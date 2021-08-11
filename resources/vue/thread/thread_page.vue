@@ -122,16 +122,16 @@
         @emoji_append="emoji_append"
       ></Emoji>
       <div class="my-2" style="font-size: 0.875rem">内容</div>
-      <b-form-textarea
+      <textarea
         id="content_input"
+        class="form-control"
         v-model="content_input"
         lazy
         rows="3"
-        max-rows="10"
         ref="content_input"
         :disabled="!this.$store.state.User.LoginStatus || Boolean(locked_TTL)"
         @keyup.ctrl.enter="new_post_handle"
-      ></b-form-textarea>
+      ></textarea>
       <div class="row align-items-center mt-3">
         <div class="col-auto">
           <b-button
