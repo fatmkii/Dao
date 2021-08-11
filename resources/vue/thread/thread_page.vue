@@ -762,11 +762,12 @@ export default {
   },
   mounted() {
     this.get_browse_current();
-    window.addEventListener("beforeunload", this.browse_record_handle, true);
-    window.addEventListener("scroll", this.scroll_watch, true);
+    window.addEventListener("beforeunload", this.browse_record_handle);
+    window.addEventListener("scroll", this.scroll_watch);
   },
   beforeDestroy() {
     this.browse_record_handle();
+    window.removeEventListener("beforeunload", this.browse_record_handle);
     window.removeEventListener("scroll", this.scroll_watch);
   },
 };
