@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true,
+		"favorites.resources": [
+			"app\\Http\\Controllers",
+			"resources",
+			"routes",
+			"config",
+			"临时笔记.txt",
+			"app\\Models",
+			"database",
+			"更新履历.txt",
+			"bug及新功能.txt"
+		],
+		"favorites.sortOrder": "ASC"
+	}
+}
