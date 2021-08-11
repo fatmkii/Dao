@@ -93,26 +93,39 @@
         </div>
       </div>
       <ThreadPaginator :thread_id="thread_id" align="left"></ThreadPaginator>
-      <div class="h6 my-2 row d-inline-flex">
-        <div class="col-auto pr-0" style="font-size: 0.875rem">昵称</div>
-        <div class="col-auto">
+      <div class="my-2 row d-inline-flex" style="font-size: 0.875rem">
+        <div class="col-auto pr-0">昵称</div>
+        <div class="col-auto d-inline-flex">
           <b-form-checkbox
-            class="mr-auto"
+            class="mr-auto ml-2"
+            v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
+            v-model="emoji_auto_hide"
+            switch
+          >
+            表情包自动收起
+          </b-form-checkbox>
+          <b-form-checkbox
+            class="mr-auto ml-2"
             v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
             v-model="post_with_admin"
             v-b-popover.hover.left="'名字会显示红色'"
             switch
           >
-            以管理员身份
+            管理员
           </b-form-checkbox>
         </div>
       </div>
       <b-form-input id="nickname_input" v-model="nickname_input"></b-form-input>
-      <Emoji :heads_id="thread_heads_id" @emoji_append="emoji_append"></Emoji>
-      <div class="h6 my-2" style="font-size: 0.875rem">内容</div>
+      <Emoji
+        :heads_id="thread_heads_id"
+        :emoji_auto_hide="emoji_auto_hide"
+        @emoji_append="emoji_append"
+      ></Emoji>
+      <div class="my-2" style="font-size: 0.875rem">内容</div>
       <b-form-textarea
         id="content_input"
         v-model="content_input"
+        lazy
         rows="3"
         max-rows="10"
         ref="content_input"
@@ -132,7 +145,7 @@
             >回复
           </b-button>
         </div>
-        <div class="col-auto">
+        <div class="col-auto" style="font-size: 0.875rem">
           <span v-if="!this.$store.state.User.LoginStatus">
             请在先<router-link to="/login">导入或领取饼干</router-link
             >后才能发言喔
@@ -364,6 +377,12 @@ export default {
     post_with_admin: function () {
       this.nickname_input = this.post_with_admin ? "管理员" : "= =";
     },
+    emoji_auto_hide: function () {
+      localStorage.setItem(
+        "emoji_auto_hide",
+        this.emoji_auto_hide ? "true" : ""
+      );
+    },
   },
   beforeRouteUpdate(to, from, next) {
     this.browse_record_handle(); //翻页时候记录浏览进度
@@ -385,6 +404,7 @@ export default {
       post_with_admin: false,
       jump_floor: "",
       jump_page_show: false,
+      emoji_auto_hide: true,
       browse_current: {
         expire_time: Date.now() + 86400000,
         page: 1,
@@ -395,8 +415,10 @@ export default {
   computed: {
     nissin_TTL() {
       const seconds =
-        (Date.parse(this.$store.state.Threads.CurrentThreadData.nissin_date) -
-          Date.parse(Date())) /
+        (Date.parse(
+          this.$store.state.Threads.CurrentThreadData.nissin_date + " GMT+800"
+        ) -
+          Date.now()) /
         1000;
       const hours = Math.floor(seconds / 3600);
       const minutes = Math.floor((seconds % 3600) / 60);
@@ -732,6 +754,11 @@ export default {
   created() {
     this.get_posts_data(false, true);
     this.$store.commit("PostsLoadStatus_set", 0); //避免显示上个ThreadsData
+    if (localStorage.getItem("emoji_auto_hide") == null) {
+      localStorage.emoji_auto_hide = "";
+    } else {
+      this.emoji_auto_hide = Boolean(localStorage.emoji_auto_hide);
+    }
   },
   mounted() {
     this.get_browse_current();

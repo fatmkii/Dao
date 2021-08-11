@@ -46,6 +46,10 @@ export default {
       type: Number,
       default: 0,
     },
+    emoji_auto_hide: {
+      type: Boolean,
+      default: true,
+    },
   },
   data: function () {
     return {
@@ -74,6 +78,9 @@ export default {
   methods: {
     emoji_click(emoji_src) {
       this.$emit("emoji_append", emoji_src);
+      if(this.emoji_auto_hide){
+        this.emoji_show = false;
+      }
     },
     emoji_open() {
       this.emoji_show = true;

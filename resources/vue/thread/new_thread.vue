@@ -2,32 +2,40 @@
 <template>
   <div>
     <div class="row align-items-center mt-3">
-      <div class="col-auto h5">
+      <div class="col-auto">
         <b-badge variant="secondary" pill class="float-left">
           {{ forum_id }}
         </b-badge>
         <span id="forum_name" @click="back_to_forum">{{ forum_name }}</span>
       </div>
-      <div class="col-auto h5">
+      <div class="col-auto">
         <span>发表新话题</span>
       </div>
     </div>
-    <div class="h6 my-2 row d-inline-flex">
+    <div class="my-2 row d-inline-flex" style="font-size: 0.875rem">
       <div class="col-auto pr-0">昵称</div>
-      <div class="col-auto">
+      <div class="col-auto d-inline-flex">
         <b-form-checkbox
-          class="mr-auto"
+          class="mr-auto ml-2"
+          v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
+          v-model="emoji_auto_hide"
+          switch
+        >
+          表情包自动收起
+        </b-form-checkbox>
+        <b-form-checkbox
+          class="mr-auto ml-2"
           v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
           v-model="post_with_admin"
           v-b-popover.hover.left="'名字会显示红色'"
           switch
         >
-          以管理员身份
+          管理员
         </b-form-checkbox>
       </div>
     </div>
     <b-form-input id="nickname_input" v-model="nickname_input"></b-form-input>
-    <div class="h6 my-2">标题</div>
+    <div class="my-2" style="font-size: 0.875rem">标题</div>
     <b-form-input
       id="title_input"
       placeholder="标题，必填"
@@ -35,9 +43,10 @@
     ></b-form-input>
     <Emoji
       :heads_id="random_heads_group_selected"
+      :emoji_auto_hide="emoji_auto_hide"
       @emoji_append="emoji_append"
     ></Emoji>
-    <div class="h6 my-2">内容</div>
+    <div class="my-2"  style="font-size: 0.875rem">内容</div>
     <b-form-textarea
       id="content_input"
       ref="content_input"
@@ -49,6 +58,7 @@
       <div class="col-auto">
         <b-button
           variant="success"
+          size="sm"
           :disabled="new_thread_handling || Boolean(locked_TTL)"
           @click="new_thread_handle"
           >发表
@@ -195,6 +205,12 @@ export default {
     post_with_admin: function () {
       this.nickname_input = this.post_with_admin ? "管理员" : "= =";
     },
+    emoji_auto_hide: function () {
+      localStorage.setItem(
+        "emoji_auto_hide",
+        this.emoji_auto_hide ? "true" : ""
+      );
+    },
   },
   computed: {
     forum_name() {
@@ -313,6 +329,11 @@ export default {
   created() {
     this.get_subtitles();
     this.get_random_heads_index();
+    if (localStorage.getItem("emoji_auto_hide") == null) {
+      localStorage.emoji_auto_hide = "";
+    } else {
+      this.emoji_auto_hide = Boolean(localStorage.emoji_auto_hide);
+    }
   },
 };
 </script>
