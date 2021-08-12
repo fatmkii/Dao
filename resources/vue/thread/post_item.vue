@@ -450,7 +450,7 @@ export default {
       }
       const quote_content =
         "<span class='quote_content'>" +
-        post_lines.join("\n") +
+        post_lines.join("\n").trim() +
         "\n" +
         this.$refs.post_author_info.innerText +
         "</span>" +

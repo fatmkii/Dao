@@ -62,7 +62,7 @@
           size="sm"
           :disabled="new_thread_handling || Boolean(locked_TTL)"
           @click="new_thread_handle"
-          >发表
+          >{{ new_thread_handling ? "提交中" : "发表" }}
         </b-button>
       </div>
       <div class="col-auto">
