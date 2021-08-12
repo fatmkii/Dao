@@ -46,14 +46,15 @@
       :emoji_auto_hide="emoji_auto_hide"
       @emoji_append="emoji_append"
     ></Emoji>
-    <div class="my-2"  style="font-size: 0.875rem">内容</div>
-    <b-form-textarea
+    <div class="my-2" style="font-size: 0.875rem">内容</div>
+    <textarea
       id="content_input"
-      ref="content_input"
+      class="form-control"
       v-model="content_input"
-      rows="3"
-      max-rows="20"
-    ></b-form-textarea>
+      rows="5"
+      ref="content_input"
+      @keyup.ctrl.enter="new_thread_handle"
+    ></textarea>
     <div class="row align-items-center mt-3">
       <div class="col-auto">
         <b-button

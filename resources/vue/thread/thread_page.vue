@@ -121,12 +121,13 @@
         :emoji_auto_hide="emoji_auto_hide"
         @emoji_append="emoji_append"
       ></Emoji>
-      <div class="my-2" style="font-size: 0.875rem">内容</div>
+      <div class="my-2" style="font-size: 0.875rem">
+        内容{{ content_input }}
+      </div>
       <textarea
         id="content_input"
         class="form-control"
         v-model="content_input"
-        lazy
         rows="3"
         ref="content_input"
         :disabled="!this.$store.state.User.LoginStatus || Boolean(locked_TTL)"
@@ -416,7 +417,10 @@ export default {
     nissin_TTL() {
       const seconds =
         (Date.parse(
-          this.$store.state.Threads.CurrentThreadData.nissin_date + " GMT+800"
+          this.$store.state.Threads.CurrentThreadData.nissin_date.replace(
+            /-/g,
+            "/"
+          ) + " GMT+800"
         ) -
           Date.now()) /
         1000;

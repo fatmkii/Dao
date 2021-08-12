@@ -15,7 +15,7 @@ class CreatePingbicisTable extends Migration
     {
         Schema::create('pingbicis', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->index();
+            $table->integer('user_id')->unique();
             $table->json('title_pingbici')->nullable();
             $table->json('content_pingbici')->nullable();
         });
