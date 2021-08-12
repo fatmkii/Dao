@@ -36,3 +36,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.b-pagination {
+  margin-bottom: 0;
+}
+</style>

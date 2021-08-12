@@ -7,7 +7,9 @@
           <b-badge variant="secondary" pill class="float-left">
             {{ forum_id }}
           </b-badge>
-          <span id="forum_name" @click="back_to_forum">{{ forum_name }}</span>
+          <span class="forum_name" @click="back_to_forum">{{
+            forum_name
+          }}</span>
         </div>
         <div class="col-auto h6 d-block d-lg-none d-xl-none">
           <b-badge variant="secondary" pill class="float-left">
@@ -92,7 +94,31 @@
           ></PostItem>
         </div>
       </div>
-      <ThreadPaginator :thread_id="thread_id" align="left"></ThreadPaginator>
+      <div class="row align-items-center">
+        <div class="col-auto">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="currentColor"
+            class="icon-back bi bi-arrow-left-square"
+            viewBox="0 0 16 16"
+            v-b-popover.hover.right="'返回小岛'"
+            @click="back_to_forum"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"
+            />
+          </svg>
+        </div>
+        <div class="col-auto">
+          <ThreadPaginator
+            :thread_id="thread_id"
+            align="left"
+          ></ThreadPaginator>
+        </div>
+      </div>
       <div class="my-2 row d-inline-flex" style="font-size: 0.875rem">
         <div class="col-auto pr-0">昵称</div>
         <div class="col-auto d-inline-flex">
@@ -121,9 +147,7 @@
         :emoji_auto_hide="emoji_auto_hide"
         @emoji_append="emoji_append"
       ></Emoji>
-      <div class="my-2" style="font-size: 0.875rem">
-        内容
-      </div>
+      <div class="my-2" style="font-size: 0.875rem">内容</div>
       <textarea
         id="content_input"
         class="form-control"
@@ -784,7 +808,7 @@ export default {
 .post_container {
   background-color: #eefaee;
 }
-#forum_name {
+.forum_name {
   cursor: pointer;
 }
 
@@ -823,6 +847,10 @@ export default {
 .z-sidebar .icon-reload {
   width: 24px;
   left: 4px;
+  cursor: pointer;
+}
+
+.icon-back {
   cursor: pointer;
 }
 </style>
