@@ -39,6 +39,7 @@
               :to="
                 '/thread/' + thread.id + '/' + Math.ceil(thread.posts_num / 200)
               "
+              :target="router_target"
               v-if="thread.posts_num > 200"
               style="color: #212529"
               >[{{ Math.ceil((thread.posts_num + 1) / 200) }}]
