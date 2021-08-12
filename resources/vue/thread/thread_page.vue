@@ -174,7 +174,6 @@
             @click="new_post_handle"
             >{{ new_post_handling ? "提交中" : "回复" }}
           </b-button>
-          <span v-show="new_post_handling">提交中</span>
         </div>
         <div class="col-auto" style="font-size: 0.875rem">
           <span v-if="!this.$store.state.User.LoginStatus">
@@ -429,7 +428,7 @@ export default {
   data: function () {
     return {
       name: "thread_page",
-      new_thread_handling: false,
+      new_post_handling: false,
       nickname_input: "= =",
       content_input: "",
       roll_name: "",
