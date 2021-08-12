@@ -122,7 +122,7 @@
         @emoji_append="emoji_append"
       ></Emoji>
       <div class="my-2" style="font-size: 0.875rem">
-        内容{{ content_input }}
+        内容
       </div>
       <textarea
         id="content_input"
