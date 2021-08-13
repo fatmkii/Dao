@@ -54,10 +54,10 @@
       </b-button>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
+        width="20"
+        height="20"
         fill="currentColor"
-        class="svg-light bi bi-trash"
+        class="svg-light bi bi-trash ml-1"
         viewBox="0 0 16 16"
         v-if="post_data.is_your_post && post_data.is_deleted == 0"
         @click="post_delete_click"
@@ -73,10 +73,10 @@
       </svg>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
+        width="20"
+        height="20"
         fill="currentColor"
-        class="svg-light bi bi-recycle"
+        class="svg-light bi bi-recycle ml-1"
         viewBox="0 0 16 16"
         v-if="post_data.is_your_post && post_data.is_deleted == 1"
         @click="post_delete_recover_click"
@@ -88,10 +88,10 @@
       </svg>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
+        width="20"
+        height="20"
         fill="currentColor"
-        class="svg-success bi bi-chat-square-dots-fill"
+        class="svg-success bi bi-chat-square-dots-fill ml-1"
         viewBox="0 0 16 16"
         v-if="post_data.is_deleted == 0"
         @click="quote_click"
@@ -103,10 +103,10 @@
       </svg>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
+        width="20"
+        height="20"
         fill="currentColor"
-        class="svg-success bi bi-gift-fill"
+        class="svg-success bi bi-gift-fill ml-1"
         viewBox="0 0 16 16"
         v-if="!post_data.is_your_post && post_data.is_deleted == 0"
         @click="reward_click"

@@ -206,7 +206,7 @@
         </div>
       </div>
       <div class="row align-items-center mt-3">
-        <div class="col-auto">
+        <div class="col-auto ml-auto">
           <b-button variant="success" size="sm" @click="back_to_forum"
             >返回小岛
           </b-button>
