@@ -140,13 +140,6 @@ const module_posts = {
             state.PostsLoadStatus = payload
         }
     },
-    getters: {
-        PostsLastPage: (state) => {
-            if (state.PostsData) {
-                return state.PostsData.last_page
-            }
-        }
-    },
     actions: {}
 }
 

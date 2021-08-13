@@ -1,7 +1,7 @@
 
 <template>
   <b-pagination-nav
-    :number-of-pages="posts_last_page"
+    :number-of-pages="last_page"
     limit="5"
     :base-url="base_url"
     use-router
@@ -19,6 +19,7 @@ export default {
   components: {},
   props: {
     thread_id: Number,
+    last_page: Number,
     align: String,
   },
   data: function () {
@@ -27,9 +28,6 @@ export default {
     };
   },
   computed: {
-    posts_last_page() {
-      return this.$store.getters.PostsLastPage;
-    },
     base_url() {
       return "/thread/" + this.thread_id + "/";
     },

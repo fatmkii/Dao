@@ -20,6 +20,7 @@
         <div class="col-auto ml-auto">
           <ThreadPaginator
             :thread_id="thread_id"
+            :last_page="thread_last_page"
             align="right"
           ></ThreadPaginator>
         </div>
@@ -115,6 +116,7 @@
         <div class="col-auto">
           <ThreadPaginator
             :thread_id="thread_id"
+            :last_page="thread_last_page"
             align="left"
           ></ThreadPaginator>
         </div>
@@ -491,6 +493,7 @@ export default {
       thread_posts_num: (state) => state.Threads.CurrentThreadData.posts_num,
       random_heads_group: (state) =>
         state.Threads.CurrentThreadData.random_heads_group,
+      thread_last_page: (state) => state.Posts.PostsData.last_page,
       posts_data: (state) => state.Posts.PostsData.data, // 记得ThreadsData要比ForumsData多.data，因为多了分页数据
       posts_load_status: (state) => state.Posts.PostsLoadStatus,
       locked_TTL: (state) => state.User.LockedTTL,
