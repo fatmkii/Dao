@@ -1,8 +1,9 @@
 <template>
   <div>
     <b-navbar>
-      <b-navbar-nav>
-        <b-navbar-brand href="/"> 岛2.0 </b-navbar-brand>
+      <b-navbar-nav class="align-middle">
+        <b-img fluid src="/icon.png" alt="icon" class="icon"></b-img>
+        <router-link to="/" tag="a" style="font-size:1.25rem">小火锅</router-link>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
         <b-button
@@ -63,9 +64,16 @@ export default {
 };
 </script>
 
-<style lang="sass" scoped>
-nav
-  background-color: #eee
-  a
+<style lang="scss">
+nav{
+  background-color: #eee;
+  a{
     color: #444
+  }
+}
+
+.icon {
+  max-width: 32px;
+  max-height: 32px;
+}
 </style>
