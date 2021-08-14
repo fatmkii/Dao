@@ -2,7 +2,7 @@
 <template>
   <div class="overflow-auto">
     <b-pagination-nav
-      :number-of-pages="threads_last_page"
+      :number-of-pages="last_page"
       limit="5"
       :base-url="base_url"
       use-router
@@ -15,11 +15,11 @@
 
 
 <script>
-
 export default {
   components: {},
   props: {
     forum_id: Number,
+    last_page: Number,
   },
   data: function () {
     return {
@@ -27,9 +27,6 @@ export default {
     };
   },
   computed: {
-    threads_last_page() {
-      return this.$store.getters.ThreadsLastPage;
-    },
     base_url() {
       return "/forum/" + this.forum_id + "/";
     },

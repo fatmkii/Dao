@@ -66,15 +66,16 @@
     </div>
     <ForumThreads
       :forum_id="forum_id"
-      :page="page"
       :new_window_to_post="new_window_to_post"
     ></ForumThreads>
     <ForumThreadsMobile
       :forum_id="forum_id"
-      :page="page"
       :new_window_to_post="new_window_to_post"
     ></ForumThreadsMobile>
-    <ForumPaginator :forum_id="forum_id"></ForumPaginator>
+    <ForumPaginator
+      :forum_id="forum_id"
+      :last_page="threads_last_page"
+    ></ForumPaginator>
     <div class="z-sidebar">
       <div class="icon-top" @click="scroll_top">
         <svg
@@ -187,6 +188,7 @@ export default {
           : "",
       forum_banners: (state) => state.Forums.CurrentForumData.banners,
       threads_load_status: (state) => state.Threads.ThreadsLoadStatus,
+      threads_last_page: (state) => state.Threads.ThreadsData.lastPage,
     }),
   },
   methods: {

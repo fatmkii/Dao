@@ -58,7 +58,6 @@ export default {
   components: {},
   props: {
     forum_id: Number,
-    page: Number,
     new_window_to_post: Boolean,
   },
   data: function () {

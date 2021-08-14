@@ -21,8 +21,8 @@ class PostSeeder extends Seeder
         for ($i = 0; $i < 500; $i++) {
             DB::table('posts_1')->insert([
                 'forum_id' => 12,
-                'thread_id' => 10006,
-                'floor' => $faker->randomNumber($nbDigits = 2),
+                'thread_id' => 10003,
+                'floor' => $i + 1,
                 'random_head' => $faker->randomDigit(),
                 'content' => $faker->text(200),
             ]);

@@ -2,8 +2,8 @@
   <div>
     <b-navbar>
       <b-navbar-nav class="align-middle">
-        <b-img fluid src="/icon.png" alt="icon" class="icon"></b-img>
-        <router-link to="/" tag="a" style="font-size:1.25rem">小火锅</router-link>
+        <b-img fluid src="/favicon.png" alt="icon" class="icon"></b-img>
+        <router-link to="/" tag="a" style="font-size:1.25rem"> 小火锅</router-link>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
         <b-button
@@ -64,7 +64,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 nav{
   background-color: #eee;
   a{
