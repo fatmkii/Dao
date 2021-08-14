@@ -104,17 +104,20 @@ export default {
 
 
 <style lang="scss" scoped>
+@import "resources/css/app.scss";
+
 .thread_title {
   cursor: pointer;
-  color: #0000ee;
+  @include font_color("font_color_href");
 }
 .threads_table_header {
-  background-color: #e9ecef;
+  @include background_color("background_color3");
   border-bottom: 1px solid #111;
   border-top: 1px solid #111;
 }
 .threads_container {
-  border-bottom: 1px solid #111;
+  border-bottom: 1px solid;
+  @include border_color("border_color1");
 }
 #spinner {
   position: fixed;

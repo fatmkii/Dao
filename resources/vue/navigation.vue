@@ -3,13 +3,71 @@
     <b-navbar>
       <b-navbar-nav class="align-middle">
         <b-img fluid src="/favicon.png" alt="icon" class="icon"></b-img>
-        <router-link to="/" tag="a" style="font-size:1.25rem"> 小火锅</router-link>
+        <router-link to="/" tag="a" style="font-size: 1.25rem" class="ml-1"
+          >小火锅</router-link
+        >
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
+        <b-dropdown
+          id="skin_button"
+          size="md"
+          text="皮肤"
+          class="my-1 mr-1 d-none d-lg-block"
+          variant="outline-dark"
+        >
+          <b-dropdown-item @click="theme_set('hdao')">
+            <b-badge pill style="background-color: #28a745">&nbsp;</b-badge>
+            H岛绿
+          </b-dropdown-item>
+          <!-- <b-dropdown-item @click="theme_set('nga')">
+            <b-badge pill style="background-color: #ffedc3">&nbsp;</b-badge>
+            NGA黄
+          </b-dropdown-item>
+          <b-dropdown-item @click="theme_set('pink')">
+            <b-badge pill style="background-color: #f9ccde">&nbsp;</b-badge>
+            QNY粉
+          </b-dropdown-item>
+          <b-dropdown-item @click="theme_set('gray')">
+            <b-badge pill style="background-color: #1c424a">&nbsp;</b-badge>
+            夜间灰
+          </b-dropdown-item>
+          <b-dropdown-item @click="theme_set('word')">
+            <b-badge pill style="background-color: #eeeeee">&nbsp;</b-badge>
+            Word白
+          </b-dropdown-item> -->
+        </b-dropdown>
+        <b-dropdown
+          id="skin_button"
+          size="sm"
+          text="皮肤"
+          class="my-1 mr-1 d-lg-none"
+          variant="outline-dark"
+        >
+          <b-dropdown-item @click="theme_set('hdao')">
+            <b-badge pill style="background-color: #28a745">&nbsp;</b-badge>
+            H岛绿
+          </b-dropdown-item>
+          <!-- <b-dropdown-item @click="theme_set('nga')">
+            <b-badge pill style="background-color: #ffedc3">&nbsp;</b-badge>
+            NGA黄
+          </b-dropdown-item>
+          <b-dropdown-item @click="theme_set('pink')">
+            <b-badge pill style="background-color: #f9ccde">&nbsp;</b-badge>
+            QNY粉
+          </b-dropdown-item>
+          <b-dropdown-item @click="theme_set('gray')">
+            <b-badge pill style="background-color: #1c424a">&nbsp;</b-badge>
+            夜间灰
+          </b-dropdown-item>
+          <b-dropdown-item @click="theme_set('word')">
+            <b-badge pill style="background-color: #eeeeee">&nbsp;</b-badge>
+            Word白
+          </b-dropdown-item> -->
+        </b-dropdown>
         <b-button
           v-if="login_status"
           size="sm"
-          class="my-1 my-sm-0 d-lg-none"
+          class="my-1 d-lg-none"
           variant="outline-dark"
           to="/user-center"
         >
@@ -19,7 +77,7 @@
         <b-button
           v-else
           size="sm"
-          class="my-1 my-sm-0 d-lg-none"
+          class="my-1 d-lg-none"
           variant="outline-success"
           to="/login"
           >导入饼干</b-button
@@ -60,15 +118,22 @@ export default {
   computed: mapState({
     login_status: (state) => state.User.LoginStatus,
   }),
-  methods: {},
+  methods: {
+    theme_set(theme_name) {
+      window.document.documentElement.setAttribute("data-theme", theme_name);
+      localStorage.theme = theme_name;
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-nav{
-  background-color: #eee;
-  a{
-    color: #444
+@import "resources/css/app.scss";
+
+nav {
+  @include background_color("background_color3");
+  a {
+    @include font_color("font_color2");
   }
 }
 

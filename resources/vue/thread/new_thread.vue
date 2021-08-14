@@ -53,6 +53,7 @@
       v-model="content_input"
       rows="5"
       ref="content_input"
+      :disabled="new_thread_handling || Boolean(locked_TTL)"
       @keyup.ctrl.enter="new_thread_handle"
     ></textarea>
     <div class="row align-items-center mt-3">

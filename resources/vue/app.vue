@@ -93,6 +93,7 @@ export default {
   created() {
     this.get_forums_data();
     this.get_user_data();
+    //读取localStorage的浏览记录
     if (localStorage.browse_logger != null) {
       this.$store.commit(
         "BrowseLogger_set_all",
@@ -101,6 +102,15 @@ export default {
     } else {
       localStorage.browse_logger = JSON.stringify(
         this.$store.state.User.BrowseLogger
+      );
+    }
+    //读取localStorage的主题
+    if (localStorage.getItem("theme") == null) {
+      localStorage.theme = "hdao";
+    } else {
+      window.document.documentElement.setAttribute(
+        "data-theme",
+        localStorage.theme
       );
     }
   },

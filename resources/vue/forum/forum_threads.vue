@@ -1,27 +1,19 @@
 
 <template>
   <div class="d-none d-lg-block d-xl-block">
-    <b-table-simple
-      v-show="threads_load_status"
-      hover
-      small
-      fixed
-      caption-top
-      responsive
-      class="threads_table table-striped"
-    >
-      <b-thead head-variant="light">
-        <b-tr class="text-center">
-          <b-th width="40%">标题</b-th>
-          <b-th width="10%">作者</b-th>
-          <b-th width="20%">发表时间</b-th>
-          <b-th width="10%">回帖数</b-th>
-          <b-th width="20%">最新回复</b-th>
-        </b-tr>
-      </b-thead>
-      <b-tbody>
-        <b-tr v-for="thread in threads_data" :key="thread.id">
-          <b-td class="text-left" :style="{ color: thread.title_color }">
+    <table v-show="threads_load_status" class="threads_table">
+      <thead>
+        <tr class="text-center">
+          <th width="40%">标题</th>
+          <th width="10%">作者</th>
+          <th width="20%">发表时间</th>
+          <th width="10%">回帖数</th>
+          <th width="20%">最新回复</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="thread in threads_data" :key="thread.id">
+          <td class="text-left" :style="{ color: thread.title_color }">
             <span class="thread_sub_title"> {{ thread.sub_title }}&nbsp; </span>
             <router-link
               class="thread_title"
@@ -44,14 +36,14 @@
               style="color: #212529"
               >[{{ Math.ceil((thread.posts_num + 1) / 200) }}]
             </router-link>
-          </b-td>
-          <b-td class="text-center">{{ thread.nickname }}</b-td>
-          <b-td class="text-center">{{ thread.created_at }}</b-td>
-          <b-td class="text-center">{{ thread.posts_num }}</b-td>
-          <b-td class="text-center">{{ thread.updated_at }}</b-td>
-        </b-tr>
-      </b-tbody>
-    </b-table-simple>
+          </td>
+          <td class="text-center">{{ thread.nickname }}</td>
+          <td class="text-center">{{ thread.created_at }}</td>
+          <td class="text-center">{{ thread.posts_num }}</td>
+          <td class="text-center">{{ thread.updated_at }}</td>
+        </tr>
+      </tbody>
+    </table>
     <b-spinner
       id="spinner"
       v-show="!threads_load_status"
@@ -115,9 +107,34 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "resources/css/app.scss";
+
 .threads_table {
-  background-color: white;
+  width: 100%;
+  margin-bottom: 1rem;
+  @include background_color("backgroud_color1");
+  thead {
+    @include background_color("background_color3");
+  }
+  th {
+    border-top: 1px solid #111;
+    border-bottom: 1px solid #111;
+    padding: 0.5rem;
+  }
+  td {
+    border-bottom: 1px solid;
+    @include border_color("border_color1");
+    padding: 0.5rem;
+  }
+  tr:hover {
+    @include background_color("background_color_hover");
+  }
 }
+
+.thread_title {
+  @include font_color("font_color_href");
+}
+
 #spinner {
   position: fixed;
   z-index: 999;
