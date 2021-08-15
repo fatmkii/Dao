@@ -11,7 +11,7 @@
         :key="forum.id"
         @click="forum_view(forum.id)"
       >
-        <b-card-body class="py-2">
+        <b-card-body class="forums-card py-2">
           <b-card-title title-tag="h5">
             {{ forum.name }}
             <b-badge variant="secondary" pill class="float-right">{{
@@ -48,16 +48,3 @@ export default {
   created: function () {},
 };
 </script>
-
-<style lang="scss" scoped>
-.card-body {
-  cursor: pointer;
-}
-</style>>
-
-
-<style lang="scss">
-.card-text {
-  font-size: 0.875rem;
-}
-</style>

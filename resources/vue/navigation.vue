@@ -2,7 +2,7 @@
   <div>
     <b-navbar>
       <b-navbar-nav class="align-middle">
-        <b-img fluid src="/favicon.png" alt="icon" class="icon"></b-img>
+        <b-img fluid src="/favicon.png" alt="icon" class="favicon"></b-img>
         <router-link to="/" tag="a" style="font-size: 1.25rem" class="ml-1"
           >小火锅</router-link
         >
@@ -27,13 +27,13 @@
             <b-badge pill style="background-color: #f9ccde">&nbsp;</b-badge>
             QNY粉
           </b-dropdown-item>
-          <b-dropdown-item @click="theme_set('gray')">
+          <b-dropdown-item @click="theme_set('night')">
             <b-badge pill style="background-color: #1c424a">&nbsp;</b-badge>
-            夜间灰
+            夜间黑
           </b-dropdown-item>
-          <b-dropdown-item @click="theme_set('word')">
+          <b-dropdown-item @click="theme_set('gray')">
             <b-badge pill style="background-color: #eeeeee">&nbsp;</b-badge>
-            Word白
+            Word灰
           </b-dropdown-item> -->
         </b-dropdown>
         <b-dropdown
@@ -55,13 +55,13 @@
             <b-badge pill style="background-color: #f9ccde">&nbsp;</b-badge>
             QNY粉
           </b-dropdown-item>
-          <b-dropdown-item @click="theme_set('gray')">
+          <b-dropdown-item @click="theme_set('night')">
             <b-badge pill style="background-color: #1c424a">&nbsp;</b-badge>
-            夜间灰
+            夜间黑
           </b-dropdown-item>
-          <b-dropdown-item @click="theme_set('word')">
+          <b-dropdown-item @click="theme_set('gray')">
             <b-badge pill style="background-color: #eeeeee">&nbsp;</b-badge>
-            Word白
+            Word灰
           </b-dropdown-item> -->
         </b-dropdown>
         <b-button
@@ -85,7 +85,7 @@
         <b-button
           v-if="login_status"
           size="md"
-          class="my-1 my-sm-0 d-none d-lg-block"
+          class="my-1 d-none d-lg-block"
           variant="outline-dark"
           to="/user-center"
         >
@@ -95,7 +95,7 @@
         <b-button
           v-else
           size="md"
-          class="my-1 my-sm-0 d-none d-lg-block"
+          class="my-1 d-none d-lg-block"
           variant="outline-success"
           to="/login"
           >导入饼干</b-button
@@ -126,19 +126,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import "resources/css/app.scss";
-
-nav {
-  @include background_color("background_color3");
-  a {
-    @include font_color("font_color2");
-  }
-}
-
-.icon {
-  max-width: 32px;
-  max-height: 32px;
-}
-</style>

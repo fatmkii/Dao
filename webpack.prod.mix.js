@@ -16,7 +16,7 @@ mix.js('resources/js/app.js', 'public/js')
     .extract(['vue', 'bootstrap-vue', 'vuex', 'vue-router', 'axios'])
     .vue()
     .version()
-    .postCss('resources/css/app.css', 'public/css', [
+    .postCss('resources/css/app.scss', 'public/css', [
         //
     ]);
 

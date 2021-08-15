@@ -1,21 +1,29 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+
+import homepage from '../vue/homepage/homepage.vue'
+import login_page from '../vue/user/login_page.vue'
+import forum_page from '../vue/forum/forum_page.vue'
+import thread_page from '../vue/thread/thread_page.vue'
+import new_thread from '../vue/thread/new_thread.vue'
+import user_center from '../vue/user/user_center.vue'
+
 Vue.use(VueRouter);
 
 const routes = [
     {
         path: '/',
         name: 'homepage',
-        component: (resolve) => require(['../vue/homepage/homepage.vue'], resolve),
+        component: homepage,
     },
     {
         path: '*',
-        component: (resolve) => require(['../vue/homepage/homepage.vue'], resolve),
+        component: homepage,
     },
     {
         path: '/login',
         name: 'login',
-        component: (resolve) => require(['../vue/user/login_page.vue'], resolve),
+        component: login_page,
     },
     {
         path: '/forum/:forum_id/:page?',
@@ -24,7 +32,7 @@ const routes = [
             forum_id: parseInt(route.params.forum_id),
             page: parseInt(route.params.page),
         }),
-        component: (resolve) => require(['../vue/forum/forum_page.vue'], resolve),
+        component: forum_page,
     },
     {
         path: '/thread/:thread_id/:page?',
@@ -33,7 +41,7 @@ const routes = [
             thread_id: parseInt(route.params.thread_id),
             page: parseInt(route.params.page),
         }),
-        component: (resolve) => require(['../vue/thread/thread_page.vue'], resolve),
+        component: thread_page,
     },
     {
         path: '/new_thread/:forum_id',
@@ -41,12 +49,12 @@ const routes = [
         props: route => ({
             forum_id: parseInt(route.params.forum_id),
         }),
-        component: (resolve) => require(['../vue/thread/new_thread.vue'], resolve),
+        component: new_thread,
     },
     {
         path: '/user-center',
         name: 'user-center',
-        component: (resolve) => require(['../vue/user/user_center.vue'], resolve),
+        component: user_center,
     },
 ]
 

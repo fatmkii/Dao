@@ -264,15 +264,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.nav {
-  background-color: #eefaee;
-}
-.nav-link {
-  padding: 0.25rem 0.5rem;
-}
-.nav-link.active {
-  background-color: #28a745 !important;
-}
-</style>

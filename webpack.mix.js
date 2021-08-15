@@ -14,12 +14,10 @@ const path = require('path');
 
 mix.js('resources/js/app.js', 'public/js')
     .extract(['vue', 'bootstrap-vue', 'vuex', 'vue-router', 'axios'])
+    .sass('resources/css/app.scss', 'public/css').version()
     .vue()
     .sourceMaps()
-    .version()
-    .postCss('resources/css/app.css', 'public/css', [
-        //
-    ]);
+    .version();
 
 if (process.env.MIX_ENV == 'local')
     mix.alias({

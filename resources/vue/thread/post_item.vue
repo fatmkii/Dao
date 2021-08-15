@@ -463,33 +463,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.post_footer_text {
-  color: #5fb878;
-}
-.post_footer {
-  font-size: calc(0.8rem + 0.2vw);
-}
-.post_item {
-  border-bottom: 1px solid #5fb878;
-}
-.emoji_img {
-  max-height: 67px;
-  max-width: 67px;
-}
-.quote_content {
-  color: #777777;
-}
-.svg-success {
-  color: #5fb878;
-  cursor: pointer;
-}
-.svg-light {
-  color: #666;
-  cursor: pointer;
-}
-.post_content img {
-  max-width: 100%;
-}
-</style>

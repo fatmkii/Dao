@@ -78,7 +78,7 @@ export default {
   methods: {
     emoji_click(emoji_src) {
       this.$emit("emoji_append", emoji_src);
-      if(this.emoji_auto_hide){
+      if (this.emoji_auto_hide) {
         this.emoji_show = false;
       }
     },
@@ -89,27 +89,3 @@ export default {
   created() {},
 };
 </script>
-
-<style lang="scss">
-.nav {
-  background-color: #eefaee;
-}
-.nav-link {
-  padding: 0.5rem 0.75rem;
-}
-.nav-link.active {
-  background-color: #28a745 !important;
-}
-
-.emoji_box {
-  max-width: 48px;
-  max-height: 48px;
-}
-.emoji_container {
-  max-height: 250px;
-  overflow-y: auto;
-}
-#placeholder___BV_tab_button__ {
-  display: none !important;
-}
-</style>

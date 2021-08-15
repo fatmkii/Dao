@@ -3,20 +3,36 @@
 
 $themes: (
     hdao: (
-        //基本上颜色1=浅色、颜色2=深色、颜色3=其他
-        //背景色
+        //背景色、0= 整体背景色 1=主题色（浅） 2=主题色（深） 3=浅灰色（导航栏等）4=深灰色（小岛号码圆点等） 5=白色 6=通常为透明色
+        background_color0: #eefaee,
         background_color1: #eefaee,
         background_color2: #dff0d8,
         background_color3: #eee,
+        background_color4: #6c757d,
+        background_color5: #ffffff,
+        background_color6: transparent,
         background_color_hover: #dff0d8,
+        //按钮系列
+        btn_color: #fff,
+        btn_background_color: #28a745,
+        btn_background_color_disable: #6dc380,
+        btn_background_color_hover: #218838,
+        btn_border_color: #28a745,
+        btn_border_color_hover: #1e7e34,
+        btn_box_shadow: rgb(72 180 97 / 50%),
         //主要前景色、图标颜色等
         icon_color1: #5fb878,
-        //字体颜色
+        icon_color2: #28a745,
+        icon_color3: #777,
+        //字体颜色 1=浅灰色（引用等）  2=深灰色（主要字体） 3=主题色（发帖者信息等）5=白色 href=超连接  admin=管理员色
         font_color1: #777,
         font_color2: #444,
+        font_color3: #5fb878,
+        font_color5: #ffffff,
         font_color_href: #0000ee,
-        font_color4: #5fb878,
-        //边框颜色
+        font_color_admin: #dd0000,
+        //边框颜色 0=黑色 1=主题色
+        border_color0: #111,
         border_color1: #5fb878,
     ),
 );
@@ -42,12 +58,33 @@ $themes: (
 //获取背景颜色
 @mixin background_color($color) {
     @include themeify {
+        background-color: themed($color);
+    }
+}
+
+//获取背景颜色（important）
+@mixin background_color_i($color) {
+    @include themeify {
         background-color: themed($color) !important;
+    }
+}
+
+//获取box_shadow
+@mixin box_shadow_color($color) {
+    @include themeify {
+        box-shadow: themed($color);
     }
 }
 
 //获取字体颜色
 @mixin font_color($color) {
+    @include themeify {
+        color: themed($color);
+    }
+}
+
+//获取字体颜色 important
+@mixin font_color_i($color) {
     @include themeify {
         color: themed($color) !important;
     }
@@ -56,21 +93,236 @@ $themes: (
 //获取边框颜色
 @mixin border_color($color) {
     @include themeify {
+        border-color: themed($color);
+    }
+}
+
+//获取边框颜色
+@mixin border_color_i($color) {
+    @include themeify {
         border-color: themed($color) !important;
     }
 }
 
+//全体共通
 body {
-    @include background_color("background_color1");
+    @include background_color("background_color0");
+    @include font_color("font_color2");
 }
 
-//因为bootstrapvue的问题，表情包栏的式样一定得在这里写
+input {
+    @include background_color("background_color5");
+}
+
+textarea {
+    @include background_color("background_color5");
+}
+
+html,
+body {
+    scroll-behavior: smooth;
+}
+
+.b-pagination {
+    margin-bottom: 0;
+}
+
+//按钮
+.btn-success {
+    @include font_color("btn_color");
+    @include background_color_i("btn_background_color");
+    @include border_color("btn_border_color");
+    :hover {
+        @include background_color_i("btn_background_color_hover");
+        @include border_color("btn_border_color_hover");
+    }
+    :disabled {
+        @include background_color_i("btn_background_color_disable");
+        @include border_color("btn_border_color");
+    }
+    :focus {
+        @include background_color_i("btn_background_color_hover");
+        @include border_color("btn_border_color_hover");
+        @include box_shadow_color("btn_box_shadow");
+    }
+}
+
+//侧边栏及其他
+#spinner {
+    position: fixed;
+    z-index: 999;
+    width: 3rem;
+    height: 3rem;
+    right: 50%;
+    top: 40%;
+}
+
+.z-sidebar {
+    position: fixed;
+    z-index: 999;
+    right: 15px;
+    top: 40%;
+    @include font_color("icon_color1");
+    width: 40px;
+    div {
+        width: 32px;
+        height: 32px;
+        position: relative;
+    }
+}
+.z-sidebar > div + div {
+    margin-top: 10px;
+}
+
+.z-sidebar > .icon-roll {
+    cursor: pointer;
+}
+.z-sidebar > .icon-top,
+.z-sidebar > .icon-down,
+.z-sidebar > .icon-jump,
+.z-sidebar > .icon-new-thread,
+.z-sidebar .icon-reload {
+    width: 24px;
+    left: 4px;
+    cursor: pointer;
+}
+
+//nav相关
 .nav {
-    @include background_color("background_color1");
+    @include background_color("background_color6");
     a {
         @include font_color("font_color2");
     }
 }
+.nav-link {
+    padding: 0.5rem 0.75rem;
+}
+.nav-link.active {
+    @include background_color("icon_color2");
+}
+.navbar {
+    @include background_color("background_color3");
+    a {
+        @include font_color("font_color2");
+    }
+}
+.favicon {
+    max-width: 32px;
+    max-height: 32px;
+}
+
+//homepage相关
+.bulletin-card {
+    @include background_color("background_color5");
+}
+.forums-card {
+    cursor: pointer;
+    @include background_color("background_color5");
+}
+.card-header {
+    @include background_color("background_color3");
+}
+.card-text {
+    font-size: 0.875rem;
+}
+
+//emoji相关
+.emoji_box {
+    max-width: 48px;
+    max-height: 48px;
+}
+.emoji_container {
+    max-height: 250px;
+    overflow-y: auto;
+}
+#placeholder___BV_tab_button__ {
+    display: none !important;
+}
+
+//forum_page相关
+.forum_name {
+    cursor: pointer;
+}
+.badge {
+    @include background_color("background_color4");
+}
+.icon-back {
+    cursor: pointer;
+}
+
+.threads_table {
+    width: 100%;
+    margin-bottom: 1rem;
+    @include background_color("backgroud_color1");
+    thead {
+        @include background_color("background_color3");
+    }
+    th {
+        border-top: 1px solid #111;
+        border-bottom: 1px solid #111;
+        padding: 0.5rem;
+    }
+    td {
+        border-bottom: 1px solid;
+        @include border_color("border_color1");
+        padding: 0.5rem;
+    }
+    tr:hover {
+        @include background_color("background_color_hover");
+    }
+}
+
+.thread_title {
+    cursor: pointer;
+    @include font_color("font_color_href");
+}
+
+.threads_table_header {
+    @include background_color("background_color3");
+    border-bottom: 1px solid #111;
+    border-top: 1px solid #111;
+}
+.threads_container {
+    border-bottom: 1px solid;
+    @include border_color("border_color1");
+}
+
+//thread_page相关
+.post_title {
+    @include background_color("background_color2");
+}
+.post_container {
+    @include background_color("background_color6");
+}
+.post_footer_text {
+    @include font_color("icon_color2");
+}
+.post_footer {
+    font-size: calc(0.8rem + 0.2vw);
+}
+.post_item {
+    border-bottom: 1px solid;
+    @include border_color("border_color1");
+}
+.emoji_img {
+    max-height: 67px;
+    max-width: 67px;
+}
+.quote_content {
+    color: #777777;
+}
+.svg-success {
+    @include font_color("icon_color2");
+    cursor: pointer;
+}
+.svg-light {
+    @include font_color("icon_color3");
+    cursor: pointer;
+}
+.post_content img {
+    max-width: 100%;
+}
+
 
 [v-cloak] {
     display: none;

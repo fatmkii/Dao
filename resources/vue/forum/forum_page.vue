@@ -25,7 +25,7 @@
         <b-badge variant="secondary" pill class="float-left">
           {{ forum_id }}
         </b-badge>
-        <span id="forum_name">{{ forum_name }}</span>
+        <span>{{ forum_name }}</span>
       </div>
       <div class="col-auto h6 d-block d-lg-none d-xl-none">
         <b-badge variant="secondary" pill class="float-left">
@@ -253,30 +253,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.z-sidebar {
-  position: fixed;
-  z-index: 999;
-  right: 15px;
-  top: 40%;
-  color: #5fb878;
-  width: 40px;
-  div {
-    width: 32x;
-    height: 32px;
-    position: relative;
-  }
-}
-.z-sidebar > div + div {
-  margin-top: 10px;
-}
-.z-sidebar > .icon-top,
-.z-sidebar > .icon-down,
-.z-sidebar > .icon-new-thread,
-.z-sidebar .icon-reload {
-  width: 24px;
-  left: 4px;
-  cursor: pointer;
-}
-</style>>

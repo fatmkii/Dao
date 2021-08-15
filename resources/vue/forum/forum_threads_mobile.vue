@@ -100,32 +100,3 @@ export default {
   },
 };
 </script>
-
-
-
-<style lang="scss" scoped>
-@import "resources/css/app.scss";
-
-.thread_title {
-  cursor: pointer;
-  @include font_color("font_color_href");
-}
-.threads_table_header {
-  @include background_color("background_color3");
-  border-bottom: 1px solid #111;
-  border-top: 1px solid #111;
-}
-.threads_container {
-  border-bottom: 1px solid;
-  @include border_color("border_color1");
-}
-#spinner {
-  position: fixed;
-  z-index: 999;
-  width: 3rem;
-  height: 3rem;
-  right: 50%;
-  top: 40%;
-}
-</style>>
-

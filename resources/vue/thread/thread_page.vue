@@ -15,7 +15,9 @@
           <b-badge variant="secondary" pill class="float-left">
             {{ forum_id }}
           </b-badge>
-          <span class="forum_name" @click="back_to_forum">{{ forum_name }}</span>
+          <span class="forum_name" @click="back_to_forum">{{
+            forum_name
+          }}</span>
         </div>
         <div class="col-auto ml-auto">
           <ThreadPaginator
@@ -163,20 +165,6 @@
         @keyup.ctrl.enter="new_post_handle"
       ></textarea>
       <div class="row align-items-center mt-3">
-        <div class="col-auto">
-          <b-button
-            variant="success"
-            size="sm"
-            :disabled="
-              !this.$store.state.User.LoginStatus ||
-              Boolean(locked_TTL) ||
-              new_post_handling
-            "
-            v-b-popover.hover.right="'可以Ctrl+Enter喔'"
-            @click="new_post_handle"
-            >{{ new_post_handling ? "提交中" : "回复" }}
-          </b-button>
-        </div>
         <div class="col-auto" style="font-size: 0.875rem">
           <span v-if="!this.$store.state.User.LoginStatus">
             请在先<router-link to="/login">导入或领取饼干</router-link
@@ -206,9 +194,23 @@
             日清，请及时更换帖子喔
           </span>
         </div>
+        <div class="col-auto ml-auto">
+          <b-button
+            variant="success"
+            size="sm"
+            :disabled="
+              !this.$store.state.User.LoginStatus ||
+              Boolean(locked_TTL) ||
+              new_post_handling
+            "
+            v-b-popover.hover.right="'可以Ctrl+Enter喔'"
+            @click="new_post_handle"
+            >{{ new_post_handling ? "提交中" : "回复" }}
+          </b-button>
+        </div>
       </div>
       <div class="row align-items-center mt-3">
-        <div class="col-auto ml-auto">
+        <div class="col-auto mr-auto">
           <b-button variant="success" size="sm" @click="back_to_forum"
             >返回小岛
           </b-button>
@@ -815,57 +817,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.post_title {
-  background-color: #dff0d8;
-}
-.post_container {
-  background-color: #eefaee;
-}
-.forum_name {
-  cursor: pointer;
-}
-
-#spinner {
-  position: fixed;
-  z-index: 999;
-  width: 3rem;
-  height: 3rem;
-  right: 50%;
-  top: 40%;
-}
-
-.z-sidebar {
-  position: fixed;
-  z-index: 999;
-  right: 15px;
-  top: 40%;
-  color: #5fb878;
-  width: 40px;
-  div {
-    width: 32px;
-    height: 32px;
-    position: relative;
-  }
-}
-.z-sidebar > div + div {
-  margin-top: 10px;
-}
-
-.z-sidebar > .icon-roll {
-  cursor: pointer;
-}
-.z-sidebar > .icon-top,
-.z-sidebar > .icon-down,
-.z-sidebar > .icon-jump,
-.z-sidebar .icon-reload {
-  width: 24px;
-  left: 4px;
-  cursor: pointer;
-}
-
-.icon-back {
-  cursor: pointer;
-}
-</style>
