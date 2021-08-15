@@ -33,7 +33,7 @@
               "
               :target="router_target"
               v-if="thread.posts_num > 200"
-              style="color: #212529"
+              class="thread_page"
               >[{{ Math.ceil((thread.posts_num + 1) / 200) }}]
             </router-link>
           </td>

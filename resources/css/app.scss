@@ -86,7 +86,7 @@ body {
     left: 4px;
     cursor: pointer;
 }
-.toast-body ,
+.toast-body,
 .toast-header {
     @include background_color("background_color_toast");
     @include font_color("font_color_toast");
@@ -194,6 +194,9 @@ body {
 //手机版主题列表
 .thread_title {
     cursor: pointer;
+    @include font_color("font_color_href");
+}
+.thread_page {
     @include font_color("font_color_href");
 }
 
