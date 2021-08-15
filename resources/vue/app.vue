@@ -107,6 +107,10 @@ export default {
     //读取localStorage的主题
     if (localStorage.getItem("theme") == null) {
       localStorage.theme = "hdao";
+      window.document.documentElement.setAttribute(
+        "data-theme",
+        localStorage.theme
+      );
     } else {
       window.document.documentElement.setAttribute(
         "data-theme",
