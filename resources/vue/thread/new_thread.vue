@@ -34,10 +34,15 @@
         </b-form-checkbox>
       </div>
     </div>
-    <b-form-input id="nickname_input" v-model="nickname_input"></b-form-input>
+    <b-form-input
+      id="nickname_input"
+      v-model="nickname_input"
+      class="nickname_input"
+    ></b-form-input>
     <div class="my-2" style="font-size: 0.875rem">标题</div>
     <b-form-input
       id="title_input"
+      class="title_input"
       placeholder="标题，必填"
       v-model="title_input"
     ></b-form-input>
@@ -49,7 +54,7 @@
     <div class="my-2" style="font-size: 0.875rem">内容</div>
     <textarea
       id="content_input"
-      class="form-control"
+      class="content_input form-control"
       v-model="content_input"
       rows="5"
       ref="content_input"
@@ -131,12 +136,14 @@
         <b-form-input
           placeholder="#212529"
           v-model="title_color_input"
+          class="common_input"
         ></b-form-input>
       </div>
       <div class="col-4">
         <b-form-input
           placeholder="大于多少奥利奥才能看帖"
           v-model="locked_by_coin_input"
+          class="common_input"
         ></b-form-input>
       </div>
     </div>

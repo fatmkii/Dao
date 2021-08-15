@@ -1,121 +1,12 @@
 @import "node_modules/bootstrap/scss/bootstrap.scss";
 @import "node_modules/bootstrap-vue/src/index.scss";
-
-$themes: (
-    hdao: (
-        //背景色、0= 整体背景色 1=主题色（浅） 2=主题色（深） 3=浅灰色（导航栏等）4=深灰色（小岛号码圆点等） 5=白色 6=通常为透明色
-        background_color0: #eefaee,
-        background_color1: #eefaee,
-        background_color2: #dff0d8,
-        background_color3: #eee,
-        background_color4: #6c757d,
-        background_color5: #ffffff,
-        background_color6: transparent,
-        background_color_hover: #dff0d8,
-        //按钮系列
-        btn_color: #fff,
-        btn_background_color: #28a745,
-        btn_background_color_disable: #6dc380,
-        btn_background_color_hover: #218838,
-        btn_border_color: #28a745,
-        btn_border_color_hover: #1e7e34,
-        btn_box_shadow: rgb(72 180 97 / 50%),
-        //主要前景色、图标颜色等
-        icon_color1: #5fb878,
-        icon_color2: #28a745,
-        icon_color3: #777,
-        //字体颜色 1=浅灰色（引用等）  2=深灰色（主要字体） 3=主题色（发帖者信息等）5=白色 href=超连接  admin=管理员色
-        font_color1: #777,
-        font_color2: #444,
-        font_color3: #5fb878,
-        font_color5: #ffffff,
-        font_color_href: #0000ee,
-        font_color_admin: #dd0000,
-        //边框颜色 0=黑色 1=主题色
-        border_color0: #111,
-        border_color1: #5fb878,
-    ),
-);
-
-//遍历主题map
-@mixin themeify {
-    @each $theme-name, $theme-map in $themes {
-        //!global 把局部变量强升为全局变量
-        $theme-map: $theme-map !global;
-        //判断html的data-theme的属性值  #{}是sass的插值表达式
-        //& sass嵌套里的父容器标识   @content是混合器插槽，像vue的slot
-        [data-theme="#{$theme-name}"] & {
-            @content;
-        }
-    }
-}
-
-//声明一个根据Key获取颜色的function
-@function themed($key) {
-    @return map-get($theme-map, $key);
-}
-
-//获取背景颜色
-@mixin background_color($color) {
-    @include themeify {
-        background-color: themed($color);
-    }
-}
-
-//获取背景颜色（important）
-@mixin background_color_i($color) {
-    @include themeify {
-        background-color: themed($color) !important;
-    }
-}
-
-//获取box_shadow
-@mixin box_shadow_color($color) {
-    @include themeify {
-        box-shadow: themed($color);
-    }
-}
-
-//获取字体颜色
-@mixin font_color($color) {
-    @include themeify {
-        color: themed($color);
-    }
-}
-
-//获取字体颜色 important
-@mixin font_color_i($color) {
-    @include themeify {
-        color: themed($color) !important;
-    }
-}
-
-//获取边框颜色
-@mixin border_color($color) {
-    @include themeify {
-        border-color: themed($color);
-    }
-}
-
-//获取边框颜色
-@mixin border_color_i($color) {
-    @include themeify {
-        border-color: themed($color) !important;
-    }
-}
+@import "./themes.scss";
+@import "./control.scss";
 
 //全体共通
 body {
     @include background_color("background_color0");
     @include font_color("font_color2");
-}
-
-input {
-    @include background_color("background_color5");
-}
-
-textarea {
-    @include background_color("background_color5");
 }
 
 html,
@@ -126,29 +17,38 @@ body {
 .b-pagination {
     margin-bottom: 0;
 }
+.common_input,
+.title_input,
+.content_input,
+.nickname_input,
+.custom-select {
+    @include background_color("background_color_input");
+    @include font_color("font_color_input");
+}
 
 //按钮
-.btn-success {
-    @include font_color("btn_color");
-    @include background_color_i("btn_background_color");
-    @include border_color("btn_border_color");
-    :hover {
-        @include background_color_i("btn_background_color_hover");
-        @include border_color("btn_border_color_hover");
-    }
-    :disabled {
-        @include background_color_i("btn_background_color_disable");
-        @include border_color("btn_border_color");
-    }
-    :focus {
-        @include background_color_i("btn_background_color_hover");
-        @include border_color("btn_border_color_hover");
-        @include box_shadow_color("btn_box_shadow");
-    }
-}
+// .btn-success {
+//     @include font_color("btn_color");
+//     @include background_color_i("btn_background_color");
+//     @include border_color("btn_border_color");
+//     :hover {
+//         @include background_color_i("btn_background_color_hover");
+//         @include border_color("btn_border_color_hover");
+//     }
+//     :disabled {
+//         @include background_color_i("btn_background_color_disable");
+//         @include border_color("btn_border_color");
+//     }
+//     :focus {
+//         @include background_color_i("btn_background_color_hover");
+//         @include border_color("btn_border_color_hover");
+//         @include box_shadow_color("btn_box_shadow");
+//     }
+// }
 
 //侧边栏及其他
 #spinner {
+    @include font_color("icon_color1");
     position: fixed;
     z-index: 999;
     width: 3rem;
@@ -186,24 +86,23 @@ body {
     left: 4px;
     cursor: pointer;
 }
+.toast-body ,
+.toast-header {
+    @include background_color("background_color_toast");
+    @include font_color("font_color_toast");
+}
 
-//nav相关
-.nav {
-    @include background_color("background_color6");
-    a {
-        @include font_color("font_color2");
-    }
-}
-.nav-link {
-    padding: 0.5rem 0.75rem;
-}
-.nav-link.active {
-    @include background_color("icon_color2");
-}
+//顶部nav相关
 .navbar {
-    @include background_color("background_color3");
-    a {
-        @include font_color("font_color2");
+    @include background_color("background_color_nav");
+    .router-link-active {
+        @include font_color("font_color_nav");
+    }
+    .btn-outline-dark {
+        @include font_color("font_color_nav");
+    }
+    .btn-outline-dark:hover {
+        @include font_color("font_color5");
     }
 }
 .favicon {
@@ -222,7 +121,12 @@ body {
 .card-header {
     @include background_color("background_color3");
 }
+.card-title {
+    @include font_color("font_color2");
+    font-size: 1rem;
+}
 .card-text {
+    @include font_color("font_color2");
     font-size: 0.875rem;
 }
 
@@ -238,6 +142,19 @@ body {
 #placeholder___BV_tab_button__ {
     display: none !important;
 }
+//emoji的nav
+.nav {
+    @include background_color("background_color6");
+    a {
+        @include font_color("font_color2");
+    }
+}
+.nav-link {
+    padding: 0.5rem 0.75rem;
+}
+.nav-link.active {
+    @include background_color("icon_color2");
+}
 
 //forum_page相关
 .forum_name {
@@ -250,6 +167,7 @@ body {
     cursor: pointer;
 }
 
+//电脑版主题列表
 .threads_table {
     width: 100%;
     margin-bottom: 1rem;
@@ -258,8 +176,9 @@ body {
         @include background_color("background_color3");
     }
     th {
-        border-top: 1px solid #111;
-        border-bottom: 1px solid #111;
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        @include border_color("border_color0");
         padding: 0.5rem;
     }
     td {
@@ -272,6 +191,7 @@ body {
     }
 }
 
+//手机版主题列表
 .thread_title {
     cursor: pointer;
     @include font_color("font_color_href");
@@ -279,8 +199,9 @@ body {
 
 .threads_table_header {
     @include background_color("background_color3");
-    border-bottom: 1px solid #111;
-    border-top: 1px solid #111;
+    border-bottom: 1px solid;
+    border-top: 1px solid;
+    @include border_color("border_color0");
 }
 .threads_container {
     border-bottom: 1px solid;
@@ -295,7 +216,7 @@ body {
     @include background_color("background_color6");
 }
 .post_footer_text {
-    @include font_color("icon_color2");
+    @include font_color("font_color3");
 }
 .post_footer {
     font-size: calc(0.8rem + 0.2vw);
@@ -309,7 +230,7 @@ body {
     max-width: 67px;
 }
 .quote_content {
-    color: #777777;
+    @include font_color("font_color1");
 }
 .svg-success {
     @include font_color("icon_color2");
@@ -322,7 +243,6 @@ body {
 .post_content img {
     max-width: 100%;
 }
-
 
 [v-cloak] {
     display: none;

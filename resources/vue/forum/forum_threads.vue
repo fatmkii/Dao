@@ -47,7 +47,6 @@
     <b-spinner
       id="spinner"
       v-show="!threads_load_status"
-      variant="success"
       label="读取中"
     >
     </b-spinner>

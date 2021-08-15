@@ -19,14 +19,6 @@
             <b-badge pill style="background-color: #28a745">&nbsp;</b-badge>
             H岛绿
           </b-dropdown-item>
-          <!-- <b-dropdown-item @click="theme_set('nga')">
-            <b-badge pill style="background-color: #ffedc3">&nbsp;</b-badge>
-            NGA黄
-          </b-dropdown-item>
-          <b-dropdown-item @click="theme_set('pink')">
-            <b-badge pill style="background-color: #f9ccde">&nbsp;</b-badge>
-            QNY粉
-          </b-dropdown-item>
           <b-dropdown-item @click="theme_set('night')">
             <b-badge pill style="background-color: #1c424a">&nbsp;</b-badge>
             夜间黑
@@ -34,7 +26,15 @@
           <b-dropdown-item @click="theme_set('gray')">
             <b-badge pill style="background-color: #eeeeee">&nbsp;</b-badge>
             Word灰
-          </b-dropdown-item> -->
+          </b-dropdown-item>
+          <!-- <b-dropdown-item @click="theme_set('nga')">
+            <b-badge pill style="background-color: #ffedc3">&nbsp;</b-badge>
+            NGA黄
+          </b-dropdown-item>
+          <b-dropdown-item @click="theme_set('pink')">
+            <b-badge pill style="background-color: #f9ccde">&nbsp;</b-badge>
+            QNY粉
+          </b-dropdown-item>-->
         </b-dropdown>
         <b-dropdown
           id="skin_button"
@@ -47,14 +47,6 @@
             <b-badge pill style="background-color: #28a745">&nbsp;</b-badge>
             H岛绿
           </b-dropdown-item>
-          <!-- <b-dropdown-item @click="theme_set('nga')">
-            <b-badge pill style="background-color: #ffedc3">&nbsp;</b-badge>
-            NGA黄
-          </b-dropdown-item>
-          <b-dropdown-item @click="theme_set('pink')">
-            <b-badge pill style="background-color: #f9ccde">&nbsp;</b-badge>
-            QNY粉
-          </b-dropdown-item>
           <b-dropdown-item @click="theme_set('night')">
             <b-badge pill style="background-color: #1c424a">&nbsp;</b-badge>
             夜间黑
@@ -62,6 +54,14 @@
           <b-dropdown-item @click="theme_set('gray')">
             <b-badge pill style="background-color: #eeeeee">&nbsp;</b-badge>
             Word灰
+          </b-dropdown-item>
+          <!-- <b-dropdown-item @click="theme_set('nga')">
+            <b-badge pill style="background-color: #ffedc3">&nbsp;</b-badge>
+            NGA黄
+          </b-dropdown-item>
+          <b-dropdown-item @click="theme_set('pink')">
+            <b-badge pill style="background-color: #f9ccde">&nbsp;</b-badge>
+            QNY粉
           </b-dropdown-item> -->
         </b-dropdown>
         <b-button

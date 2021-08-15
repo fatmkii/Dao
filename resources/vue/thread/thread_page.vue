@@ -144,7 +144,7 @@
           </b-form-checkbox>
         </div>
       </div>
-      <b-form-input id="nickname_input" v-model="nickname_input"></b-form-input>
+      <b-form-input id="nickname_input" v-model="nickname_input" class="nickname_input"></b-form-input>
       <Emoji
         :heads_id="thread_heads_id"
         :emoji_auto_hide="emoji_auto_hide"
@@ -153,7 +153,7 @@
       <div class="my-2" style="font-size: 0.875rem">内容</div>
       <textarea
         id="content_input"
-        class="form-control"
+        class="content_input form-control"
         v-model="content_input"
         rows="3"
         ref="content_input"
@@ -203,7 +203,7 @@
               Boolean(locked_TTL) ||
               new_post_handling
             "
-            v-b-popover.hover.right="'可以Ctrl+Enter喔'"
+            v-b-popover.hover.left="'可以Ctrl+Enter喔'"
             @click="new_post_handle"
             >{{ new_post_handling ? "提交中" : "回复" }}
           </b-button>
@@ -222,7 +222,6 @@
       <b-spinner
         id="spinner"
         v-show="!posts_load_status"
-        variant="success"
         label="读取中"
       >
       </b-spinner>
