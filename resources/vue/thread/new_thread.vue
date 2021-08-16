@@ -56,7 +56,7 @@
       id="content_input"
       class="content_input form-control"
       v-model="content_input"
-      rows="5"
+      :rows="content_input_rows"
       ref="content_input"
       :disabled="new_thread_handling || Boolean(locked_TTL)"
       @keyup.ctrl.enter="new_thread_handle"
@@ -244,6 +244,16 @@ export default {
     },
     locked_TTL() {
       return this.$store.state.User.LockedTTL;
+    },
+    content_input_rows() {
+      const lines = (this.content_input.match(/\n/g) || "").length + 3;
+      if (lines < 5) {
+        return 5;
+      } else if (lines > 12) {
+        return 12;
+      } else {
+        return lines;
+      }
     },
   },
 

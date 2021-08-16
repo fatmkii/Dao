@@ -144,7 +144,11 @@
           </b-form-checkbox>
         </div>
       </div>
-      <b-form-input id="nickname_input" v-model="nickname_input" class="nickname_input"></b-form-input>
+      <b-form-input
+        id="nickname_input"
+        v-model="nickname_input"
+        class="nickname_input"
+      ></b-form-input>
       <Emoji
         :heads_id="thread_heads_id"
         :emoji_auto_hide="emoji_auto_hide"
@@ -155,7 +159,7 @@
         id="content_input"
         class="content_input form-control"
         v-model="content_input"
-        rows="3"
+        :rows="content_input_rows"
         ref="content_input"
         :disabled="
           !this.$store.state.User.LoginStatus ||
@@ -164,8 +168,23 @@
         "
         @keyup.ctrl.enter="new_post_handle"
       ></textarea>
-      <div class="row align-items-center mt-3">
-        <div class="col-auto" style="font-size: 0.875rem">
+      <div class="row align-items-center mt-2">
+        <div class="col-auto ml-auto">
+          <b-button
+            variant="success"
+            :disabled="
+              !this.$store.state.User.LoginStatus ||
+              Boolean(locked_TTL) ||
+              new_post_handling
+            "
+            v-b-popover.hover.left="'可以Ctrl+Enter喔'"
+            @click="new_post_handle"
+            >{{ new_post_handling ? "提交中" : "回复" }}
+          </b-button>
+        </div>
+      </div>
+      <div class="row align-items-center mt-2">
+        <div class="col-auto ml-auto" style="font-size: 0.875rem">
           <span v-if="!this.$store.state.User.LoginStatus">
             请在先<router-link to="/login">导入或领取饼干</router-link
             >后才能发言喔
@@ -194,22 +213,9 @@
             日清，请及时更换帖子喔
           </span>
         </div>
-        <div class="col-auto ml-auto">
-          <b-button
-            variant="success"
-            size="sm"
-            :disabled="
-              !this.$store.state.User.LoginStatus ||
-              Boolean(locked_TTL) ||
-              new_post_handling
-            "
-            v-b-popover.hover.left="'可以Ctrl+Enter喔'"
-            @click="new_post_handle"
-            >{{ new_post_handling ? "提交中" : "回复" }}
-          </b-button>
-        </div>
       </div>
-      <div class="row align-items-center mt-3">
+
+      <div class="row align-items-center mt-2">
         <div class="col-auto mr-auto">
           <b-button variant="success" size="sm" @click="back_to_forum"
             >返回小岛
@@ -219,11 +225,7 @@
     </div>
 
     <div>
-      <b-spinner
-        id="spinner"
-        v-show="!posts_load_status"
-        label="读取中"
-      >
+      <b-spinner id="spinner" v-show="!posts_load_status" label="读取中">
       </b-spinner>
 
       <div class="z-sidebar">
@@ -309,7 +311,7 @@
         </div>
       </div>
 
-      <b-modal ref="roll_modal" id="roll_modal">
+      <b-modal ref="roll_modal" id="roll_modal" class="roll_modal">
         <template v-slot:modal-header>
           <h5>Roll点面板</h5>
         </template>
@@ -365,7 +367,7 @@
           </b-button-group>
         </template>
       </b-modal>
-      <b-modal ref="jump_modal" id="jump_modal">
+      <b-modal ref="jump_modal" id="jump_modal" class="jump_modal">
         <template v-slot:modal-header>
           <h5>跳楼机</h5>
         </template>
@@ -476,6 +478,16 @@ export default {
         return roll_simulation.join();
       } else {
         return null;
+      }
+    },
+    content_input_rows() {
+      const lines = (this.content_input.match(/\n/g) || "").length + 3;
+      if (lines < 5) {
+        return 5;
+      } else if (lines > 10) {
+        return 10;
+      } else {
+        return lines;
       }
     },
     ...mapState({
