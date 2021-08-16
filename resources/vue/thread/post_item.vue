@@ -139,7 +139,7 @@
       >
       <span
         class="post_nick_name"
-        :style="{ color: author_color[post_data.created_by_admin] }"
+        :class="author_class"
       >
         {{ post_data.nickname }}
       </span>
@@ -207,11 +207,16 @@ export default {
       content_reward_input: "",
       coin_reward_input: "",
       reward_handling: false,
-      author_color: ["", "#DD0000", "#5fb878"],
       post_content_show: true,
     };
   },
   computed: {
+    author_class() {
+      return {
+        created_by_admin1: this.post_data.created_by_admin == 1,
+        created_by_admin2: this.post_data.created_by_admin == 2,
+      };
+    },
     forum_id() {
       return this.$store.state.Forums.CurrentForumData.id;
     },

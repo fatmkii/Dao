@@ -26,6 +26,10 @@ body {
     @include font_color("font_color_input");
 }
 
+.favicon {
+    cursor: pointer;
+}
+
 //按钮
 // .btn-success {
 //     @include font_color("btn_color");
@@ -91,18 +95,25 @@ body {
     @include background_color("background_color_toast");
     @include font_color("font_color_toast");
 }
-.modal-content{
+.modal-content {
     @include background_color("background_color_modal");
-    input.form-control{
+    input.form-control {
         @include background_color("background_color_input");
         @include font_color("font_color_input");
     }
-    .input-group-text{
+    .input-group-text {
         @include background_color("background_color_modal");
         @include font_color("font_color_modal");
     }
 }
 
+//管理员及系统昵称的颜色
+.post_nick_name.created_by_admin1 {
+    color: #dd0000;
+}
+.post_nick_name.created_by_admin2 {
+    color: #5fb878;
+}
 
 //顶部nav相关
 .navbar {

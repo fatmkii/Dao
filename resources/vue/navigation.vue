@@ -2,7 +2,13 @@
   <div>
     <b-navbar>
       <b-navbar-nav class="align-middle">
-        <b-img fluid src="/favicon.png" alt="icon" class="favicon"></b-img>
+        <b-img
+          fluid
+          src="/favicon.png"
+          alt="icon"
+          class="favicon"
+          @click="$router.push('/')"
+        ></b-img>
         <router-link to="/" tag="a" style="font-size: 1.25rem" class="ml-1"
           >小火锅</router-link
         >

@@ -481,7 +481,7 @@ export default {
       }
     },
     content_input_rows() {
-      const lines = (this.content_input.match(/\n/g) || "").length + 3;
+      const lines = (this.content_input.match(/\n/g) || "").length + 2;
       if (lines < 5) {
         return 5;
       } else if (lines > 10) {
@@ -538,7 +538,7 @@ export default {
             this.random_heads_data = JSON.parse(
               response.data.random_heads.random_heads
             );
-            document.title = this.thread_title;
+            document.title = this.thread_title; //设置浏览器页面标签文字
             if (remind) {
               this.$bvToast.toast("已刷新帖子", {
                 title: "Done.",
