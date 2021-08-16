@@ -91,6 +91,18 @@ body {
     @include background_color("background_color_toast");
     @include font_color("font_color_toast");
 }
+.modal-content{
+    @include background_color("background_color_modal");
+    input.form-control{
+        @include background_color("background_color_input");
+        @include font_color("font_color_input");
+    }
+    .input-group-text{
+        @include background_color("background_color_modal");
+        @include font_color("font_color_modal");
+    }
+}
+
 
 //顶部nav相关
 .navbar {

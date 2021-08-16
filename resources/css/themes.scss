@@ -26,6 +26,8 @@ $themes: (
         //toast颜色
         background_color_toast: rgba(255, 255, 255, 0.5),
         font_color_toast: #444,
+        //modal颜色
+        background_color_modal: #ffffff,
         //输入框颜色
         background_color_input: #fff,
         font_color_input: #444,
@@ -39,7 +41,7 @@ $themes: (
         // btn_background_color_hover: #218838,
         // btn_border_color: #28a745,
         // btn_border_color_hover: #1e7e34,
-        // btn_box_shadow: rgb(72 180 97 / 50%),,,,,
+        // btn_box_shadow: rgb(72 180 97 / 50%),,,,,,,,
     ),
     night: (
         //背景色、0= 整体背景色 1=主题色（浅） 2=主题色（深） 3=浅灰色（导航栏等）4=深灰色（小岛号码圆点等） 5=白色 6=通常为透明色 input=输入框颜色
@@ -68,6 +70,9 @@ $themes: (
         //toast颜色
         background_color_toast: rgba(66, 74, 84, 0.5),
         font_color_toast: #eee,
+        //modal颜色
+        background_color_modal: #1d2939,
+        font_color_modal: #eee,
         //输入框颜色
         background_color_input: #424a54,
         font_color_input: #ddd,
@@ -85,6 +90,7 @@ $themes: (
         background_color5: #ffffff,
         background_color6: transparent,
         background_color_hover: #eee,
+
         //主要前景色、图标颜色等
         icon_color1: #aaaaaa,
         icon_color2: #777,
@@ -102,6 +108,8 @@ $themes: (
         //toast颜色
         background_color_toast: rgba(255, 255, 255, 0.5),
         font_color_toast: #444,
+        //modal颜色
+        background_color_modal: #ffffff,
         //输入框颜色
         background_color_input: #fff,
         font_color_input: #444,
@@ -115,6 +123,6 @@ $themes: (
         // btn_background_color_hover: #218838,
         // btn_border_color: #28a745,
         // btn_border_color_hover: #1e7e34,
-        // btn_box_shadow: rgb(72 180 97 / 50%),,,,,
+        // btn_box_shadow: rgb(72 180 97 / 50%),,,,,,,,
     ),
 );
