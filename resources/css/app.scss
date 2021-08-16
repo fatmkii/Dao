@@ -65,31 +65,40 @@ body {
     position: fixed;
     z-index: 999;
     right: 15px;
-    top: 40%;
+    bottom: 40%;
     @include font_color("icon_color1");
     width: 40px;
-    div {
+    div > div {
+        margin-top: 10px;
+        width: 32px;
+        height: 32px;
+        position: relative;
+    }
+    .icon-box {
+        margin-top: 10px;
         width: 32px;
         height: 32px;
         position: relative;
     }
 }
-.z-sidebar > div + div {
-    margin-top: 10px;
+.z-sidebar {
+    .icon-roll {
+        cursor: pointer;
+    }
+}
+.z-sidebar {
+    .icon-top,
+    .icon-down,
+    .icon-jump,
+    .icon-new-thread,
+    .icon-box,
+    .icon-reload {
+        width: 24px;
+        left: 4px;
+        cursor: pointer;
+    }
 }
 
-.z-sidebar > .icon-roll {
-    cursor: pointer;
-}
-.z-sidebar > .icon-top,
-.z-sidebar > .icon-down,
-.z-sidebar > .icon-jump,
-.z-sidebar > .icon-new-thread,
-.z-sidebar .icon-reload {
-    width: 24px;
-    left: 4px;
-    cursor: pointer;
-}
 .toast-body,
 .toast-header {
     @include background_color("background_color_toast");
