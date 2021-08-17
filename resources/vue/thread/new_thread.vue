@@ -61,18 +61,35 @@
       :disabled="new_thread_handling || Boolean(locked_TTL)"
       @keyup.ctrl.enter="new_thread_handle"
     ></textarea>
-    <div class="row align-items-center mt-3">
-      <div class="col-auto">
+    <div class="row align-items-center mt-2">
+      <div class="col-7">
+        <b-form-file
+          browse-text="上传图片"
+          size="sm"
+          placeholder="未选择"
+          accept="image/jpeg, image/png, image/gif"
+          style="max-width: 300px"
+          @input="upload_img_handle"
+        ></b-form-file>
+        <b-spinner
+          class="spinner img-uploading"
+          v-show="upload_img_handling"
+          label="上传中"
+        >
+        </b-spinner>
+      </div>
+      <div class="col-5">
         <b-button
           variant="success"
-          size="sm"
+          class="float-right"
           :disabled="new_thread_handling || Boolean(locked_TTL)"
           @click="new_thread_handle"
           >{{ new_thread_handling ? "提交中" : "发表" }}
         </b-button>
       </div>
-      <div class="col-auto">
-        <span v-show="new_thread_handling">数据提交中……</span>
+    </div>
+    <div class="row align-items-center mt-2">
+      <div class="col-auto ml-auto" style="font-size: 0.875rem">
         <span v-if="locked_TTL">
           你的饼干封禁中，将于{{
             Math.floor(locked_TTL / 3600) + 1
@@ -208,6 +225,7 @@ export default {
       title_color_input: "",
       post_with_admin: false,
       locked_by_coin_input: undefined,
+      upload_img_handling: false,
     };
   },
   watch: {
@@ -343,6 +361,36 @@ export default {
         .catch((error) => {
           alert(error);
         }); // Todo:写异常返回代码;
+    },
+    upload_img_handle(file) {
+      if (!file) return;
+      this.upload_img_handling = true;
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append(
+        "Token",
+        "ofdns1jjalu6efhl4ahlgmqack2lm3ll:J7Io2WOTXnIUZ2G0ibCcNsJ1BsY=:eyJkZWFkbGluZSI6MTYyOTIxMjIyOSwiYWN0aW9uIjoiZ2V0IiwidWlkIjoxMDM2OCwiYWlkIjoiMTEwMDQiLCJmcm9tIjoiZmlsZSJ9"
+      );
+      delete axios.defaults.headers.Authorization; //正常用的transFormRequest会影响data，只能把Authorization删了再加回去
+      const config = {
+        method: "post",
+        url: "https://up.tietuku.cn/",
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+        data: formData,
+      };
+      axios(config)
+        .then((response) => {
+          this.upload_img_handling = false;
+          this.content_input += "<img src='" + response.data.linkurl + "' >";
+          axios.defaults.headers.Authorization = "Bearer " + localStorage.Token;
+        })
+        .catch((error) => {
+          this.upload_img_handling = false;
+          axios.defaults.headers.Authorization = "Bearer " + localStorage.Token;
+          alert(error);
+        });
     },
   },
   created() {

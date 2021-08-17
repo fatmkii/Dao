@@ -173,7 +173,6 @@
       <div class="row align-items-center mt-2">
         <div class="col-7">
           <b-form-file
-            v-model="upload_img_file"
             browse-text="上传图片"
             size="sm"
             placeholder="未选择"
@@ -509,7 +508,6 @@ export default {
       jump_page_show: false,
       z_bar_show: false,
       emoji_auto_hide: true,
-      upload_img_file: null,
       upload_img_handling: false,
       browse_current: {
         expire_time: Date.now() + 86400000,
@@ -749,7 +747,6 @@ export default {
         .catch((error) => {
           this.upload_img_handling = false;
           axios.defaults.headers.Authorization = "Bearer " + localStorage.Token;
-
           alert(error);
         });
     },
