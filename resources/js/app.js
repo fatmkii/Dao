@@ -11,10 +11,9 @@ import store from './store/store'
 import router from './routes.js'
 
 window.sha256 = require('js-sha256')
-
 window.axios = require('axios')
 axios.defaults.withCredentials = false; // 在全局 axios 实例中启用 withCredentials 选项
-axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+// axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //axios拦截器
 axios.interceptors.response.use(
     (response) => {
@@ -24,7 +23,7 @@ axios.interceptors.response.use(
         if (error.response.status === 401) {
             localStorage.clear('Binggan')   //如果遇到401错误(用户未认证)，就清除Binggan和Token
             localStorage.clear('Token')
-            axios.defaults.headers.Authorization = "";
+            delete axios.defaults.headers.Authorization;
             alert('此页面需先登录喔！');
             window.location.href = '/login' //统一跳转到登陆页面
         }

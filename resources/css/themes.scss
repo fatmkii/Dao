@@ -27,7 +27,8 @@ $themes: (
         background_color_toast: rgba(255, 255, 255, 0.5),
         font_color_toast: #444,
         //modal颜色
-        background_color_modal: #ffffff,
+        background_color_modal1: #ffffff,
+        background_color_modal2: #e9ecef,
         //输入框颜色
         background_color_input: #fff,
         font_color_input: #444,
@@ -71,7 +72,8 @@ $themes: (
         background_color_toast: rgba(66, 74, 84, 0.5),
         font_color_toast: #eee,
         //modal颜色
-        background_color_modal: #1d2939,
+        background_color_modal1: #1d2939,
+        background_color_modal2: #1d2939,
         font_color_modal: #eee,
         //输入框颜色
         background_color_input: #424a54,
@@ -108,8 +110,9 @@ $themes: (
         //toast颜色
         background_color_toast: rgba(255, 255, 255, 0.5),
         font_color_toast: #444,
-        //modal颜色
-        background_color_modal: #ffffff,
+        //modal颜色 1=整体背景色 2=label背景色
+        background_color_modal1: #ffffff,
+        background_color_modal2: #e9ecef,
         //输入框颜色
         background_color_input: #fff,
         font_color_input: #444,

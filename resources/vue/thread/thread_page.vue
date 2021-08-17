@@ -23,6 +23,7 @@
           <ThreadPaginator
             :thread_id="thread_id"
             :last_page="posts_last_page"
+            :current_page="isNaN(page) ? 1 : page"
             align="right"
           ></ThreadPaginator>
         </div>
@@ -119,6 +120,7 @@
           <ThreadPaginator
             :thread_id="thread_id"
             :last_page="posts_last_page"
+            :current_page="isNaN(page) ? 1 : page"
             align="left"
           ></ThreadPaginator>
         </div>
@@ -169,9 +171,27 @@
         @keyup.ctrl.enter="new_post_handle"
       ></textarea>
       <div class="row align-items-center mt-2">
-        <div class="col-auto ml-auto">
+        <div class="col-7">
+          <b-form-file
+            v-model="upload_img_file"
+            browse-text="上传图片"
+            size="sm"
+            placeholder="未选择"
+            accept="image/jpeg, image/png, image/gif"
+            style="max-width: 300px"
+            @input="upload_img_handle"
+          ></b-form-file>
+          <b-spinner
+            class="spinner img-uploading"
+            v-show="upload_img_handling"
+            label="上传中"
+          >
+          </b-spinner>
+        </div>
+        <div class="col-5">
           <b-button
             variant="success"
+            class="ml-2 float-right"
             :disabled="
               !this.$store.state.User.LoginStatus ||
               Boolean(locked_TTL) ||
@@ -214,7 +234,6 @@
           </span>
         </div>
       </div>
-
       <div class="row align-items-center mt-2">
         <div class="col-auto mr-auto">
           <b-button variant="success" size="sm" @click="back_to_forum"
@@ -225,7 +244,7 @@
     </div>
 
     <div>
-      <b-spinner id="spinner" v-show="!posts_load_status" label="读取中">
+      <b-spinner class="spinner document-loading" v-show="!posts_load_status" label="读取中">
       </b-spinner>
 
       <div class="z-sidebar">
@@ -490,6 +509,8 @@ export default {
       jump_page_show: false,
       z_bar_show: false,
       emoji_auto_hide: true,
+      upload_img_file: null,
+      upload_img_handling: false,
       browse_current: {
         expire_time: Date.now() + 86400000,
         page: 1,
@@ -701,6 +722,37 @@ export default {
           alert(Object.values(error.response.data.errors)[0]);
         });
     },
+    upload_img_handle(file) {
+      if (!file) return;
+      this.upload_img_handling = true;
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append(
+        "Token",
+        "ofdns1jjalu6efhl4ahlgmqack2lm3ll:J7Io2WOTXnIUZ2G0ibCcNsJ1BsY=:eyJkZWFkbGluZSI6MTYyOTIxMjIyOSwiYWN0aW9uIjoiZ2V0IiwidWlkIjoxMDM2OCwiYWlkIjoiMTEwMDQiLCJmcm9tIjoiZmlsZSJ9"
+      );
+      delete axios.defaults.headers.Authorization; //正常用的transFormRequest会影响data，只能把Authorization删了再加回去
+      const config = {
+        method: "post",
+        url: "http://up.tietuku.cn/",
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+        data: formData,
+      };
+      axios(config)
+        .then((response) => {
+          this.upload_img_handling = false;
+          this.content_input += "<img src='" + response.data.linkurl + "' >";
+          axios.defaults.headers.Authorization = "Bearer " + localStorage.Token;
+        })
+        .catch((error) => {
+          this.upload_img_handling = false;
+          axios.defaults.headers.Authorization = "Bearer " + localStorage.Token;
+
+          alert(error);
+        });
+    },
     emoji_append(emoji_src) {
       this.content_input += "<img src='" + emoji_src + "' class='emoji_img'>";
       this.$refs.content_input.focus();
@@ -871,3 +923,4 @@ export default {
   },
 };
 </script> 
+

@@ -45,7 +45,7 @@
       </tbody>
     </table>
     <b-spinner
-      id="spinner"
+      class="spinner document-loading"
       v-show="!threads_load_status"
       label="读取中"
     >

@@ -51,7 +51,7 @@ body {
 // }
 
 //侧边栏及其他
-#spinner {
+.spinner.document-loading {
     @include font_color("icon_color1");
     position: fixed;
     z-index: 999;
@@ -59,6 +59,11 @@ body {
     height: 3rem;
     right: 50%;
     top: 40%;
+}
+.spinner.img-uploading {
+    @include font_color("icon_color1");
+    width: 1rem;
+    height: 1rem;
 }
 
 .z-sidebar {
@@ -105,13 +110,13 @@ body {
     @include font_color("font_color_toast");
 }
 .modal-content {
-    @include background_color("background_color_modal");
+    @include background_color("background_color_modal1");
     input.form-control {
         @include background_color("background_color_input");
         @include font_color("font_color_input");
     }
     .input-group-text {
-        @include background_color("background_color_modal");
+        @include background_color("background_color_modal2");
         @include font_color("font_color_modal");
     }
 }
@@ -277,6 +282,15 @@ body {
 }
 .post_content img {
     max-width: 100%;
+}
+
+label.custom-file-label {
+    @include background_color("background_color_input");
+    @include font_color("font_color_input");
+}
+label.custom-file-label::after {
+    @include background_color("background_color_modal2");
+    @include font_color("font_color_modal");
 }
 
 [v-cloak] {

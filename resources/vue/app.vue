@@ -74,7 +74,7 @@ export default {
             } else {
               localStorage.clear("Binggan");
               localStorage.clear("Token");
-              axios.defaults.headers.Authorization = "";
+              delete axios.defaults.headers.Authorization;
               window.location.href = "/"; //因为想清空Vuex状态，所以用js原生的重定向，而不是Vuerouter的push
               alert(response.data.message);
             }
@@ -83,7 +83,7 @@ export default {
             if (error.response.status === 401) {
               localStorage.clear("Binggan"); //如果遇到401错误(用户未认证)，就清除Binggan和Token
               localStorage.clear("Token");
-              axios.defaults.headers.Authorization = "";
+              delete axios.defaults.headers.Authorization;
             }
             alert("你的饼干好像有问题？请重新登录");
           }); // Todo:写异常返回代码;

@@ -135,7 +135,7 @@ export default {
           } else {
             throw new Error("此浏览器居然不支持localstorage");
           }
-          axios.defaults.headers.Authorization = "";
+          delete axios.defaults.headers.Authorization;
           window.location.href = "/"; //因为想清空Vuex状态，所以用js原生的重定向，而不是Vuerouter的push
         })
         .catch((error) => alert(error)); // Todo:写异常返回代码
@@ -256,7 +256,7 @@ export default {
           if (error.response.status === 401) {
             localStorage.clear("Binggan"); //如果遇到401错误(用户未认证)，就清除Binggan和Token
             localStorage.clear("Token");
-            axios.defaults.headers.Authorization = "";
+            delete axios.defaults.headers.Authorization;
           }
           alert(error);
         }); // Todo:写异常返回代码;

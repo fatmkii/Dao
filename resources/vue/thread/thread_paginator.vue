@@ -2,11 +2,11 @@
 <template>
   <b-pagination-nav
     :number-of-pages="last_page"
+    v-model="current_page"
     limit="5"
     :base-url="base_url"
     use-router
     first-number
-    last-number
     :align="align"
     class="my-2"
     size="sm"
@@ -20,6 +20,7 @@ export default {
   props: {
     thread_id: Number,
     last_page: Number,
+    current_page: Number,
     align: String,
   },
   data: function () {
