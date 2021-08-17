@@ -734,7 +734,7 @@ export default {
       delete axios.defaults.headers.Authorization; //正常用的transFormRequest会影响data，只能把Authorization删了再加回去
       const config = {
         method: "post",
-        url: "http://up.tietuku.cn/",
+        url: "https://up.tietuku.cn/",
         headers: {
           "content-type": "multipart/form-data",
         },
