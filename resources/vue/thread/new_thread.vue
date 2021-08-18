@@ -69,6 +69,7 @@
           placeholder="未选择"
           accept="image/jpeg, image/png, image/gif"
           style="max-width: 300px"
+          :disabled="!this.$store.state.User.LoginStatus"
           @input="upload_img_handle"
         ></b-form-file>
         <b-spinner
@@ -383,7 +384,10 @@ export default {
       axios(config)
         .then((response) => {
           this.upload_img_handling = false;
-          this.content_input += "<img src='" + response.data.linkurl.replace(/http/g, "https") + "' >";
+          this.content_input +=
+            "<img src='" +
+            response.data.linkurl.replace(/http/g, "https") +
+            "' >";
           axios.defaults.headers.Authorization = "Bearer " + localStorage.Token;
         })
         .catch((error) => {

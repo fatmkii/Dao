@@ -178,6 +178,7 @@
             placeholder="未选择"
             accept="image/jpeg, image/png, image/gif"
             style="max-width: 300px"
+            :disabled="!this.$store.state.User.LoginStatus"
             @input="upload_img_handle"
           ></b-form-file>
           <b-spinner
