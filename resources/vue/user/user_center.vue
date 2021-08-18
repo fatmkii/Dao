@@ -81,7 +81,6 @@
           </div>
         </div>
       </b-tab>
-      <b-tab title="切换皮肤">还没做好啦</b-tab>
     </b-tabs>
   </div>
 </template>

@@ -243,7 +243,11 @@
     </div>
 
     <div>
-      <b-spinner class="spinner document-loading" v-show="!posts_load_status" label="读取中">
+      <b-spinner
+        class="spinner document-loading"
+        v-show="!posts_load_status"
+        label="读取中"
+      >
       </b-spinner>
 
       <div class="z-sidebar">
@@ -741,7 +745,10 @@ export default {
       axios(config)
         .then((response) => {
           this.upload_img_handling = false;
-          this.content_input += "<img src='" + response.data.linkurl + "' >";
+          this.content_input +=
+            "<img src='" +
+            response.data.linkurl.replace(/http/g, "https") +
+            "' >";
           axios.defaults.headers.Authorization = "Bearer " + localStorage.Token;
         })
         .catch((error) => {
