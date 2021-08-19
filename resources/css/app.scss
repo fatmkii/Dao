@@ -185,6 +185,12 @@ body {
 #placeholder___BV_tab_button__ {
     display: none !important;
 }
+//1.0的emoji
+.emotion {
+    max-width: 48px;
+    max-height: 48px;
+}
+
 //emoji的nav
 .nav {
     @include background_color("background_color6");
