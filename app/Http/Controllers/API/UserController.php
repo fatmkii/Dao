@@ -230,9 +230,9 @@ class UserController extends Controller
         try {
             DB::beginTransaction();
             $tax = ceil($request->coin * 0.07); //税率0.07
-            $coin_get = $request->coin - $tax;
-            $user->coin -= $request->coin;
-            $user_target->coin += $coin_get;
+            $coin_pay = $request->coin + $tax;
+            $user->coin -= $coin_pay;
+            $user_target->coin += $request->coin;
             $user->save();
             $user_target->save();
             if ($user->coin < 0) {
@@ -245,7 +245,7 @@ class UserController extends Controller
             $post->thread_id = $request->thread_id;
             $post->content = "<span class='quote_content'>" .
                 $request->post_floor_message .
-                '</span><br>我为你打赏了' . $coin_get .
+                '</span><br>我为你打赏了' . $request->coin .
                 '块奥利奥<br>——' . $request->content;
             $post->nickname = '奥利奥打赏系统';
             $post->created_by_admin = 2; //0=一般用户 1=管理员发布，2=系统发布
@@ -275,10 +275,6 @@ class UserController extends Controller
             );
         }
 
-        //清除redis的posts缓存
-        // for ($i = 1; $i <= ceil($thread->posts_num / 200); $i++) {
-        //     Cache::forget('threads_cache_' . $thread->id . '_' . $i);
-        // }
         ProcessUserActive::dispatch(
             [
                 'binggan' => $user->binggan,
@@ -292,7 +288,7 @@ class UserController extends Controller
         return response()->json(
             [
                 'code' => ResponseCode::SUCCESS,
-                'message' => '打赏成功！对方获得' . $coin_get . '个奥利奥，你减少了' . $request->coin . '个奥利奥',
+                'message' => '打赏成功！对方获得' . $request->coin . '个奥利奥，你减少了' . $coin_pay . '个奥利奥',
                 'data' => [
                     'binggan' => $request->binggan,
                     'binggan_target' => $request->binggan_target,

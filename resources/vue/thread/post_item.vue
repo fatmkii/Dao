@@ -109,7 +109,7 @@
         class="svg-success bi bi-gift-fill ml-1"
         viewBox="0 0 16 16"
         v-if="!post_data.is_your_post && post_data.is_deleted == 0"
-        @click="reward_click"
+        @click="emit_reward"
       >
         <!-- 打赏按钮 -->
         <path
@@ -137,10 +137,7 @@
       <span class="post_footer_text" @click="quote_click"
         >№{{ post_data.floor }} ☆☆☆</span
       >
-      <span
-        class="post_nick_name"
-        :class="author_class"
-      >
+      <span class="post_nick_name" :class="author_class">
         {{ post_data.nickname }}
       </span>
       <span class="post_footer_text">于</span>
@@ -150,51 +147,12 @@
         →{{ post_data.created_binggan_hash.slice(0, 5) }}
       </span>
     </div>
-
-    <b-modal ref="reward_modal" id="reward_modal">
-      <template v-slot:modal-header>
-        <h5>打赏olo 给№{{ post_data.floor }}楼</h5>
-      </template>
-      <template v-slot:default>
-        <p>
-          友情提示：您在打赏回贴作者以后，将会扣除7%的手续费。
-          <br />
-          对方将获得：
-          <span style="color: red"
-            >{{ Math.floor(coin_reward_input * 0.93) }} </span
-          >块奥利奥。
-        </p>
-        <b-input-group prepend="打赏：">
-          <b-form-input
-            v-model="coin_reward_input"
-            placeholder="olo数量"
-          ></b-form-input>
-        </b-input-group>
-        <b-input-group prepend="留言：">
-          <b-form-input v-model="content_reward_input"></b-form-input>
-        </b-input-group>
-      </template>
-      <template v-slot:modal-footer="{ cancel }">
-        <b-button-group>
-          <b-button
-            variant="success"
-            :disabled="reward_handling"
-            @click="reward_handle"
-            >打赏！</b-button
-          >
-          <b-button variant="outline-secondary" @click="cancel()">
-            取消
-          </b-button>
-        </b-button-group>
-      </template>
-    </b-modal>
   </div>
 </template>
 
 
 <script>
 export default {
-  components: {},
   props: {
     post_data: Object,
     thread_anti_jingfen: Number,
@@ -233,44 +191,14 @@ export default {
     }
   },
   methods: {
-    reward_click() {
-      this.$refs["reward_modal"].show();
-    },
-    reward_handle() {
-      this.reward_handling = true;
-      const config = {
-        method: "post",
-        url: "/api/user/reward",
-        data: {
-          binggan: this.$store.state.User.Binggan,
-          forum_id: this.$store.state.Forums.CurrentForumData.id,
-          thread_id: this.post_data.thread_id,
-          post_id: this.post_data.id,
-          content: this.content_reward_input,
-          coin: this.coin_reward_input,
-          post_floor_message: this.$refs.post_author_info.innerText,
-        },
+    emit_reward() {
+      const payload = {
+        floor: this.post_data.floor,
+        thread_id: this.post_data.thread_id,
+        post_id: this.post_data.id,
+        post_floor_message: this.$refs.post_author_info.innerText,
       };
-      axios(config)
-        .then((response) => {
-          if (response.data.code == 200) {
-            this.$bvToast.toast(response.data.message, {
-              title: "Done.",
-              autoHideDelay: 1500,
-              appendToast: true,
-            });
-            this.$refs["reward_modal"].hide();
-            this.reward_handling = false;
-            this.$parent.get_posts_data();
-          } else {
-            this.reward_handling = false;
-            alert(response.data.message);
-          }
-        })
-        .catch((error) => {
-          alert(error);
-          this.reward_handling = false;
-        }); // Todo:写异常返回代码
+      this.$emit("emit_reward", payload);
     },
     post_delete_click() {
       var isdelete = confirm("要删除这个回复吗？（消费300奥利奥）");

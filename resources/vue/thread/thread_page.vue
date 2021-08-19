@@ -95,6 +95,7 @@
             :admin_button_show="admin_button_show"
             @quote_click="quote_click_handle"
             @get_posts_data="get_posts_data"
+            @emit_reward="emit_reward"
           ></PostItem>
         </div>
       </div>
@@ -457,6 +458,7 @@
           </b-button-group>
         </template>
       </b-modal>
+      <RewardModal ref="reward_modal"></RewardModal>
     </div>
   </div>
 </template>
@@ -467,9 +469,9 @@ import { mapState } from "vuex";
 import PostItem from "./post_item.vue";
 import ThreadPaginator from "./thread_paginator.vue";
 import Emoji from "./emoji.vue";
-
+import RewardModal from "./reward_modal.vue";
 export default {
-  components: { PostItem, ThreadPaginator, Emoji },
+  components: { PostItem, ThreadPaginator, Emoji, RewardModal },
   props: {
     thread_id: Number, //来自router，
     page: Number, //来自router
@@ -905,6 +907,9 @@ export default {
           this.$store.state.User.BrowseLogger
         );
       }
+    },
+    emit_reward(payload) {
+      this.$refs.reward_modal.reward_click(payload);
     },
   },
   created() {
