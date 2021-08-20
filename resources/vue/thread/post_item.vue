@@ -125,7 +125,7 @@
     </div>
     <div class="post_content mb-2" style="margin-top: 2rem" ref="post_centent">
       <span
-        v-html="post_data.content.replace(/\n/g, '<br>')"
+        v-html="post_content"
         v-show="post_content_show"
         style="word-wrap: break-word; white-space: normal"
       ></span>
@@ -158,6 +158,7 @@ export default {
     thread_anti_jingfen: Number,
     random_head_add: String,
     admin_button_show: Boolean,
+    no_image_mode: Boolean,
   },
   data: function () {
     return {
@@ -177,6 +178,15 @@ export default {
     },
     forum_id() {
       return this.$store.state.Forums.CurrentForumData.id;
+    },
+    post_content() {
+      if (this.no_image_mode) {
+        return this.post_data.content
+          .replace(/\n/g, "<br>")
+          .replace(/<img[^<>]*>/g, "");
+      } else {
+        return this.post_data.content.replace(/\n/g, "<br>");
+      }
     },
   },
   created() {

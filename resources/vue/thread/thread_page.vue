@@ -19,6 +19,11 @@
             forum_name
           }}</span>
         </div>
+        <div class="col-auto">
+          <b-form-checkbox v-model="no_image_mode" switch>
+            无图模式
+          </b-form-checkbox>
+        </div>
         <div class="col-auto ml-auto">
           <ThreadPaginator
             :thread_id="thread_id"
@@ -93,6 +98,7 @@
             :thread_anti_jingfen="thread_anti_jingfen"
             :random_head_add="random_heads_data[post_data.random_head]"
             :admin_button_show="admin_button_show"
+            :no_image_mode="no_image_mode"
             @quote_click="quote_click_handle"
             @get_posts_data="get_posts_data"
             @emit_reward="emit_reward"
@@ -492,6 +498,9 @@ export default {
         this.emoji_auto_hide ? "true" : ""
       );
     },
+    no_image_mode: function () {
+      localStorage.setItem("no_image_mode", this.no_image_mode ? "true" : "");
+    },
   },
   beforeRouteUpdate(to, from, next) {
     this.browse_record_handle(); //翻页时候记录浏览进度
@@ -514,6 +523,7 @@ export default {
       jump_floor: "",
       jump_page_show: false,
       z_bar_show: false,
+      no_image_mode: false,
       emoji_auto_hide: true,
       upload_img_handling: false,
       browse_current: {
@@ -919,6 +929,11 @@ export default {
       localStorage.emoji_auto_hide = "";
     } else {
       this.emoji_auto_hide = Boolean(localStorage.emoji_auto_hide);
+    }
+    if (localStorage.getItem("no_image_mode") == null) {
+      localStorage.no_image_mode = "";
+    } else {
+      this.no_image_mode = Boolean(localStorage.no_image_mode);
     }
   },
   mounted() {
