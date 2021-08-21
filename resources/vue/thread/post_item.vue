@@ -182,10 +182,13 @@ export default {
     post_content() {
       if (this.no_image_mode) {
         return this.post_data.content
+          .replace(/<script/g, "<**禁止使用script**")
           .replace(/\n/g, "<br>")
           .replace(/<img[^<>]*>/g, "");
       } else {
-        return this.post_data.content.replace(/\n/g, "<br>");
+        return this.post_data.content
+          // .replace(/<script/g, "<**禁止使用script**")
+          .replace(/\n/g, "<br>");
       }
     },
   },
