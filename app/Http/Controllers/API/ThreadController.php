@@ -317,6 +317,11 @@ class ThreadController extends Controller
             $posts->append('created_binggan_hash');
         }
 
+        //为超管加入发帖者饼干显示
+        if ($user->admin == 99) {
+            $posts->makeVisible('created_binggan');
+        }
+
         //提供该帖子的随机头像地址表
         $random_heads = Cache::remember('random_heads_cache_' . $CurrentThread->random_heads_group, 7 * 24 * 3600, function () use ($CurrentThread) {
             return DB::table('random_heads')->find($CurrentThread->random_heads_group);

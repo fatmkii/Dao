@@ -39,11 +39,20 @@ class AuthController extends Controller
         }
 
         if ($user) {
-            if ($user->admin == 0) {
-                $token = $user->createToken($binggan, ['normal'])->plainTextToken;
-            } else {
-                $token = $user->createToken($binggan, ['admin'])->plainTextToken;
+            switch ($user->admin) {
+                case 0:
+                    $token = $user->createToken($binggan, ['normal'])->plainTextToken;
+                    break;
+                case 1:
+                    $token = $user->createToken($binggan, ['admin'])->plainTextToken;
+                    break;
+                case 99:
+                    $token = $user->createToken($binggan, ['super_admin', 'admin'])->plainTextToken;
+                    break;
+                default:
+                    $token = $user->createToken($binggan, ['normal'])->plainTextToken;
             }
+
             return response()->json(
                 [
                     'code' => ResponseCode::SUCCESS,

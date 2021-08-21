@@ -76,11 +76,41 @@ class Post extends myModel
             case 0:
                 return $nickname;
             case 1:
-                return '****';
+                if ($this->created_by_admin != 2) {
+                    return '****';
+                } else {
+                    return $nickname;
+                }
             case 2:
-                return '****';
+                if ($this->created_by_admin != 2) {
+                    return '****';
+                } else {
+                    return $nickname;
+                }
             default:
                 return $nickname;
+        }
+    }
+
+    public function getCreatedByAdminAttribute($created_by_admin)
+    {
+        switch ($this->is_deleted) {
+            case 0:
+                return $created_by_admin;
+            case 1:
+                if ($created_by_admin != 2) {
+                    return 0;
+                } else {
+                    return $created_by_admin;
+                }
+            case 2:
+                if ($created_by_admin != 2) {
+                    return 0;
+                } else {
+                    return $created_by_admin;
+                }
+            default:
+                return $created_by_admin;
         }
     }
 
