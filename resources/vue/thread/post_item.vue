@@ -187,7 +187,7 @@ export default {
           .replace(/<img[^<>]*>/g, "");
       } else {
         return this.post_data.content
-          // .replace(/<script/g, "<**禁止使用script**")
+          .replace(/<script/g, "<**禁止使用script**")
           .replace(/\n/g, "<br>");
       }
     },
