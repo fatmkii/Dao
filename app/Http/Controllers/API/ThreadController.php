@@ -318,7 +318,7 @@ class ThreadController extends Controller
         }
 
         //为超管加入发帖者饼干显示
-        if ($user->admin == 99) {
+        if ($user && $user->admin == 99) {
             $posts->makeVisible('created_binggan');
         }
 
