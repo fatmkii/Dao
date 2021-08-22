@@ -25,12 +25,12 @@ class AdminController extends Controller
         ]);
 
         $user = $request->user();
-        if (!$user->tokenCan('admin')) {
-            return response()->json([
-                'code' => ResponseCode::ADMIN_UNAUTHORIZED,
-                'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
-            ]);
-        }
+        // if (!$user->tokenCan('admin')) {
+        //     return response()->json([
+        //         'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+        //         'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+        //     ]);
+        // }
 
         $thread = Thread::find($request->thread_id);
         if (!$thread) {
@@ -81,12 +81,12 @@ class AdminController extends Controller
         ]);
 
         $user = $request->user();
-        if (!$user->tokenCan('admin')) {
-            return response()->json([
-                'code' => ResponseCode::ADMIN_UNAUTHORIZED,
-                'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
-            ]);
-        }
+        // if (!$user->tokenCan('admin')) {
+        //     return response()->json([
+        //         'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+        //         'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+        //     ]);
+        // }
 
         $thread = Thread::find($request->thread_id);
         if (!$thread) {
@@ -137,12 +137,12 @@ class AdminController extends Controller
         ]);
 
         $user = $request->user();
-        if (!$user->tokenCan('admin')) {
-            return response()->json([
-                'code' => ResponseCode::ADMIN_UNAUTHORIZED,
-                'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
-            ]);
-        }
+        // if (!$user->tokenCan('admin')) {
+        //     return response()->json([
+        //         'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+        //         'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+        //     ]);
+        // }
 
         $thread = Thread::find($request->thread_id);
         if (!$thread) {
@@ -183,7 +183,7 @@ class AdminController extends Controller
         ]);
     }
 
-    public function post_delete(Request $request,$post_id)
+    public function post_delete(Request $request, $post_id)
     {
         $request->validate([
             'thread_id' => 'required|integer',
@@ -191,12 +191,12 @@ class AdminController extends Controller
         ]);
 
         $user = $request->user();
-        if (!$user->tokenCan('admin')) {
-            return response()->json([
-                'code' => ResponseCode::ADMIN_UNAUTHORIZED,
-                'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
-            ]);
-        }
+        // if (!$user->tokenCan('admin')) {
+        //     return response()->json([
+        //         'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+        //         'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+        //     ]);
+        // }
 
         $post = Post::suffix(intval($request->thread_id / 10000))->find($post_id);
         if (!$post) {
@@ -241,7 +241,7 @@ class AdminController extends Controller
         ]);
     }
 
-    public function post_recover(Request $request,$post_id)
+    public function post_recover(Request $request, $post_id)
     {
         $request->validate([
             'thread_id' => 'required|integer',
@@ -249,12 +249,12 @@ class AdminController extends Controller
         ]);
 
         $user = $request->user();
-        if (!$user->tokenCan('admin')) {
-            return response()->json([
-                'code' => ResponseCode::ADMIN_UNAUTHORIZED,
-                'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
-            ]);
-        }
+        // if (!$user->tokenCan('admin')) {
+        //     return response()->json([
+        //         'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+        //         'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+        //     ]);
+        // }
 
         $post = Post::suffix(intval($request->thread_id / 10000))->find($post_id);
         if (!$post) {
@@ -309,12 +309,12 @@ class AdminController extends Controller
         ]);
 
         $user = $request->user();
-        if (!$user->tokenCan('admin')) {
-            return response()->json([
-                'code' => ResponseCode::ADMIN_UNAUTHORIZED,
-                'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
-            ]);
-        }
+        // if (!$user->tokenCan('admin')) {
+        //     return response()->json([
+        //         'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+        //         'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+        //     ]);
+        // }
 
         $post = Post::suffix(intval($request->thread_id / 10000))->find($request->post_id);
         if (!$post) {
@@ -344,11 +344,6 @@ class AdminController extends Controller
             $post_to_delete->save();
         }
 
-        //清除redis的posts缓存
-        // $thread = $post->thread;
-        // for ($i = 1; $i <= ceil($thread->posts_num / 200); $i++) {
-        //     Cache::forget('threads_cache_' . $thread->id . '_' . $i);
-        // }
         ProcessUserActive::dispatch(
             [
                 'binggan' => $user->binggan,
@@ -378,12 +373,12 @@ class AdminController extends Controller
         ]);
 
         $user = $request->user();
-        if (!$user->tokenCan('admin')) {
-            return response()->json([
-                'code' => ResponseCode::ADMIN_UNAUTHORIZED,
-                'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
-            ]);
-        }
+        // if (!$user->tokenCan('admin')) {
+        //     return response()->json([
+        //         'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+        //         'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+        //     ]);
+        // }
 
         $post = Post::suffix(intval($request->thread_id / 10000))->find($request->post_id);
         if (!$post) {
@@ -439,12 +434,12 @@ class AdminController extends Controller
         ]);
 
         $user = $request->user();
-        if (!$user->tokenCan('admin')) {
-            return response()->json([
-                'code' => ResponseCode::ADMIN_UNAUTHORIZED,
-                'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
-            ]);
-        }
+        // if (!$user->tokenCan('admin')) {
+        //     return response()->json([
+        //         'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+        //         'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+        //     ]);
+        // }
 
         $post = Post::suffix(intval($request->thread_id / 10000))->find($request->post_id);
         if (!$post) {

@@ -51,8 +51,9 @@ Route::prefix('user')->group(function () {
     Route::post('/pingbici_set', [UserController::class, 'pingbici_set']);     //设定屏蔽词
     Route::post('/my_emoji_set', [UserController::class, 'my_emoji_set']);     //设定表情包
 });
-//Admin系列
-Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
+
+//Admin系列（记得CheckTokenCan要在auth:sanctum的前面）
+Route::middleware('CheckTokenCan:admin', 'auth:sanctum')->prefix('admin')->group(function () {
     Route::post('/thread_delete', [AdminController::class, 'thread_delete']); //删主题
     Route::delete('/post_delete/{post_id}', [AdminController::class, 'post_delete']); //删帖
     Route::put('/post_recover/{post_id}', [AdminController::class, 'post_recover']); //恢复帖子
