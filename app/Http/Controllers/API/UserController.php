@@ -55,7 +55,7 @@ class UserController extends Controller
 
 
 
-        $user = $request->user();
+        $user = $request->user(); //从sanctum的token获得饼干
         $user->last_login = Carbon::now();
         $user->save();
 
@@ -77,20 +77,8 @@ class UserController extends Controller
             return DB::table('emoji')->get();
         });
 
-        if ($user->binggan == $request->get('binggan')) {
-            return response()->json(
-                [
-                    'code' => ResponseCode::SUCCESS,
-                    'message' => '饼干认证成功，欢迎回来',
-                    'data' => [
-                        'binggan' => $user,
-                        'pingbici' => $user->pingbici,
-                        'my_emoji' => $user->MyEmoji,
-                        'emojis' => $emojis,
-                    ],
-                ],
-            );
-        } else {
+        //确认饼干是否一致
+        if ($user->binggan != $request->get('binggan')) {
             return response()->json(
                 [
                     'code' => ResponseCode::CANNOTLOGIN,
@@ -99,6 +87,25 @@ class UserController extends Controller
                 401
             );
         }
+
+        //如果持有管理员token，使admin属性暴露，追加admin_forums属性
+        if ($user->tokenCan('admin')) {
+            $user->makeVisible('admin');
+            $user->append('admin_forums');
+        }
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '饼干认证成功，欢迎回来',
+                'data' => [
+                    'binggan' => $user,
+                    'pingbici' => $user->pingbici,
+                    'my_emoji' => $user->MyEmoji,
+                    'emojis' => $emojis,
+                ],
+            ],
+        );
     }
 
     /**
@@ -344,7 +351,6 @@ class UserController extends Controller
                 'code' => ResponseCode::SUCCESS,
                 'message' => '已设定屏蔽词',
                 'data' => [
-                    'user' => $user,
                     'pingbici' => $pingbici,
                 ]
             ],
@@ -392,7 +398,6 @@ class UserController extends Controller
                 'code' => ResponseCode::SUCCESS,
                 'message' => '已设定我的表情包',
                 'data' => [
-                    'user' => $user,
                     'my_emoji' => $my_emoji,
                 ]
             ],

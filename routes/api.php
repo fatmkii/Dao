@@ -25,6 +25,7 @@ use App\Http\Controllers\API\AdminController;
 
 //Auth系列
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/admin_login', [AuthController::class, 'admin_login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 //Forum系列

@@ -7,6 +7,7 @@ import forum_page from '../vue/forum/forum_page.vue'
 import thread_page from '../vue/thread/thread_page.vue'
 import new_thread from '../vue/thread/new_thread.vue'
 import user_center from '../vue/user/user_center.vue'
+import admin_login_page from '../vue/admin/admin_login_page.vue'
 
 Vue.use(VueRouter);
 
@@ -24,6 +25,11 @@ const routes = [
         path: '/login',
         name: 'login',
         component: login_page,
+    },
+    {
+        path: '/admin_login',
+        name: 'admin_login',
+        component: admin_login_page,
     },
     {
         path: '/forum/:forum_id/:page?',

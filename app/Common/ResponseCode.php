@@ -66,7 +66,7 @@ class ResponseCode
         self::THREAD_TOO_MANY => '发新主题过于频繁',
         self::POST_NOT_FOUND => '未找到该帖子',
         self::POST_TOO_MANY => '回帖过于频繁',
-        self::LOGIN_FAILED => '登录态失效',
+        self::LOGIN_FAILED => '登录失败',
         self::DATABASE_FAILED => '数据库错误',
         self::USER_REGISTER_FAIL => '申请饼干失败',
     ];

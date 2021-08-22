@@ -82,6 +82,10 @@
         </div>
       </b-tab>
     </b-tabs>
+    <hr />
+    <router-link to="admin_login" tag="a" style="font-size: 0.875rem">
+      管理
+    </router-link>
   </div>
 </template>
 

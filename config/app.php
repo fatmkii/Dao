@@ -5,6 +5,9 @@ return [
     //新增饼干的开关
     'new_binggan' => env('NEW_BINGGAN', false),
 
+    //密码加盐
+    'password_salt'=> env('PASSWORD_SALT',''),
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

@@ -36,6 +36,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'binggan',
+        'admin',
         'password',
         'last_login',
         'created_ip',
@@ -64,11 +65,11 @@ class User extends Authenticatable
 
     protected static function booted()
     {
-        static::retrieved(function ($user) {
-            if ($user->admin != 0) {
-                $user->append('admin_forums');
-            }
-        });
+        // static::retrieved(function ($user) {
+        //     if ($user->admin != 0) {
+        //         $user->append('admin_forums');
+        //     }
+        // });
     }
 
 

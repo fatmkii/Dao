@@ -39,15 +39,17 @@ export default {
         axios(config)
           .then((response) => {
             if (response.data.code == 200) {
-              this.$store.commit(
-                "AdminStatus_set",
-                response.data.data.binggan.admin
-              );
-              if (response.data.data.binggan.admin != 0) {
+              if (response.data.data.binggan.admin) {
                 this.$store.commit(
-                  "AdminForums_set",
-                  JSON.parse(response.data.data.binggan.admin_forums)
+                  "AdminStatus_set",
+                  response.data.data.binggan.admin
                 );
+                if (response.data.data.binggan.admin != 0) {
+                  this.$store.commit(
+                    "AdminForums_set",
+                    JSON.parse(response.data.data.binggan.admin_forums)
+                  );
+                }
               }
               this.$store.commit(
                 "LockedTTL_set",

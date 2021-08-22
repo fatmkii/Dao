@@ -16,7 +16,7 @@ class CreateAdminsTable extends Migration
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->unique();
-            $table->tinyInteger('admin_level')->default(1);
+            // $table->tinyInteger('admin_level')->default(1);
             $table->json('forums')->nullable();
             $table->timestamps();
             $table->softDeletes();
