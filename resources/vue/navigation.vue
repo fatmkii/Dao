@@ -4,7 +4,7 @@
       <b-navbar-nav class="align-middle">
         <b-img
           fluid
-          src="/favicon.png"
+          src="/favicon2.png"
           alt="icon"
           class="favicon"
           @click="$router.push('/')"
