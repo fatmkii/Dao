@@ -53,7 +53,7 @@ Route::prefix('user')->group(function () {
     Route::post('/my_emoji_set', [UserController::class, 'my_emoji_set']);     //设定表情包
 });
 
-//Admin系列（记得CheckTokenCan要在auth:sanctum的前面）
+//Admin系列
 Route::middleware('CheckTokenCan:admin', 'auth:sanctum')->prefix('admin')->group(function () {
     Route::post('/thread_delete', [AdminController::class, 'thread_delete']); //删主题
     Route::delete('/post_delete/{post_id}', [AdminController::class, 'post_delete']); //删帖
@@ -63,6 +63,11 @@ Route::middleware('CheckTokenCan:admin', 'auth:sanctum')->prefix('admin')->group
     Route::post('/user_lock', [AdminController::class, 'user_lock']); //封id（临时）
     Route::post('/thread_set_top', [AdminController::class, 'thread_set_top']); //设置置顶
     Route::post('/thread_cancel_top', [AdminController::class, 'thread_cancel_top']); //取消置顶
+});
+
+//SuperAdmin系列
+Route::middleware('CheckTokenCan:super_admin', 'auth:sanctum')->prefix('admin')->group(function () {
+    Route::get('/check_user_post', [AdminController::class, 'check_user_post']); //查询用户发帖记录
 });
 
 

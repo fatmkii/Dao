@@ -43,11 +43,6 @@ Vue.component('app', require('../vue/app.vue').default);
 //全局通用底部
 Vue.component('footer_navi', require('../vue/footer_navi.vue').default);
 
-
-// router.afterEach((to, from) => {
-//     window.scrollTo(0, 0);
-// })
-
 const app = new Vue({
     router,
     store

@@ -1,5 +1,6 @@
 <template>
   <div class="post_item my-2" :id="'f_' + post_data.floor">
+    <slot name='header'></slot>
     <div class="float-right" v-if="this.$store.state.User.LoginStatus">
       <b-button
         size="sm"

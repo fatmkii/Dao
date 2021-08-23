@@ -1,12 +1,9 @@
 
 <template>
   <div>
-    <p>你好！别来无恙。</p>
+    <p class="mt-2">你好！别来无恙。</p>
     <p>你的饼干是：{{ binggan }}</p>
     <p>你的奥利奥：{{ user_coin }} 个</p>
-    <p v-if="this.$store.state.User.AdminStatus">
-      管理的板块：{{ this.$store.state.User.AdminForums }}
-    </p>
     <b-button
       size="md"
       class="my-1 my-sm-0"
@@ -83,7 +80,7 @@
       </b-tab>
     </b-tabs>
     <hr />
-    <router-link to="admin_login" tag="a" style="font-size: 0.875rem">
+    <router-link to="admin_center" tag="a" style="font-size: 0.875rem">
       管理
     </router-link>
   </div>

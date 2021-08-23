@@ -28,7 +28,7 @@
           <ThreadPaginator
             :thread_id="thread_id"
             :last_page="posts_last_page"
-            :current_page="isNaN(page) ? 1 : page"
+            :current_page="page"
             align="right"
           ></ThreadPaginator>
         </div>
@@ -127,7 +127,7 @@
           <ThreadPaginator
             :thread_id="thread_id"
             :last_page="posts_last_page"
-            :current_page="isNaN(page) ? 1 : page"
+            :current_page="page"
             align="left"
           ></ThreadPaginator>
         </div>
@@ -628,9 +628,9 @@ export default {
             this.$nextTick(() => {
               //渲染完成后执行
               //如果有设定上次阅读进度，则滚动到上次进度
-              const page = isNaN(this.page) ? 1 : this.page;
+              // const page = isNaN(this.page) ? 1 : this.page;
               if (
-                this.browse_current.page == page &&
+                this.browse_current.page == this.page &&
                 typeof this.$store.state.User.BrowseLogger[
                   this.thread_id.toString()
                 ] != "undefined" &&
@@ -662,9 +662,9 @@ export default {
           )
         );
       }
-      const page = isNaN(this.page) ? 1 : this.page;
+      // const page = isNaN(this.page) ? 1 : this.page;
       if (
-        this.browse_current.page > page &&
+        this.browse_current.page > this.page &&
         typeof this.$store.state.User.BrowseLogger[this.thread_id.toString()] !=
           "undefined"
       ) {
@@ -899,16 +899,16 @@ export default {
       }
     },
     scroll_watch() {
-      const page = isNaN(this.page) ? 1 : this.page;
-      if (this.browse_current.page <= page) {
+      // const page = isNaN(this.page) ? 1 : this.page;
+      if (this.browse_current.page <= this.page) {
         this.browse_current["height"] = document.documentElement.scrollTop;
       }
     },
     browse_record_handle() {
       //写入本次阅读进度
-      const page = isNaN(this.page) ? 1 : this.page;
-      if (this.browse_current.page <= page) {
-        this.browse_current.page = page;
+      // const page = isNaN(this.page) ? 1 : this.page;
+      if (this.browse_current.page <= this.page) {
+        this.browse_current.page = this.page;
         this.$store.commit("BrowseLogger_set", {
           suffix: this.thread_id.toString(),
           browse_current: this.browse_current,

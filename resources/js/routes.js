@@ -8,6 +8,8 @@ import thread_page from '../vue/thread/thread_page.vue'
 import new_thread from '../vue/thread/new_thread.vue'
 import user_center from '../vue/user/user_center.vue'
 import admin_login_page from '../vue/admin/admin_login_page.vue'
+import admin_center from '../vue/admin/admin_center'
+import check_user_post from '../vue/admin/check_user_post'
 
 Vue.use(VueRouter);
 
@@ -32,11 +34,24 @@ const routes = [
         component: admin_login_page,
     },
     {
+        path: '/admin_center',
+        name: 'admin_center',
+        component: admin_center,
+    },
+    {
+        path: '/admin/check_user_post/:page?',
+        name: 'check_user_post',
+        props: route => ({
+            page: parseInt(isNaN(route.params.page) ? 1 : route.params.page),
+        }),
+        component: check_user_post,
+    },
+    {
         path: '/forum/:forum_id/:page?',
         name: 'forum',
         props: route => ({
             forum_id: parseInt(route.params.forum_id),
-            page: parseInt(route.params.page),
+            page: parseInt(isNaN(route.params.page) ? 1 : route.params.page),
         }),
         component: forum_page,
     },
@@ -45,7 +60,7 @@ const routes = [
         name: 'thread',
         props: route => ({
             thread_id: parseInt(route.params.thread_id),
-            page: parseInt(route.params.page),
+            page: parseInt(isNaN(route.params.page) ? 1 : route.params.page),
         }),
         component: thread_page,
     },

@@ -437,4 +437,29 @@ class AdminController extends Controller
             'message' => '该饼干已封禁3天。',
         ]);
     }
+
+    public function check_user_post(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'page' => 'required|integer',
+            'database_post_num' => 'required|integer',
+        ]);
+
+        $user_to_check = User::where('binggan', $request->query('binggan'))->first();
+        if (!$user_to_check) {
+            return response()->json([
+                'code' => ResponseCode::USER_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
+            ]);
+        }
+
+        // $posts = DB::table('posts_' . $request->query('database_post_num'))->where('created_binggan', $request->query('binggan'))->paginate(200);
+        $posts = Post::suffix($request->query('database_post_num'))->where('created_binggan', $request->query('binggan'))->paginate(200);
+
+        return response()->json([
+            'code' => ResponseCode::SUCCESS,
+            'posts_data' => $posts,
+        ]);
+    }
 }
