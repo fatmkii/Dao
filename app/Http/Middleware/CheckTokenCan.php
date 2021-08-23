@@ -18,7 +18,7 @@ class CheckTokenCan
     public function handle(Request $request, Closure $next, $role)
     {
         $user = $request->user();
-        if ($user->tokenCan($role)) {
+        if (!$user->tokenCan($role)) {
             return response()->json([
                 'code' => ResponseCode::ADMIN_UNAUTHORIZED,
                 'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
