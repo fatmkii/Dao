@@ -52,7 +52,7 @@ export default {
   },
   mounted() {
     if (this.$store.state.User.AdminStatus == 0) {
-      this.$router.replace("/admin/login");
+      this.$router.replace("/admin_login");
     }
     document.title = "管理员中心";
   },

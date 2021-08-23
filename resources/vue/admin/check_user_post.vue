@@ -88,6 +88,9 @@ export default {
     };
   },
   mounted() {
+    if (this.$store.state.User.AdminStatus != 99) {
+      this.$router.replace("/admin_login");
+    }
     document.title = "查询发帖记录";
   },
   methods: {
