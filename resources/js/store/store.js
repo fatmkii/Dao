@@ -4,6 +4,7 @@ Vue.use(Vuex)
 
 const module_user = {
     state: () => ({
+        UserDataLoaded: 0,
         Token: '',
         Binggan: '',
         LoginStatus: false,
@@ -18,6 +19,9 @@ const module_user = {
         BrowseLogger: {}
     }),
     mutations: {
+        UserDataLoaded_set(state, payload) {
+            state.UserDataLoaded = payload
+        },
         Token_set(state, payload) {
             state.Token = payload
         },

@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-3">
+  <div class="mt-3" v-if="this_show">
     <p>查询发帖记录</p>
     <div class="row align-items-center">
       <div class="col-auto">
@@ -87,12 +87,21 @@ export default {
       last_page: 1,
     };
   },
-  mounted() {
-    if (this.$store.state.User.AdminStatus != 99) {
-      this.$router.replace("/admin_login");
-    }
-    document.title = "查询发帖记录";
+  computed: {
+    this_show() {
+      if (this.$store.state.User.UserDataLoaded == 2) {
+        if (this.$store.state.User.AdminStatus == 99) {
+          document.title = "查询发帖记录";
+          return true;
+        } else {
+          this.$router.replace("/admin_login");
+        }
+      } else {
+        return false;
+      }
+    },
   },
+  mounted() {},
   methods: {
     check_user_post_handle() {
       this.posts_load_status = false;

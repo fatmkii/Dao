@@ -1,12 +1,10 @@
 <template>
-  <div>
+  <div v-if="this_show">
     <p class="mt-2">管理员中心</p>
     <p>我的饼干是：{{ this.$store.state.User.Binggan }}</p>
     <p>管理的板块：{{ this.$store.state.User.AdminForums }}</p>
     <hr />
-    <p class="mt-2">
-      管理员操作面板 
-    </p>
+    <p class="mt-2">管理员操作面板</p>
     <b-tabs pills>
       <b-tab title="版头设定">
         <div class="mx-2 my-2">
@@ -50,10 +48,20 @@ export default {
       name: "admin_center",
     };
   },
+  computed: {
+    this_show() {
+      if (this.$store.state.User.UserDataLoaded == 2) {
+        if (this.$store.state.User.AdminStatus == 99) {
+          return true;
+        } else {
+          this.$router.replace("/admin_login");
+        }
+      } else {
+        return false;
+      }
+    },
+  },
   mounted() {
-    if (this.$store.state.User.AdminStatus == 0) {
-      this.$router.replace("/admin_login");
-    }
     document.title = "管理员中心";
   },
   methods: {},

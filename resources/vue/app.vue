@@ -24,6 +24,7 @@ export default {
     },
     get_user_data() {
       if (localStorage.Token != null && localStorage.Binggan != null) {
+        this.$store.commit("UserDataLoaded_set", 1);
         this.$store.commit("Token_set", localStorage.Token);
         this.$store.commit("Binggan_set", localStorage.Binggan);
         this.$store.commit("LoginStatus_set", true);
@@ -73,6 +74,7 @@ export default {
                 this.$store.commit("MyEmoji_set", response.data.data.my_emoji);
               }
               this.$store.commit("Emojis_set", response.data.data.emojis);
+              this.$store.commit("UserDataLoaded_set", 2);
             } else {
               localStorage.clear("Binggan");
               localStorage.clear("Token");

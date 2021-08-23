@@ -41,7 +41,9 @@ export default {
       password_visible: false,
     };
   },
-  mounted() {},
+  mounted() {
+    document.title = "管理员登陆";
+  },
   methods: {
     admin_login_handle() {
       const config = {
@@ -68,7 +70,7 @@ export default {
               "Bearer " + localStorage.Token;
             this.admin_login_handling = false;
             alert(response.data.message);
-            window.location.href = "/"; //因为想清空Vuex状态，所以用js原生的重定向，而不是Vuerouter的push
+            window.location.href = "/admin_center"; //因为想清空Vuex状态，所以用js原生的重定向，而不是Vuerouter的push
           } else {
             this.admin_login_handling = false;
             alert(response.data.message);
