@@ -123,8 +123,8 @@ export default {
         url: "/api/admin/check_user_post",
         params: {
           page: this.page,
-          binggan: this.binggan,
-          IP: this.IP,
+          binggan: this.binggan == "" ? null : this.binggan,
+          IP: this.IP == "" ? null : this.IP,
           database_post_num: this.database_post_num,
         },
       };
