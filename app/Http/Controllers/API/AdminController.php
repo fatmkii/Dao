@@ -441,21 +441,30 @@ class AdminController extends Controller
     public function check_user_post(Request $request)
     {
         $request->validate([
-            'binggan' => 'required|string',
+            'binggan' => 'required_without:IP|string',
+            'IP' => 'required_without:binggan|ipv4',
             'page' => 'required|integer',
             'database_post_num' => 'required|integer',
         ]);
 
-        $user_to_check = User::where('binggan', $request->query('binggan'))->first();
-        if (!$user_to_check) {
-            return response()->json([
-                'code' => ResponseCode::USER_NOT_FOUND,
-                'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
-            ]);
+        if ($request->query('binggan') != null) {
+            $user_to_check = User::where('binggan', $request->query('binggan'))->first();
+            if (!$user_to_check) {
+                return response()->json([
+                    'code' => ResponseCode::USER_NOT_FOUND,
+                    'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
+                ]);
+            }
+            $posts = Post::suffix($request->query('database_post_num'))
+                ->where('created_binggan', $request->query('binggan'))->paginate(200);
+        }
+        if ($request->query('IP') != null) {
+            $posts = Post::suffix($request->query('database_post_num'))
+                ->where('created_IP', $request->query('IP'))->paginate(200);
         }
 
-        // $posts = DB::table('posts_' . $request->query('database_post_num'))->where('created_binggan', $request->query('binggan'))->paginate(200);
-        $posts = Post::suffix($request->query('database_post_num'))->where('created_binggan', $request->query('binggan'))->paginate(200);
+        $posts->makeVisible('created_IP');
+        $posts->makeVisible('created_binggan');
 
         return response()->json([
             'code' => ResponseCode::SUCCESS,

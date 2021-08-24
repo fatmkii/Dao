@@ -60,8 +60,8 @@ return [
     'in' => 'The selected :attribute is invalid.',
     'in_array' => 'The :attribute field does not exist in :other.',
     'integer' => 'The :attribute must be an integer.',
-    'ip' => 'The :attribute must be a valid IP address.',
-    'ipv4' => 'The :attribute must be a valid IPv4 address.',
+    'ip' => ':attribute需符合IP地址格式',
+    'ipv4' => ':attribute需符合IPv4地址格式',
     'ipv6' => 'The :attribute must be a valid IPv6 address.',
     'json' => 'The :attribute must be a valid JSON string.',
     'lt' => [
@@ -102,7 +102,7 @@ return [
     'required_unless' => 'The :attribute field is required unless :other is in :values.',
     'required_with' => 'The :attribute field is required when :values is present.',
     'required_with_all' => 'The :attribute field is required when :values are present.',
-    'required_without' => 'The :attribute field is required when :values is not present.',
+    'required_without' => '如果没提供:values，则必须提供:attribute',
     'required_without_all' => 'The :attribute field is required when none of :values are present.',
     'prohibited' => 'The :attribute field is prohibited.',
     'prohibited_if' => 'The :attribute field is prohibited when :other is :value.',
@@ -156,6 +156,7 @@ return [
         'title' => '标题',
         'title_pingbici' => '标题屏蔽词',
         'content_pingbici' => '内容屏蔽词',
+        'IP' => 'IP',
     ],
 
 ];

@@ -19,9 +19,9 @@
     <b-tabs pills v-if="this.$store.state.User.AdminStatus == 99">
       <b-tab title="发帖记录">
         <div class="mx-2 my-2">
-          <router-link to="/admin/check_user_post"
-            >查询用户发帖记录</router-link
-          >
+          <router-link to="/admin/check_user_post">
+            查询用户发帖记录
+          </router-link>
         </div>
       </b-tab>
       <b-tab title="用户操作记录">

@@ -13,6 +13,16 @@
         </b-input-group>
       </div>
       <div class="col-auto">
+        <b-input-group prepend="IP：" style="max-width: 400px">
+          <b-form-input v-model="IP"></b-form-input>
+          <b-input-group-append>
+            <b-button variant="success" @click="check_user_post_handle">
+              查询
+            </b-button>
+          </b-input-group-append>
+        </b-input-group>
+      </div>
+      <div class="col-auto">
         <span>Posts数据表</span>
         <b-form-select
           v-model="database_post_num"
@@ -54,6 +64,8 @@
               "
               >原帖地址</router-link
             >
+            <span class="ml-1">IP:{{ post_data.created_IP }}</span>
+            <span class="ml-1">饼干:{{ post_data.created_binggan }}</span>
           </template>
         </PostItem>
       </div>
@@ -79,7 +91,8 @@ export default {
   data: function () {
     return {
       name: "check_user_post",
-      binggan: "",
+      binggan: null,
+      IP: null,
       posts_load_status: false,
       posts_data: null,
       database_post_num_options: [0, 1, 2],
@@ -111,6 +124,7 @@ export default {
         params: {
           page: this.page,
           binggan: this.binggan,
+          IP: this.IP,
           database_post_num: this.database_post_num,
         },
       };
