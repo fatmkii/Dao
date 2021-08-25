@@ -447,6 +447,7 @@ class AdminController extends Controller
             'database_post_num' => 'required|integer',
         ]);
 
+        //根据饼干查询发帖记录
         if ($request->query('binggan') != null) {
             $user_to_check = User::where('binggan', $request->query('binggan'))->first();
             if (!$user_to_check) {
@@ -458,6 +459,7 @@ class AdminController extends Controller
             $posts = Post::suffix($request->query('database_post_num'))
                 ->where('created_binggan', $request->query('binggan'))->paginate(200);
         }
+        //根据IP查询发帖记录
         if ($request->query('IP') != null) {
             $posts = Post::suffix($request->query('database_post_num'))
                 ->where('created_IP', $request->query('IP'))->paginate(200);
@@ -469,6 +471,62 @@ class AdminController extends Controller
         return response()->json([
             'code' => ResponseCode::SUCCESS,
             'posts_data' => $posts,
+        ]);
+    }
+
+    public function check_jingfen(Request $request)
+    {
+        $request->validate([
+            'thread_id' => 'required|integer',
+            'content' => 'required|string',
+        ]);
+
+        $CurrentThread = Thread::find($request->thread_id);
+        if (!$CurrentThread) {
+            return response()->json([
+                'code' => ResponseCode::THREAD_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::THREAD_NOT_FOUND],
+            ]);
+        }
+
+        //确认是否拥有该版面的管理员权限
+        $user = $request->user();
+        if (
+            !in_array($CurrentThread->forum_id, json_decode($user->AdminPermissions->forums))
+        ) {
+            return response()->json(
+                [
+                    'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+                    'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+                ],
+            );
+        }
+
+        $posts = $CurrentThread->posts()->orderBy('id', 'asc')->paginate(200);
+
+        //为管理员加上created_binggan_hash
+        $posts->append('created_binggan_hash');
+
+
+        //临时打开主题的反精分标签
+        $CurrentThread->anti_jingfen = 1;
+
+        ProcessUserActive::dispatch(
+            [
+                'binggan' => $user->binggan,
+                'user_id' => $user->id,
+                'active' => '管理员查看了反精分',
+                'thread_id' => $request->thread_id,
+                'content' => $request->content,
+            ]
+        );
+
+        return response()->json([
+            'code' => ResponseCode::SUCCESS,
+            // 'forum_data' => $CurrentForum,
+            'thread_data' => $CurrentThread,
+            'posts_data' => $posts,
+            // 'random_heads' => $random_heads,
         ]);
     }
 }

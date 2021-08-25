@@ -66,7 +66,10 @@
             class="ml-1"
             size="sm"
             variant="warning"
-            v-if="this.thread_sub_id == 0"
+            v-if="
+              this.thread_sub_id == 0 &&
+              this.$store.state.User.AdminForums.includes(this.forum_id)
+            "
             v-show="admin_button_show"
             @click="thread_set_top"
           >
@@ -76,11 +79,24 @@
             class="ml-1"
             size="sm"
             variant="warning"
-            v-if="this.thread_sub_id != 0"
+            v-if="
+              this.thread_sub_id != 0 &&
+              this.$store.state.User.AdminForums.includes(this.forum_id)
+            "
             v-show="admin_button_show"
             @click="thread_cancel_top"
           >
             取消置顶
+          </b-button>
+          <b-button
+            class="ml-1"
+            size="sm"
+            variant="warning"
+            v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
+            v-show="admin_button_show"
+            @click="check_jingfen_admin"
+          >
+            反精分
           </b-button>
           <b-button
             class="ml-1"
@@ -698,6 +714,34 @@ export default {
           })
           .catch((error) => alert(error));
       }
+    },
+    check_jingfen_admin() {
+      var content = prompt(
+        "要用查看这个主题的反精分吗？请输入理由",
+        "请输入理由"
+      );
+      const config = {
+        method: "post",
+        url: "/api/admin/check_jingfen",
+        data: {
+          thread_id: this.thread_id,
+          content: content,
+        },
+      };
+      axios(config)
+        .then((response) => {
+          if (response.data.code == 200) {
+            this.$store.commit("PostsData_set", response.data.posts_data);
+            this.$store.commit(
+              "CurrentThreadData_set",
+              response.data.thread_data
+            );
+            this.$store.commit("PostsLoadStatus_set", 1);
+          } else {
+            alert(response.data.message);
+          }
+        })
+        .catch((error) => alert(error)); // Todo:写异常返回代码;
     },
     back_to_forum() {
       this.$router.push({ name: "forum", params: { forum_id: this.forum_id } });

@@ -67,7 +67,7 @@ class Post extends myModel
 
     public function getCreatedBingganHashAttribute()
     {
-        return hash('sha256', $this->created_binggan);
+        return hash('sha256', $this->created_binggan . $this->thread_id);
     }
 
     public function getNicknameAttribute($nickname)

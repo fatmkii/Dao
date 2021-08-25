@@ -58,7 +58,7 @@
                 '/thread/' +
                 post_data.thread_id +
                 '/' +
-                Math.ceil(post_data.floor == 0 ? 1 : post_data.floor / 200) +
+                Math.ceil((post_data.floor + 1) / 200) +
                 '#f_' +
                 post_data.floor
               "
