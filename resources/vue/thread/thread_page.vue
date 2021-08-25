@@ -716,6 +716,8 @@ export default {
       }
     },
     check_jingfen_admin() {
+      alert("现在不需要这样喔~~");
+      return;//暂时关闭此功能
       var content = prompt(
         "要用查看这个主题的反精分吗？请输入理由",
         "请输入理由"

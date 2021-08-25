@@ -63,7 +63,7 @@ Route::middleware('CheckTokenCan:admin', 'auth:sanctum')->prefix('admin')->group
     Route::post('/user_lock', [AdminController::class, 'user_lock']); //封id（临时）
     Route::post('/thread_set_top', [AdminController::class, 'thread_set_top']); //设置置顶
     Route::post('/thread_cancel_top', [AdminController::class, 'thread_cancel_top']); //取消置顶
-    Route::post('/check_jingfen', [AdminController::class, 'check_jingfen']); //查精分
+    // Route::post('/check_jingfen', [AdminController::class, 'check_jingfen']); //查精分
 });
 
 //SuperAdmin系列
