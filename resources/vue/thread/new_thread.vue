@@ -12,6 +12,31 @@
         <span>发表新话题</span>
       </div>
     </div>
+    <div
+      class="post_title px-1 py-2 h5 d-none d-lg-block d-xl-block"
+      v-if="preview_show"
+    >
+      <span style="word-wrap: break-word; white-space: normal"
+        >标题：{{ title_input }}</span
+      >
+    </div>
+    <div
+      class="post_title px-1 py-2 h6 d-block d-lg-none d-xl-none"
+      v-if="preview_show"
+    >
+      <span style="word-wrap: break-word; white-space: normal"
+        >标题：{{ title_input }}</span
+      >
+    </div>
+    <div>
+      <PostItem
+        v-if="preview_show"
+        :post_data="preview_post_data"
+        :thread_anti_jingfen="0"
+        :admin_button_show="false"
+        :no_image_mode="false"
+      ></PostItem>
+    </div>
     <div class="my-2 row d-inline-flex" style="font-size: 0.875rem">
       <div class="col-auto pr-0">昵称</div>
       <div class="col-auto d-inline-flex">
@@ -51,7 +76,14 @@
       :emoji_auto_hide="emoji_auto_hide"
       @emoji_append="emoji_append"
     ></Emoji>
-    <div class="my-2" style="font-size: 0.875rem">内容</div>
+    <div class="my-2 row d-inline-flex" style="font-size: 0.875rem">
+      <div class="col-auto pr-0">内容</div>
+      <div class="col-auto d-inline-flex">
+        <b-form-checkbox class="mr-auto ml-2" v-model="preview_show" switch>
+          实时预览
+        </b-form-checkbox>
+      </div>
+    </div>
     <textarea
       id="content_input"
       class="content_input form-control"
@@ -190,9 +222,10 @@
 
 <script>
 import Emoji from "./emoji.vue";
+import PostItem from "./post_item.vue";
 
 export default {
-  components: { Emoji },
+  components: { Emoji, PostItem },
   props: {
     forum_id: Number, //来自router
   },
@@ -227,6 +260,7 @@ export default {
       post_with_admin: false,
       locked_by_coin_input: undefined,
       upload_img_handling: false,
+      preview_show: false,
     };
   },
   watch: {
@@ -273,6 +307,17 @@ export default {
       } else {
         return lines;
       }
+    },
+    preview_post_data() {
+      return {
+        content: this.content_input,
+        created_at: "预览中……",
+        floor: 0,
+        is_deleted: 0,
+        is_your_post: false,
+        nickname: this.nickname_input,
+        random_head: null,
+      };
     },
   },
 

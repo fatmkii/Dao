@@ -120,6 +120,15 @@
             @emit_reward="emit_reward"
           ></PostItem>
         </div>
+        <div>
+          <PostItem
+            v-if="preview_show"
+            :post_data="preview_post_data"
+            :thread_anti_jingfen="0"
+            :admin_button_show="false"
+            :no_image_mode="no_image_mode"
+          ></PostItem>
+        </div>
       </div>
       <div class="row align-items-center">
         <div class="col-auto">
@@ -179,7 +188,14 @@
         :emoji_auto_hide="emoji_auto_hide"
         @emoji_append="emoji_append"
       ></Emoji>
-      <div class="my-2" style="font-size: 0.875rem">内容</div>
+      <div class="my-2 row d-inline-flex" style="font-size: 0.875rem">
+        <div class="col-auto pr-0">内容</div>
+        <div class="col-auto d-inline-flex">
+          <b-form-checkbox class="mr-auto ml-2" v-model="preview_show" switch>
+            实时预览
+          </b-form-checkbox>
+        </div>
+      </div>
       <textarea
         id="content_input"
         class="content_input form-control"
@@ -535,6 +551,7 @@ export default {
       roll_handling: false,
       random_heads_data: Object,
       admin_button_show: false,
+      preview_show: false,
       post_with_admin: false,
       jump_floor: "",
       jump_page_show: false,
@@ -584,6 +601,16 @@ export default {
       } else {
         return lines;
       }
+    },
+    preview_post_data() {
+      return {
+        content: this.content_input,
+        created_at: "预览中……",
+        floor: 0,
+        is_deleted: 0,
+        is_your_post: false,
+        nickname: this.nickname_input,
+      };
     },
     ...mapState({
       forum_name: (state) =>
@@ -717,7 +744,7 @@ export default {
     },
     check_jingfen_admin() {
       alert("现在不需要这样喔~~");
-      return;//暂时关闭此功能
+      return; //暂时关闭此功能
       var content = prompt(
         "要用查看这个主题的反精分吗？请输入理由",
         "请输入理由"
