@@ -76,18 +76,38 @@
       :emoji_auto_hide="emoji_auto_hide"
       @emoji_append="emoji_append"
     ></Emoji>
-    <div class="my-2 row d-inline-flex" style="font-size: 0.875rem">
+    <div class="my-2 row align-items-center" style="font-size: 0.875rem">
       <div class="col-auto pr-0">内容</div>
       <div class="col-auto d-inline-flex">
         <b-form-checkbox class="mr-auto ml-2" v-model="preview_show" switch>
           实时预览
         </b-form-checkbox>
       </div>
+      <div class="col-auto ml-auto">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="currentColor"
+          class="icon-revoke bi bi-reply-all"
+          viewBox="0 0 16 16"
+          v-b-popover.hover.left="'撤销'"
+          @click="content_input_revoke"
+        >
+          <path
+            d="M8.098 5.013a.144.144 0 0 1 .202.134V6.3a.5.5 0 0 0 .5.5c.667 0 2.013.005 3.3.822.984.624 1.99 1.76 2.595 3.876-1.02-.983-2.185-1.516-3.205-1.799a8.74 8.74 0 0 0-1.921-.306 7.404 7.404 0 0 0-.798.008h-.013l-.005.001h-.001L8.8 9.9l-.05-.498a.5.5 0 0 0-.45.498v1.153c0 .108-.11.176-.202.134L4.114 8.254a.502.502 0 0 0-.042-.028.147.147 0 0 1 0-.252.497.497 0 0 0 .042-.028l3.984-2.933zM9.3 10.386c.068 0 .143.003.223.006.434.02 1.034.086 1.7.271 1.326.368 2.896 1.202 3.94 3.08a.5.5 0 0 0 .933-.305c-.464-3.71-1.886-5.662-3.46-6.66-1.245-.79-2.527-.942-3.336-.971v-.66a1.144 1.144 0 0 0-1.767-.96l-3.994 2.94a1.147 1.147 0 0 0 0 1.946l3.994 2.94a1.144 1.144 0 0 0 1.767-.96v-.667z"
+          />
+          <path
+            d="M5.232 4.293a.5.5 0 0 0-.7-.106L.54 7.127a1.147 1.147 0 0 0 0 1.946l3.994 2.94a.5.5 0 1 0 .593-.805L1.114 8.254a.503.503 0 0 0-.042-.028.147.147 0 0 1 0-.252.5.5 0 0 0 .042-.028l4.012-2.954a.5.5 0 0 0 .106-.699z"
+          />
+        </svg>
+      </div>
     </div>
     <textarea
       id="content_input"
       class="content_input form-control"
       v-model="content_input"
+      @input="content_input_change"
       :rows="content_input_rows"
       ref="content_input"
       :disabled="new_thread_handling || Boolean(locked_TTL)"
@@ -234,6 +254,7 @@ export default {
       name: "new_thread",
       new_thread_handling: false,
       nickname_input: "= =",
+      content_input_array: [""],
       content_input: "",
       title_input: "",
       random_heads_group_selected: 1,
@@ -367,8 +388,21 @@ export default {
           alert(Object.values(error.response.data.errors)[0]);
         });
     },
+    content_input_change() {
+      this.content_input_array.unshift(this.content_input);
+      if (this.content_input_array.length > 20) {
+        this.content_input_array.pop();
+      }
+    },
+    content_input_revoke() {
+      if (this.content_input_array.length > 1) {
+        this.content_input_array.shift();
+        this.content_input = this.content_input_array[0];
+      }
+    },
     emoji_append(emoji_src) {
       this.content_input += "<img src='" + emoji_src + "' class='emoji_img'>";
+      this.content_input_change();
       this.$refs.content_input.focus();
     },
     get_subtitles() {
@@ -433,6 +467,7 @@ export default {
             "<img src='" +
             response.data.linkurl.replace(/http/g, "https") +
             "' >";
+          this.content_input_change();
           axios.defaults.headers.Authorization = "Bearer " + localStorage.Token;
         })
         .catch((error) => {
