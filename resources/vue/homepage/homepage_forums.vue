@@ -22,6 +22,7 @@
         </b-card-body>
       </b-list-group>
     </b-card>
+    <p class="my-2 ml-2">不同的食材，每样都很好吃。</p>
   </div>
 </template>
 
