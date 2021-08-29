@@ -188,12 +188,18 @@
         :emoji_auto_hide="emoji_auto_hide"
         @emoji_append="emoji_append"
       ></Emoji>
-      <div class="my-2 row d-inline-flex" style="font-size: 0.875rem">
+      <div class="my-2 row align-items-center" style="font-size: 0.875rem">
         <div class="col-auto pr-0">内容</div>
         <div class="col-auto d-inline-flex">
-          <b-form-checkbox class="mr-auto ml-2" v-model="preview_show" switch>
+          <b-form-checkbox class="ml-2" v-model="preview_show" switch>
             实时预览
           </b-form-checkbox>
+        </div>
+        <div
+          class="col-auto ml-auto d-block d-lg-none d-xl-none"
+          @click="revoke_handle"
+        >
+          撤销
         </div>
       </div>
       <textarea
@@ -692,7 +698,9 @@ export default {
             alert(response.data.message);
           }
         })
-        .catch((error) => alert(error)); // Todo:写异常返回代码;
+        .catch((error) => {
+          alert(Object.values(error.response.data.errors)[0]);
+        });
     },
     get_browse_current() {
       if (
@@ -912,6 +920,9 @@ export default {
         "/thread/" + this.thread_id + "/" + page + "#f_" + this.jump_floor;
       this.$router.push(link);
       this.$refs["jump_modal"].hide();
+    },
+    revoke_handle(){
+      console.log("按了撤销");
     },
     thread_set_top() {
       var user_confirm = confirm("把这个主题置顶吗？");

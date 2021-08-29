@@ -12,7 +12,7 @@ import router from './routes.js'
 
 window.sha256 = require('js-sha256')
 window.axios = require('axios')
-axios.defaults.withCredentials = false; // 在全局 axios 实例中启用 withCredentials 选项
+// axios.defaults.withCredentials = false; // 在全局 axios 实例中启用 withCredentials 选项
 // axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //axios拦截器
 axios.interceptors.response.use(
@@ -20,7 +20,7 @@ axios.interceptors.response.use(
         return response
     },
     error => {
-        if (error.response.status === 401) {
+        if (error.response.status !== undefined || error.response.status === 401) {
             localStorage.clear('Binggan')   //如果遇到401错误(用户未认证)，就清除Binggan和Token
             localStorage.clear('Token')
             delete axios.defaults.headers.Authorization;

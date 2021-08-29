@@ -262,7 +262,9 @@ export default {
             alert(response.data.message);
           }
         })
-        .catch((error) => alert(error)); // Todo:写异常返回代码;
+        .catch((error) => {
+          alert(Object.values(error.response.data.errors)[0]);
+        });
     },
     new_thread_botton() {
       this.$router.push({
