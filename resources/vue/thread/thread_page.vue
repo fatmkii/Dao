@@ -218,7 +218,7 @@
       <textarea
         id="content_input"
         class="content_input form-control"
-        @input="content_input_change"
+        @change="content_input_change"
         v-model="content_input"
         :rows="content_input_rows"
         ref="content_input"

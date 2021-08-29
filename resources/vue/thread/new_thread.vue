@@ -107,7 +107,7 @@
       id="content_input"
       class="content_input form-control"
       v-model="content_input"
-      @input="content_input_change"
+      @change="content_input_change"
       :rows="content_input_rows"
       ref="content_input"
       :disabled="new_thread_handling || Boolean(locked_TTL)"
