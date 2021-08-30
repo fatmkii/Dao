@@ -212,10 +212,9 @@ body {
 .badge {
     @include background_color("background_color4");
 }
-.icon-back {
-    cursor: pointer;
-}
-.icon-revoke {
+.icon-back,
+.icon-revoke,
+.icon-drawer {
     cursor: pointer;
 }
 

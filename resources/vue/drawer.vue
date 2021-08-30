@@ -1,0 +1,399 @@
+<template>
+  <!-- 来源https://codepen.io/576/pen/yqaxYw -->
+  <div class="inner-draw">
+    <!--       <img src="https://upload.cc/i1/2018/07/20/9zHmRE.png" alt=""> -->
+    <div>
+      <canvas
+        id="drawer-canvas"
+        ref="drawer-canvas"
+        @mousedown="canvasDown($event)"
+        @mouseup="canvasUp($event)"
+        @mousemove="canvasMove($event)"
+        @touchstart="canvasDown($event)"
+        @touchend="canvasUp($event)"
+        @touchmove="canvasMove($event)"
+      >
+      </canvas>
+    </div>
+    <div id="drawer-control" class="row align-items-center">
+      <!--画笔颜色-->
+      <div id="canvas-color" class="col-3 text-center">
+        <div>颜色</div>
+        <!--           <ul>
+            <li 
+              v-for="item in colors" 
+              :class="{'active':config.lineColor === item}"
+              :style="{ background: item }" 
+              @click="setColor(item)"
+            ></li>
+          </ul> -->
+        <input type="color" v-model="config.lineColor" />
+      </div>
+      <!--画笔-->
+      <div id="canvas-brush" class="col-4 text-center">
+        <div>大小</div>
+        <span
+          class="mx-2"
+          v-for="pen in brushs"
+          :key="pen.index"
+          :style="{ fontSize: pen.font_size + 'px' }"
+          @click="setBrush(pen.lineWidth)"
+          >{{ pen.innerHTML }}</span
+        >
+      </div>
+      <!--操作-->
+      <div id="canvas-control" class="col-5 text-center">
+        <div>操作</div>
+        <span
+          v-for="control in controls"
+          :key="control.index"
+          :title="control.title"
+          :class="['mx-2', control.className]"
+          v-html="control.innerHTML"
+          @click="controlCanvas(control.action)"
+        ></span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data: function () {
+    return {
+      name: "drawer",
+      canvas: Object,
+      colors: [
+        "#fef4ac",
+        "#0018ba",
+        "#ffc200",
+        "#f32f15",
+        "#cccccc",
+        "#5ab639",
+        "#000",
+      ],
+      brushs: [
+        {
+          lineWidth: 3,
+          innerHTML: "🖌️",
+          font_size: 12,
+        },
+        {
+          lineWidth: 6,
+          innerHTML: "🖌️",
+          font_size: 16,
+        },
+        {
+          lineWidth: 12,
+          innerHTML: "🖌️",
+          font_size: 20,
+        },
+      ],
+      context: {},
+      imgUrl: [],
+      canvasMoveUse: false,
+      // 存储当前表面状态数组-上一步
+      preDrawAry: [],
+      // 存储当前表面状态数组-下一步
+      nextDrawAry: [],
+      // 中间数组
+      middleAry: [],
+      // 配置参数
+      config: {
+        lineWidth: 3,
+        lineColor: "#111111",
+        shadowBlur: 1,
+      },
+      eraserMode: false,
+      lastX: 0,
+      lastY: 0,
+    };
+  },
+  computed: {
+    controls() {
+      return [
+        {
+          title: "上一步",
+          action: "prev",
+          className: this.preDrawAry.length ? "active" : "",
+          innerHTML:
+            '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/></svg>',
+        },
+        {
+          title: "下一步",
+          action: "next",
+          className: this.nextDrawAry.length ? "active" : "",
+          innerHTML:
+            '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/></svg>',
+        },
+        {
+          title: "橡皮擦",
+          action: "eraser",
+          className:
+            this.preDrawAry.length || this.nextDrawAry.length ? "active" : "",
+          innerHTML:
+            '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eraser-fill" viewBox="0 0 16 16">  <path d="M8.086 2.207a2 2 0 0 1 2.828 0l3.879 3.879a2 2 0 0 1 0 2.828l-5.5 5.5A2 2 0 0 1 7.879 15H5.12a2 2 0 0 1-1.414-.586l-2.5-2.5a2 2 0 0 1 0-2.828l6.879-6.879zm.66 11.34L3.453 8.254 1.914 9.793a1 1 0 0 0 0 1.414l2.5 2.5a1 1 0 0 0 .707.293H7.88a1 1 0 0 0 .707-.293l.16-.16z"/></svg>',
+        },
+        {
+          title: "清除",
+          action: "clear",
+          className:
+            this.preDrawAry.length || this.nextDrawAry.length ? "active" : "",
+          innerHTML:
+            '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">  <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/><path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/></svg>',
+        },
+      ];
+    },
+  },
+  // created() {
+  //   // this.$emit('setNav', '在线涂鸦画板')
+  // },
+  mounted() {
+    this.canvas = document.querySelector("#drawer-canvas");
+    this.context = this.canvas.getContext("2d");
+    this.initDraw();
+    this.setCanvasStyle();
+    // document.querySelector('#footer').classList.add('hide-footer')
+    // document.querySelector('body').classList.add('fix-body')
+  },
+  destroyed() {
+    // document.querySelector('#footer').classList.remove('hide-footer')
+    // document.querySelector('body').classList.remove('fix-body')
+  },
+  methods: {
+    isPc: function () {
+      const userAgentInfo = navigator.userAgent;
+      const Agents = [
+        "Android",
+        "iPhone",
+        "SymbianOS",
+        "Windows Phone",
+        "iPad",
+        "iPod",
+      ];
+      let flag = true;
+      for (let v = 0; v < Agents.length; v++) {
+        if (userAgentInfo.indexOf(Agents[v]) > 0) {
+          flag = false;
+          break;
+        }
+      }
+      return flag;
+    },
+    removeImg: function (src) {
+      this.imgUrl = this.imgUrl.filter((item) => item !== src);
+    },
+    initDraw() {
+      this.canvas.width = 498;
+      this.canvas.height = 498;
+      const preData = this.context.getImageData(
+        0,
+        0,
+        this.canvas.width,
+        this.canvas.height
+      );
+      // 空绘图表面进栈
+      this.middleAry.push(preData);
+    },
+    canvasMove: function (e) {
+      if (this.canvasMoveUse) {
+        // console.log("canvasMove");
+        this.context.beginPath();
+        this.context.moveTo(this.lastX, this.lastY);
+        const t = e.target;
+        let canvasX;
+        let canvasY;
+        if (this.isPc()) {
+          // canvasX = e.clientX - t.parentNode.offsetLeft;
+          // canvasY = e.clientY - t.parentNode.offsetTop;
+          canvasX = e.clientX - t.getBoundingClientRect().x;
+          canvasY = e.clientY - t.getBoundingClientRect().y;
+        } else {
+          // canvasX = e.changedTouches[0].clientX - t.parentNode.offsetLeft;
+          // canvasY = e.changedTouches[0].clientY - t.parentNode.offsetTop;
+          canvasX = e.changedTouches[0].clientX - t.getBoundingClientRect().x;
+          canvasY = e.changedTouches[0].clientY - t.getBoundingClientRect().y;
+        }
+        this.context.globalCompositeOperation = this.eraserMode
+          ? "destination-out"
+          : "source-over";
+        // this.context.rect(canvasX,canvasY,20,20);
+        this.context.lineTo(canvasX, canvasY);
+        [this.lastX, this.lastY] = [canvasX, canvasY];
+        this.context.stroke();
+      }
+    },
+    beginPath: function (e) {
+      // const canvas = document.querySelector("#drawer-canvas");
+      if (e.target !== this.canvas) {
+        // console.log("beginPath");
+        this.context.beginPath();
+      }
+    },
+    // mouseup
+    canvasUp: function (e) {
+      // console.log("canvasUp");
+      const preData = this.context.getImageData(
+        0,
+        0,
+        this.canvas.width,
+        this.canvas.height
+      );
+      if (!this.nextDrawAry.length) {
+        // 当前绘图表面进栈
+        this.middleAry.push(preData);
+      } else {
+        this.middleAry = [];
+        this.middleAry = this.middleAry.concat(this.preDrawAry);
+        this.middleAry.push(preData);
+        this.nextDrawAry = [];
+      }
+      this.canvasMoveUse = false;
+    },
+    // mousedown
+    canvasDown: function (e) {
+      // console.log("canvasDown");
+      // console.log(this.eraserMode);
+      this.canvasMoveUse = true;
+      // client是基于整个页面的坐标
+      // offset是cavas距离顶部以及左边的距离
+      // const canvasX = e.clientX - e.target.parentNode.offsetLeft;
+      // const canvasY = e.clientY - e.target.parentNode.offsetTop;
+      const canvasX = e.clientX - e.target.getBoundingClientRect().x;
+      const canvasY = e.clientY - e.target.getBoundingClientRect().y;
+      this.setCanvasStyle();
+      // 清除子路径
+      this.lastX = canvasX;
+      this.lastY = canvasY;
+      // console.log("moveTo", canvasX, canvasY);
+      // 当前绘图表面状态
+      const preData = this.context.getImageData(
+        0,
+        0,
+        this.canvas.width,
+        this.canvas.height
+      );
+      // 当前绘图表面进栈
+      this.preDrawAry.push(preData);
+    },
+    // 设置颜色
+    setColor: function (color) {
+      this.config.lineColor = color;
+      this.eraserMode = false;
+    },
+    // 设置笔刷大小
+    setBrush: function (type) {
+      this.config.lineWidth = type;
+      this.eraserMode = false;
+    },
+    // 操作
+    controlCanvas: function (action) {
+      switch (action) {
+        case "prev":
+          if (this.preDrawAry.length) {
+            const popData = this.preDrawAry.pop();
+            const midData = this.middleAry[this.preDrawAry.length + 1];
+            this.nextDrawAry.push(midData);
+            this.context.putImageData(popData, 0, 0);
+          }
+          break;
+        case "next":
+          if (this.nextDrawAry.length) {
+            const popData = this.nextDrawAry.pop();
+            const midData =
+              this.middleAry[
+                this.middleAry.length - this.nextDrawAry.length - 2
+              ];
+            this.preDrawAry.push(midData);
+            this.context.putImageData(popData, 0, 0);
+          }
+          break;
+        case "clear":
+          this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+          // console.log(this.middleAry);
+          this.preDrawAry = [];
+          this.nextDrawAry = [];
+          this.middleAry = [this.middleAry[0]];
+          break;
+        case "eraser":
+          this.eraserMode = true;
+          break;
+      }
+    },
+    //上传图片
+    upload() {
+      const src = this.canvas.toDataURL("image/png");
+      this.$emit("upload_emit", this.dataUrlToBlob(src, "image/png"));
+      this.$emit("drawer_click");
+    },
+    // 设置绘画配置
+    setCanvasStyle: function () {
+      this.context.lineWidth = this.config.lineWidth;
+      this.context.shadowBlur = this.config.shadowBlur;
+      this.context.shadowColor = this.config.lineColor;
+      this.context.strokeStyle = this.config.lineColor;
+      this.context.lineCap = "round";
+      this.context.lineJoin = "round";
+    },
+    //用来把dataURL转换成Blob的
+    dataUrlToBlob(base64, mimeType) {
+      let bytes = window.atob(base64.split(",")[1]);
+      let ab = new ArrayBuffer(bytes.length);
+      let ia = new Uint8Array(ab);
+      for (let i = 0; i < bytes.length; i++) {
+        ia[i] = bytes.charCodeAt(i);
+      }
+      return new Blob([ab], { type: mimeType });
+    },
+  },
+};
+</script>
+
+<style>
+#drawer_modal___BV_modal_body_ {
+  padding: 0px;
+}
+
+@media screen and (max-width: 450px) {
+  #canvas-brush {
+    display: none;
+  }
+}
+#drawer-canvas {
+  border: 1px #585858 solid;
+  cursor: crosshair;
+  width: 100%;
+  height: 498px;
+}
+#canvas-color ul {
+  margin: 0;
+  padding: 0;
+}
+#canvas-color ul li {
+  width: 13px;
+  height: 13px;
+  border: 3px #fff solid;
+  margin: 8px;
+  cursor: pointer;
+}
+#canvas-color .active {
+  border: 1px solid #5fb878;
+}
+#canvas-brush span {
+  width: 20px;
+  height: 15px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+#canvas-control span {
+  font-size: 14px;
+  width: 20px;
+  height: 15px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+#canvas-control .active,
+#canvas-brush .active {
+  color: #5fb878;
+}
+</style>
