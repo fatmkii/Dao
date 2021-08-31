@@ -6,6 +6,7 @@
       <canvas
         id="drawer-canvas"
         ref="drawer-canvas"
+        @touchmove.prevent
         @mousedown="canvasDown($event)"
         @mouseup="canvasUp($event)"
         @mousemove="canvasMove($event)"

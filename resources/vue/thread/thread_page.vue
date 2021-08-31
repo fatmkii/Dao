@@ -544,7 +544,6 @@
             @upload_emit="upload_img_handle"
             @drawer_click="drawer_click"
             ref="drawer_component"
-            @touchmove.prevent
           ></Drawer>
         </template>
         <template v-slot:modal-footer="{ cancel }">
