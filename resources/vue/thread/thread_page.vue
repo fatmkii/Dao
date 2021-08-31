@@ -203,7 +203,6 @@
             fill="currentColor"
             class="icon-drawer bi bi-pencil ml-2"
             viewBox="0 0 16 16"
-            v-b-popover.hover.left="'来涂鸦吧！'"
             @click="drawer_click"
           >
             <path

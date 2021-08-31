@@ -5,8 +5,6 @@
     </template>
     <template v-slot:default>
       <p>
-        <span style="color: red">8月19日起计算方法变更。此提示保留一周。</span>
-        <br />
         友情提示：在打赏额以外，会追加扣除7%手续费。
         <br />
         总共扣除：
