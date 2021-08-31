@@ -530,9 +530,15 @@
         </template>
       </b-modal>
 
-      <b-modal ref="drawer_modal" id="drawer_modal" class="drawer_modal" centered >
+      <b-modal
+        ref="drawer_modal"
+        id="drawer_modal"
+        class="drawer_modal"
+        centered
+        @touchmove.prevent
+      >
         <template v-slot:modal-header>
-          <span style="font-size:1.0rem">涂鸦板（测试中）</span>
+          <span style="font-size: 1rem">涂鸦板（测试中）</span>
         </template>
         <template v-slot:default>
           <Drawer

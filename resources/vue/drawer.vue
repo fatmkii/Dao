@@ -192,7 +192,7 @@ export default {
       if (window.innerHeight > 580) {
         this.canvas.height = 400;
       } else {
-        this.canvas.height = window.innerHeight - 212;
+        this.canvas.height = window.innerHeight - 100;
       }
       const preData = this.context.getImageData(
         0,
