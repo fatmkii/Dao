@@ -15,9 +15,9 @@
       >
       </canvas>
     </div>
-    <div id="drawer-control" class="row align-items-center">
+    <div id="drawer-control" class="d-flex flex-row px-2">
       <!--画笔颜色-->
-      <div id="canvas-color" class="col-3 text-center">
+      <div id="canvas-color" class="mx-1 text-center">
         <div>颜色</div>
         <!--           <ul>
             <li 
@@ -30,7 +30,7 @@
         <input type="color" v-model="config.lineColor" />
       </div>
       <!--画笔-->
-      <div id="canvas-brush" class="col-4 text-center">
+      <div id="canvas-brush" class="mx-1 text-center">
         <div>大小</div>
         <span
           class="mx-2"
@@ -42,7 +42,7 @@
         >
       </div>
       <!--操作-->
-      <div id="canvas-control" class="col-5 text-center">
+      <div id="canvas-control" class="mx-1 text-center">
         <div>操作</div>
         <span
           v-for="control in controls"
@@ -184,8 +184,16 @@ export default {
       this.imgUrl = this.imgUrl.filter((item) => item !== src);
     },
     initDraw() {
-      this.canvas.width = 498;
-      this.canvas.height = 498;
+      if (window.innerWidth > 516) {
+        this.canvas.width = 498;
+      } else {
+        this.canvas.width = window.innerWidth - 18;
+      }
+      if (window.innerHeight > 580) {
+        this.canvas.height = 400;
+      } else {
+        this.canvas.height = window.innerHeight - 212;
+      }
       const preData = this.context.getImageData(
         0,
         0,
@@ -354,16 +362,17 @@ export default {
   padding: 0px;
 }
 
-@media screen and (max-width: 450px) {
-  #canvas-brush {
-    display: none;
-  }
+#drawer_modal___BV_modal_header_,
+#drawer_modal___BV_modal_footer_ {
+  padding-bottom: 6px;
+  padding-top: 6px;
 }
+
 #drawer-canvas {
   border: 1px #585858 solid;
   cursor: crosshair;
-  width: 100%;
-  height: 498px;
+  /* width: 100%;
+  height: 498px; */
 }
 #canvas-color ul {
   margin: 0;

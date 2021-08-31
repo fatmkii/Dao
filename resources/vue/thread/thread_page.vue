@@ -531,9 +531,9 @@
         </template>
       </b-modal>
 
-      <b-modal ref="drawer_modal" id="drawer_modal" class="drawer_modal">
+      <b-modal ref="drawer_modal" id="drawer_modal" class="drawer_modal" centered >
         <template v-slot:modal-header>
-          <h5>涂鸦板（测试中）</h5>
+          <span style="font-size:1.0rem">涂鸦板（测试中）</span>
         </template>
         <template v-slot:default>
           <Drawer
@@ -544,10 +544,10 @@
         </template>
         <template v-slot:modal-footer="{ cancel }">
           <b-button-group>
-            <b-button variant="success" @click="upload_drawer_click"
+            <b-button variant="success" size="sm" @click="upload_drawer_click"
               >上传</b-button
             >
-            <b-button variant="outline-secondary" @click="cancel()">
+            <b-button variant="outline-secondary" size="sm" @click="cancel()">
               取消
             </b-button>
           </b-button-group>
