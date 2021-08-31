@@ -535,7 +535,6 @@
         id="drawer_modal"
         class="drawer_modal"
         centered
-        @touchmove.prevent
       >
         <template v-slot:modal-header>
           <span style="font-size: 1rem">涂鸦板（测试中）</span>
@@ -545,6 +544,7 @@
             @upload_emit="upload_img_handle"
             @drawer_click="drawer_click"
             ref="drawer_component"
+            @touchmove.prevent
           ></Drawer>
         </template>
         <template v-slot:modal-footer="{ cancel }">
