@@ -73,7 +73,7 @@ export default {
               if (response.data.data.my_emoji != null) {
                 this.$store.commit("MyEmoji_set", response.data.data.my_emoji);
               }
-              this.$store.commit("Emojis_set", response.data.data.emojis);
+              // this.$store.commit("Emojis_set", response.data.data.emojis);
               this.$store.commit("UserDataLoaded_set", 2);
             } else {
               localStorage.clear("Binggan");
@@ -97,6 +97,9 @@ export default {
   created() {
     this.get_forums_data();
     this.get_user_data();
+    //把常用数据写入Vuex，变量来源于json/文件夹下的定义 
+    this.$store.commit("Emojis_set", emoji_json);
+    
     //读取localStorage的浏览记录
     if (localStorage.browse_logger != null) {
       this.$store.commit(
@@ -108,7 +111,7 @@ export default {
         this.$store.state.User.BrowseLogger
       );
     }
-    //读取localStorage的主题
+    //读取localStorage的皮肤主题
     if (localStorage.getItem("theme") == null) {
       localStorage.theme = "hdao";
       window.document.documentElement.setAttribute(

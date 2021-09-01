@@ -22,7 +22,7 @@
       ><div v-show="emoji_show">
         <div
           class="emoji_box m-1 d-inline-flex"
-          v-for="emoji_src in JSON.parse(emoji_data.emojis)"
+          v-for="emoji_src in emoji_data.emojis"
           :key="emoji_src.index"
         >
           <b-img
