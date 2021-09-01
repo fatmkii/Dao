@@ -97,9 +97,9 @@ export default {
           }
         })
         .catch((error) => {
-          alert(error);
           this.reward_handling = false;
-        }); // Todo:写异常返回代码
+          alert(Object.values(error.response.data.errors)[0]);
+        }); 
     },
   },
 };

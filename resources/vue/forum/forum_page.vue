@@ -80,7 +80,7 @@
       <transition-group name="z-sidebar" tag="div">
         <div
           class="icon-top"
-          @click="scroll_top"
+          @click="scroll_icon_click('top')"
           key="icon-top"
           v-show="z_bar_show"
         >
@@ -143,7 +143,7 @@
         </div>
         <div
           class="icon-down"
-          @click="scroll_bottom"
+          @click="scroll_icon_click('bottom')"
           key="icon-down"
           v-show="z_bar_show"
         >
@@ -272,11 +272,15 @@ export default {
         params: { forum_id: this.forum_id },
       });
     },
-    scroll_bottom() {
-      window.scrollTo(0, document.documentElement.scrollHeight);
-    },
-    scroll_top() {
-      window.scrollTo(0, 0);
+    scroll_icon_click(position) {
+      switch (position) {
+        case "top":
+          window.scrollTo(0, 0);
+          break;
+        case "bottom":
+          window.scrollTo(0, document.documentElement.scrollHeight);
+          break;
+      }
     },
   },
   created() {

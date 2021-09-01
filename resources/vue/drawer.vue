@@ -1,7 +1,6 @@
 <template>
   <!-- 来源https://codepen.io/576/pen/yqaxYw -->
   <div class="inner-draw">
-    <!--       <img src="https://upload.cc/i1/2018/07/20/9zHmRE.png" alt=""> -->
     <div>
       <canvas
         id="drawer-canvas"
@@ -20,14 +19,6 @@
       <!--画笔颜色-->
       <div id="canvas-color" class="mx-1 text-center">
         <div>颜色</div>
-        <!--           <ul>
-            <li 
-              v-for="item in colors" 
-              :class="{'active':config.lineColor === item}"
-              :style="{ background: item }" 
-              @click="setColor(item)"
-            ></li>
-          </ul> -->
         <input type="color" v-model="config.lineColor" />
       </div>
       <!--画笔-->
@@ -64,15 +55,6 @@ export default {
     return {
       name: "drawer",
       canvas: Object,
-      colors: [
-        "#fef4ac",
-        "#0018ba",
-        "#ffc200",
-        "#f32f15",
-        "#cccccc",
-        "#5ab639",
-        "#000",
-      ],
       brushs: [
         {
           lineWidth: 3,
@@ -146,16 +128,11 @@ export default {
       ];
     },
   },
-  // created() {
-  //   // this.$emit('setNav', '在线涂鸦画板')
-  // },
   mounted() {
     this.canvas = document.querySelector("#drawer-canvas");
     this.context = this.canvas.getContext("2d");
     this.initDraw();
     this.setCanvasStyle();
-    // document.querySelector('#footer').classList.add('hide-footer')
-    // document.querySelector('body').classList.add('fix-body')
   },
   destroyed() {
     // document.querySelector('#footer').classList.remove('hide-footer')
@@ -206,20 +183,15 @@ export default {
     },
     canvasMove: function (e) {
       if (this.canvasMoveUse) {
-        // console.log("canvasMove");
         this.context.beginPath();
         this.context.moveTo(this.lastX, this.lastY);
         const t = e.target;
         let canvasX;
         let canvasY;
         if (this.isPc()) {
-          // canvasX = e.clientX - t.parentNode.offsetLeft;
-          // canvasY = e.clientY - t.parentNode.offsetTop;
           canvasX = e.clientX - t.getBoundingClientRect().x;
           canvasY = e.clientY - t.getBoundingClientRect().y;
         } else {
-          // canvasX = e.changedTouches[0].clientX - t.parentNode.offsetLeft;
-          // canvasY = e.changedTouches[0].clientY - t.parentNode.offsetTop;
           canvasX = e.changedTouches[0].clientX - t.getBoundingClientRect().x;
           canvasY = e.changedTouches[0].clientY - t.getBoundingClientRect().y;
         }
@@ -233,7 +205,6 @@ export default {
       }
     },
     beginPath: function (e) {
-      // const canvas = document.querySelector("#drawer-canvas");
       if (e.target !== this.canvas) {
         // console.log("beginPath");
         this.context.beginPath();
@@ -241,7 +212,6 @@ export default {
     },
     // mouseup
     canvasUp: function (e) {
-      // console.log("canvasUp");
       const preData = this.context.getImageData(
         0,
         0,
@@ -261,20 +231,15 @@ export default {
     },
     // mousedown
     canvasDown: function (e) {
-      // console.log("canvasDown");
-      // console.log(this.eraserMode);
       this.canvasMoveUse = true;
       // client是基于整个页面的坐标
       // offset是cavas距离顶部以及左边的距离
-      // const canvasX = e.clientX - e.target.parentNode.offsetLeft;
-      // const canvasY = e.clientY - e.target.parentNode.offsetTop;
       const canvasX = e.clientX - e.target.getBoundingClientRect().x;
       const canvasY = e.clientY - e.target.getBoundingClientRect().y;
       this.setCanvasStyle();
       // 清除子路径
       this.lastX = canvasX;
       this.lastY = canvasY;
-      // console.log("moveTo", canvasX, canvasY);
       // 当前绘图表面状态
       const preData = this.context.getImageData(
         0,
@@ -372,8 +337,6 @@ export default {
 #drawer-canvas {
   border: 1px #585858 solid;
   cursor: crosshair;
-  /* width: 100%;
-  height: 498px; */
 }
 #canvas-color ul {
   margin: 0;

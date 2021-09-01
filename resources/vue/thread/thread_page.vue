@@ -203,7 +203,7 @@
             fill="currentColor"
             class="icon-drawer bi bi-pencil ml-2"
             viewBox="0 0 16 16"
-            @click="drawer_click"
+            @click="modal_toggle('drawer_modal')"
           >
             <path
               d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"
@@ -327,7 +327,7 @@
         <transition-group name="z-sidebar" tag="div">
           <div
             class="icon-top"
-            @click="scroll_top"
+            @click="scroll_icon_click('top')"
             key="icon-top"
             v-show="z_bar_show"
           >
@@ -349,7 +349,7 @@
           </div>
           <div
             class="icon-roll"
-            @click="roll_click"
+            @click="modal_toggle('roll_modal')"
             key="icon-roll"
             v-show="z_bar_show"
           >
@@ -393,7 +393,7 @@
           </div>
           <div
             class="icon-jump"
-            @click="jump_click"
+            @click="modal_toggle('jump_modal')"
             key="icon-jump"
             v-show="z_bar_show"
           >
@@ -410,7 +410,7 @@
           </div>
           <div
             class="icon-down"
-            @click="scroll_bottom"
+            @click="scroll_icon_click('bottom')"
             key="icon-down"
             v-show="z_bar_show"
           >
@@ -529,7 +529,6 @@
           </b-button-group>
         </template>
       </b-modal>
-
       <b-modal
         ref="drawer_modal"
         id="drawer_modal"
@@ -542,7 +541,7 @@
         <template v-slot:default>
           <Drawer
             @upload_emit="upload_img_handle"
-            @drawer_click="drawer_click"
+            @drawer_click="modal_toggle('drawer_modal')"
             ref="drawer_component"
           ></Drawer>
         </template>
@@ -935,20 +934,18 @@ export default {
         .scrollIntoView({ block: "start", behavior: "smooth" });
       this.$refs.content_input.focus();
     },
-    scroll_bottom() {
-      window.scrollTo(0, document.documentElement.scrollHeight);
+    scroll_icon_click(position) {
+      switch (position) {
+        case "top":
+          window.scrollTo(0, 0);
+          break;
+        case "bottom":
+          window.scrollTo(0, document.documentElement.scrollHeight);
+          break;
+      }
     },
-    scroll_top() {
-      window.scrollTo(0, 0);
-    },
-    roll_click() {
-      this.$refs["roll_modal"].show();
-    },
-    jump_click() {
-      this.$refs["jump_modal"].show();
-    },
-    drawer_click() {
-      this.$refs["drawer_modal"].toggle();
+    modal_toggle(modal_name){
+      this.$refs[modal_name].toggle()
     },
     upload_drawer_click() {
       this.$refs.drawer_component.upload();
@@ -986,9 +983,9 @@ export default {
           }
         })
         .catch((error) => {
-          alert(error);
           this.roll_handling = false;
-        }); // Todo:写异常返回代码
+          alert(Object.values(error.response.data.errors)[0]);
+        });
     },
     jump_handle() {
       if (this.jump_floor == "") {
@@ -1059,14 +1056,12 @@ export default {
       }
     },
     scroll_watch() {
-      // const page = isNaN(this.page) ? 1 : this.page;
       if (this.browse_current.page <= this.page) {
         this.browse_current["height"] = document.documentElement.scrollTop;
       }
     },
     browse_record_handle() {
       //写入本次阅读进度
-      // const page = isNaN(this.page) ? 1 : this.page;
       if (this.browse_current.page <= this.page) {
         this.browse_current.page = this.page;
         this.$store.commit("BrowseLogger_set", {
