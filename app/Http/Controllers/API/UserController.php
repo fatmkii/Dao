@@ -73,9 +73,9 @@ class UserController extends Controller
         }
 
         //用redis缓存所有emoji
-        // $emojis = Cache::remember('emoji_cache',  24 * 3600, function () {
-        //     return DB::table('emoji')->get();
-        // });
+        $emojis = Cache::remember('emoji_cache',  24 * 3600, function () {
+            return DB::table('emoji')->get();
+        });
 
         //确认饼干是否一致
         if ($user->binggan != $request->get('binggan')) {
@@ -102,7 +102,7 @@ class UserController extends Controller
                     'binggan' => $user,
                     'pingbici' => $user->pingbici,
                     'my_emoji' => $user->MyEmoji,
-                    // 'emojis' => $emojis,
+                    'emojis' => $emojis,
                 ],
             ],
         );
