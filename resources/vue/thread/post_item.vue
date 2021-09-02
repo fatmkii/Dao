@@ -1,6 +1,6 @@
 <template>
   <div class="post_item my-2" :id="'f_' + post_data.floor">
-    <slot name='header'></slot>
+    <slot name="header"></slot>
     <div class="float-right" v-if="this.$store.state.User.LoginStatus">
       <b-button
         size="sm"
@@ -162,11 +162,30 @@
 <script>
 export default {
   props: {
-    post_data: Object,
-    thread_anti_jingfen: Number,
-    random_head_add: String,
-    admin_button_show: Boolean,
-    no_image_mode: Boolean,
+    post_data: {
+      type: Object,
+      default: {},
+    },
+    thread_anti_jingfen: {
+      type: Number,
+      default: 0,
+    },
+    random_head_add: {
+      type: String,
+      default: "",
+    },
+    admin_button_show: {
+      type: Boolean,
+      default: false,
+    },
+    no_image_mode: {
+      type: Boolean,
+      default: false,
+    },
+    no_emoji_mode: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: function () {
     return {
@@ -188,16 +207,16 @@ export default {
       return this.$store.state.Forums.CurrentForumData.id;
     },
     post_content() {
+      let content = this.post_data.content;
       if (this.no_image_mode) {
-        return this.post_data.content
-          .replace(/<script/g, "<**禁止使用script**")
-          .replace(/\n/g, "<br>")
-          .replace(/<img[^<>]*>/g, "");
-      } else {
-        return this.post_data.content
-          .replace(/<script/g, "<**禁止使用script**")
-          .replace(/\n/g, "<br>");
+        content = content.replace(/<img[^<>]*(jpg|png|gif)'\s*>/g, "");
       }
+      if (this.no_emoji_mode) {
+        content = content.replace(/<img[^<>]*(class='emoji_img')+[^<>]*>/g, "");
+      }
+      return content
+        .replace(/<script/g, "<**禁止使用script**")
+        .replace(/\n/g, "<br>");
     },
   },
   created() {

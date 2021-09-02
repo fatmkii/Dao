@@ -21,7 +21,12 @@
         </div>
         <div class="col-auto">
           <b-form-checkbox v-model="no_image_mode" switch>
-            无图模式
+            无图
+          </b-form-checkbox>
+        </div>
+        <div class="col-auto">
+          <b-form-checkbox v-model="no_emoji_mode" switch>
+            无表情包
           </b-form-checkbox>
         </div>
         <div class="col-auto ml-auto">
@@ -115,6 +120,7 @@
             :random_head_add="random_heads_data[post_data.random_head]"
             :admin_button_show="admin_button_show"
             :no_image_mode="no_image_mode"
+            :no_emoji_mode="no_emoji_mode"
             @quote_click="quote_click_handle"
             @get_posts_data="get_posts_data"
             @emit_reward="emit_reward"
@@ -127,6 +133,7 @@
             :thread_anti_jingfen="0"
             :admin_button_show="false"
             :no_image_mode="no_image_mode"
+            :no_emoji_mode="no_emoji_mode"
           ></PostItem>
         </div>
       </div>
@@ -595,6 +602,9 @@ export default {
     no_image_mode: function () {
       localStorage.setItem("no_image_mode", this.no_image_mode ? "true" : "");
     },
+    no_emoji_mode: function () {
+      localStorage.setItem("no_image_mode", this.no_image_mode ? "true" : "");
+    },
   },
   beforeRouteUpdate(to, from, next) {
     this.browse_record_handle(); //翻页时候记录浏览进度
@@ -620,6 +630,7 @@ export default {
       jump_page_show: false,
       z_bar_show: false,
       no_image_mode: false,
+      no_emoji_mode: false,
       emoji_auto_hide: true,
       upload_img_handling: false,
       browse_current: {
@@ -944,8 +955,8 @@ export default {
           break;
       }
     },
-    modal_toggle(modal_name){
-      this.$refs[modal_name].toggle()
+    modal_toggle(modal_name) {
+      this.$refs[modal_name].toggle();
     },
     upload_drawer_click() {
       this.$refs.drawer_component.upload();
@@ -1089,6 +1100,11 @@ export default {
       localStorage.no_image_mode = "";
     } else {
       this.no_image_mode = Boolean(localStorage.no_image_mode);
+    }
+    if (localStorage.getItem("no_emoji_mode") == null) {
+      localStorage.no_emoji_mode = "";
+    } else {
+      this.no_emoji_mode = Boolean(localStorage.no_emoji_mode);
     }
   },
   mounted() {
