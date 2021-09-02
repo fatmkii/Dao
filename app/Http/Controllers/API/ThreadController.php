@@ -323,16 +323,16 @@ class ThreadController extends Controller
         }
 
         //提供该帖子的随机头像地址表
-        $random_heads = Cache::remember('random_heads_cache_' . $CurrentThread->random_heads_group, 7 * 24 * 3600, function () use ($CurrentThread) {
-            return DB::table('random_heads')->find($CurrentThread->random_heads_group);
-        });
+        // $random_heads = Cache::remember('random_heads_cache_' . $CurrentThread->random_heads_group, 7 * 24 * 3600, function () use ($CurrentThread) {
+        //     return DB::table('random_heads')->find($CurrentThread->random_heads_group);
+        // });
 
         return response()->json([
             'code' => ResponseCode::SUCCESS,
             'forum_data' => $CurrentForum,
             'thread_data' => $CurrentThread,
             'posts_data' => $posts,
-            'random_heads' => $random_heads,
+            // 'random_heads' => $random_heads,
         ]);
     }
     /**
