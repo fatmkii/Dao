@@ -20,6 +20,7 @@
 
 </body>
 
+<script src="{{ mix('json/heads.js') }}"></script>
 <script src="{{ mix('json/emoji.js') }}"></script>
 <script src="{{ mix('js/manifest.js') }}"></script>
 <script src="{{ mix('js/vendor.js') }}"></script>

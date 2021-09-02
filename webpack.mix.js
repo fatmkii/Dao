@@ -16,6 +16,7 @@ mix.js('resources/js/app.js', 'public/js')
     .extract(['vue', 'bootstrap-vue', 'vuex', 'vue-router', 'axios'])
     .sass('resources/css/app.scss', 'public/css')
     .copy('resources/json/emoji.js', 'public/json')
+    .copy('resources/json/heads.js', 'public/json')
     .vue()
     .sourceMaps()
     .version();

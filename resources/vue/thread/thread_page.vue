@@ -117,7 +117,11 @@
           <PostItem
             :post_data="post_data"
             :thread_anti_jingfen="thread_anti_jingfen"
-            :random_head_add="random_heads_data[post_data.random_head]"
+            :random_head_add="
+              random_heads_data[random_heads_group - 1].random_heads[
+                post_data.random_head
+              ]
+            "
             :admin_button_show="admin_button_show"
             :no_image_mode="no_image_mode"
             :no_emoji_mode="no_emoji_mode"
@@ -191,7 +195,7 @@
         class="nickname_input"
       ></b-form-input>
       <Emoji
-        :heads_id="thread_heads_id"
+        :heads_id="random_heads_group"
         :emoji_auto_hide="emoji_auto_hide"
         @emoji_append="emoji_append"
       ></Emoji>
@@ -622,7 +626,7 @@ export default {
       roll_num: 1,
       roll_range: 100,
       roll_handling: false,
-      random_heads_data: Object,
+      // random_heads_data: Object,
       admin_button_show: false,
       preview_show: false,
       post_with_admin: false,
@@ -695,8 +699,6 @@ export default {
         state.Forums.CurrentForumData.id ? state.Forums.CurrentForumData.id : 0,
       thread_title: (state) => state.Threads.CurrentThreadData.title,
       thread_sub_id: (state) => state.Threads.CurrentThreadData.sub_id,
-      thread_heads_id: (state) =>
-        state.Threads.CurrentThreadData.random_heads_group,
       thread_anti_jingfen: (state) =>
         state.Threads.CurrentThreadData.anti_jingfen,
       thread_posts_num: (state) => state.Threads.CurrentThreadData.posts_num,
@@ -706,6 +708,7 @@ export default {
       posts_data: (state) => state.Posts.PostsData.data, // 记得ThreadsData要比ForumsData多.data，因为多了分页数据
       posts_load_status: (state) => state.Posts.PostsLoadStatus,
       locked_TTL: (state) => state.User.LockedTTL,
+      random_heads_data: (state) => state.User.RandomHeads,
     }),
   },
   methods: {
@@ -731,9 +734,9 @@ export default {
               response.data.forum_data
             );
             this.$store.commit("PostsLoadStatus_set", 1);
-            this.random_heads_data = JSON.parse(
-              response.data.random_heads.random_heads
-            );
+            // this.random_heads_data = JSON.parse(
+            //   response.data.random_heads.random_heads
+            // );
             document.title = this.thread_title; //设置浏览器页面标签文字
             if (remind) {
               this.$bvToast.toast("已刷新帖子", {

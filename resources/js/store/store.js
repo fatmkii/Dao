@@ -16,6 +16,7 @@ const module_user = {
         ContentPingbici: [],
         MyEmoji: "",
         Emojis: [],
+        RandomHeads: [],
         BrowseLogger: {}
     }),
     mutations: {
@@ -54,6 +55,9 @@ const module_user = {
         },
         Emojis_set(state, payload) {
             state.Emojis = payload
+        },
+        RandomHeads_set(state, payload) {
+            state.RandomHeads = payload
         },
         BrowseLogger_set(state, payload) {
             if (typeof state.BrowseLogger[payload.suffix] == "undefined") {
