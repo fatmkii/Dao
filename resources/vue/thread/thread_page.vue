@@ -607,7 +607,7 @@ export default {
       localStorage.setItem("no_image_mode", this.no_image_mode ? "true" : "");
     },
     no_emoji_mode: function () {
-      localStorage.setItem("no_image_mode", this.no_image_mode ? "true" : "");
+      localStorage.setItem("no_emoji_mode", this.no_emoji_mode ? "true" : "");
     },
   },
   beforeRouteUpdate(to, from, next) {
