@@ -84,13 +84,18 @@ export default {
             }
           })
           .catch((error) => {
-            if (error.response.status === 401) {
+            if (
+              error.response.status !== undefined &&
+              error.response.status === 401
+            ) {
               localStorage.clear("Binggan"); //如果遇到401错误(用户未认证)，就清除Binggan和Token
               localStorage.clear("Token");
               delete axios.defaults.headers.Authorization;
+              alert("你的饼干好像有问题？请重新登录");
+            } else {
+              alert(Object.values(error.response.data.errors)[0]);
             }
-            alert("你的饼干好像有问题？请重新登录");
-          }); // Todo:写异常返回代码;
+          });
       }
     },
   },

@@ -114,15 +114,15 @@ class PostController extends Controller
             $post->created_by_admin = $request->post_with_admin  ? 1 : 0;
             $post->created_ip = $request->ip();
             $post->random_head = random_int(0, 39);
-            $post->floor = Post::suffix(intval($request->thread_id / 10000))->where('thread_id', $request->thread_id)->count();
-            $post->save();
-
+            // $post->floor = Post::suffix(intval($request->thread_id / 10000))->where('thread_id', $request->thread_id)->count();
+            // $post->save();
             $thread = $post->thread;
-            $thread->posts_num = $thread->posts_num + 1;
+            $thread->posts_num++;
+            $post->floor = $thread->posts_num;
             $thread->save();
+            $post->save();
             $user->coin += 10; //回复+10奥利奥
             $user->save();
-
             DB::commit();
         } catch (QueryException $e) {
             DB::rollback();
@@ -435,12 +435,13 @@ class PostController extends Controller
             $post->nickname = 'Roll点系统';
             $post->created_ip = $request->ip();
             $post->random_head = random_int(1, 40);
-            $post->floor = Post::suffix(intval($request->thread_id / 10000))->where('thread_id', $request->thread_id)->count();
-            $post->save();
+            // $post->floor = Post::suffix(intval($request->thread_id / 10000))->where('thread_id', $request->thread_id)->count();
+            // $post->save();
 
             $thread = $post->thread;
-            $thread->posts_num = $thread->posts_num + 1;
+            $post->floor = $thread->posts_num;
             $thread->save();
+            $post->save();
             DB::commit();
         } catch (QueryException $e) {
             DB::rollback();

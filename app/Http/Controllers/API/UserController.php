@@ -258,12 +258,12 @@ class UserController extends Controller
             $post->created_by_admin = 2; //0=一般用户 1=管理员发布，2=系统发布
             $post->created_ip = $request->ip();
             $post->random_head = random_int(1, 40);
-            $post->floor = Post::suffix(intval($request->thread_id / 10000))->where('thread_id', $request->thread_id)->count();
-            $post->save();
-
+            // $post->floor = Post::suffix(intval($request->thread_id / 10000))->where('thread_id', $request->thread_id)->count();
+            // $post->save();
             $thread = $post->thread;
-            $thread->posts_num = $thread->posts_num + 1;
+            $post->floor = $thread->posts_num;
             $thread->save();
+            $post->save();
 
             DB::commit();
         } catch (QueryException $e) {
