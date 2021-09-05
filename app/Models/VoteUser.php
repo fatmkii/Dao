@@ -10,15 +10,13 @@ class VoteUser extends Model
     use HasFactory;
 
     protected $guarded = [];
-<<<<<<< Updated upstream
-=======
+
     public $hidden = [
         'user_id',
         'vote_question_id',
-        
+
     ];
->>>>>>> Stashed changes
-    
+
     public function VoteQuestion()
     {
         return $this->belongsTo(VoteQuestion::class);
