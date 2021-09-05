@@ -13,6 +13,7 @@ use Illuminate\Database\QueryException;
 use App\Common\ResponseCode;
 use Carbon\Carbon;
 use App\Exceptions\CoinException;
+use App\Http\Controllers\api\VoteController;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use App\Jobs\ProcessUserActive;
@@ -46,6 +47,7 @@ class ThreadController extends Controller
             'random_heads_group' => 'integer',
             'post_with_admin' => 'boolean',
             'locked_by_coin' => 'integer|max:1000000',
+            'is_vote' => 'boolean|required',
         ]);
 
 
@@ -149,11 +151,20 @@ class ThreadController extends Controller
             $post->random_head = random_int(1, 40);
             $post->floor = 0;
             $post->save();
+
+            //追加投票贴
+            if ($request->is_vote) {
+                $user->coin -= 1000; //发投票主题减500奥利奥  
+                $vote_controller = new VoteController;
+                $vote_controller->create($request, $thread->id);
+            }
+
             //统一判断奥利奥是否足够
             if ($user->coin < 0) {
                 throw new CoinException();
             }
             $user->save();
+
             DB::commit();
         } catch (QueryException $e) {
             DB::rollback();

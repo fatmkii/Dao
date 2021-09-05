@@ -14,10 +14,17 @@ class CreateVoteOptionsTable extends Migration
     public function up()
     {
         Schema::create('vote_options', function (Blueprint $table) {
+<<<<<<< Updated upstream
             $table->id();
             $table->integer('vote_question_id')->index();
             $table->string('option_text');
             $table->integer('vote_total');
+=======
+            $table->id()->startingValue(10001);
+            $table->integer('vote_question_id')->index();
+            $table->string('option_text');
+            $table->integer('vote_total')->default(0);
+>>>>>>> Stashed changes
             $table->timestamps();
         });
     }

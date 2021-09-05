@@ -5,43 +5,34 @@ namespace App\Common;
 class ResponseCode
 {
     const SUCCESS = 200;
-
     const FILED_ERROR = 20422;
 
     const USER_UNAUTHORIZED = 21401;
-
     const USER_REGISTER_FAIL = 21403;
-
     const USER_NOT_FOUND = 21404;
-
     const USER_LOCKED = 21443;
-
     const USER_BANNED = 21499;
-
     const COIN_NOT_ENOUGH = 21412;
-
     const USER_PASSWORD_ERROR = 21001;
-
     const USER_NEW_CLOSED = 21406;
+    const CANNOTLOGIN = 21401;
 
     const ADMIN_UNAUTHORIZED = 22401;
 
-    const CANNOTLOGIN = 21401;
 
     const THREAD_NOT_FOUND = 23404;
-
     const THREAD_WAS_NISSINED = 23410;
-
     const THREAD_TOO_MANY = 23429;
-
     const THREAD_UNAUTHORIZED = 23401;
 
     const POST_NOT_FOUND = 24404;
-
     const POST_TOO_MANY = 24429;
+    const POST_UNAUTHORIZED = 24401;
 
-    const POST_UNAUTHORIZED = 23401;
-    
+    const VOTE_NOT_FOUND = 25404;
+    const VOTE_OPTION_NOT_FOUND = 25404;
+    const VOTE_WAS_OUTDATE = 25410;
+
     const LOGIN_FAILED = 20001;
 
     const DATABASE_FAILED = 5001;
@@ -69,6 +60,9 @@ class ResponseCode
         self::LOGIN_FAILED => '登录失败',
         self::DATABASE_FAILED => '数据库错误',
         self::USER_REGISTER_FAIL => '申请饼干失败',
+        self::VOTE_NOT_FOUND => '投票不存在',
+        self::VOTE_OPTION_NOT_FOUND => '投票选项不存在',
+        self::VOTE_WAS_OUTDATE => '投票已过期',
     ];
 }
 

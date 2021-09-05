@@ -283,6 +283,8 @@ export default {
       locked_by_coin_input: undefined,
       upload_img_handling: false,
       preview_show: false,
+      is_vote: false,
+      vote_multiple:false,
     };
   },
   watch: {
@@ -366,6 +368,8 @@ export default {
           admin_subtitle: this.admin_subtitles_selected,
           post_with_admin: this.post_with_admin,
           locked_by_coin: this.locked_by_coin_input,
+          is_vote: this.is_vote,
+          // vote_multiple:this.vote_multiple
         },
       };
       axios(config)
