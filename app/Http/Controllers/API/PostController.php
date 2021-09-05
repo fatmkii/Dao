@@ -117,6 +117,7 @@ class PostController extends Controller
             // $post->floor = Post::suffix(intval($request->thread_id / 10000))->where('thread_id', $request->thread_id)->count();
             // $post->save();
             $thread = $post->thread;
+            // $thread = Thread::where('id', $post->thread->id)->sharedLock()->first();//用sharelock防止posts_num错误
             $thread->posts_num++;
             $post->floor = $thread->posts_num;
             $thread->save();
@@ -439,6 +440,7 @@ class PostController extends Controller
             // $post->save();
 
             $thread = $post->thread;
+            $thread->posts_num++;
             $post->floor = $thread->posts_num;
             $thread->save();
             $post->save();
