@@ -88,7 +88,10 @@ class User extends Authenticatable
         return $this->hasOne(Admin::class);
     }
 
-
+    public function VoteUser()
+    {
+        return $this->hasMany(VoteUser::class);
+    }
 
     public function getAdminForumsAttribute()
     {

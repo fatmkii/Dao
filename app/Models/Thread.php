@@ -49,6 +49,11 @@ class Thread extends myModel
         return new HasMany($posts->newQuery(), $this, 'thread_id', 'id');
     }
 
+    public function VoteQuestion()
+    {
+        return $this->hasOne(VoteQuestion::class);
+    }
+
     protected function serializeDate($date)
     {
         return $date->format('Y-m-d H:i');

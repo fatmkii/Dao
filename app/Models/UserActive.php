@@ -23,6 +23,6 @@ class UserActive extends myModel
 
     public function User()
     {
-        return $this->belongsTo(Thread::class);
+        return $this->belongsTo(User::class);
     }
 }
