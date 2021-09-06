@@ -45,15 +45,16 @@ class PostController extends Controller
 
 
 
-        $user = User::where('binggan', $request->binggan)->first();
-        if (!$user) {
-            return response()->json(
-                [
-                    'code' => ResponseCode::USER_NOT_FOUND,
-                    'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
-                ],
-            );
-        }
+        // $user = User::where('binggan', $request->binggan)->first();
+        $user = $request->user;
+        // if (!$user) {
+        //     return response()->json(
+        //         [
+        //             'code' => ResponseCode::USER_NOT_FOUND,
+        //             'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
+        //         ],
+        //     );
+        // }
 
         //如果回帖频率过高，返回错误
         if (Redis::GET('new_post_record_' . $request->binggan) >= 10 && $user->admin == 0) {
@@ -64,29 +65,29 @@ class PostController extends Controller
         }
 
         //如果饼干被ban，直接返回错误
-        if ($user->is_banned) {
-            return response()->json(
-                [
-                    'code' => ResponseCode::USER_BANNED,
-                    'message' => ResponseCode::$codeMap[ResponseCode::USER_BANNED],
-                    'data' => [
-                        'binggan' => $user->binggan,
-                    ],
-                ],
-                401
-            );
-        }
+        // if ($user->is_banned) {
+        //     return response()->json(
+        //         [
+        //             'code' => ResponseCode::USER_BANNED,
+        //             'message' => ResponseCode::$codeMap[ResponseCode::USER_BANNED],
+        //             'data' => [
+        //                 'binggan' => $user->binggan,
+        //             ],
+        //         ],
+        //         401
+        //     );
+        // }
 
         //查询饼干是否在封禁期
-        if ($user->lockedTTL) {
-            $lockTTL_hours = intval($user->lockedTTL / 3600) + 1;
-            return response()->json(
-                [
-                    'code' => ResponseCode::USER_LOCKED,
-                    'message' => ResponseCode::$codeMap[ResponseCode::USER_LOCKED] . '，将于' . $lockTTL_hours . '小时后解封',
-                ],
-            );
-        }
+        // if ($user->lockedTTL) {
+        //     $lockTTL_hours = intval($user->lockedTTL / 3600) + 1;
+        //     return response()->json(
+        //         [
+        //             'code' => ResponseCode::USER_LOCKED,
+        //             'message' => ResponseCode::$codeMap[ResponseCode::USER_LOCKED] . '，将于' . $lockTTL_hours . '小时后解封',
+        //         ],
+        //     );
+        // }
 
         //确认是否冒充管理员发帖
         if (
@@ -235,7 +236,8 @@ class PostController extends Controller
         }
 
         //判断饼干是否足够
-        $user = User::where('binggan', $request->binggan)->first();
+        // $user = User::where('binggan', $request->binggan)->first();
+        $user = $request->user;
         if ($user->coin < 300) {
             return response()->json(
                 [
@@ -316,7 +318,8 @@ class PostController extends Controller
         }
 
         //判断饼干是否足够
-        $user = User::where('binggan', $request->binggan)->first();
+        // $user = User::where('binggan', $request->binggan)->first();
+        $user = $request->user;
         if ($user->coin < 300) {
             return response()->json(
                 [
@@ -366,39 +369,40 @@ class PostController extends Controller
             'roll_range' => 'required|integer|max:100000000|min:1',
         ]);
 
-        $user = User::where('binggan', $request->binggan)->first();
-        if (!$user) {
-            return response()->json(
-                [
-                    'code' => ResponseCode::USER_NOT_FOUND,
-                    'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
-                ],
-            );
-        }
+        // $user = User::where('binggan', $request->binggan)->first();
+        $user = $request->user;
+        // if (!$user) {
+        //     return response()->json(
+        //         [
+        //             'code' => ResponseCode::USER_NOT_FOUND,
+        //             'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
+        //         ],
+        //     );
+        // }
         //如果饼干被ban，直接返回错误
-        if ($user->is_banned) {
-            return response()->json(
-                [
-                    'code' => ResponseCode::USER_BANNED,
-                    'message' => ResponseCode::$codeMap[ResponseCode::USER_BANNED],
-                    'data' => [
-                        'binggan' => $user->binggan,
-                    ],
-                ],
-                401
-            );
-        }
+        // if ($user->is_banned) {
+        //     return response()->json(
+        //         [
+        //             'code' => ResponseCode::USER_BANNED,
+        //             'message' => ResponseCode::$codeMap[ResponseCode::USER_BANNED],
+        //             'data' => [
+        //                 'binggan' => $user->binggan,
+        //             ],
+        //         ],
+        //         401
+        //     );
+        // }
 
         //查询饼干是否在封禁期
-        if ($user->lockedTTL) {
-            $lockTTL_hours = intval($user->lockedTTL / 3600) + 1;
-            return response()->json(
-                [
-                    'code' => ResponseCode::USER_LOCKED,
-                    'message' => ResponseCode::$codeMap[ResponseCode::USER_LOCKED] . '，将于' . $lockTTL_hours . '小时后解封',
-                ],
-            );
-        }
+        // if ($user->lockedTTL) {
+        //     $lockTTL_hours = intval($user->lockedTTL / 3600) + 1;
+        //     return response()->json(
+        //         [
+        //             'code' => ResponseCode::USER_LOCKED,
+        //             'message' => ResponseCode::$codeMap[ResponseCode::USER_LOCKED] . '，将于' . $lockTTL_hours . '小时后解封',
+        //         ],
+        //     );
+        // }
 
         //生成roll点结果
         $roll_result_arr = array();

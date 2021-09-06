@@ -49,15 +49,16 @@ class ThreadController extends Controller
         ]);
 
 
-        $user = User::where('binggan', $request->binggan)->first();
-        if (!$user) {
-            return response()->json(
-                [
-                    'code' => ResponseCode::USER_NOT_FOUND,
-                    'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
-                ],
-            );
-        }
+        // $user = User::where('binggan', $request->binggan)->first();
+        $user = $request->user;
+        // if (!$user) {
+        //     return response()->json(
+        //         [
+        //             'code' => ResponseCode::USER_NOT_FOUND,
+        //             'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
+        //         ],
+        //     );
+        // }
 
         //如果发帖频率过高，返回错误
         if (Redis::exists('new_thread_record_' . $request->binggan) &&  $user->admin == 0) {
@@ -83,29 +84,29 @@ class ThreadController extends Controller
         }
 
         //如果饼干被ban，直接返回错误
-        if ($user->is_banned) {
-            return response()->json(
-                [
-                    'code' => ResponseCode::USER_BANNED,
-                    'message' => ResponseCode::$codeMap[ResponseCode::USER_BANNED],
-                    'data' => [
-                        'binggan' => $user->binggan,
-                    ],
-                ],
-                401
-            );
-        }
+        // if ($user->is_banned) {
+        //     return response()->json(
+        //         [
+        //             'code' => ResponseCode::USER_BANNED,
+        //             'message' => ResponseCode::$codeMap[ResponseCode::USER_BANNED],
+        //             'data' => [
+        //                 'binggan' => $user->binggan,
+        //             ],
+        //         ],
+        //         401
+        //     );
+        // }
 
         //查询饼干是否在封禁期
-        if ($user->lockedTTL) {
-            $lockTTL_hours = intval($user->lockedTTL / 3600) + 1;
-            return response()->json(
-                [
-                    'code' => ResponseCode::USER_LOCKED,
-                    'message' => ResponseCode::$codeMap[ResponseCode::USER_LOCKED] . '，将于' . $lockTTL_hours . '小时后解封',
-                ],
-            );
-        }
+        // if ($user->lockedTTL) {
+        //     $lockTTL_hours = intval($user->lockedTTL / 3600) + 1;
+        //     return response()->json(
+        //         [
+        //             'code' => ResponseCode::USER_LOCKED,
+        //             'message' => ResponseCode::$codeMap[ResponseCode::USER_LOCKED] . '，将于' . $lockTTL_hours . '小时后解封',
+        //         ],
+        //     );
+        // }
 
         //执行追加新主题流程
         try {
@@ -220,8 +221,8 @@ class ThreadController extends Controller
         }
 
         $CurrentForum = $CurrentThread->forum;
-        $user = User::where('binggan', $request->query('binggan'))->first();
-
+        // $user = User::where('binggan', $request->query('binggan'))->first();
+        $user = $request->user;
 
         //判断是否可无饼干访问的板块
         if (!$CurrentForum->is_anonymous && !$user) {

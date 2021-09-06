@@ -29,25 +29,33 @@ Route::post('/admin_login', [AuthController::class, 'admin_login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 //Forum系列
-Route::apiResource('forums', ForumController::class);
+Route::prefix('forums')->group(function () {
+    Route::get('', [ForumController::class, 'index']); //查看板块列表
+    Route::get('/{forum_id}', [ForumController::class, 'show'])->middleware('CheckBinggan:show'); //查看板块内主题列表
+});
+// Route::apiResource('forums', ForumController::class);
 
 //thread系列
-Route::post('/threads/create', [ThreadController::class, 'create'])->name('thread.create');
-Route::apiResource('threads', ThreadController::class);
+Route::prefix('threads')->group(function () {
+    Route::get('/{Thread_id}', [ThreadController::class, 'show'])->middleware('CheckBinggan:show'); //查看主题
+    Route::post('/create', [ThreadController::class, 'create'])->middleware('CheckBinggan:create'); //发新主题
+});
+// Route::apiResource('threads', ThreadController::class)->middleware('auth:sanctum');
 
 //Post系列
 Route::prefix('posts')->group(function () {
-    Route::post('/create', [PostController::class, 'create'])->name('posts.create');
-    Route::post('/create_roll', [PostController::class, 'create_roll']);
-    Route::put('/recover/{post_id}', [PostController::class, 'recover']);
+    Route::post('/create', [PostController::class, 'create'])->middleware('CheckBinggan:create'); //新帖子
+    Route::delete('/{id}', [PostController::class, 'destroy'])->middleware('CheckBinggan:create'); //删除帖子
+    Route::post('/create_roll', [PostController::class, 'create_roll'])->middleware('CheckBinggan:create'); //新roll点
+    Route::put('/recover/{post_id}', [PostController::class, 'recover'])->middleware('CheckBinggan:create'); //恢复删除的帖子
 });
-Route::apiResource('posts', PostController::class);
+// Route::apiResource('posts', PostController::class);
 
 //User系列
 Route::prefix('user')->group(function () {
     Route::post('/show', [UserController::class, 'show'])->middleware('auth:sanctum'); //获得用户信息
     Route::post('/register', [UserController::class, 'create']);   //新建饼干
-    Route::post('/reward', [UserController::class, 'reward']);     //打赏
+    Route::post('/reward', [UserController::class, 'reward'])->middleware('CheckBinggan:create');     //打赏
     Route::get('/check_reg_record', [UserController::class, 'check_reg_record']); //返回注册记录TTL
     Route::post('/pingbici_set', [UserController::class, 'pingbici_set']);     //设定屏蔽词
     Route::post('/my_emoji_set', [UserController::class, 'my_emoji_set']);     //设定表情包

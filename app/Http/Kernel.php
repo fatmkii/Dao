@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'CheckTokenCan' => \App\Http\Middleware\CheckTokenCan::class,
+        'CheckBinggan' => \App\Http\Middleware\CheckBinggan::class,
     ];
 
     /**

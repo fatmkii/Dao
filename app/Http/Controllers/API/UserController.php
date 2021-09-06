@@ -53,8 +53,6 @@ class UserController extends Controller
             'binggan' => 'required|string',
         ]);
 
-
-
         $user = $request->user(); //从sanctum的token获得饼干
         $user->last_login = Carbon::now();
         $user->save();
@@ -208,17 +206,18 @@ class UserController extends Controller
             'post_id' => 'required|integer',
         ]);
 
-        $user = User::where('binggan', $request->binggan)->first();
+        $user = $request->user;
+        // $user = User::where('binggan', $request->binggan)->first();
         $post_target = Post::suffix(intval($request->thread_id / 10000))->find($request->post_id);
         $user_target = User::where('binggan', $post_target->created_binggan)->first();
 
         //判断用户饼干是否存在
-        if (!$user) {
-            return response()->json([
-                'code' => ResponseCode::USER_NOT_FOUND,
-                'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
-            ]);
-        }
+        // if (!$user) {
+        //     return response()->json([
+        //         'code' => ResponseCode::USER_NOT_FOUND,
+        //         'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
+        //     ]);
+        // }
         //判断对象用户饼干是否存在
         if (!$user_target) {
             return response()->json([

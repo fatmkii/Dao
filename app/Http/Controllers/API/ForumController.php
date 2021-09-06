@@ -49,7 +49,8 @@ class ForumController extends Controller
     public function show(Request $request, $forum_id)
     {
         $CurrentForum = Forum::find($forum_id);
-        $user = User::where('binggan', $request->query('binggan'))->first();
+        $user = $request->user;
+        // $user = User::where('binggan', $request->query('binggan'))->first();
         //判断是否可无饼干访问的板块
         if (!$CurrentForum->is_anonymous && !$user) {
             return response()->json([
