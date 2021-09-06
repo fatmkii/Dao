@@ -152,91 +152,175 @@
       </div>
     </div>
     <hr />
-    <div class="row align-items-center mt-3">
-      <div class="col-4"><span class="h6 my-2">副标题</span></div>
-      <div class="col-4">
-        <span class="h6 my-2">日清时间</span>
-        <span v-if="forum_nissin == 0">（本小岛不日清）</span>
-        <span v-if="forum_nissin == 1">（本小岛固定8点日清）</span>
-      </div>
-      <div class="col-4"><span class="h6 my-2">反精分</span></div>
-    </div>
-    <div class="row align-items-center mt-3">
-      <div class="col-4">
-        <b-form-select
-          v-model="subtitles_selected"
-          :options="subtitles_options"
-        ></b-form-select>
-      </div>
-      <div class="col-4">
-        <b-form-select
-          v-model="nissin_time_selected"
-          :options="nissin_time_options"
-          :disabled="!(forum_nissin == 2)"
-        ></b-form-select>
-      </div>
-      <div class="col-4">
-        <b-form-select
-          v-model="anti_jingfen_selected"
-          :options="anti_jingfen_options"
-        ></b-form-select>
-      </div>
-    </div>
-    <hr />
-    <div class="row align-items-center mt-3">
-      <div class="col-4">
-        <span class="h6 my-2">选择随机头像组</span>
-      </div>
-      <div class="col-4">
-        <span class="h6 my-2">给标题换个颜色吗？（收费500奥利奥）</span>
-      </div>
-      <div class="col-4">
-        <span class="h6 my-2">设定看帖权限（收费500奥利奥）</span>
-      </div>
-    </div>
-    <div class="row align-items-center mt-3">
-      <div class="col-4">
-        <b-form-select
-          v-model="random_heads_group_selected"
-          :options="random_heads_group"
-          value-field="id"
-          text-field="name"
-        ></b-form-select>
-      </div>
-      <div class="col-4">
-        <b-form-input
-          placeholder="#212529"
-          v-model="title_color_input"
-          class="common_input"
-        ></b-form-input>
-      </div>
-      <div class="col-4">
-        <b-form-input
-          placeholder="大于多少奥利奥才能看帖"
-          v-model="locked_by_coin_input"
-          class="common_input"
-        ></b-form-input>
-      </div>
-    </div>
-    <div v-if="this.$store.state.User.AdminForums.includes(this.forum_id)">
-      <hr />
-      <div class="row align-items-center mt-3">
-        <div class="col-4"><span class="h6 my-2">管理员选项</span></div>
-        <div class="col-4"></div>
-        <div class="col-4"></div>
-      </div>
-      <div class="row align-items-center mt-3">
-        <div class="col-4">
-          <b-form-select
-            v-model="admin_subtitles_selected"
-            :options="admin_subtitles_options"
-            :disabled="subtitles_selected != '[公告]'"
-          ></b-form-select>
+    <b-tabs pills>
+      <b-tab title="常规">
+        <div class="row align-items-center mt-3">
+          <div class="col-4"><span class="h6 my-2">副标题</span></div>
+          <div class="col-4">
+            <span class="h6 my-2">日清时间</span>
+            <span v-if="forum_nissin == 0">（本小岛不日清）</span>
+            <span v-if="forum_nissin == 1">（本小岛固定8点日清）</span>
+          </div>
+          <div class="col-4"><span class="h6 my-2">反精分</span></div>
         </div>
-        <div class="col-4"></div>
-        <div class="col-4"></div>
-      </div>
-    </div>
+        <div class="row align-items-center mt-3">
+          <div class="col-4">
+            <b-form-select
+              v-model="subtitles_selected"
+              :options="subtitles_options"
+            ></b-form-select>
+          </div>
+          <div class="col-4">
+            <b-form-select
+              v-model="nissin_time_selected"
+              :options="nissin_time_options"
+              :disabled="!(forum_nissin == 2)"
+            ></b-form-select>
+          </div>
+          <div class="col-4">
+            <b-form-select
+              v-model="anti_jingfen_selected"
+              :options="anti_jingfen_options"
+            ></b-form-select>
+          </div>
+        </div>
+        <div class="row align-items-center mt-3">
+          <div class="col-4">
+            <span class="h6 my-2">选择随机头像组</span>
+          </div>
+        </div>
+        <div class="row align-items-center mt-3">
+          <div class="col-4">
+            <b-form-select
+              v-model="random_heads_group_selected"
+              :options="random_heads_group"
+              value-field="id"
+              text-field="name"
+            ></b-form-select>
+          </div>
+        </div>
+      </b-tab>
+      <b-tab title="收费">
+        <div class="row align-items-center mt-3">
+          <div class="col-4">
+            <span class="h6 my-2">给标题换个颜色吗？（500奥利奥）</span>
+          </div>
+          <div class="col-4">
+            <span class="h6 my-2">设定看帖权限（500奥利奥）</span>
+          </div>
+        </div>
+        <div class="row align-items-center mt-3">
+          <div class="col-4">
+            <b-form-input
+              placeholder="#212529"
+              v-model="title_color_input"
+              class="common_input"
+            ></b-form-input>
+          </div>
+          <div class="col-4">
+            <b-form-input
+              placeholder="大于多少奥利奥才能看帖"
+              v-model="locked_by_coin_input"
+              class="common_input"
+            ></b-form-input>
+          </div>
+        </div>
+      </b-tab>
+      <b-tab title="投票">
+        <b-form-checkbox class="mr-3" v-model="is_vote">
+          开启投票
+        </b-form-checkbox>
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="mr-3 svg-icon bi bi-plus-lg"
+              viewBox="0 0 16 16"
+              v-show="is_vote"
+              @click="vote_option_control('push')"
+            >
+              <path
+                d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"
+              />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="mr-3 svg-icon bi bi-dash-lg"
+              viewBox="0 0 16 16"
+              v-show="is_vote"
+              @click="vote_option_control('pop')"
+            >
+              <path d="M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z" />
+            </svg>
+          </div>
+          <div class="col-auto">
+            <b-form-checkbox
+              class="mr-3"
+              v-show="is_vote"
+              v-model="vote_multiple"
+              v-b-popover.hover.right="'未启用'"
+              disabled
+            >
+              投票多选
+            </b-form-checkbox>
+          </div>
+          <div class="col-4">
+            <b-form-select
+              class="mr-3"
+              v-show="is_vote"
+              v-model="vote_time_selected"
+              :options="vote_time_options"
+            ></b-form-select>
+          </div>
+        </div>
+
+        <div v-show="is_vote">
+          <div class="my-2" style="font-size: 0.875rem">投票标题</div>
+          <b-form-input
+            id="vote_title_input"
+            class="vote_title_input"
+            placeholder="投票标题，必填"
+            v-model="vote_title_input"
+          ></b-form-input>
+        </div>
+        <div
+          class="my-2"
+          v-show="is_vote"
+          v-for="(vote_option, index) in vote_options"
+          :key="index"
+        >
+          <div style="font-size: 0.875rem">选项{{ index + 1 }}</div>
+          <b-form-input v-model="vote_options[index]"></b-form-input>
+        </div>
+      </b-tab>
+      <b-tab
+        title="管理员"
+        v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
+      >
+        <div class="row align-items-center mt-3">
+          <div class="col-4"><span class="h6 my-2">管理员选项</span></div>
+          <div class="col-4"></div>
+          <div class="col-4"></div>
+        </div>
+        <div class="row align-items-center mt-3">
+          <div class="col-4">
+            <b-form-select
+              v-model="admin_subtitles_selected"
+              :options="admin_subtitles_options"
+              :disabled="subtitles_selected != '[公告]'"
+            ></b-form-select>
+          </div>
+          <div class="col-4"></div>
+          <div class="col-4"></div>
+        </div>
+      </b-tab>
+    </b-tabs>
   </div>
 </template>
 
@@ -284,7 +368,15 @@ export default {
       upload_img_handling: false,
       preview_show: false,
       is_vote: false,
-      vote_multiple:false,
+      vote_multiple: false,
+      vote_title_input: "",
+      vote_options: ["", "", ""],
+      vote_time_options: [
+        { value: 86400, text: "24小时" },
+        { value: 172800, text: "48小时" },
+        { value: 259200, text: "72小时" },
+      ],
+      vote_time_selected: 86400,
     };
   },
   watch: {
@@ -344,14 +436,13 @@ export default {
       };
     },
   },
-
   methods: {
     back_to_forum() {
       this.$router.push({ name: "forum", params: { forum_id: this.forum_id } });
     },
     new_thread_handle() {
       this.new_thread_handling = true;
-      const config = {
+      var config = {
         method: "post",
         url: "/api/threads/create",
         data: {
@@ -369,9 +460,14 @@ export default {
           post_with_admin: this.post_with_admin,
           locked_by_coin: this.locked_by_coin_input,
           is_vote: this.is_vote,
-          // vote_multiple:this.vote_multiple
         },
       };
+      if (this.is_vote) { //如果是投票贴，追加投票相关的请求参数
+        config.data.vote_multiple = this.vote_multiple;
+        config.data.vote_title = this.vote_title_input;
+        config.data.vote_options = JSON.stringify(this.vote_options);
+        config.data.vote_end_time = this.vote_time_selected;
+      }
       axios(config)
         .then((response) => {
           if (response.data.code == 200) {
@@ -480,6 +576,25 @@ export default {
           axios.defaults.headers.Authorization = "Bearer " + localStorage.Token;
           alert(error);
         });
+    },
+    vote_option_control(action) {
+      const max_options = 30; //最大投票数
+      switch (action) {
+        case "push": {
+          if (this.vote_options.length < max_options) {
+            this.vote_options.push("");
+          } else {
+            alert("最大选项数：" + max_options);
+          }
+          break;
+        }
+        case "pop": {
+          if (this.vote_options.length > 1) {
+            this.vote_options.pop();
+          }
+          break;
+        }
+      }
     },
   },
   created() {

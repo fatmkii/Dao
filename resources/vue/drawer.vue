@@ -26,8 +26,8 @@
         <div>大小</div>
         <span
           class="mx-2"
-          v-for="pen in brushs"
-          :key="pen.index"
+          v-for="(pen, index) in brushs"
+          :key="index"
           :style="{ fontSize: pen.font_size + 'px' }"
           @click="setBrush(pen.lineWidth)"
           >{{ pen.innerHTML }}</span
@@ -37,8 +37,8 @@
       <div id="canvas-control" class="mx-1 text-center">
         <div>操作</div>
         <span
-          v-for="control in controls"
-          :key="control.index"
+          v-for="(control, index) in controls"
+          :key="index"
           :title="control.title"
           :class="['mx-2', control.className]"
           v-html="control.innerHTML"

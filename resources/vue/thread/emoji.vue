@@ -15,15 +15,15 @@
     <b-tab
       class="emoji_container"
       :title="emoji_data.name"
-      v-for="emoji_data in emojis_data"
-      :key="emoji_data.index"
+      v-for="(emoji_data, index) in emojis_data"
+      :key="index"
       lazy
       @click="emoji_open()"
       ><div v-show="emoji_show">
         <div
           class="emoji_box m-1 d-inline-flex"
-          v-for="emoji_src in emoji_data.emojis"
-          :key="emoji_src.index"
+          v-for="(emoji_src, index) in emoji_data.emojis"
+          :key="index"
         >
           <b-img
             :src="emoji_src"

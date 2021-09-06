@@ -11,12 +11,12 @@
       v-show="!banner_hiden"
     >
       <b-carousel-slide
-        v-for="banner in JSON.parse(
+        v-for="(banner, index) in JSON.parse(
           this.$store.state.Forums.CurrentForumData.banners
         ).sort(function () {
           return 0.5 - Math.random();
         })"
-        :key="banner.id"
+        :key="index"
         :img-src="banner"
       ></b-carousel-slide>
     </b-carousel>

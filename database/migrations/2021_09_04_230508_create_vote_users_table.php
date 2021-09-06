@@ -17,11 +17,7 @@ class CreateVoteUsersTable extends Migration
             $table->id();
             $table->integer('user_id')->index();
             $table->integer('vote_question_id')->index();
-<<<<<<< Updated upstream
-            $table->json('option_id'); //用json存放数组，方便日后改为多选
-=======
             $table->json('options_id'); //用json存放数组，方便日后改为多选
->>>>>>> Stashed changes
             $table->timestamps();
         });
     }

@@ -14,19 +14,11 @@ class CreateVoteQuestionsTable extends Migration
     public function up()
     {
         Schema::create('vote_questions', function (Blueprint $table) {
-<<<<<<< Updated upstream
-            $table->id();
-            $table->integer('thread_id')->index();
-            $table->text('title');
-            $table->timestamp('end_time');
-            $table->integer('vote_total');
-=======
             $table->id()->startingValue(10001);
             $table->integer('thread_id')->index();
             $table->text('title');
             $table->timestamp('end_date');
             $table->integer('vote_total')->default(0);
->>>>>>> Stashed changes
             $table->boolean('multiple')->default(0); //多选，还没做
             $table->timestamps();
         });
