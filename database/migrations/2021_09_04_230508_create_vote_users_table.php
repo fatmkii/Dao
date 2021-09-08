@@ -14,7 +14,7 @@ class CreateVoteUsersTable extends Migration
     public function up()
     {
         for ($i = 1; $i < 3; $i++) {
-            Schema::create('vote_users', function (Blueprint $table) {
+            Schema::create('vote_users_' . $i, function (Blueprint $table) {
                 $table->id();
                 $table->integer('user_id')->index();
                 $table->integer('vote_question_id')->index();
