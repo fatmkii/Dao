@@ -9,7 +9,7 @@ use App\Http\Controllers\API\ThreadController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\CommonController;
 use App\Http\Controllers\API\AdminController;
-use App\Http\Controllers\api\VoteController;
+use App\Http\Controllers\API\VoteController;
 
 /*
 |--------------------------------------------------------------------------
