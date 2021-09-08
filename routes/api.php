@@ -9,6 +9,7 @@ use App\Http\Controllers\API\ThreadController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\CommonController;
 use App\Http\Controllers\API\AdminController;
+use App\Http\Controllers\api\VoteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,12 @@ Route::prefix('posts')->group(function () {
     Route::put('/recover/{post_id}', [PostController::class, 'recover'])->middleware('CheckBinggan:create'); //恢复删除的帖子
 });
 // Route::apiResource('posts', PostController::class);
+
+//Vote系列
+Route::prefix('votes')->group(function () {
+    Route::get('/{vote_id}', [VoteController::class, 'show']); //显示投票结果
+    Route::post('', [VoteController::class, 'store']);  //用户参与投票
+});
 
 //User系列
 Route::prefix('user')->group(function () {

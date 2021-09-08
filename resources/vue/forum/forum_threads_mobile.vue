@@ -12,6 +12,7 @@
       >
         <div class="text-left my-1 py-1" :style="{ color: thread.title_color }">
           <span class="thread_sub_title"> {{ thread.sub_title }}&nbsp; </span>
+          <span v-if="thread.vote_question_id != null">🗳️</span>
           <router-link
             class="thread_title"
             style="word-wrap: break-word; white-space: normal"
@@ -19,7 +20,7 @@
             :style="{ color: thread.title_color }"
             :target="router_target"
           >
-            {{ thread.title }}&nbsp;&nbsp;
+            {{ thread.title }}
           </router-link>
           <span v-if="thread.locked_by_coin > 0"
             >🔒{{ thread.locked_by_coin }}</span
@@ -29,9 +30,10 @@
               '/thread/' + thread.id + '/' + Math.ceil(thread.posts_num / 200)
             "
             v-if="thread.posts_num > 200"
-              class="thread_page"
+            class="thread_page ml-1"
             >[{{ Math.ceil((thread.posts_num + 1) / 200) }}]</router-link
           >
+          <span v-if="thread.posts_num >= 1200">🔥</span>
         </div>
         <div class="my-1 py-1" style="font-size: 0.8rem">
           <span>发帖人：{{ thread.nickname }} </span>

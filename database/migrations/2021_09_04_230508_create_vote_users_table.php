@@ -13,13 +13,15 @@ class CreateVoteUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('vote_users', function (Blueprint $table) {
-            $table->id();
-            $table->integer('user_id')->index();
-            $table->integer('vote_question_id')->index();
-            $table->json('options_id'); //用json存放数组，方便日后改为多选
-            $table->timestamps();
-        });
+        for ($i = 1; $i < 3; $i++) {
+            Schema::create('vote_users', function (Blueprint $table) {
+                $table->id();
+                $table->integer('user_id')->index();
+                $table->integer('vote_question_id')->index();
+                $table->json('options_id'); //用json存放数组，方便日后改为多选
+                $table->timestamps();
+            });
+        }
     }
 
     /**

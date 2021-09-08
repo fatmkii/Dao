@@ -228,7 +228,7 @@
       </b-tab>
       <b-tab title="投票">
         <b-form-checkbox class="mr-3" v-model="is_vote">
-          开启投票
+          开启投票（1000奥利奥）
         </b-form-checkbox>
         <div class="row align-items-center">
           <div class="col-auto">

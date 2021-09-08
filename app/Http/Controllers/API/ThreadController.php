@@ -17,6 +17,7 @@ use App\Http\Controllers\api\VoteController;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use App\Jobs\ProcessUserActive;
+use App\Models\VoteQuestion;
 
 class ThreadController extends Controller
 {
@@ -155,8 +156,9 @@ class ThreadController extends Controller
             //追加投票贴
             if ($request->is_vote) {
                 $user->coin -= 1000; //发投票主题减500奥利奥  
-                $vote_controller = new VoteController;
-                $vote_controller->create($request, $thread->id);
+                $vote_question = new VoteQuestion();
+                $thread->vote_question_id = $vote_question->create($request, $thread->id); //$vote_question->create会返回id
+                $thread->save();
             }
 
             //统一判断奥利奥是否足够

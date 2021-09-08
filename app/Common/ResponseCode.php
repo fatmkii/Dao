@@ -32,6 +32,7 @@ class ResponseCode
     const VOTE_NOT_FOUND = 25404;
     const VOTE_OPTION_NOT_FOUND = 25404;
     const VOTE_WAS_OUTDATE = 25410;
+    const VOTE_HAVE_BEEN_VOTE = 25403;
 
     const LOGIN_FAILED = 20001;
 
@@ -63,6 +64,7 @@ class ResponseCode
         self::VOTE_NOT_FOUND => '投票不存在',
         self::VOTE_OPTION_NOT_FOUND => '投票选项不存在',
         self::VOTE_WAS_OUTDATE => '投票已过期',
+        self::VOTE_HAVE_BEEN_VOTE => '你已经投过票了',
     ];
 }
 

@@ -113,6 +113,10 @@
             删主题
           </b-button>
         </div>
+        <VoteComponent
+          v-if="vote_question_id"
+          :vote_question_id="vote_question_id"
+        ></VoteComponent>
         <div v-for="post_data in posts_data" :key="post_data.id">
           <PostItem
             :post_data="post_data"
@@ -580,9 +584,17 @@ import ThreadPaginator from "./thread_paginator.vue";
 import Emoji from "./emoji.vue";
 import RewardModal from "./reward_modal.vue";
 import Drawer from "../drawer.vue";
+import VoteComponent from "./vote.vue";
 
 export default {
-  components: { PostItem, ThreadPaginator, Emoji, RewardModal, Drawer },
+  components: {
+    PostItem,
+    ThreadPaginator,
+    Emoji,
+    RewardModal,
+    Drawer,
+    VoteComponent,
+  },
   props: {
     thread_id: Number, //来自router，
     page: Number, //来自router
@@ -702,6 +714,8 @@ export default {
       thread_anti_jingfen: (state) =>
         state.Threads.CurrentThreadData.anti_jingfen,
       thread_posts_num: (state) => state.Threads.CurrentThreadData.posts_num,
+      vote_question_id: (state) =>
+        state.Threads.CurrentThreadData.vote_question_id,
       random_heads_group: (state) =>
         state.Threads.CurrentThreadData.random_heads_group,
       posts_last_page: (state) => state.Posts.PostsData.lastPage,
