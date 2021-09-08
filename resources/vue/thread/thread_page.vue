@@ -114,7 +114,7 @@
           </b-button>
         </div>
         <VoteComponent
-          v-if="vote_question_id"
+          v-if="vote_question_id && posts_load_status"
           :vote_question_id="vote_question_id"
         ></VoteComponent>
         <div v-for="post_data in posts_data" :key="post_data.id">

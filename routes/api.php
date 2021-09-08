@@ -55,7 +55,7 @@ Route::prefix('posts')->group(function () {
 //Vote系列
 Route::prefix('votes')->group(function () {
     Route::get('/{vote_id}', [VoteController::class, 'show']); //显示投票结果
-    Route::post('', [VoteController::class, 'store']);  //用户参与投票
+    Route::post('', [VoteController::class, 'store'])->middleware('CheckBinggan:create');  //用户参与投票
 });
 
 //User系列

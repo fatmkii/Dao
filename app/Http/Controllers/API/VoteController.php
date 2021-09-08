@@ -49,41 +49,7 @@ class VoteController extends Controller
             'vote_options' => 'json|required|max:500',
         ]);
 
-        $user = User::where('binggan', $request->binggan)->first();
-        //确认用户是否存在
-        if (!$user) {
-            return response()->json(
-                [
-                    'code' => ResponseCode::USER_NOT_FOUND,
-                    'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
-                ],
-            );
-        }
-
-        //如果饼干被ban，直接返回错误
-        if ($user->is_banned) {
-            return response()->json(
-                [
-                    'code' => ResponseCode::USER_BANNED,
-                    'message' => ResponseCode::$codeMap[ResponseCode::USER_BANNED],
-                    'data' => [
-                        'binggan' => $user->binggan,
-                    ],
-                ],
-                401
-            );
-        }
-
-        //查询饼干是否在封禁期
-        if ($user->lockedTTL) {
-            $lockTTL_hours = intval($user->lockedTTL / 3600) + 1;
-            return response()->json(
-                [
-                    'code' => ResponseCode::USER_LOCKED,
-                    'message' => ResponseCode::$codeMap[ResponseCode::USER_LOCKED] . '，将于' . $lockTTL_hours . '小时后解封',
-                ],
-            );
-        }
+        $user = $request->user;
 
         $vote_question = VoteQuestion::find($request->vote_question_id);
         //检查投票id是否存在
