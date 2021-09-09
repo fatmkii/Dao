@@ -13,7 +13,6 @@ use Illuminate\Database\QueryException;
 use App\Common\ResponseCode;
 use Carbon\Carbon;
 use App\Exceptions\CoinException;
-use App\Http\Controllers\api\VoteController;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use App\Jobs\ProcessUserActive;

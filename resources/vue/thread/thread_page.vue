@@ -551,7 +551,7 @@
         centered
       >
         <template v-slot:modal-header>
-          <span style="font-size: 1rem">涂鸦板（测试中）</span>
+          <span style="font-size: 1rem">涂鸦板</span>
         </template>
         <template v-slot:default>
           <Drawer
@@ -561,6 +561,15 @@
           ></Drawer>
         </template>
         <template v-slot:modal-footer="{ cancel }">
+          <b-form-file
+            browse-text="插入"
+            size="sm"
+            placeholder=""
+            accept="image/jpeg, image/png, image/gif"
+            style="max-width: 45px"
+            class="mr-auto"
+            @input="drawer_insert"
+          ></b-form-file>
           <b-button-group>
             <b-button variant="success" size="sm" @click="upload_drawer_click"
               >上传</b-button
@@ -654,6 +663,7 @@ export default {
         page: 1,
         height: 0,
       },
+      drawer_insert_img: undefined,
     };
   },
   computed: {
@@ -1103,6 +1113,9 @@ export default {
     },
     emit_reward(payload) {
       this.$refs.reward_modal.reward_click(payload);
+    },
+    drawer_insert(file) {
+      this.$refs.drawer_component.drawer_insert(file);
     },
   },
   created() {

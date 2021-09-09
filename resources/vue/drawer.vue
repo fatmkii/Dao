@@ -319,6 +319,34 @@ export default {
       }
       return new Blob([ab], { type: mimeType });
     },
+    //插入图片
+    drawer_insert(file) {
+      var reader = new FileReader();
+      var image = new Image();
+      reader.readAsDataURL(file);
+      reader.onload = function (event) {
+        image.src = event.target.result;
+        image.onload = function () {
+          var canvas = document.querySelector("#drawer-canvas");
+          var context = canvas.getContext("2d");
+          //根据canvas大小，缩放图片到合适尺寸
+          var temp_width = image.width;
+          var temp_height = image.height;
+          if (image.width / image.height >= canvas.width / canvas.height) {
+            if (image.width > canvas.width) {
+              temp_width = canvas.width;
+              temp_height = (image.height * canvas.width) / image.width;
+            }
+          } else {
+            if (image.height > canvas.height) {
+              temp_height = canvas.height;
+              temp_width = (image.width * canvas.height) / image.height;
+            }
+          }
+          context.drawImage(image, 0, 0, temp_width, temp_height);
+        };
+      };
+    },
   },
 };
 </script>
