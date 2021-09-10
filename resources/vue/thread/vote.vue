@@ -11,7 +11,7 @@
       :key="index"
     >
       <b-form-radio v-model="choice_seleted" :value="vote_option.id">
-        选项{{ index + 1 }}：{{ vote_option.option_text }}
+        {{ index + 1 }}：{{ vote_option.option_text }}
       </b-form-radio>
       <b-progress
         class="w-75 ml-4"
