@@ -254,10 +254,8 @@ export default {
           }
           this.canvas_background.height = this.canvas_background.height;
           let size_temp = {
-            // x: this.background_img_size.x + (canvasX - this.lastX),
-            // y: this.background_img_size.y + (canvasY - this.lastY),
-            x: canvasX,
-            y: canvasY,
+            x: this.background_img_size.x + (canvasX - this.lastX),
+            y: this.background_img_size.y + (canvasY - this.lastY),
             width: this.background_img_size.width,
             height: this.background_img_size.height,
           };
@@ -292,10 +290,18 @@ export default {
         this.canvasMoveUse = false;
       } else {
         //记录抬起鼠标位置，作为背景定位的x,y
-        this.background_img_size.x +=
-          e.clientX - e.target.getBoundingClientRect().x - this.lastX;
-        this.background_img_size.y +=
-          e.clientY - e.target.getBoundingClientRect().y - this.lastY;
+        const t = e.target;
+        let canvasX;
+        let canvasY;
+        if (this.isPc()) {
+          canvasX = e.clientX - t.getBoundingClientRect().x;
+          canvasY = e.clientY - t.getBoundingClientRect().y;
+        } else {
+          canvasX = e.changedTouches[0].clientX - t.getBoundingClientRect().x;
+          canvasY = e.changedTouches[0].clientY - t.getBoundingClientRect().y;
+        }
+        this.background_img_size.x += canvasX - this.lastX;
+        this.background_img_size.y += canvasY - this.lastY;
         this.canvasMoveUse = false;
       }
     },
@@ -322,8 +328,18 @@ export default {
         this.preDrawAry.push(preData);
       } else {
         //记录点下鼠标时候的位置
-        this.lastX = e.clientX - e.target.getBoundingClientRect().x;
-        this.lastY = e.clientY - e.target.getBoundingClientRect().y;
+        const t = e.target;
+        let canvasX;
+        let canvasY;
+        if (this.isPc()) {
+          canvasX = e.clientX - t.getBoundingClientRect().x;
+          canvasY = e.clientY - t.getBoundingClientRect().y;
+        } else {
+          canvasX = e.changedTouches[0].clientX - t.getBoundingClientRect().x;
+          canvasY = e.changedTouches[0].clientY - t.getBoundingClientRect().y;
+        }
+        this.lastX = canvasX;
+        this.lastY = canvasY;
         this.canvasMoveUse = true;
       }
     },
