@@ -16,6 +16,7 @@
       <canvas
         id="drawer-canvas"
         ref="drawer-canvas"
+        :class="{ painting: !dragMode, dragging: dragMode }"
         :width="canvas_width"
         :height="canvas_height"
         @touchmove.prevent
@@ -70,8 +71,13 @@ export default {
       canvas: Object,
       canvas_background: Object,
       background_img: Image,
-      background_img_width: 0,
-      background_img_height: 0,
+
+      background_img_size: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+      },
       brushs: [
         {
           lineWidth: 3,
@@ -247,7 +253,13 @@ export default {
             canvasY = e.changedTouches[0].clientY - t.getBoundingClientRect().y;
           }
           this.canvas_background.height = this.canvas_background.height;
-          this.draw_background(this.background_img, canvasX, canvasY);
+          let size_temp = {
+            x: this.background_img_size.x + (canvasX - this.lastX),
+            y: this.background_img_size.y + (canvasY - this.lastY),
+            width: this.background_img_size.width,
+            height: this.background_img_size.height,
+          };
+          this.draw_background(this.background_img, size_temp);
         }
       }
     },
@@ -277,6 +289,11 @@ export default {
         }
         this.canvasMoveUse = false;
       } else {
+        //记录抬起鼠标位置，作为背景定位的x,y
+        this.background_img_size.x +=
+          e.clientX - e.target.getBoundingClientRect().x - this.lastX;
+        this.background_img_size.y +=
+          e.clientY - e.target.getBoundingClientRect().y - this.lastY;
         this.canvasMoveUse = false;
       }
     },
@@ -302,6 +319,9 @@ export default {
         // 当前绘图表面进栈
         this.preDrawAry.push(preData);
       } else {
+        //记录点下鼠标时候的位置
+        this.lastX = e.clientX - e.target.getBoundingClientRect().x;
+        this.lastY = e.clientY - e.target.getBoundingClientRect().y;
         this.canvasMoveUse = true;
       }
     },
@@ -387,33 +407,33 @@ export default {
           var canvas = vm.canvas_background;
           var image = vm.background_img;
           //根据canvas大小，缩放图片到合适尺寸
-          vm.background_img_width = image.width;
-          vm.background_img_height = image.height;
+          vm.background_img_size.width = image.width;
+          vm.background_img_size.height = image.height;
           if (image.width / image.height >= canvas.width / canvas.height) {
             if (image.width > canvas.width) {
-              vm.background_img_width = canvas.width;
-              vm.background_img_height =
+              vm.background_img_size.width = canvas.width;
+              vm.background_img_size.height =
                 (image.height * canvas.width) / image.width;
             }
           } else {
             if (image.height > canvas.height) {
-              vm.background_img_width =
+              vm.background_img_size.width =
                 (image.width * canvas.height) / image.height;
-              vm.background_img_height = canvas.height;
+              vm.background_img_size.height = canvas.height;
             }
           }
-          vm.draw_background(image, 0, 0);
+          vm.draw_background(image, vm.background_img_size);
         };
       };
     },
     //绘制背景图（用于拖曳背景）
-    draw_background(image, x, y) {
+    draw_background(image, size) {
       this.background_context.drawImage(
         image,
-        x,
-        y,
-        this.background_img_width,
-        this.background_img_height
+        size.x,
+        size.y,
+        size.width,
+        size.height
       );
     },
     //用来把dataURL转换成Blob的
@@ -430,7 +450,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 #canvas-container {
   position: relative;
 }
@@ -454,8 +474,15 @@ export default {
 
 #drawer-canvas {
   border: 1px #585858 solid;
-  cursor: crosshair;
+  &.painting {
+    cursor: crosshair;
+  }
+  &.dragging {
+    cursor: grab;
+  }
 }
+
+
 #canvas-color ul {
   margin: 0;
   padding: 0;
