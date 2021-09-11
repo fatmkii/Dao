@@ -254,8 +254,10 @@ export default {
           }
           this.canvas_background.height = this.canvas_background.height;
           let size_temp = {
-            x: this.background_img_size.x + (canvasX - this.lastX),
-            y: this.background_img_size.y + (canvasY - this.lastY),
+            // x: this.background_img_size.x + (canvasX - this.lastX),
+            // y: this.background_img_size.y + (canvasY - this.lastY),
+            x: canvasX,
+            y: canvasY,
             width: this.background_img_size.width,
             height: this.background_img_size.height,
           };
@@ -481,7 +483,6 @@ export default {
     cursor: grab;
   }
 }
-
 
 #canvas-color ul {
   margin: 0;
