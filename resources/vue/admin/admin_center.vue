@@ -55,6 +55,7 @@ export default {
           return true;
         } else {
           this.$router.replace("/admin_login");
+          return false;
         }
       } else {
         return false;
