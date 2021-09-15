@@ -51,7 +51,7 @@ export default {
   computed: {
     this_show() {
       if (this.$store.state.User.UserDataLoaded == 2) {
-        if (this.$store.state.User.AdminStatus == 99) {
+        if (this.$store.state.User.AdminStatus != 0) {
           return true;
         } else {
           this.$router.replace("/admin_login");
