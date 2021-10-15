@@ -58,16 +58,29 @@ class ForumController extends Controller
         ]);
 
         //用redis记录，每个ip只能1分钟只能搜索一次
-        if ($request->has('search_title')) {
-            if (Redis::exists('search_record_' . $request->ip())) {
+        // if ($request->has('search_title')) {
+        //     if (Redis::exists('search_record_' . $request->ip())) {
+        //         return response()->json([
+        //             'code' => ResponseCode::SEARCH_TOO_MANY,
+        //             'message' => ResponseCode::$codeMap[ResponseCode::SEARCH_TOO_MANY],
+        //         ]);
+        //     } else {
+        //         Redis::setex('search_record_' . $request->ip(),  60, 1);
+        //     }
+        // };
+
+        //用redis记录，全局每10秒搜索20次限制
+        if (Redis::exists('search_record_global')) {
+            Redis::incr('search_record_global');
+            if (Redis::GET('search_record_global' > 20)) {
                 return response()->json([
                     'code' => ResponseCode::SEARCH_TOO_MANY,
                     'message' => ResponseCode::$codeMap[ResponseCode::SEARCH_TOO_MANY],
                 ]);
-            } else {
-                Redis::setex('search_record_' . $request->ip(),  60, 1);
             }
-        };
+        } else {
+            Redis::setex('search_record_global',  10, 1);
+        }
 
         $CurrentForum = Forum::find($forum_id);
         $user = $request->user;

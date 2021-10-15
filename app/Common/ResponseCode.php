@@ -58,7 +58,7 @@ class ResponseCode
         self::THREAD_NOT_FOUND => '主题贴不存在',
         self::THREAD_WAS_NISSINED => '主题已被日清',
         self::THREAD_TOO_MANY => '发新主题过于频繁',
-        self::SEARCH_TOO_MANY => '搜索过于频繁。1分钟只能搜索1次。',
+        self::SEARCH_TOO_MANY => '为保护服务器，设定了全局10只能搜索20次。',
         self::POST_NOT_FOUND => '未找到该帖子',
         self::POST_TOO_MANY => '回帖过于频繁',
         self::LOGIN_FAILED => '登录失败',
