@@ -11,6 +11,7 @@ class ResponseCode
     const USER_REGISTER_FAIL = 21403;
     const USER_NOT_FOUND = 21404;
     const USER_LOCKED = 21443;
+    
     const USER_BANNED = 21499;
     const COIN_NOT_ENOUGH = 21412;
     const USER_PASSWORD_ERROR = 21001;
@@ -24,6 +25,7 @@ class ResponseCode
     const THREAD_WAS_NISSINED = 23410;
     const THREAD_TOO_MANY = 23429;
     const THREAD_UNAUTHORIZED = 23401;
+    const SEARCH_TOO_MANY = 23429;
 
     const POST_NOT_FOUND = 24404;
     const POST_TOO_MANY = 24429;
@@ -56,6 +58,7 @@ class ResponseCode
         self::THREAD_NOT_FOUND => '主题贴不存在',
         self::THREAD_WAS_NISSINED => '主题已被日清',
         self::THREAD_TOO_MANY => '发新主题过于频繁',
+        self::SEARCH_TOO_MANY => '搜索过于频繁。1分钟只能搜索1次。',
         self::POST_NOT_FOUND => '未找到该帖子',
         self::POST_TOO_MANY => '回帖过于频繁',
         self::LOGIN_FAILED => '登录失败',

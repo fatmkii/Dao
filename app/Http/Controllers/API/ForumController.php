@@ -8,8 +8,10 @@ use App\Models\Forum;
 use App\Models\Thread;
 use App\Models\User;
 use App\Common\ResponseCode;
+use App\Jobs\ProcessUserActive;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 
 class ForumController extends Controller
 {
@@ -48,6 +50,25 @@ class ForumController extends Controller
      */
     public function show(Request $request, $forum_id)
     {
+        $request->validate([
+            'binggan' => 'string',
+            'page' => 'integer',
+            'search_title' => 'string|max:100', //搜索标题
+            'sub_title' => 'string|max:20', //用来搜索副标题，暂时没用
+        ]);
+
+        //用redis记录，每个ip只能1分钟只能搜索一次
+        if ($request->has('search_title')) {
+            if (Redis::exists('search_record_' . $request->ip())) {
+                return response()->json([
+                    'code' => ResponseCode::SEARCH_TOO_MANY,
+                    'message' => ResponseCode::$codeMap[ResponseCode::SEARCH_TOO_MANY],
+                ]);
+            } else {
+                Redis::setex('search_record_' . $request->ip(),  60, 1);
+            }
+        };
+
         $CurrentForum = Forum::find($forum_id);
         $user = $request->user;
         // $user = User::where('binggan', $request->query('binggan'))->first();
@@ -95,16 +116,36 @@ class ForumController extends Controller
                             ->where('is_deleted', 0);
                     });
                 break;
-            case 2: //按照24小时日清模式
+            case 2: //按照24小时日清模式(目前咒版不清标题)
                 break;
         }
+        //搜索标题
+        if ($request->has('search_title')) {
+            $threads->where('title', 'like', '%' . $request->query('search_title') . '%');
+        }
 
+        //加入公告以及排序
         $threads
             ->orWhere(function ($query) {  //加入全岛公告（sub_id=99）
                 $query->where('is_deleted', 0)
                     ->where('sub_id', 99);
             })
             ->orderBy('sub_id', 'desc')->orderBy('updated_at', 'desc'); //sub_id是用来把公告等提前的
+
+
+
+        //记录搜索行为
+        if ($request->has('search_title')) {
+            ProcessUserActive::dispatch(
+                [
+                    'binggan' => $user->binggan,
+                    'user_id' => $user->id,
+                    'active' => '用户进行了搜索',
+                    'content' => '关键词：' . $request->query('search_title'),
+                    'forum_id' => $forum_id,
+                ]
+            );
+        }
 
         return response()->json([
             'code' => ResponseCode::SUCCESS,

@@ -41,14 +41,30 @@
           隐藏版头
         </b-form-checkbox>
       </div>
-      <div class="col-auto my-2 ml-auto">
+      <div class="col-auto my-2 ml-auto d-flex">
         <span v-if="!this.$store.state.User.LoginStatus">
           请在先<router-link to="/login">导入或领取饼干 </router-link>
           后才能发言喔
         </span>
         <b-button
           size="sm"
-          class="my-1 my-sm-0 d-lg-none"
+          class="my-1 ml-1 my-sm-0 d-lg-none"
+          variant="outline-dark"
+          :disabled="!this.$store.state.User.LoginStatus"
+          @click="search_show = !search_show"
+          >搜索</b-button
+        >
+        <b-button
+          size="md"
+          class="my-1 ml-1 my-sm-0 d-none d-lg-block"
+          variant="outline-dark"
+          :disabled="!this.$store.state.User.LoginStatus"
+          @click="search_show = !search_show"
+          >搜索</b-button
+        >
+        <b-button
+          size="sm"
+          class="my-1 ml-1 my-sm-0 d-lg-none"
           variant="success"
           :disabled="!this.$store.state.User.LoginStatus"
           @click="new_thread_botton"
@@ -56,13 +72,30 @@
         >
         <b-button
           size="md"
-          class="my-1 my-sm-0 d-none d-lg-block"
+          class="my-1 ml-1 my-sm-0 d-none d-lg-block"
           variant="success"
           :disabled="!this.$store.state.User.LoginStatus"
           @click="new_thread_botton"
           >发表主题</b-button
         >
       </div>
+    </div>
+    <div class="d-flex flex-row my-2" v-if="search_show">
+      <b-form-input
+        id="search_input"
+        class="search_input"
+        style="max-width: 400px"
+        placeholder="目前只支持搜索标题"
+        v-model="search_input"
+      ></b-form-input>
+      <b-button
+        size="sm"
+        class="ml-1"
+        style="min-width: 46px"
+        variant="success"
+        @click="get_threads_data(true, search_input)"
+        >搜索</b-button
+      >
     </div>
     <ForumThreads
       :forum_id="forum_id"
@@ -218,6 +251,8 @@ export default {
       new_window_to_post: false,
       banner_hiden: false,
       z_bar_show: false,
+      search_show: false,
+      search_input: "",
     };
   },
   computed: {
@@ -232,8 +267,8 @@ export default {
     }),
   },
   methods: {
-    get_threads_data(remind) {
-      const config = {
+    get_threads_data(remind, search_title) {
+      var config = {
         method: "get",
         url: "/api/forums/" + this.forum_id,
         params: {
@@ -241,6 +276,9 @@ export default {
           binggan: this.$store.state.User.Binggan,
         },
       };
+      if (search_title) {
+        config.params.search_title = search_title;
+      }
       axios(config)
         .then((response) => {
           if (response.data.code == 200) {
