@@ -11,3 +11,15 @@
 'https://i.loli.net/2021/05/05/Ys5UIZ6zXKcfGMT.gif'
 'https://ftp.bmp.ovh/imgs/2021/06/5481dfe13988a764.jpg'
 'https://s3.jpg.cm/2021/06/30/IWjLSG.jpg'
+
+
+10月15日
+[
+    "https://s3.jpg.cm/2021/08/07/IAoSEC.jpg",
+    "https://tva1.sinaimg.cn/large/008i3skNly1gt7n5hy7y5j30pk06ytaj.jpg"
+]
+
+10月15日改
+[
+    "https://q7501.bvimg.com/10368/d5c9adc17eb4b9aa.png"
+]

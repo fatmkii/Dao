@@ -98,6 +98,11 @@ class ForumController extends Controller
 
         $threads = $CurrentForum->threads()->where('is_deleted', 0);
 
+        //搜索标题
+        if ($request->has('search_title')) {
+            $threads->where('title', 'like', '%' . $request->query('search_title') . '%');
+        }
+
         //各种日清模式
         switch ($CurrentForum->is_nissin) {
             case 0:
@@ -119,10 +124,7 @@ class ForumController extends Controller
             case 2: //按照24小时日清模式(目前咒版不清标题)
                 break;
         }
-        //搜索标题
-        if ($request->has('search_title')) {
-            $threads->where('title', 'like', '%' . $request->query('search_title') . '%');
-        }
+
 
         //加入公告以及排序
         $threads
