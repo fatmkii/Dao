@@ -232,7 +232,11 @@ export default {
   watch: {
     // 如果路由有变化，再次获得数据
     $route(to) {
-      this.get_threads_data();
+      if (this.search_title) {
+        this.get_threads_data(false, this.search_title);
+      } else {
+        this.get_threads_data();
+      }
       this.$store.commit("ThreadsLoadStatus_set", 0);
     },
     new_window_to_post: function () {
