@@ -233,7 +233,7 @@ export default {
     // 如果路由有变化，再次获得数据
     $route(to) {
       if (this.search_title) {
-        this.get_threads_data(false, this.search_title);
+        this.get_threads_data(false, this.search_input);
       } else {
         this.get_threads_data();
       }
