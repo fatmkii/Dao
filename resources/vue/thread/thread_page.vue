@@ -258,7 +258,8 @@
         @keyup.ctrl.enter="new_post_handle"
       ></textarea>
       <div class="row align-items-center mt-2">
-        <div class="col-7">
+        <!-- <div class="col-7">
+          原自费图床tietuku暂时关闭。
           <b-form-file
             browse-text="上传图片"
             size="sm"
@@ -274,8 +275,9 @@
             label="上传中"
           >
           </b-spinner>
-        </div>
-        <div class="col-5">
+        </div> -->
+        <Imgtu></Imgtu>
+        <div class="col-6 ml-auto">
           <b-button
             variant="success"
             class="ml-2 float-right"
@@ -585,7 +587,6 @@
   </div>
 </template>
 
-
 <script>
 import { mapState } from "vuex";
 import PostItem from "./post_item.vue";
@@ -594,6 +595,7 @@ import Emoji from "./emoji.vue";
 import RewardModal from "./reward_modal.vue";
 import Drawer from "../drawer.vue";
 import VoteComponent from "./vote.vue";
+import Imgtu from "../imgtu.vue";
 
 export default {
   components: {
@@ -603,6 +605,7 @@ export default {
     RewardModal,
     Drawer,
     VoteComponent,
+    Imgtu,
   },
   props: {
     thread_id: Number, //来自router，
@@ -1149,4 +1152,3 @@ export default {
   },
 };
 </script> 
-

@@ -210,6 +210,7 @@ export default {
       let content = this.post_data.content;
       if (this.no_image_mode) {
         content = content.replace(/<img[^<>]*(jpg|png|gif)'\s*>/g, "");
+        content = content.replace(/<img[^<>]*border="0"\s*>/g, "");
       }
       if (this.no_emoji_mode) {
         content = content.replace(/<img[^<>]*(class='emoji_img')+[^<>]*>/g, "");

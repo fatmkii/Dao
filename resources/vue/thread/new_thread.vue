@@ -115,7 +115,8 @@
       @keyup.ctrl.enter="new_thread_handle"
     ></textarea>
     <div class="row align-items-center mt-2">
-      <div class="col-7">
+      <!-- <div class="col-7">
+          原自费图床tietuku暂时关闭。
         <b-form-file
           browse-text="上传图片"
           size="sm"
@@ -131,8 +132,9 @@
           label="上传中"
         >
         </b-spinner>
-      </div>
-      <div class="col-5">
+      </div> -->
+      <Imgtu></Imgtu>
+      <div class="col-6 ml-auto">
         <b-button
           variant="success"
           class="float-right"
@@ -328,9 +330,10 @@
 <script>
 import Emoji from "./emoji.vue";
 import PostItem from "./post_item.vue";
+import Imgtu from "../imgtu.vue";
 
 export default {
-  components: { Emoji, PostItem },
+  components: { Emoji, PostItem, Imgtu },
   props: {
     forum_id: Number, //来自router
   },
@@ -462,7 +465,8 @@ export default {
           is_vote: this.is_vote,
         },
       };
-      if (this.is_vote) { //如果是投票贴，追加投票相关的请求参数
+      if (this.is_vote) {
+        //如果是投票贴，追加投票相关的请求参数
         config.data.vote_multiple = this.vote_multiple;
         config.data.vote_title = this.vote_title_input;
         config.data.vote_options = JSON.stringify(this.vote_options);
