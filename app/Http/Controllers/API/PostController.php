@@ -364,7 +364,8 @@ class PostController extends Controller
             'binggan' => 'required|string',
             'forum_id' => 'required|integer',
             'thread_id' => 'required|integer',
-            'roll_event' => 'required|string',
+            'roll_name' => 'nullable|string',
+            'roll_event' => 'nullable|string',
             'roll_num' => 'required|integer|max:1000|min:1',
             'roll_range' => 'required|integer|max:100000000|min:1',
         ]);
@@ -409,6 +410,18 @@ class PostController extends Controller
         for ($i = 0; $i < $request->roll_num; $i++) {
             array_push($roll_result_arr, rand(1, $request->roll_range));
         }
+        $roll_result_str = sprintf(
+            "%s d %s = 「%s」.",
+            $request->roll_num,
+            $request->roll_range,
+            join(", ", $roll_result_arr),
+        );;
+        if ($request->roll_event) {
+            $roll_result_str = substr_replace($roll_result_str, "「" . $request->roll_event . "」的结果", 0, 0);
+        }
+        if ($request->roll_name) {
+            $roll_result_str = substr_replace($roll_result_str, "「" . $request->roll_name . "」，", 0, 0);
+        }
 
         //执行追加新roll点的流程
         try {
@@ -418,24 +431,7 @@ class PostController extends Controller
             $post->created_binggan = $request->binggan;
             $post->forum_id = $request->forum_id;
             $post->thread_id = $request->thread_id;
-            if ($request->roll_name) {
-                $post->content = sprintf(
-                    "「%s」，「%s」的结果：%s d %s = 「%s」.",
-                    $request->roll_name,
-                    $request->roll_event,
-                    $request->roll_num,
-                    $request->roll_range,
-                    join(", ", $roll_result_arr),
-                );
-            } else {
-                $post->content = sprintf(
-                    "「%s」的结果：%s d %s = 「%s」.",
-                    $request->roll_event,
-                    $request->roll_num,
-                    $request->roll_range,
-                    join(", ", $roll_result_arr),
-                );
-            }
+            $post->content = $roll_result_str;
             $post->created_by_admin = 2; //0=一般用户 1=管理员发布，2=系统发布
             $post->nickname = 'Roll点系统';
             $post->created_ip = $request->ip();

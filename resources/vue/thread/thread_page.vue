@@ -474,7 +474,8 @@
             输出参考：（只是格式参考啦）
             <br />
             <span v-show="roll_name">「{{ roll_name }}」，</span>
-            「{{ roll_event }}」的结果： {{ roll_num }} d {{ roll_range }} =「{{
+            <span v-show="roll_event">「{{ roll_event }}」的结果：</span>
+             {{ roll_num }} d {{ roll_range }} =「{{
               roll_simulation
             }}」
           </p>
@@ -488,7 +489,7 @@
             <b-input-group prepend="Roll点事件">
               <b-form-input
                 v-model="roll_event"
-                placeholder="必填"
+                placeholder="可留空"
               ></b-form-input>
             </b-input-group>
           </div>
