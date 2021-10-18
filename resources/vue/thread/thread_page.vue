@@ -29,15 +29,13 @@
             无表情包
           </b-form-checkbox>
         </div>
-        <div class="col-auto ml-auto">
-          <ThreadPaginator
-            :thread_id="thread_id"
-            :last_page="posts_last_page"
-            :current_page="page"
-            align="right"
-          ></ThreadPaginator>
-        </div>
       </div>
+      <ThreadPaginator
+        :thread_id="thread_id"
+        :last_page="posts_last_page"
+        :current_page="page"
+        align="right"
+      ></ThreadPaginator>
       <div class="post_container">
         <div
           class="jump_page alert alert-success px-1 py-1"
@@ -475,9 +473,7 @@
             <br />
             <span v-show="roll_name">「{{ roll_name }}」，</span>
             <span v-show="roll_event">「{{ roll_event }}」的结果：</span>
-             {{ roll_num }} d {{ roll_range }} =「{{
-              roll_simulation
-            }}」
+            {{ roll_num }} d {{ roll_range }} =「{{ roll_simulation }}」
           </p>
           <div class="my-1">
             <b-input-group prepend="Roll点昵称">
@@ -527,18 +523,27 @@
           <h5>跳楼机</h5>
         </template>
         <template v-slot:default>
-          <p>最大高度：{{ thread_posts_num }}楼</p>
+          <p>最大高度：{{ posts_last_page }}页，{{ thread_posts_num }}楼</p>
           <div class="my-1">
-            <b-input-group prepend="跳到：">
+            <b-input-group prepend="跳页：">
+              <b-form-input
+                v-model="jump_page"
+                autofocus
+                @keyup.enter="jump_handle"
+              ></b-form-input>
+            </b-input-group>
+          </div>
+          <div class="my-1">
+            <b-input-group prepend="跳楼：">
               <b-form-input
                 v-model="jump_floor"
-                autofocus
                 @keyup.enter="jump_handle"
               ></b-form-input>
             </b-input-group>
           </div>
         </template>
         <template v-slot:modal-footer="{ cancel }">
+          <span style="fontsize: 0.6rem">*两者都输入时，优先跳页</span>
           <b-button-group>
             <b-button variant="success" @click="jump_handle">Jump！</b-button>
             <b-button variant="outline-secondary" @click="cancel()">
@@ -656,6 +661,7 @@ export default {
       preview_show: false,
       post_with_admin: false,
       jump_floor: "",
+      jump_page: "",
       jump_page_show: false,
       z_bar_show: false,
       no_image_mode: false,
@@ -1030,12 +1036,17 @@ export default {
         });
     },
     jump_handle() {
-      if (this.jump_floor == "") {
-        alert("请输入目标楼");
+      if (this.jump_floor == "" && this.jump_page == "") {
+        return;
       }
-      const page = Math.ceil(this.jump_floor / 200);
-      const link =
-        "/thread/" + this.thread_id + "/" + page + "#f_" + this.jump_floor;
+      if (this.jump_page) {
+        const page = this.jump_page;
+        var link = "/thread/" + this.thread_id + "/" + page;
+      } else if (this.jump_floor) {
+        const page = Math.ceil(this.jump_floor / 200);
+        var link =
+          "/thread/" + this.thread_id + "/" + page + "#f_" + this.jump_floor;
+      }
       this.$router.push(link);
       this.$refs["jump_modal"].hide();
     },

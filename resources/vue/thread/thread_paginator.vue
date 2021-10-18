@@ -3,10 +3,9 @@
   <b-pagination-nav
     :number-of-pages="last_page"
     v-model="current_page"
-    limit="5"
+    limit="7"
     :base-url="base_url"
     use-router
-    first-number
     :align="align"
     class="my-2"
     size="sm"

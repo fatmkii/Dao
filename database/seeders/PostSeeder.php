@@ -18,14 +18,15 @@ class PostSeeder extends Seeder
     {
         // Post::factory(5000)->create();
         $faker = Factory::create();
-        for ($i = 0; $i < 500; $i++) {
+        for ($i = 0; $i < 2000; $i++) {
             DB::table('posts_1')->insert([
                 'forum_id' => 12,
-                'thread_id' => 10003,
+                'thread_id' => 10060,
                 'floor' => $i + 1,
                 'random_head' => $faker->randomDigit(),
                 'content' => $faker->text(200),
             ]);
+            DB::table('threads')->where('id', 10060)->increment('posts_num');
         }
     }
 }
