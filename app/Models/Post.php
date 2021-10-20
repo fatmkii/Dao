@@ -45,12 +45,13 @@ class Post extends myModel
     {
         static::saving(function ($post) {
             $thread = $post->thread;
-            if ($post->floor % 200 == 0) { //如果是刚好是翻页楼或者是第0楼，则清除全部页面的缓存（以刷新页码）
-                for ($i = 1; $i <= ceil(($thread->posts_num + 1) / 200); $i++) {
+            $count = $thread->posts->count();
+            if ($count % 200 == 0) { //如果是刚好是翻页楼或者是第0楼，则清除全部页面的缓存（以刷新页码）
+                for ($i = 1; $i <= ceil(($count) / 200); $i++) {
                     Cache::forget('threads_cache_' . $thread->id . '_' . $i);
                 }
             } else {
-                Cache::forget('threads_cache_' . $thread->id . '_' . ceil(($post->floor + 1) / 200));
+                Cache::forget('threads_cache_' . $thread->id . '_' . ceil(($count) / 200));
             }
         });
     }

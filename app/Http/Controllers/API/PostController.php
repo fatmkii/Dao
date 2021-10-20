@@ -119,8 +119,10 @@ class PostController extends Controller
             // $post->save();
             $thread = $post->thread;
             // $thread = Thread::where('id', $post->thread->id)->sharedLock()->first();//用sharelock防止posts_num错误
-            $thread->posts_num++;
-            $post->floor = $thread->posts_num;
+            // $thread->posts_num++;
+            // $post->floor = $thread->posts_num;
+            $thread->posts_num = $thread->posts->count();
+            $post->floor = $thread->posts->count();
             $thread->save();
             $post->save();
             $user->coin += 10; //回复+10奥利奥
