@@ -301,12 +301,19 @@ class AdminController extends Controller
         }
 
         $user_to_delete_all = User::where('binggan', $post->created_binggan)->first();
-        $posts_to_delete = Post::suffix(intval($request->thread_id / 10000))->where('thread_id', $request->thread_id)->where('created_binggan', $user_to_delete_all->binggan)->get();
-
-        foreach ($posts_to_delete as $post_to_delete) {
-            $post_to_delete->is_deleted = 2;
-            $post_to_delete->save();
-        }
+        // $posts_to_delete = Post::suffix(intval($request->thread_id / 10000))
+        //     ->where('thread_id', $request->thread_id)
+        //     ->where('created_binggan', $user_to_delete_all->binggan)
+        //     ->get();
+        Post::suffix(intval($request->thread_id / 10000))
+            ->where('thread_id', $request->thread_id)
+            ->where('created_binggan', $user_to_delete_all->binggan)
+            ->chunk(5, function ($posts_to_delete) {
+                foreach ($posts_to_delete as $post_to_delete) {
+                    $post_to_delete->is_deleted = 2;
+                    $post_to_delete->save();
+                }
+            });
 
         ProcessUserActive::dispatch(
             [
@@ -322,9 +329,6 @@ class AdminController extends Controller
         return response()->json([
             'code' => ResponseCode::SUCCESS,
             'message' => '该作者全部帖子已删除。',
-            'data' => [
-                'posts_to_delete' => $posts_to_delete,
-            ],
         ]);
     }
 
