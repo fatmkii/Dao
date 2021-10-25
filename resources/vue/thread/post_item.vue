@@ -196,6 +196,11 @@ export default {
       post_content_show: true,
     };
   },
+  watch: {
+    use_pingbici() {
+      this.pingbici_check();
+    },
+  },
   computed: {
     author_class() {
       return {
@@ -220,17 +225,12 @@ export default {
         .replace(/<script/g, "<**禁止使用script**")
         .replace(/\n/g, "<br>");
     },
+    use_pingbici() {
+      return this.$store.state.User.UsePingbici;
+    },
   },
   created() {
-    if (this.$store.state.User.UsePingbici) {
-      const title_pingbici = JSON.parse(this.$store.state.User.ContentPingbici);
-      for (var i = 0; i < title_pingbici.length; i++) {
-        var reg = new RegExp(title_pingbici[i], "g");
-        if (reg.test(this.post_data.content)) {
-          this.post_content_show = false;
-        }
-      }
-    }
+    this.pingbici_check();
   },
   methods: {
     emit_reward() {
@@ -434,6 +434,19 @@ export default {
     },
     post_content_show_click() {
       this.post_content_show = true;
+    },
+    pingbici_check() {
+      if (this.$store.state.User.UsePingbici) {
+        const content_pingbici = JSON.parse(
+          this.$store.state.User.ContentPingbici
+        );
+        for (var i = 0; i < content_pingbici.length; i++) {
+          var reg = new RegExp(content_pingbici[i], "g");
+          if (reg.test(this.post_data.content)) {
+            this.post_content_show = false; //回帖是否显示的开关
+          }
+        }
+      }
     },
   },
 };
