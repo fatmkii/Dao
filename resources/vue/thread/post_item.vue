@@ -178,14 +178,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    no_image_mode: {
-      type: Boolean,
-      default: false,
-    },
-    no_emoji_mode: {
-      type: Boolean,
-      default: false,
-    },
   },
   data: function () {
     return {
@@ -212,15 +204,7 @@ export default {
       return this.$store.state.Forums.CurrentForumData.id;
     },
     post_content() {
-      let content = this.post_data.content;
-      if (this.no_image_mode) {
-        content = content.replace(/<img[^<>]*(jpg|png|gif)'\s*>/g, "");
-        content = content.replace(/<img[^<>]*border="0"\s*>/g, "");
-      }
-      if (this.no_emoji_mode) {
-        content = content.replace(/<img[^<>]*(class='emoji_img')+[^<>]*>/g, "");
-      }
-      return content
+      return this.post_data.content
         .replace(/<script/g, "<**禁止使用script**")
         .replace(/\n/g, "<br>");
     },

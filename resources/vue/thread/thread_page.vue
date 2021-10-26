@@ -125,8 +125,6 @@
               ]
             "
             :admin_button_show="admin_button_show"
-            :no_image_mode="no_image_mode"
-            :no_emoji_mode="no_emoji_mode"
             @quote_click="quote_click_handle"
             @get_posts_data="get_posts_data"
             @emit_reward="emit_reward"
@@ -138,8 +136,6 @@
             :post_data="preview_post_data"
             :thread_anti_jingfen="0"
             :admin_button_show="false"
-            :no_image_mode="no_image_mode"
-            :no_emoji_mode="no_emoji_mode"
           ></PostItem>
         </div>
       </div>
@@ -635,9 +631,17 @@ export default {
     },
     no_image_mode: function () {
       localStorage.setItem("no_image_mode", this.no_image_mode ? "true" : "");
+      window.document.documentElement.setAttribute(
+        "data-no-img",
+        this.no_image_mode ? "true" : ""
+      );
     },
     no_emoji_mode: function () {
       localStorage.setItem("no_emoji_mode", this.no_emoji_mode ? "true" : "");
+      window.document.documentElement.setAttribute(
+        "data-no-emoji",
+        this.no_emoji_mode ? "true" : ""
+      );
     },
   },
   beforeRouteUpdate(to, from, next) {

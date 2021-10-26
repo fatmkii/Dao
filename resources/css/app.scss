@@ -321,6 +321,21 @@ label.custom-file-label::after {
     background-color: transparent;
 }
 
+//无图模式
+[data-no-img="true"] .post_content {
+    img {
+        display: none;
+    }
+    img.emoji_img {
+        display: inline;
+    }
+}
+[data-no-emoji="true"] .post_content {
+    img.emoji_img {
+        display: none;
+    }
+}
+
 [v-cloak] {
     display: none;
 }
