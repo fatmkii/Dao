@@ -178,6 +178,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    no_image_mode: {
+      type: Boolean,
+      default: false,
+    },
+    no_emoji_mode: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: function () {
     return {
@@ -204,7 +212,28 @@ export default {
       return this.$store.state.Forums.CurrentForumData.id;
     },
     post_content() {
+      let vm = this; //为了回调函数可以使用vue的data
+      function img_replacer(match) {
+        //用于屏蔽表情包或者其他图片的回调函数
+        if (match.search(/class='emoji_img'/g) != -1) {
+          //判断是否表情包
+          if (vm.no_emoji_mode) {
+            //no_emoji_mode:无表情包模式
+            return "";
+          } else {
+            return match;
+          }
+        } else {
+          if (vm.no_image_mode) {
+            //no_img_mode:无图模式
+            return "";
+          } else {
+            return match;
+          }
+        }
+      }
       return this.post_data.content
+        .replace(/<img[^>]*>/g, img_replacer)
         .replace(/<script/g, "<**禁止使用script**")
         .replace(/\n/g, "<br>");
     },
