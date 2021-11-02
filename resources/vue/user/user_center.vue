@@ -47,7 +47,7 @@
                 class="mx-2"
                 switch
                 v-model="use_pingbici_input"
-                v-b-popover.hover.buttom="'切换后也要点击提交喔'"
+                v-b-popover.hover.bottom="'切换后也要点击提交喔'"
               >
                 启用屏蔽词
               </b-form-checkbox>
