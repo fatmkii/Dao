@@ -51,8 +51,8 @@ class ForumController extends Controller
     public function show(Request $request, $forum_id)
     {
         $request->validate([
-            'binggan' => 'string',
-            'page' => 'integer',
+            'binggan' => 'string|nullable',
+            'page' => 'integer|nullable',
             'search_title' => 'string|max:100', //搜索标题
             'sub_title' => 'string|max:20', //用来搜索副标题，暂时没用
         ]);

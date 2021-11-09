@@ -34,6 +34,8 @@
         :post_data="preview_post_data"
         :thread_anti_jingfen="0"
         :admin_button_show="false"
+        :no_image_mode="false"
+        :no_emoji_mode="false"
       ></PostItem>
     </div>
     <div class="my-2 row d-inline-flex" style="font-size: 0.875rem">
