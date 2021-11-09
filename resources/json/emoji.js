@@ -418,7 +418,7 @@ var emoji_json =
                 "https://www.z4a.net/images/2021/11/09/b8014a90f603738da977d476b34aa751f8198618461f.png",
                 "https://www.z4a.net/images/2021/11/09/bd315c6034a85edf8db14f7749051e23dd54564edf1c.png",
                 "https://www.z4a.net/images/2021/11/09/c2cec3fdfc039245d688605b87c5b3c27d1ed21b8f1c.png",
-                "hhttps://www.z4a.net/images/2021/11/09/d009b3de9c82d158ccbfe3e5805b0ed8bc3eb135e41c.png",
+                "https://www.z4a.net/images/2021/11/09/d009b3de9c82d158ccbfe3e5805b0ed8bc3eb135e41c.png",
                 "https://www.z4a.net/images/2021/11/09/d52a2834349b033b5bb5f46aea9e21d3d539b6001778.png",
                 "https://www.z4a.net/images/2021/11/09/d833c895d143ad4bd113a09482534dafa40f4bfba81c.png",
                 "https://www.z4a.net/images/2021/11/09/d01373f082025aafa40f9c9ffbbcbc64034f78f0ac1c.gif",
