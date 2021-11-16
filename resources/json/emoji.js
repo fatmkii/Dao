@@ -214,6 +214,8 @@ var emoji_json =
                 "https://www.z4a.net/images/2021/10/21/007hyfXLly1gpkbfnnxs1g3025025dga.gif",
                 "https://www.z4a.net/images/2021/10/21/007hyfXLly1guid4abs0gg601c01c3yq02.gif",
                 "https://www.z4a.net/images/2021/10/21/fef60002bffc4007a998.jpg",
+                "https://www.z4a.net/images/2021/11/16/IcO94H.png",
+                "https://www.z4a.net/images/2021/11/16/IcOosP.jpg",
                 "https://www.z4a.net/images/2021/10/21/003tdpvWgy1gv19p6jlbuj602i02it8l02.jpg"
             ],
             "deleted_at": null
@@ -780,6 +782,7 @@ var emoji_json =
                 "https://z3.ax1x.com/2021/04/29/gFjFRe.jpg",
                 "https://z3.ax1x.com/2021/04/29/gFjkxH.jpg",
                 "https://z3.ax1x.com/2021/04/29/gFjPPO.jpg",
+                "https://www.z4a.net/images/2021/11/16/I1cZP1.jpg",
                 "https://z3.ax1x.com/2021/04/29/gFj9IK.jpg",
                 "https://z3.ax1x.com/2021/04/29/gFjEMd.jpg",
                 "https://z3.ax1x.com/2021/04/28/giOyGQ.jpg",
