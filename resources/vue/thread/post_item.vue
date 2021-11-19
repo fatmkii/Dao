@@ -127,10 +127,10 @@
     <div class="post_content mb-2" style="margin-top: 2rem" ref="post_centent">
       <span
         v-html="post_content"
-        v-show="post_content_show"
+        v-if="post_content_show"
         style="word-wrap: break-word; white-space: normal"
       ></span>
-      <span v-show="!post_content_show" @click="post_content_show_click"
+      <span v-if="!post_content_show" @click="post_content_show_click"
         >*此回帖已屏蔽*</span
       >
     </div>
