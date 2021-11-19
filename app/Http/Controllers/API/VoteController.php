@@ -142,9 +142,11 @@ class VoteController extends Controller
 
 
         $user = User::where('binggan', $request->query('binggan'))->first();
-        $user_choices = "";
+
         if ($user) {
             $user_choices = $vote_question->VoteUserChoices($user->id);
+        } else {
+            $user_choices = "";
         }
 
         return response()->json([
