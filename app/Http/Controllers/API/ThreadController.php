@@ -308,15 +308,21 @@ class ThreadController extends Controller
         }
 
         $page = $request->query('page') == 'NaN' ? 1 : $request->query('page');
-        $posts = Cache::remember('threads_cache_' . $CurrentThread->id . '_' . $page, 3600, function () use ($CurrentThread) {
-            $result = $CurrentThread->posts()->orderBy('id', 'asc')->paginate(200);
-            if ($result->currentPage() > 1) {
-                $result->appendPost0($CurrentThread->posts()->first()); //为第2页及之后增加0楼
-                return $result;
-            }
-            return $result;
-        });
-
+        //使用缓存
+        // $posts = Cache::remember('threads_cache_' . $CurrentThread->id . '_' . $page, 3600, function () use ($CurrentThread) {
+        //     $result = $CurrentThread->posts()->orderBy('id', 'asc')->paginate(200);
+        //     if ($result->currentPage() > 1) {
+        //         $result->appendPost0($CurrentThread->posts()->first()); //为第2页及之后增加0楼
+        //         return $result;
+        //     }
+        //     return $result;
+        // });
+        
+        //不使用缓存
+        $posts = $CurrentThread->posts()->orderBy('id', 'asc')->paginate(200);
+        if ($posts->currentPage() > 1) {
+            $posts->appendPost0($CurrentThread->posts()->first()); //为第2页及之后增加0楼
+        }
 
         //如果有提供binggan，为每个post输入binggan，用来判断is_your_post（为前端提供是否是用户自己帖子的判据）
         if ($request->query('binggan')) {
