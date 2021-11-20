@@ -147,15 +147,15 @@ class PostController extends Controller
         // for ($i = 1; $i <= ceil($thread->posts_num / 200); $i++) {
         //     Cache::forget('threads_cache_' . $thread->id . '_' . $i);
         // }
-        ProcessUserActive::dispatch(
-            [
-                'binggan' => $user->binggan,
-                'user_id' => $user->id,
-                'active' => '用户发表了新回帖',
-                'thread_id' => $thread->id,
-                'post_id' => $post->id,
-            ]
-        );
+        // ProcessUserActive::dispatch(
+        //     [
+        //         'binggan' => $user->binggan,
+        //         'user_id' => $user->id,
+        //         'active' => '用户发表了新回帖',
+        //         'thread_id' => $thread->id,
+        //         'post_id' => $post->id,
+        //     ]
+        // );
         return response()->json(
             [
                 'code' => ResponseCode::SUCCESS,
