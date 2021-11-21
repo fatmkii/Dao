@@ -16,6 +16,7 @@ use App\Exceptions\CoinException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use App\Jobs\ProcessUserActive;
+use App\Models\GambleQuestion;
 use App\Models\VoteQuestion;
 
 class ThreadController extends Controller
@@ -48,6 +49,7 @@ class ThreadController extends Controller
             'post_with_admin' => 'boolean',
             'locked_by_coin' => 'integer|max:1000000',
             'is_vote' => 'boolean|required',
+            'is_gamble' => 'boolean|required',
         ]);
 
 
@@ -154,9 +156,17 @@ class ThreadController extends Controller
 
             //追加投票贴
             if ($request->is_vote) {
-                $user->coin -= 1000; //发投票主题减500奥利奥  
+                $user->coin -= 1000; //发投票主题减1000奥利奥  
                 $vote_question = new VoteQuestion();
                 $thread->vote_question_id = $vote_question->create($request, $thread->id); //$vote_question->create会返回id
+                $thread->save();
+            }
+
+            //追加菠菜贴
+            if ($request->is_gamble) {
+                $user->coin -= 500; //发菠菜主题减500奥利奥  
+                $gamble_question = new GambleQuestion();
+                $thread->gamble_question_id = $gamble_question->create($request, $thread->id); //$gamble_question->create会返回id
                 $thread->save();
             }
 
@@ -317,7 +327,7 @@ class ThreadController extends Controller
         //     }
         //     return $result;
         // });
-        
+
         //不使用缓存
         $posts = $CurrentThread->posts()->orderBy('id', 'asc')->paginate(200);
         if ($posts->currentPage() > 1) {

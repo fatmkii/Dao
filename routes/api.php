@@ -10,6 +10,7 @@ use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\CommonController;
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\VoteController;
+use App\Http\Controllers\API\GambleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,14 @@ Route::prefix('posts')->group(function () {
 Route::prefix('votes')->group(function () {
     Route::get('/{vote_id}', [VoteController::class, 'show']); //显示投票结果
     Route::post('', [VoteController::class, 'store'])->middleware('CheckBinggan:create');  //用户参与投票
+});
+
+//Gamble系列
+Route::prefix('gambles')->group(function () {
+    Route::get('/{gamble_id}', [GambleController::class, 'show']); //显示菠菜结果
+    Route::post('', [GambleController::class, 'store'])->middleware('CheckBinggan:create');  //用户投注
+    Route::post('/close', [GambleController::class, 'close'])->middleware('auth:sanctum');  //关闭菠菜（只能由管理员操作）
+    Route::post('/repeal', [GambleController::class, 'repeal'])->middleware('auth:sanctum');  //关闭菠菜（只能由管理员操作）
 });
 
 //User系列

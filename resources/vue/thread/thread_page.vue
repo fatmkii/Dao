@@ -115,6 +115,11 @@
           v-if="vote_question_id && posts_load_status"
           :vote_question_id="vote_question_id"
         ></VoteComponent>
+        <GambleComponent
+          v-if="gamble_question_id && posts_load_status"
+          :gamble_question_id="gamble_question_id"
+          :admin_button_show="admin_button_show"
+        ></GambleComponent>
         <div v-for="post_data in posts_data" :key="post_data.id">
           <PostItem
             :post_data="post_data"
@@ -601,6 +606,7 @@ import Emoji from "./emoji.vue";
 import RewardModal from "./reward_modal.vue";
 import Drawer from "../drawer.vue";
 import VoteComponent from "./vote.vue";
+import GambleComponent from "./gamble_component.vue";
 import Imgtu from "../imgtu.vue";
 
 export default {
@@ -611,6 +617,7 @@ export default {
     RewardModal,
     Drawer,
     VoteComponent,
+    GambleComponent,
     Imgtu,
   },
   props: {
@@ -736,6 +743,8 @@ export default {
       thread_posts_num: (state) => state.Threads.CurrentThreadData.posts_num,
       vote_question_id: (state) =>
         state.Threads.CurrentThreadData.vote_question_id,
+      gamble_question_id: (state) =>
+        state.Threads.CurrentThreadData.gamble_question_id,
       random_heads_group: (state) =>
         state.Threads.CurrentThreadData.random_heads_group,
       posts_last_page: (state) => state.Posts.PostsData.lastPage,

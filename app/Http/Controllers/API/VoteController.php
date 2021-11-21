@@ -78,9 +78,6 @@ class VoteController extends Controller
             ]);
         };
 
-        $vote_question->vote_total++;
-        $vote_question->save();
-
         $request_options_id = json_decode($request->vote_options, true);
         foreach ($request_options_id as $option_id) {
             $option = VoteOption::find($option_id);
@@ -95,6 +92,9 @@ class VoteController extends Controller
             $option->save();
         }
 
+        $vote_question->vote_total++;
+        $vote_question->save();
+
         $vote_user = new VoteUser;
         $vote_user->setSuffix(intval($request->vote_question_id / 10000));
         $vote_user->user_id = $user->id;
@@ -107,7 +107,7 @@ class VoteController extends Controller
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
                 'active' => '用户参加了投票',
-                'vote_question_id' => $request->vote_options,
+                'vote_question_id' => $request->vote_question_id,
             ]
         );
 

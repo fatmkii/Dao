@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\myModel;
+use App\Models\GambleQuestion;
+use App\Models\User;
 
-class VoteUser extends myModel
+class GambleUser extends myModel
 {
     use HasFactory;
 
@@ -14,13 +16,14 @@ class VoteUser extends myModel
 
     public $hidden = [
         'user_id',
-        'vote_question_id',
-
+        'gamble_question_id',
+        'created_at',
+        'updated_at',
     ];
 
-    public function VoteQuestion()
+    public function GambleQuestion()
     {
-        return $this->belongsTo(VoteQuestion::class);
+        return $this->belongsTo(GambleQuestion::class);
     }
 
     public function User()

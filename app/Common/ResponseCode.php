@@ -11,7 +11,7 @@ class ResponseCode
     const USER_REGISTER_FAIL = 21403;
     const USER_NOT_FOUND = 21404;
     const USER_LOCKED = 21443;
-    
+
     const USER_BANNED = 21499;
     const COIN_NOT_ENOUGH = 21412;
     const USER_PASSWORD_ERROR = 21001;
@@ -32,9 +32,15 @@ class ResponseCode
     const POST_UNAUTHORIZED = 24401;
 
     const VOTE_NOT_FOUND = 25404;
-    const VOTE_OPTION_NOT_FOUND = 25404;
+    const VOTE_OPTION_NOT_FOUND = 254041;
     const VOTE_WAS_OUTDATE = 25410;
     const VOTE_HAVE_BEEN_VOTE = 25403;
+
+    const GAMBLE_NOT_FOUND = 26404;
+    const GAMBLE_OPTION_NOT_FOUND = 264041;
+    const GAMBLE_WAS_OUTDATE = 26410;
+    const GAMBLE_HAVE_BEEN_BET = 26403;
+    const GAMBLE_HAS_BEEN_CLOSED = 264101;
 
     const LOGIN_FAILED = 20001;
 
@@ -68,6 +74,11 @@ class ResponseCode
         self::VOTE_OPTION_NOT_FOUND => '投票选项不存在',
         self::VOTE_WAS_OUTDATE => '投票已过期',
         self::VOTE_HAVE_BEEN_VOTE => '你已经投过票了',
+        self::GAMBLE_NOT_FOUND => '菠菜不存在',
+        self::GAMBLE_OPTION_NOT_FOUND => '菠菜选项不存在',
+        self::GAMBLE_WAS_OUTDATE => '菠菜已过期',
+        self::GAMBLE_HAS_BEEN_CLOSED => '菠菜已关闭',
+        self::GAMBLE_HAVE_BEEN_BET => '你已经下过注了',
     ];
 }
 

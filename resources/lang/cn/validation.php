@@ -157,7 +157,8 @@ return [
         'title_pingbici' => '标题屏蔽词',
         'content_pingbici' => '内容屏蔽词',
         'IP' => 'IP',
-        'roll_event' => 'Roll点事件'
+        'roll_event' => 'Roll点事件',
+        'betting_olo' => '下注奥利奥',
     ],
 
 ];

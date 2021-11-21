@@ -218,6 +218,29 @@ body {
 .icon-drawer {
     cursor: pointer;
 }
+//菠菜下注列表
+.gamble_table {
+    width: 100%;
+    margin-bottom: 1rem;
+    @include background_color("backgroud_color1");
+    thead {
+        @include background_color("background_color2");
+    }
+    th {
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        @include border_color("border_color0");
+        padding: 0.5rem;
+    }
+    td {
+        border-bottom: 1px solid;
+        @include border_color("border_color1");
+        padding: 0.5rem;
+    }
+    tr:hover {
+        @include background_color("background_color_hover");
+    }
+}
 
 //电脑版主题列表
 .threads_table {
@@ -277,6 +300,7 @@ body {
     font-size: calc(0.8rem + 0.2vw);
 }
 .vote-content,
+.gamble-content,
 .post_item {
     border-bottom: 1px solid;
     @include border_color("border_color1");

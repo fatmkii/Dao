@@ -17,7 +17,8 @@ class CreateThreadsTable extends Migration
             $table->id()->startingValue(10001);
             $table->tinyInteger('sub_id')->unsigned()->default(0)->index(); //用来排序的。10=本岛公告、99=全岛公告
             $table->integer('forum_id')->index();
-            $table->integer('vote_question_id')->nullable();
+            $table->integer('vote_question_id')->nullable(); //投票贴的id
+            $table->integer('gamble_question_id')->nullable(); //菠菜贴的id
             $table->string('nickname');
             $table->text('title');
             $table->string('sub_title')->default('[闲聊]');

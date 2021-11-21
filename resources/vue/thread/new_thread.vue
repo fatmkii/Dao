@@ -301,6 +301,68 @@
           <b-form-input v-model="vote_options[index]"></b-form-input>
         </div>
       </b-tab>
+      <b-tab title="菠菜">
+        <b-form-checkbox class="mr-3" v-model="is_gamble">
+          开启菠菜（500奥利奥）
+        </b-form-checkbox>
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="mr-3 svg-icon bi bi-plus-lg"
+              viewBox="0 0 16 16"
+              v-show="is_gamble"
+              @click="vote_option_control('push')"
+            >
+              <path
+                d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"
+              />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="mr-3 svg-icon bi bi-dash-lg"
+              viewBox="0 0 16 16"
+              v-show="is_gamble"
+              @click="vote_option_control('pop')"
+            >
+              <path d="M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z" />
+            </svg>
+          </div>
+          <div class="col-4">
+            <b-form-select
+              class="mr-3"
+              v-show="is_gamble"
+              v-model="gamble_time_selected"
+              :options="gamble_time_options"
+            ></b-form-select>
+          </div>
+        </div>
+
+        <div v-show="is_gamble">
+          <div class="my-2" style="font-size: 0.875rem">菠菜标题</div>
+          <b-form-input
+            id="vote_title_input"
+            class="vote_title_input"
+            placeholder="菠菜标题，必填"
+            v-model="vote_title_input"
+          ></b-form-input>
+        </div>
+        <div
+          class="my-2"
+          v-show="is_gamble"
+          v-for="(vote_option, index) in vote_options"
+          :key="index"
+        >
+          <div style="font-size: 0.875rem">选项{{ index + 1 }}</div>
+          <b-form-input v-model="vote_options[index]"></b-form-input>
+        </div>
+      </b-tab>
       <b-tab
         title="管理员"
         v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
@@ -371,6 +433,7 @@ export default {
       upload_img_handling: false,
       preview_show: false,
       is_vote: false,
+      is_gamble: false,
       vote_multiple: false,
       vote_title_input: "",
       vote_options: ["", "", ""],
@@ -380,6 +443,14 @@ export default {
         { value: 259200, text: "72小时" },
       ],
       vote_time_selected: 86400,
+      gamble_time_options: [
+        { value: 86400, text: "1天" },
+        { value: 259200, text: "3天" },
+        { value: 432000, text: "5天" },
+        { value: 604800, text: "7天" },
+        { value: 1209600, text: "14天" },
+      ],
+      gamble_time_selected: 86400,
     };
   },
   watch: {
@@ -391,6 +462,16 @@ export default {
         "emoji_auto_hide",
         this.emoji_auto_hide ? "true" : ""
       );
+    },
+    is_vote() {
+      if (this.is_vote) {
+        this.is_gamble = false;
+      }
+    },
+    is_gamble() {
+      if (this.is_gamble) {
+        this.is_vote = false;
+      }
     },
   },
   computed: {
@@ -463,6 +544,7 @@ export default {
           post_with_admin: this.post_with_admin,
           locked_by_coin: this.locked_by_coin_input,
           is_vote: this.is_vote,
+          is_gamble: this.is_gamble,
         },
       };
       if (this.is_vote) {
@@ -471,6 +553,12 @@ export default {
         config.data.vote_title = this.vote_title_input;
         config.data.vote_options = JSON.stringify(this.vote_options);
         config.data.vote_end_time = this.vote_time_selected;
+      }
+      if (this.is_gamble) {
+        //如果是菠菜贴，追加投票相关的请求参数
+        config.data.gamble_title = this.vote_title_input;
+        config.data.gamble_options = JSON.stringify(this.vote_options);
+        config.data.gamble_end_time = this.gamble_time_selected;
       }
       axios(config)
         .then((response) => {

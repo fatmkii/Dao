@@ -22,7 +22,8 @@ class CreateUserActivesTable extends Migration
                 $table->integer('post_id')->nullable();
                 $table->integer('thread_id')->nullable();
                 $table->integer('forum_id')->nullable();
-                $table->integer('vote_options_id')->nullable();
+                $table->integer('vote_question_id')->nullable();
+                $table->integer('gamble_question_id')->nullable();
                 $table->string('binggan_target')->nullable();
                 $table->tinyText('content')->nullable();
                 $table->timestamps();
