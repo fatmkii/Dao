@@ -302,8 +302,12 @@
         </div>
       </b-tab>
       <b-tab title="菠菜">
-        <b-form-checkbox class="mr-3" v-model="is_gamble">
-          开启菠菜（500奥利奥）
+        <b-form-checkbox
+          class="mr-3"
+          v-model="is_gamble"
+          :disabled="forum_id != 12"
+        >
+          开启菠菜（500奥利奥）  目前只能在海滨乐园岛开菠菜（避免被日清）
         </b-form-checkbox>
         <div class="row align-items-center">
           <div class="col-auto">
