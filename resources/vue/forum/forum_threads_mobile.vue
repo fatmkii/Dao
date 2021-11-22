@@ -13,6 +13,7 @@
         <div class="text-left my-1 py-1" :style="{ color: thread.title_color }">
           <span class="thread_sub_title"> {{ thread.sub_title }}&nbsp; </span>
           <span v-if="thread.vote_question_id != null">🗳️</span>
+          <span v-if="thread.gamble_question_id != null">🎲</span>
           <router-link
             class="thread_title"
             style="word-wrap: break-word; white-space: normal"

@@ -19,13 +19,15 @@
         }}
         {{ gamble_option.option_text }}
       </b-form-radio>
-      <b-progress
-        class="w-75 ml-4"
-        height="1.5rem"
-        :value="gamble_option.olo_total"
-        :max="gamble_question.olo_total"
-        show-value
-      ></b-progress>
+      <div class="d-flex">
+        <span style="min-width: 100px" class="pl-1">{{ gamble_option.olo_total }}</span
+        ><b-progress
+          class="w-75 ml-4"
+          height="1.5rem"
+          :value="gamble_option.olo_total"
+          :max="gamble_question.olo_total"
+        ></b-progress>
+      </div>
     </div>
     <div class="my-2">
       <b-input-group class="my-2" size="sm">

@@ -343,6 +343,9 @@ label.custom-file-label::after {
 }
 .progress {
     background-color: transparent;
+    position: relative;
+    left: -124px;
+    z-index: -1;
 }
 
 [v-cloak] {

@@ -13,13 +13,15 @@
       <b-form-radio v-model="choice_seleted" :value="vote_option.id">
         {{ index + 1 }}：{{ vote_option.option_text }}
       </b-form-radio>
-      <b-progress
-        class="w-75 ml-4"
-        height="1.5rem"
-        :value="vote_option.vote_total"
-        :max="vote_question.vote_total"
-        show-value
-      ></b-progress>
+      <div class="d-flex">
+        <span style="min-width: 100px" class="pl-1">{{ vote_option.vote_total }}</span>
+        <b-progress
+          class="w-75 ml-4"
+          height="1.5rem"
+          :value="vote_option.vote_total"
+          :max="vote_question.vote_total"
+        ></b-progress>
+      </div> 
     </div>
     <div class="my-2">
       <b-button
