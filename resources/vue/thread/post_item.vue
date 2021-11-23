@@ -144,17 +144,18 @@
       <span class="post_footer_text">于</span>
       <span class="post_created_at">{{ post_data.created_at }}</span>
       <span class="post_footer_text"> 留言 ☆☆☆</span>
-      <span
-        v-if="this.$store.state.User.AdminStatus == 99"
-        v-show="admin_button_show"
-        class="post_anti_jingfen"
-      >
-        →{{ post_data.created_binggan }}
-      </span>
+
       <span v-if="thread_anti_jingfen" class="post_anti_jingfen">
         →{{ post_data.created_binggan_hash.slice(0, 5) }}
       </span>
     </div>
+    <span
+      v-if="this.$store.state.User.AdminStatus == 99"
+      v-show="admin_button_show"
+      class="post_anti_jingfen"
+    >
+      →{{ post_data.created_binggan }}
+    </span>
   </div>
 </template>
 
