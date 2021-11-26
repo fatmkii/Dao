@@ -135,7 +135,6 @@
             @quote_click="quote_click_handle"
             @get_posts_data="get_posts_data"
             @emit_reward="emit_reward"
-            ><template v-slot:battle><Battle></Battle></template
           ></PostItem>
         </div>
         <div>
