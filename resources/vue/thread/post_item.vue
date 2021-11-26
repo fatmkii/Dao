@@ -134,6 +134,7 @@
         >*此回帖已屏蔽*</span
       >
     </div>
+    <slot name="battle"></slot>
     <div class="post_footer" ref="post_author_info">
       <span class="post_footer_text" @click="quote_click"
         >№{{ post_data.floor }} ☆☆☆</span

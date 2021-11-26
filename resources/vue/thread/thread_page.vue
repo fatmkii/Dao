@@ -135,6 +135,7 @@
             @quote_click="quote_click_handle"
             @get_posts_data="get_posts_data"
             @emit_reward="emit_reward"
+            ><template v-slot:battle><Battle></Battle></template
           ></PostItem>
         </div>
         <div>
@@ -608,6 +609,7 @@ import Drawer from "../drawer.vue";
 import VoteComponent from "./vote.vue";
 import GambleComponent from "./gamble_component.vue";
 import Imgtu from "../imgtu.vue";
+import Battle from "./battle.vue";
 
 export default {
   components: {
@@ -619,6 +621,7 @@ export default {
     VoteComponent,
     GambleComponent,
     Imgtu,
+    Battle,
   },
   props: {
     thread_id: Number, //来自router，
