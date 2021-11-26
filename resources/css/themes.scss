@@ -8,6 +8,7 @@ $themes: (
         background_color4: #6c757d,
         background_color5: #ffffff,
         background_color6: transparent,
+        background_color7: #ffffff,
         background_color_hover: #dff0d8,
         //主要前景色、图标颜色等
         icon_color1: #5fb878,
@@ -23,6 +24,7 @@ $themes: (
         //边框颜色 0=黑色 1=主题色
         border_color0: #111,
         border_color1: #5fb878,
+        border_color2: #ced4da,
         //toast颜色
         background_color_toast: rgba(255, 255, 255, 0.5),
         font_color_toast: #444,
@@ -42,7 +44,7 @@ $themes: (
         // btn_background_color_hover: #218838,
         // btn_border_color: #28a745,
         // btn_border_color_hover: #1e7e34,
-        // btn_box_shadow: rgb(72 180 97 / 50%),,,,,,,,
+        // btn_box_shadow: rgb(72 180 97 / 50%),,,,,,,,,,
     ),
     night: (
         //背景色、0= 整体背景色 1=主题色（浅） 2=主题色（深） 3=浅灰色（导航栏等）4=深灰色（小岛号码圆点等） 5=白色 6=通常为透明色 input=输入框颜色
@@ -53,6 +55,7 @@ $themes: (
         background_color4: #6c757d,
         background_color5: #1d2939,
         background_color6: transparent,
+        background_color7: #424a54,
         background_color_hover: #424a54,
         //主要前景色、图标颜色等
         icon_color1: #bdbbbb,
@@ -68,6 +71,7 @@ $themes: (
         //边框颜色 0=黑色 1=主题色
         border_color0: #111,
         border_color1: #1c424a,
+        border_color2: #1c424a,
         //toast颜色
         background_color_toast: rgba(66, 74, 84, 0.5),
         font_color_toast: #eee,
@@ -91,8 +95,8 @@ $themes: (
         background_color4: #6c757d,
         background_color5: #ffffff,
         background_color6: transparent,
+        background_color7: #e8e8e8,
         background_color_hover: #eee,
-
         //主要前景色、图标颜色等
         icon_color1: #aaaaaa,
         icon_color2: #777,
@@ -107,6 +111,7 @@ $themes: (
         //边框颜色 0=黑色 1=主题色
         border_color0: #111,
         border_color1: #111,
+        border_color2: #111,
         //toast颜色
         background_color_toast: rgba(255, 255, 255, 0.5),
         font_color_toast: #444,
@@ -126,6 +131,6 @@ $themes: (
         // btn_background_color_hover: #218838,
         // btn_border_color: #28a745,
         // btn_border_color_hover: #1e7e34,
-        // btn_box_shadow: rgb(72 180 97 / 50%),,,,,,,,
+        // btn_box_shadow: rgb(72 180 97 / 50%),,,,,,,,,,
     ),
 );

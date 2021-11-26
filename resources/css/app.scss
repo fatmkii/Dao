@@ -348,6 +348,15 @@ label.custom-file-label::after {
     z-index: -1;
 }
 
+//大乱斗相关
+.battle-item {
+    max-width: 600px;
+    border: 2px solid;
+    border-radius: 10px;
+    @include background_color("background_color7");
+    @include border_color("border_color2");
+}
+
 [v-cloak] {
     display: none;
 }
