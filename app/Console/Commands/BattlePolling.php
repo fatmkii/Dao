@@ -38,6 +38,8 @@ class BattlePolling extends Command
      */
     public function handle()
     {
+        return 0;
+
         DB::table('battles')->where('id', 10001)->increment('bet_olo');
         return 0;
     }
