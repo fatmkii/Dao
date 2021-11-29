@@ -261,8 +261,7 @@
         @keyup.ctrl.enter="new_post_handle"
       ></textarea>
       <div class="row align-items-center mt-2">
-        <!-- <div class="col-7">
-          原自费图床tietuku暂时关闭。
+        <div class="col-7" v-if="this.forum_id === 419">
           <b-form-file
             browse-text="上传图片"
             size="sm"
@@ -278,8 +277,8 @@
             label="上传中"
           >
           </b-spinner>
-        </div> -->
-        <Imgtu></Imgtu>
+        </div>
+        <Imgtu v-if="this.forum_id !== 419 && this.forum_id !== 0"></Imgtu>
         <div class="col-6 ml-auto">
           <b-button
             variant="success"
@@ -948,6 +947,10 @@ export default {
     },
     upload_img_handle(file) {
       if (!file) return;
+      if (file.size > 1048576) {
+        alert("图片最多支持1M大小");
+        return;
+      }
       this.upload_img_handling = true;
       const formData = new FormData();
       formData.append("file", file);
