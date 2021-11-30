@@ -176,7 +176,7 @@ class UserController extends Controller
             ]);
         }
 
-        // try {
+        try {
             DB::beginTransaction();
             $user = new User;
             do {
@@ -198,13 +198,13 @@ class UserController extends Controller
             }
 
             DB::commit();
-        // } catch (QueryException $e) {
-        //     DB::rollback();
-        //     return response()->json([
-        //         'code' => ResponseCode::DATABASE_FAILED,
-        //         'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-        //     ]);
-        // }
+        } catch (QueryException $e) {
+            DB::rollback();
+            return response()->json([
+                'code' => ResponseCode::DATABASE_FAILED,
+                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
+            ]);
+        }
         $token = $user->createToken($binggan, ['normal'])->plainTextToken;
         //用redis记录饼干申请ip。限定7天内只能申请1次。
         Redis::setex('reg_record_' . $request->ip(), 7 * 24 * 3600, 1);
