@@ -16,12 +16,10 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::get('/{path}', function () {
-    return view('index');
-})->where('path','.*');
 
 
-//测试用
+// 测试用
+// Route::get('/MAC_test', [TestController::class, 'MAC_test']);
 // Route::middleware('auth:sanctum')->get('/test', [TestController::class, 'test']);
 // Route::get('/test', [TestController::class, 'test'])->block();
 // Route::get('/test/login', [TestController::class, 'login']);
@@ -39,3 +37,7 @@ Route::get('/{path}', function () {
 //     Route::get('test', [TestController::class, 'bs_test']);
 //     Route::get('test/{id}', [TestController::class, 'bs_test']);
 // });
+
+Route::get('/{path}', function () {
+    return view('index');
+})->where('path','.*');

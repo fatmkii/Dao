@@ -131,6 +131,10 @@ class UserController extends Controller
 
     public function create(Request $request)
     {
+        $request->validate([
+            'register_key' => 'required|string',
+        ]);
+
         if (!config('app.new_binggan')) {
             return response()->json([
                 'code' => ResponseCode::USER_NEW_CLOSED,
@@ -147,6 +151,31 @@ class UserController extends Controller
             ]);
         }
 
+        //经过AES加密的Canvas指纹，作为UUID判断是否重复申请饼干
+        //密钥：XiaoHuoGuoCpttmm
+        $key = "XiaoHuoGuoCpttmm";
+        $iv = 'abcdef0123456789';
+        $options = OPENSSL_ZERO_PADDING;
+        $created_UUID = openssl_decrypt($request->register_key, 'aes-128-cbc', $key, $options, $iv);
+        $created_UUID_short = substr($created_UUID, 10, 8);
+        //并且字符串的开始应为：XiaoHuoGuo
+        if (substr($created_UUID, 0, 10) != "XiaoHuoGuo") {
+            return response()->json([
+                'code' => ResponseCode::USER_REGISTER_FAIL,
+                'message' => ResponseCode::$codeMap[ResponseCode::USER_REGISTER_FAIL] . '，是否使用了非正常手段申请饼干？如有疑问请联络：Bombaxceiba@protonmail.com',
+                'uuid' => $created_UUID_short,
+            ]);
+        }
+
+        //确认UUID是否被ban
+        if (DB::table('user_register')->where('created_UUID', $created_UUID_short)->value('is_banned')) {
+            return response()->json([
+                'code' => ResponseCode::USER_REGISTER_FAIL,
+                'message' => ResponseCode::$codeMap[ResponseCode::USER_REGISTER_FAIL] . '，是否申请了过多饼干？如有疑问请联络：Bombaxceiba@protonmail.com',
+                'uuid' => $created_UUID_short,
+            ]);
+        }
+
         try {
             DB::beginTransaction();
             $user = new User;
@@ -155,8 +184,19 @@ class UserController extends Controller
             } while (!empty(User::where('binggan', $binggan)->first));
             $user->binggan = $binggan;
             $user->created_ip = $request->ip();
+            $user->created_UUID = $created_UUID_short;
             $user->coin = 1500;
             $user->save();
+
+            //记录UUID申请次数
+            if (DB::table('user_register')->where('created_UUID', $created_UUID_short)->exists()) {
+                DB::table('user_register')->where('created_UUID', $created_UUID_short)->increment('count');
+            } else {
+                DB::table('user_register')->insert([
+                    'created_UUID' => $created_UUID_short
+                ]);
+            }
+
             DB::commit();
         } catch (QueryException $e) {
             DB::rollback();

@@ -12,6 +12,8 @@ import router from './routes.js'
 
 window.sha256 = require('js-sha256')
 window.axios = require('axios')
+window.CryptoJS = require("crypto-js");
+
 // axios.defaults.withCredentials = false; // 在全局 axios 实例中启用 withCredentials 选项
 // axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //axios拦截器
