@@ -216,6 +216,7 @@ var emoji_json =
                 "https://www.z4a.net/images/2021/10/21/fef60002bffc4007a998.jpg",
                 "https://www.z4a.net/images/2021/11/16/IcO94H.png",
                 "https://www.z4a.net/images/2021/11/16/IcOosP.jpg",
+                "https://www.z4a.net/images/2021/12/01/LPPgGy.gif",
                 "https://www.z4a.net/images/2021/10/21/003tdpvWgy1gv19p6jlbuj602i02it8l02.jpg"
             ],
             "deleted_at": null
