@@ -13,7 +13,7 @@ const path = require('path');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-    .extract(['vue', 'bootstrap-vue', 'vuex', 'vue-router', 'axios'])
+    .extract(['vue', 'bootstrap-vue', 'vuex', 'vue-router', 'axios', 'js-sha256', "crypto-js"])
     .sass('resources/css/app.scss', 'public/css')
     .copy('resources/json/emoji.js', 'public/json')
     .copy('resources/json/heads.js', 'public/json')
