@@ -171,7 +171,9 @@ class UserController extends Controller
         if (DB::table('user_register')->where('created_UUID', $created_UUID_short)->value('is_banned')) {
             return response()->json([
                 'code' => ResponseCode::USER_REGISTER_FAIL,
-                'message' => ResponseCode::$codeMap[ResponseCode::USER_REGISTER_FAIL] . '，是否申请了过多饼干？如有疑问请联络：Bombaxceiba@protonmail.com',
+                'message' => ResponseCode::$codeMap[ResponseCode::USER_REGISTER_FAIL] .
+                    '，是否申请了过多饼干？如有疑问请联络：Bombaxceiba@protonmail.com，' .
+                    '附带：' . $created_UUID_short,
                 'uuid' => $created_UUID_short,
             ]);
         }
@@ -195,6 +197,11 @@ class UserController extends Controller
                 DB::table('user_register')->insert([
                     'created_UUID' => $created_UUID_short
                 ]);
+            }
+
+            //如果申请次数已经达到10次，则ban
+            if (DB::table('user_register')->where('created_UUID', $created_UUID_short)->value('count') >= 10) {
+                DB::table('user_register')->where('created_UUID', $created_UUID_short)->update(['is_banned' => 1]);
             }
 
             DB::commit();
