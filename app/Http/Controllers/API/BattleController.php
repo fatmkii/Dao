@@ -315,8 +315,45 @@ class BattleController extends Controller
 
             $battle->progress = 3;
             $battle->initiator_rand_num = $rand_num;
-            $difference = $battle->initiator_rand_num - $battle->challenger_rand_num;
+            $difference = intval($battle->initiator_rand_num - $battle->challenger_rand_num);
             switch ($difference) {
+                case 0: { //平局！
+                        $battle->result = 3;
+                        $challenger_user->coin += intval($battle->battle_olo * 1.96);
+                        $initiator_user->coin += intval($battle->battle_olo * 1.96);
+                        $challenger_user->save();
+                        $initiator_user->save();
+
+                        //平局系统公告
+                        $battle_message = new BattleMessage;
+                        $battle_message->battle_id = $battle->id;
+                        $battle_message->message_type = 0;
+                        $battle_message->message = BattleChara::CharaName($battle->challenger_chara) . '和' . BattleChara::CharaName($battle->initiator_chara)
+                            . '的脑门闪过一道光，他们相互理解了！';
+                        $battle_message->save();
+
+
+                        //平局发起者公告
+                        $battle_message = new BattleMessage;
+                        $battle_message->battle_id = $battle->id;
+                        $battle_message->chara_url = BattleChara::CharaHead($battle->initiator_chara, 'win');
+                        $battle_message->message_type = 1;
+                        $battle_message->message = BattleChara::CharaName($battle->initiator_chara) .
+                            '获得奖金' .
+                            intval($battle->battle_olo * 1.96) . '个奥利奥';
+                        $battle_message->save();
+
+                        //平局挑战者公告
+                        $battle_message = new BattleMessage;
+                        $battle_message->battle_id = $battle->id;
+                        $battle_message->chara_url = BattleChara::CharaHead($battle->challenger_chara, 'win');
+                        $battle_message->message_type = 2;
+                        $battle_message->message = BattleChara::CharaName($battle->challenger_chara) .
+                            '获得奖金' .
+                            intval($battle->battle_olo * 1.96) . '个奥利奥';
+                        $battle_message->save();
+                        break;
+                    }
                 case $difference > 0: { //发起者胜利
                         $battle->result = 1;
                         $initiator_user->coin += intval($battle->battle_olo * 1.96);
@@ -382,43 +419,6 @@ class BattleController extends Controller
 
                         break;
                     }
-                case $difference == 0: { //平局！
-                        $battle->result = 3;
-                        $challenger_user->coin += intval($battle->battle_olo * 1.96);
-                        $initiator_user->coin += intval($battle->battle_olo * 1.96);
-                        $challenger_user->save();
-                        $initiator_user->save();
-
-                        //平局系统公告
-                        $battle_message = new BattleMessage;
-                        $battle_message->battle_id = $battle->id;
-                        $battle_message->message_type = 0;
-                        $battle_message->message = BattleChara::CharaName($battle->challenger_chara) . '和' . BattleChara::CharaName($battle->initiator_chara)
-                            . '的脑门闪过一道光，他们相互理解了！';
-                        $battle_message->save();
-
-
-                        //平局发起者公告
-                        $battle_message = new BattleMessage;
-                        $battle_message->battle_id = $battle->id;
-                        $battle_message->chara_url = BattleChara::CharaHead($battle->initiator_chara, 'win');
-                        $battle_message->message_type = 1;
-                        $battle_message->message = BattleChara::CharaName($battle->initiator_chara) .
-                            '获得奖金' .
-                            intval($battle->battle_olo * 1.96) . '个奥利奥';
-                        $battle_message->save();
-
-                        //平局挑战者公告
-                        $battle_message = new BattleMessage;
-                        $battle_message->battle_id = $battle->id;
-                        $battle_message->chara_url = BattleChara::CharaHead($battle->challenger_chara, 'win');
-                        $battle_message->message_type = 2;
-                        $battle_message->message = BattleChara::CharaName($battle->challenger_chara) .
-                            '获得奖金' .
-                            intval($battle->battle_olo * 1.96) . '个奥利奥';
-                        $battle_message->save();
-                        break;
-                    }
             }
             $battle->save();
 
@@ -454,6 +454,7 @@ class BattleController extends Controller
         return response()->json([
             'code' => ResponseCode::SUCCESS,
             'message' => '已结束大乱斗！',
+            'd' => $difference,
         ]);
     }
 }
