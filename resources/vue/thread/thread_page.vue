@@ -750,7 +750,7 @@ export default {
       jump_page: "",
       jump_page_show: false,
       battle_olo: 100,
-      battle_chara_options: [],
+      // battle_chara_options: [],
       battle_chara_id: undefined,
       z_bar_show: false,
       no_image_mode: false,
@@ -835,6 +835,7 @@ export default {
       posts_load_status: (state) => state.Posts.PostsLoadStatus,
       locked_TTL: (state) => state.User.LockedTTL,
       random_heads_data: (state) => state.User.RandomHeads,
+      battle_chara_options:(state) => state.User.CharaIndex,
     }),
   },
   methods: {
@@ -905,24 +906,24 @@ export default {
           alert(Object.values(error.response.data.errors)[0]);
         });
     },
-    get_chara_index() {
-      const config = {
-        method: "get",
-        url: "/api/battles/chara_index",
-      };
-      axios(config)
-        .then((response) => {
-          if (response.data.code == 200) {
-            this.battle_chara_options = response.data.chara_index;
-          } else {
-            alert(response.data.message);
-          }
-        })
-        .catch((error) => {
-          this.roll_handling = false;
-          alert(Object.values(error.response.data.errors)[0]);
-        });
-    },
+    // get_chara_index() {
+    //   const config = {
+    //     method: "get",
+    //     url: "/api/battles/chara_index",
+    //   };
+    //   axios(config)
+    //     .then((response) => {
+    //       if (response.data.code == 200) {
+    //         this.battle_chara_options = response.data.chara_index;
+    //       } else {
+    //         alert(response.data.message);
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       this.roll_handling = false;
+    //       alert(Object.values(error.response.data.errors)[0]);
+    //     });
+    // },
     get_browse_current() {
       if (
         typeof this.$store.state.User.BrowseLogger[this.thread_id.toString()] !=
@@ -1113,9 +1114,6 @@ export default {
       }
     },
     modal_toggle(modal_name) {
-      if (modal_name == "battle_modal") {
-        this.get_chara_index();
-      }
       this.$refs[modal_name].toggle();
     },
     upload_drawer_click() {

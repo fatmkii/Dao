@@ -105,6 +105,7 @@ export default {
     //把常用数据写入Vuex，变量来源于json/文件夹下的定义
     this.$store.commit("Emojis_set", emoji_json);
     this.$store.commit("RandomHeads_set", random_heads_json);
+    this.$store.commit("CharaIndex_set", chara_index);
 
     //读取localStorage的浏览记录
     if (localStorage.browse_logger != null) {

@@ -17,6 +17,7 @@ mix.js('resources/js/app.js', 'public/js')
     .sass('resources/css/app.scss', 'public/css')
     .copy('resources/json/emoji.js', 'public/json')
     .copy('resources/json/heads.js', 'public/json')
+    .copy('resources/json/chara_index.js', 'public/json')
     .vue()
     .sourceMaps()
     .version();

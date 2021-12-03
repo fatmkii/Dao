@@ -109,11 +109,15 @@ export default {
       name: "battle",
       get_data_handling: true,
       post_roll_handling: false,
-      battle_chara_options: [],
+      // battle_chara_options: [],
       battle_chara_id: undefined,
     };
   },
-  computed: {},
+  computed: {
+    battle_chara_options() {
+      return this.$store.state.User.CharaIndex;
+    },
+  },
   methods: {
     // get_battle_data() {
     //   const config = {
@@ -143,24 +147,24 @@ export default {
     //       alert(Object.values(error.response.data.errors)[0]);
     //     });
     // },
-    get_chara_index() {
-      const config = {
-        method: "get",
-        url: "/api/battles/chara_index",
-      };
-      axios(config)
-        .then((response) => {
-          if (response.data.code == 200) {
-            this.battle_chara_options = response.data.chara_index;
-          } else {
-            alert(response.data.message);
-          }
-        })
-        .catch((error) => {
-          this.roll_handling = false;
-          alert(Object.values(error.response.data.errors)[0]);
-        });
-    },
+    // get_chara_index() {
+    //   const config = {
+    //     method: "get",
+    //     url: "/api/battles/chara_index",
+    //   };
+    //   axios(config)
+    //     .then((response) => {
+    //       if (response.data.code == 200) {
+    //         this.battle_chara_options = response.data.chara_index;
+    //       } else {
+    //         alert(response.data.message);
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       this.roll_handling = false;
+    //       alert(Object.values(error.response.data.errors)[0]);
+    //     });
+    // },
     challenger_roll_handle() {
       var confirmed = confirm(
         "要参加大乱斗吗？押注：" + this.battle_data.battle_olo + "个奥利奥"
@@ -217,12 +221,12 @@ export default {
   },
   created() {
     // this.get_battle_data();
-    if (
-      this.battle_data.progress == 0 &&
-      this.battle_data.is_your_battle == false
-    ) {
-      this.get_chara_index();
-    }
+    // if (
+    //   this.battle_data.progress == 0 &&
+    //   this.battle_data.is_your_battle == false
+    // ) {
+    //   this.get_chara_index();
+    // }
   },
 };
 </script>
