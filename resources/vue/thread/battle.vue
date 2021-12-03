@@ -51,6 +51,41 @@
           >迎战</b-button
         >
       </div>
+      <div v-if="battle_data.progress == 2">
+        <span
+          class="battle_message_system"
+          v-if="battle_data.result == 1 && battle_data.is_your_battle == true"
+          >你获得了{{ Math.floor(battle_data.battle_olo * 1.96) }}个奥利奥！
+        </span>
+        <span
+          class="battle_message_system"
+          v-if="
+            battle_data.result == 1 && battle_data.you_are_challenger == true
+          "
+          >你输掉了{{ Math.floor(battle_data.battle_olo * 1.96) }}个奥利奥……
+        </span>
+        <span
+          class="battle_message_system"
+          v-if="battle_data.result == 2 && battle_data.is_your_battle == true"
+          >你输掉了{{ Math.floor(battle_data.battle_olo * 1.96) }}个奥利奥……
+        </span>
+        <span
+          class="battle_message_system"
+          v-if="
+            battle_data.result == 2 && battle_data.you_are_challenger == true
+          "
+          >你获得了{{ Math.floor(battle_data.battle_olo * 1.96) }}个奥利奥！
+        </span>
+        <span
+          class="battle_message_system"
+          v-if="
+            battle_data.result == 3 &&
+            (battle_data.you_are_challenger == true ||
+              battle_data.is_your_battle == true)
+          "
+          >你获得了{{ Math.floor(battle_data.battle_olo * 1.96) }}个奥利奥！
+        </span>
+      </div>
     </div>
   </div>
 </template>

@@ -18,6 +18,7 @@ class Battle extends Model
 
     protected $appends = [
         'is_your_battle',
+        'you_are_challenger'
     ];
 
     public $hidden = [
@@ -56,7 +57,7 @@ class Battle extends Model
     {
         $this->binggan = $binggan;
     }
-
+    
     public static function Binggan($binggan)
     {
         $instance = new static;
@@ -65,11 +66,21 @@ class Battle extends Model
         return $instance->newQuery();
     }
 
-
     public function getIsYourBattleAttribute()
     {
         if ($this->binggan) {
             if ($this->binggan == $this->created_binggan) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public function getYouAreChallengerAttribute()
+    {
+        if ($this->binggan) {
+            if ($this->binggan == $this->challenger_binggan) {
                 return true;
             } else {
                 return false;

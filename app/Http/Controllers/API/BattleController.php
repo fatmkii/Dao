@@ -188,6 +188,7 @@ class BattleController extends Controller
             DB::beginTransaction();
 
             $battle->progress = 1;
+            $battle->challenger_binggan = $request->binggan;
             $battle->challenger_user_id = $user->id;
             $battle->challenger_chara = $request->chara_id;
             $battle->challenger_rand_num = $rand_num;
@@ -313,7 +314,7 @@ class BattleController extends Controller
             $battle_message->save();
 
 
-            $battle->progress = 3;
+            $battle->progress = 2;
             $battle->initiator_rand_num = $rand_num;
             $difference = intval($battle->initiator_rand_num - $battle->challenger_rand_num);
             switch ($difference) {
