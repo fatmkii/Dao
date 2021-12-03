@@ -40,6 +40,14 @@ class BattleChara
             'lose' => 'https://www.z4a.net/images/2021/11/27/ia_100004448.jpg',
         ),
         4 => array(
+            'name' => '小白猫',
+            'wait' => 'https://z3.ax1x.com/2021/04/29/gkMVyj.jpg',
+            'against' => 'https://z3.ax1x.com/2021/04/29/gkMFfS.jpg',
+            'attack' => 'https://z3.ax1x.com/2021/08/16/ffB0xO.png',
+            'win' => 'https://z3.ax1x.com/2021/04/29/gkMnwq.jpg',
+            'lose' => 'https://z3.ax1x.com/2021/04/29/gkMASg.jpg',
+        ),
+        5 => array(
             'name' => '麻将脸',
             'wait' => 'https://www.z4a.net/images/2021/11/27/063.png',
             'against' => 'https://www.z4a.net/images/2021/11/27/075.png',
@@ -47,7 +55,7 @@ class BattleChara
             'win' => 'https://www.z4a.net/images/2021/11/27/057.png',
             'lose' => 'https://www.z4a.net/images/2021/11/27/153.png',
         ),
-        5 => array(
+        6 => array(
             'name' => '小恐龙',
             'wait' => 'https://www.z4a.net/images/2021/11/27/5415f6faaf51f3deffd1d00183eef01f3a297973.jpg',
             'against' => 'https://www.z4a.net/images/2021/11/27/QQ20210501234624.png',
@@ -55,7 +63,7 @@ class BattleChara
             'win' => 'https://www.z4a.net/images/2021/11/27/QQ20210501230752.jpg',
             'lose' => 'https://www.z4a.net/images/2021/11/27/QQ20210501230904.gif',
         ),
-        6 => array(
+        7 => array(
             'name' => 'TD猫',
             'wait' => 'https://www.z4a.net/images/2021/11/27/QQ20210822211433.gif',
             'against' => 'https://www.z4a.net/images/2021/11/27/QQ20210822211656.gif',
@@ -63,7 +71,7 @@ class BattleChara
             'win' => 'https://www.z4a.net/images/2021/11/27/QQ20210822211059.gif',
             'lose' => 'https://www.z4a.net/images/2021/11/27/QQ20210822211530.gif',
         ),
-        7 => array(
+        8 => array(
             'name' => '小豆泥',
             'wait' => 'https://www.z4a.net/images/2021/11/27/QQ20210417143904.png',
             'against' => 'https://www.z4a.net/images/2021/12/01/QQ20211201220044.gif',
@@ -71,7 +79,7 @@ class BattleChara
             'win' => 'https://www.z4a.net/images/2021/11/27/QQ20210814204640.jpg',
             'lose' => 'https://www.z4a.net/images/2021/12/01/QQ20211201220048.gif',
         ),
-        8 => array(
+        9 => array(
             'name' => '小企鹅',
             'wait' => 'https://www.z4a.net/images/2021/11/27/0c350dec0ef4e3cd.jpg',
             'against' => 'https://www.z4a.net/images/2021/11/27/3d3fe9940b1439d1.jpg',
@@ -79,7 +87,7 @@ class BattleChara
             'win' => 'https://www.z4a.net/images/2021/11/27/d0c57162364ac318.jpg',
             'lose' => 'https://www.z4a.net/images/2021/11/27/d0a77206afd99fbd.jpg',
         ),
-        9 => array(
+        10 => array(
             'name' => '元元',
             'wait' => 'https://www.z4a.net/images/2021/11/27/008i3skNly1gq437fg55kj308c07s0t3.jpg',
             'against' => 'https://www.z4a.net/images/2021/11/27/008i3skNly1gq436vah7gj308c07uaad.jpg',
