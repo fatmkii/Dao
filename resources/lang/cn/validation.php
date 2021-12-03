@@ -159,6 +159,7 @@ return [
         'IP' => 'IP',
         'roll_event' => 'Roll点事件',
         'betting_olo' => '下注奥利奥',
+        'chara_id' => '乱斗角色 ',
     ],
 
 ];

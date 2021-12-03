@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\myModel;
 use App\Models\Thread;
 use Illuminate\Support\Facades\Cache;
+use App\Common\ResponseCode;
+use App\Models\Battle;
 
 class Post extends myModel
 {
@@ -35,6 +37,7 @@ class Post extends myModel
 
     protected $appends = [
         'is_your_post',
+        'battle_data',
     ];
 
     protected $casts = [];
@@ -150,6 +153,33 @@ class Post extends myModel
             } else {
                 return false;
             }
+        } else {
+            return null;
+        }
+    }
+
+    public function getBattleDataAttribute()
+    {
+        if ($this->battle_id) {
+            $battle = Battle::find($this->battle_id);
+            if (!$battle) {
+                return response()->json([
+                    'code' => ResponseCode::BATTLE_NOT_FOUND,
+                    'message' => ResponseCode::$codeMap[ResponseCode::BATTLE_NOT_FOUND],
+                ]);
+            }
+            $battle_messages  = $battle->BattleMessages;
+
+            //如果有提供binggan，为battle输入binggan，用来判断is_your_battle（为前端提供是否是用户自己帖子的判据）
+            if ($this->binggan) {
+                $battle->setBinggan($this->binggan);
+            }
+            return [
+                'battle' => $battle,
+                'battle_messages' => $battle_messages,
+            ];
+        } else {
+            return null;
         }
     }
 }

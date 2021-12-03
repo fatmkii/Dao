@@ -139,7 +139,7 @@ class BattleChara
     public static function CharaAttackMessage($chara_id, $rand_num)
     {
         $chara_name = self::chara_head[$chara_id]['name'];
-        $message = self::dice_message[intval($rand_num / 10)];
+        $message = self::dice_message[intval(($rand_num - 1) / 10)];
         $message = str_replace('%name', $chara_name, $message);
         $message = str_replace('%rand_num', strval($rand_num), $message);
         return $message;
