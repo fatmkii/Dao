@@ -42,8 +42,9 @@ class BattleController extends Controller
         $battle_messages  = $battle->BattleMessages;
 
         //如果有提供binggan，为battle输入binggan，用来判断is_your_battle（为前端提供是否是用户自己帖子的判据）
-        $battle->setBinggan($request->query('binggan'));
-
+        if ($request->query('binggan')) {
+            $battle->setBinggan($request->query('binggan'));
+        }
         return response()->json([
             'code' => ResponseCode::SUCCESS,
             'battle' => $battle,
