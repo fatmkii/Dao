@@ -73,7 +73,7 @@ class ForumController extends Controller
         if ($request->has('search_title')) {
             if (Redis::exists('search_record_global')) {
                 Redis::incr('search_record_global');
-                if (Redis::GET('search_record_global') > 5) {
+                if (Redis::GET('search_record_global') > 20) {
                     return response()->json([
                         'code' => ResponseCode::SEARCH_TOO_MANY,
                         'message' => ResponseCode::$codeMap[ResponseCode::SEARCH_TOO_MANY],
