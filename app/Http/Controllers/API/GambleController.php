@@ -382,7 +382,7 @@ class GambleController extends Controller
         }
         try {
             DB::beginTransaction();
-            if (Carbon::parse($gamble_question->end_date > Carbon::now())) {
+            if (Carbon::parse($gamble_question->end_date) > Carbon::now()) {
                 $gamble_question->end_date = Carbon::now();
             }
             $gamble_question->result_option_id = $request->result_option;

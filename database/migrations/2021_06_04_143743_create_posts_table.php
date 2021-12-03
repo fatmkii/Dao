@@ -20,6 +20,7 @@ class CreatePostsTable extends Migration
                 $table->tinyInteger('is_deleted')->default(0); //0=正常；1=被用户删除；2=被管理员删除
                 $table->integer('forum_id')->index();
                 $table->integer('thread_id')->index();
+                $table->integer('battle_id')->nullable(); //大乱斗的ID
                 $table->integer('floor')->index();
                 $table->tinyInteger('random_head')->nullable(); //论坛随机头像功能用
                 $table->tinyInteger('created_by_admin')->default(0); //0=一般用户 1=管理员发布，2=系统发布

@@ -96,37 +96,50 @@ class BattleChara
 
     //骰子结果文字
     const dice_message = array(
-        0 => '%name突然失手了！掷出了「%rand_num」点。',
-        1 => '%name突然失手了！掷出了「%rand_num」点。',
-        2 => '%name突然失手了！掷出了「%rand_num」点。',
-        3 => '%name突然失手了！掷出了「%rand_num」点。',
-        4 => '%name突然失手了！掷出了「%rand_num」点。',
-        5 => '%name突然失手了！掷出了「%rand_num」点。',
-        6 => '%name突然失手了！掷出了「%rand_num」点。',
-        7 => '%name突然失手了！掷出了「%rand_num」点。',
-        8 => '%name突然失手了！掷出了「%rand_num」点。',
-        9 => '%name突然失手了！掷出了「%rand_num」点。',
-        10 => '%name突然失手了！掷出了「%rand_num」点。',
+        0 => '%name突然脚下踩到了乐高！掷出了「%rand_num」点。',
+        1 => '%name用手手轻轻拨了一下骰子，掷出了「%rand_num」点。',
+        2 => '%name被对方的美貌诱惑了，掷出了「%rand_num」点。',
+        3 => '%name有点心不在焉，掷出了「%rand_num」点。',
+        4 => '%name不紧不慢地掷出了「%rand_num」点。',
+        5 => '%name决定打完这场就回老家结婚，掷出了「%rand_num」点。',
+        6 => '%name使出全力一击，掷出了「%rand_num」点。',
+        7 => '%name决定向岛神祈祷，掷出了「%rand_num」点。',
+        8 => '%name发动了右手的王之力！掷出了「%rand_num」点。',
+        9 => '%name在此刻欧皇附体！掷出了「%rand_num」点。',
+        10 => '%name发动屁元特攻，造成了成吨伤害！掷出了「%rand_num」点。',
 
     );
 
-    public static function CharaHead($chara_index, $action)
+    public static function CharaHeadIndex()
     {
-        return self::chara_head[$chara_index][$action];
+        $index = [];
+        foreach (self::chara_head as $key => $value) {
+            array_push($index, ['value' => $key, 'text' => $value['name']]);
+        }
+        return $index;
+    }
+    public static function CharaHead(int $chara_id, string $action)
+    {
+        return self::chara_head[$chara_id][$action];
     }
 
-    public static function CharaAttackMessage($chara_index, $rand_num)
+    public static function CharaName(int $chara_id)
     {
-        $chara_name = self::chara_head[$chara_index];
+        return self::chara_head[$chara_id]['name'];
+    }
+
+    public static function CharaAttackMessage($chara_id, $rand_num)
+    {
+        $chara_name = self::chara_head[$chara_id]['name'];
         $message = self::dice_message[intval($rand_num / 10)];
-        str_replace('%name', $chara_name, $message);
-        str_replace('%rand_num', strval($rand_num), $message);
+        $message = str_replace('%name', $chara_name, $message);
+        $message = str_replace('%rand_num', strval($rand_num), $message);
         return $message;
     }
 
-    public static function CharaRandNum($chara_index)
+    public static function CharaRandNum($chara_id)
     {
-        switch ($chara_index) {
+        switch ($chara_id) {
             case 9: //元元可以掷出最大101点
                 return random_int(1, 101);
             default:

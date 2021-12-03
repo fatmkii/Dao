@@ -42,6 +42,13 @@ class ResponseCode
     const GAMBLE_HAVE_BEEN_BET = 26403;
     const GAMBLE_HAS_BEEN_CLOSED = 264101;
 
+    const BATTLE_NOT_FOUND = 27404;
+    const BATTLE_WAS_OUTDATE = 27410;
+    const BATTLE_HAVE_BEEN_BET = 27403;
+    const BATTLE_HAS_BEEN_ROLL_I = 274031;
+    const BATTLE_HAS_BEEN_ROLL_C = 274032;
+    const BATTLE_HAS_BEEN_CLOSED = 274101;
+
     const LOGIN_FAILED = 20001;
 
     const DATABASE_FAILED = 5001;
@@ -79,6 +86,12 @@ class ResponseCode
         self::GAMBLE_WAS_OUTDATE => '菠菜已过期',
         self::GAMBLE_HAS_BEEN_CLOSED => '菠菜已关闭',
         self::GAMBLE_HAVE_BEEN_BET => '你已经下过注了',
+        self::BATTLE_NOT_FOUND => '大乱斗不存在',
+        self::BATTLE_WAS_OUTDATE => '大乱斗已过期',
+        self::BATTLE_HAVE_BEEN_BET => '大乱斗已正常结束了',
+        self::BATTLE_HAS_BEEN_CLOSED => '大乱斗已关闭',
+        self::BATTLE_HAS_BEEN_ROLL_C => '已经有挑战者参加了',
+        self::BATTLE_HAS_BEEN_ROLL_I => '大乱斗还在等待挑战者',
     ];
 }
 

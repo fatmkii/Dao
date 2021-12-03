@@ -56,7 +56,7 @@ class CheckBinggan
                     }
                     break;
                 }
-            case 'show': //发帖等
+            case 'show': //看帖等
                 {
                     break;
                 }
