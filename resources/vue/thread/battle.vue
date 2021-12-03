@@ -14,13 +14,15 @@
         <img class="emoji_img" :src="battle_message.chara_url" />
         <span
           class="mx-1"
-          :class="{ 'battle_message_system': battle_message.message_type == 0 }"
+          :class="{ battle_message_system: battle_message.message_type == 0 }"
           >{{ battle_message.message }}</span
         >
       </div>
     </div>
     <div class="d-flex align-items-center justify-content-center my-1">
-      <div v-if="battle_data.progress == 0">
+      <div
+        v-if="battle_data.progress == 0 && battle_data.is_your_battle == false"
+      >
         <b-input-group size="sm" prepend="角色：">
           <b-form-select
             size="sm"
@@ -31,6 +33,11 @@
             >挑战</b-button
           >
         </b-input-group>
+      </div>
+      <div
+        v-if="battle_data.progress == 0 && battle_data.is_your_battle == true"
+      >
+        <span class="battle_message_system">正在等待挑战者……</span>
       </div>
       <div
         v-if="battle_data.progress == 1 && battle_data.is_your_battle == true"
@@ -84,7 +91,10 @@ export default {
           if (response.data.code == 200) {
             this.battle_messages = response.data.battle_messages;
             this.battle_data = response.data.battle;
-            if (this.battle_data.progress == 0) {
+            if (
+              this.battle_data.progress == 0 &&
+              this.battle_data.is_your_battle == false
+            ) {
               this.get_chara_index();
             }
             this.get_data_handling = false;

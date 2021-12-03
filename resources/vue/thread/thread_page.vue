@@ -150,7 +150,10 @@
                 no_battle_mode == false
               "
             >
-              <Battle :battle_id="post_data.battle_id"></Battle>
+              <Battle
+                ref="battle_component"
+                :battle_id="post_data.battle_id"
+              ></Battle>
             </template>
           </PostItem>
         </div>
@@ -835,6 +838,12 @@ export default {
   },
   methods: {
     get_posts_data(remind = false, scroll_enable = false) {
+      if (this.$refs["battle_component"] !== undefined) {
+        console.log(this.$refs["battle_component"]);
+        this.$refs["battle_component"].forEach((battle_component) => {
+          battle_component.get_battle_data();//同时刷新大乱斗数据
+        });
+      }
       const config = {
         method: "get",
         url: "/api/threads/" + this.thread_id,
