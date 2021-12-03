@@ -66,10 +66,10 @@ class BattleChara
         7 => array(
             'name' => '小豆泥',
             'wait' => 'https://www.z4a.net/images/2021/11/27/QQ20210417143904.png',
-            'against' => 'https://www.z4a.net/images/2021/11/27/BQx4KS.jpg',
+            'against' => 'https://www.z4a.net/images/2021/12/01/QQ20211201220044.gif',
             'attack' => 'https://www.z4a.net/images/2021/11/27/008lY0qrly1gw4ct6dut2g306o06ogme.gif',
             'win' => 'https://www.z4a.net/images/2021/11/27/QQ20210814204640.jpg',
-            'lose' => 'https://www.z4a.net/images/2021/11/27/QQ20210417143911.png',
+            'lose' => 'https://www.z4a.net/images/2021/12/01/QQ20211201220048.gif',
         ),
         8 => array(
             'name' => '小企鹅',
