@@ -142,7 +142,7 @@
             @get_posts_data="get_posts_data"
             @emit_reward="emit_reward"
           >
-            <template
+            <!-- <template
               v-slot:battle
               v-if="
                 post_data.battle_id &&
@@ -154,7 +154,7 @@
                 ref="battle_component"
                 :battle_id="post_data.battle_id"
               ></Battle>
-            </template>
+            </template> -->
           </PostItem>
         </div>
         <div>
