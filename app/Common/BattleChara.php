@@ -95,11 +95,6 @@ class BattleChara
             'win' => 'https://www.z4a.net/images/2021/11/27/2mtBTg.jpg',
             'lose' => 'https://www.z4a.net/images/2021/11/27/RpGEX4.jpg',
         ),
-
-
-
-
-
     );
 
     //骰子结果文字

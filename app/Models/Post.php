@@ -168,7 +168,7 @@ class Post extends myModel
                     'message' => ResponseCode::$codeMap[ResponseCode::BATTLE_NOT_FOUND],
                 ]);
             }
-            $battle_messages  = $battle->BattleMessages;
+            $battle_messages  = $battle->BattleMessages()->get();
 
             //如果有提供binggan，为battle输入binggan，用来判断is_your_battle（为前端提供是否是用户自己帖子的判据）
             if ($this->binggan) {
