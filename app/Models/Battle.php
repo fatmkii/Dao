@@ -23,6 +23,8 @@ class Battle extends Model
 
     public $hidden = [
         'post_id',
+        'created_binggan',
+        'challenger_binggan',
         'initiator_user_id',
         'initiator_chara',
         'challenger_user_id',
