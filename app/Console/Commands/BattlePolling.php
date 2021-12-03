@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Illuminate\Database\QueryException;
 
 class BattlePolling extends Command
 {
@@ -38,9 +40,42 @@ class BattlePolling extends Command
      */
     public function handle()
     {
-        return 0;
+        //清除过期的对战请求
+        try {
+            DB::beginTransaction();
 
-        DB::table('battles')->where('id', 10001)->increment('bet_olo');
-        return 0;
+            $battles_outdate = DB::table('battles')
+                ->where('progress', '<=', 1)
+                ->where('updated_at', "<", Carbon::now()->addMinutes(-5))
+                ->get();
+
+            foreach ($battles_outdate as $battle_outdate) {
+                DB::table('users')->where('id', $battle_outdate->initiator_user_id)->increment('coin', $battle_outdate->battle_olo);
+                if ($battle_outdate->progress == 1) {
+                    DB::table('users')->where('id', $battle_outdate->challenger_user_id)->increment('coin', $battle_outdate->battle_olo);
+                }
+
+                DB::table('battle_messages')->insert(
+                    [
+                        'battle_id' => $battle_outdate->id,
+                        'message_type' => 0,
+                        'message' => '由于超过了5分钟，乱斗已结束。奥利奥已退回。',
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ]
+                );
+            }
+
+            $battles_outdate = DB::table('battles')
+                ->where('progress', '<=', 1)
+                ->where('updated_at', "<", Carbon::now()->addMinutes(-5))
+                ->update(['progress' => 3],);
+            DB::commit();
+        } catch (QueryException $e) {
+            DB::rollback();
+            return false;
+        }
+
+        return true;
     }
 }

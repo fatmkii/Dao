@@ -9,6 +9,7 @@ use App\Http\Controllers\API\ThreadController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\CommonController;
 use App\Http\Controllers\API\AdminController;
+use App\Http\Controllers\API\BattleController;
 use App\Http\Controllers\API\VoteController;
 use App\Http\Controllers\API\GambleController;
 
@@ -63,8 +64,17 @@ Route::prefix('votes')->group(function () {
 Route::prefix('gambles')->group(function () {
     Route::get('/{gamble_id}', [GambleController::class, 'show']); //显示菠菜结果
     Route::post('', [GambleController::class, 'store'])->middleware('CheckBinggan:create');  //用户投注
-    Route::post('/close', [GambleController::class, 'close'])->middleware('auth:sanctum');  //关闭菠菜（只能由管理员操作）
-    Route::post('/repeal', [GambleController::class, 'repeal'])->middleware('auth:sanctum');  //关闭菠菜（只能由管理员操作）
+    Route::post('/close', [GambleController::class, 'close'])->middleware('auth:sanctum');  //开奖菠菜（只能由管理员操作）
+    Route::post('/repeal', [GambleController::class, 'repeal'])->middleware('auth:sanctum');  //中止菠菜（只能由管理员操作）
+});
+
+//Battle系列
+Route::prefix('battles')->group(function () {
+    Route::get('/chara_index', [BattleController::class, 'chara_index']); //获取大乱斗头像组
+    Route::get('/{battle_id}', [BattleController::class, 'show']); //显示大乱斗结果
+    Route::post('', [BattleController::class, 'create'])->middleware('CheckBinggan:create');  //用户发起大乱斗
+    Route::post('/c_roll', [BattleController::class, 'challenger_roll'])->middleware('CheckBinggan:create');  //挑战者投色子
+    Route::post('/i_roll', [BattleController::class, 'initiator_roll'])->middleware('CheckBinggan:create');  //发起者投色子
 });
 
 //User系列

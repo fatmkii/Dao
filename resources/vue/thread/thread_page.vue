@@ -19,16 +19,22 @@
             forum_name
           }}</span>
         </div>
-        <div class="col-auto">
-          <b-form-checkbox v-model="no_image_mode" switch>
+        <b-dropdown
+          id="shield-dropdown"
+          text="屏蔽图"
+          variant="outline-dark"
+          size="sm"
+        >
+          <b-form-checkbox v-model="no_image_mode" switch class="ml-2 my-2">
             无图
           </b-form-checkbox>
-        </div>
-        <div class="col-auto">
-          <b-form-checkbox v-model="no_emoji_mode" switch>
+          <b-form-checkbox v-model="no_emoji_mode" switch class="ml-2 my-2">
             无表情包
           </b-form-checkbox>
-        </div>
+          <b-form-checkbox v-model="no_battle_mode" switch class="ml-2 my-2">
+            无大乱斗
+          </b-form-checkbox>
+        </b-dropdown>
       </div>
       <ThreadPaginator
         :thread_id="thread_id"
@@ -135,7 +141,18 @@
             @quote_click="quote_click_handle"
             @get_posts_data="get_posts_data"
             @emit_reward="emit_reward"
-          ></PostItem>
+          >
+            <template
+              v-slot:battle
+              v-if="
+                post_data.battle_id &&
+                posts_load_status &&
+                no_battle_mode == false
+              "
+            >
+              <Battle :battle_id="post_data.battle_id"></Battle>
+            </template>
+          </PostItem>
         </div>
         <div>
           <PostItem
@@ -216,10 +233,26 @@
         <div class="col-auto ml-auto">
           <svg
             xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="28"
+            fill="currentColor"
+            class="icon-battle bi bi-controller ml-3"
+            viewBox="0 0 16 16"
+            @click="modal_toggle('battle_modal')"
+          >
+            <path
+              d="M11.5 6.027a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-1.5 1.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm2.5-.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-1.5 1.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm-6.5-3h1v1h1v1h-1v1h-1v-1h-1v-1h1v-1z"
+            />
+            <path
+              d="M3.051 3.26a.5.5 0 0 1 .354-.613l1.932-.518a.5.5 0 0 1 .62.39c.655-.079 1.35-.117 2.043-.117.72 0 1.443.041 2.12.126a.5.5 0 0 1 .622-.399l1.932.518a.5.5 0 0 1 .306.729c.14.09.266.19.373.297.408.408.78 1.05 1.095 1.772.32.733.599 1.591.805 2.466.206.875.34 1.78.364 2.606.024.816-.059 1.602-.328 2.21a1.42 1.42 0 0 1-1.445.83c-.636-.067-1.115-.394-1.513-.773-.245-.232-.496-.526-.739-.808-.126-.148-.25-.292-.368-.423-.728-.804-1.597-1.527-3.224-1.527-1.627 0-2.496.723-3.224 1.527-.119.131-.242.275-.368.423-.243.282-.494.575-.739.808-.398.38-.877.706-1.513.773a1.42 1.42 0 0 1-1.445-.83c-.27-.608-.352-1.395-.329-2.21.024-.826.16-1.73.365-2.606.206-.875.486-1.733.805-2.466.315-.722.687-1.364 1.094-1.772a2.34 2.34 0 0 1 .433-.335.504.504 0 0 1-.028-.079zm2.036.412c-.877.185-1.469.443-1.733.708-.276.276-.587.783-.885 1.465a13.748 13.748 0 0 0-.748 2.295 12.351 12.351 0 0 0-.339 2.406c-.022.755.062 1.368.243 1.776a.42.42 0 0 0 .426.24c.327-.034.61-.199.929-.502.212-.202.4-.423.615-.674.133-.156.276-.323.44-.504C4.861 9.969 5.978 9.027 8 9.027s3.139.942 3.965 1.855c.164.181.307.348.44.504.214.251.403.472.615.674.318.303.601.468.929.503a.42.42 0 0 0 .426-.241c.18-.408.265-1.02.243-1.776a12.354 12.354 0 0 0-.339-2.406 13.753 13.753 0 0 0-.748-2.295c-.298-.682-.61-1.19-.885-1.465-.264-.265-.856-.523-1.733-.708-.85-.179-1.877-.27-2.913-.27-1.036 0-2.063.091-2.913.27z"
+            />
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
             fill="currentColor"
-            class="icon-drawer bi bi-pencil ml-2"
+            class="icon-drawer bi bi-pencil ml-3"
             viewBox="0 0 16 16"
             @click="modal_toggle('drawer_modal')"
           >
@@ -232,7 +265,7 @@
             width="24"
             height="24"
             fill="currentColor"
-            class="icon-revoke bi bi-reply-all ml-2"
+            class="icon-revoke bi bi-reply-all ml-3"
             viewBox="0 0 16 16"
             v-b-popover.hover.left="'撤销'"
             @click="content_input_revoke"
@@ -556,6 +589,44 @@
           </b-button-group>
         </template>
       </b-modal>
+      <b-modal ref="battle_modal" id="battle_modal" class="battle_modal">
+        <template v-slot:modal-header>
+          <h5>表情包大乱斗！</h5>
+        </template>
+        <template v-slot:default>
+          <p>问苍茫大地 谁主沉浮</p>
+          <div class="my-1">
+            <b-input-group prepend="角色：">
+              <b-form-select
+                v-model="battle_chara_id"
+                :options="battle_chara_options"
+              ></b-form-select>
+            </b-input-group>
+            <div class="my-1">
+              <b-input-group prepend="下注：">
+                <b-form-input
+                  v-model="battle_olo"
+                  autofocus
+                  @keyup.enter="battle_handle"
+                ></b-form-input>
+              </b-input-group>
+            </div>
+          </div>
+        </template>
+        <template v-slot:modal-footer="{ cancel }">
+          <b-button-group>
+            <b-button
+              variant="success"
+              :disabled="roll_handling"
+              @click="battle_handle"
+              >Fight！</b-button
+            >
+            <b-button variant="outline-secondary" @click="cancel()">
+              取消
+            </b-button>
+          </b-button-group>
+        </template>
+      </b-modal>
       <b-modal
         ref="drawer_modal"
         id="drawer_modal"
@@ -647,6 +718,9 @@ export default {
     no_emoji_mode: function () {
       localStorage.setItem("no_emoji_mode", this.no_emoji_mode ? "true" : "");
     },
+    no_battle_mode: function () {
+      localStorage.setItem("no_battle_mode", this.no_battle_mode ? "true" : "");
+    },
   },
   beforeRouteUpdate(to, from, next) {
     this.browse_record_handle(); //翻页时候记录浏览进度
@@ -671,9 +745,13 @@ export default {
       jump_floor: "",
       jump_page: "",
       jump_page_show: false,
+      battle_olo: 100,
+      battle_chara_options: [],
+      battle_chara_id: undefined,
       z_bar_show: false,
       no_image_mode: false,
       no_emoji_mode: false,
+      no_battle_mode: false,
       emoji_auto_hide: true,
       upload_img_handling: false,
       browse_current: {
@@ -814,6 +892,24 @@ export default {
           }
         })
         .catch((error) => {
+          alert(Object.values(error.response.data.errors)[0]);
+        });
+    },
+    get_chara_index() {
+      const config = {
+        method: "get",
+        url: "/api/battles/chara_index",
+      };
+      axios(config)
+        .then((response) => {
+          if (response.data.code == 200) {
+            this.battle_chara_options = response.data.chara_index;
+          } else {
+            alert(response.data.message);
+          }
+        })
+        .catch((error) => {
+          this.roll_handling = false;
           alert(Object.values(error.response.data.errors)[0]);
         });
     },
@@ -1007,6 +1103,9 @@ export default {
       }
     },
     modal_toggle(modal_name) {
+      if (modal_name == "battle_modal") {
+        this.get_chara_index();
+      }
       this.$refs[modal_name].toggle();
     },
     upload_drawer_click() {
@@ -1038,6 +1137,40 @@ export default {
             this.content_input = "";
             this.roll_handling = false;
             this.$refs["roll_modal"].hide();
+            this.get_posts_data();
+          } else {
+            this.roll_handling = false;
+            alert(response.data.message);
+          }
+        })
+        .catch((error) => {
+          this.roll_handling = false;
+          alert(Object.values(error.response.data.errors)[0]);
+        });
+    },
+    battle_handle() {
+      this.roll_handling = true;
+      const config = {
+        method: "post",
+        url: "/api/battles",
+        data: {
+          binggan: this.$store.state.User.Binggan,
+          forum_id: this.forum_id,
+          thread_id: this.thread_id,
+          battle_olo: this.battle_olo,
+          chara_id: this.battle_chara_id,
+        },
+      };
+      axios(config)
+        .then((response) => {
+          if (response.data.code == 200) {
+            this.$bvToast.toast(response.data.message, {
+              title: "Done.",
+              autoHideDelay: 1500,
+              appendToast: true,
+            });
+            this.roll_handling = false;
+            this.$refs["battle_modal"].hide();
             this.get_posts_data();
           } else {
             this.roll_handling = false;
@@ -1164,6 +1297,11 @@ export default {
       localStorage.no_emoji_mode = "";
     } else {
       this.no_emoji_mode = Boolean(localStorage.no_emoji_mode);
+    }
+    if (localStorage.getItem("no_battle_mode") == null) {
+      localStorage.no_battle_mode = "";
+    } else {
+      this.no_battle_mode = Boolean(localStorage.no_battle_mode);
     }
   },
   mounted() {

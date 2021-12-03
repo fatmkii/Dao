@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->integer('coin')->default(0); //通用货币
             $table->timestamp('last_login')->nullable();
             $table->string('created_ip')->nullable();
+            $table->string('created_UUID')->nullable();
             $table->boolean('use_pingbici')->default(0); 
             $table->timestamps();
         });

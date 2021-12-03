@@ -141,13 +141,14 @@ body {
     .router-link-active {
         @include font_color("font_color_nav");
     }
-    .btn-outline-dark {
-        @include font_color("font_color_nav");
-    }
-    .btn-outline-dark:hover {
-        @include font_color("font_color5");
-    }
 }
+.btn-outline-dark {
+    @include font_color("font_color_nav");
+}
+.btn-outline-dark:hover {
+    @include font_color("font_color5");
+}
+
 .favicon {
     max-width: 32px;
     max-height: 32px;
@@ -215,7 +216,8 @@ body {
 .svg-icon,
 .icon-back,
 .icon-revoke,
-.icon-drawer {
+.icon-drawer,
+.icon-battle {
     cursor: pointer;
 }
 //菠菜下注列表
@@ -355,6 +357,14 @@ label.custom-file-label::after {
     border-radius: 10px;
     @include background_color("background_color7");
     @include border_color("border_color2");
+}
+.battle_message_system {
+    @include background_color("background_color3");
+    border-radius: 10px;
+    padding-left: ($spacer * 0.5);
+    padding-right: ($spacer * 0.5);
+    padding-top: ($spacer * 0.25);
+    padding-bottom: ($spacer * 0.25);
 }
 
 [v-cloak] {

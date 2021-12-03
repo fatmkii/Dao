@@ -15,14 +15,16 @@ class CreateBattlesTable extends Migration
     {
         Schema::create('battles', function (Blueprint $table) {
             $table->id()->startingValue(10001);
-            $table->integer('post_id')->index();
+            $table->string('created_binggan');
+            $table->tinyInteger('progress')->default(0)->index(); //0=等待挑战者；1=挑战者已参加；2=正常结束；3=超时关闭
             $table->integer('initiator_user_id');
-            $table->integer('initiator_head');
+            $table->tinyInteger('initiator_chara');
+            $table->unsignedTinyInteger('initiator_rand_num')->nullable();
             $table->integer('challenger_user_id')->nullable();
-            $table->integer('challenger_head')->nullable();
-            $table->integer('bet_olo');
-            $table->tinyInteger('result')->nullable();
-            $table->timestamp('end_date');
+            $table->tinyInteger('challenger_chara')->nullable();
+            $table->unsignedTinyInteger('challenger_rand_num')->nullable();
+            $table->tinyInteger('result')->default(0); //0=进行中；1=发起者胜利；2=挑战者胜利；3=平局
+            $table->integer('battle_olo');
             $table->timestamps();
         });
     }
