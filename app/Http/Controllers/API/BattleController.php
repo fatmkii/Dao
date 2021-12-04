@@ -140,7 +140,8 @@ class BattleController extends Controller
 
         $user = $request->user;
 
-        $battle = Battle::find($request->battle_id);
+        // $battle = Battle::find($request->battle_id);
+        $battle = DB::table('battles')->where('id', $request->battle_id)->sharedLock()->first();//改用悲观锁
         if (!$battle) {
             return response()->json([
                 'code' => ResponseCode::BATTLE_NOT_FOUND,
@@ -175,12 +176,25 @@ class BattleController extends Controller
         try {
             DB::beginTransaction();
 
-            $battle->progress = 1;
-            $battle->challenger_binggan = $request->binggan;
-            $battle->challenger_user_id = $user->id;
-            $battle->challenger_chara = $request->chara_id;
-            $battle->challenger_rand_num = $rand_num;
-            $battle->save();
+            // $battle->progress = 1;
+            // $battle->challenger_binggan = $request->binggan;
+            // $battle->challenger_user_id = $user->id;
+            // $battle->challenger_chara = $request->chara_id;
+            // $battle->challenger_rand_num = $rand_num;
+            // $battle->save();
+
+            //用了悲观锁，就不能用eloquent更新了？好像。
+            DB::table('battles')->where('id', $request->battle_id)->update(
+                [
+                    'progress' => 1,
+                    'challenger_binggan' => $request->binggan,
+                    'challenger_user_id' => $user->id,
+                    'challenger_chara' => $request->chara_id,
+                    'challenger_rand_num' => $rand_num,
+                ]
+            );
+           
+            DB::commit();
 
             //发起挑战的动作
             $battle_message = new BattleMessage;
