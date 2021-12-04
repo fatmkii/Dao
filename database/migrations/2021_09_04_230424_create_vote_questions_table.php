@@ -18,7 +18,7 @@ class CreateVoteQuestionsTable extends Migration
             $table->integer('thread_id')->index();
             $table->text('title');
             $table->timestamp('end_date');
-            $table->integer('vote_total')->default(0);
+            $table->unsignedInteger('vote_total')->default(0);
             $table->boolean('multiple')->default(0); //多选，还没做
             $table->timestamps();
         });

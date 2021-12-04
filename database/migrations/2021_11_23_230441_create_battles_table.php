@@ -25,7 +25,7 @@ class CreateBattlesTable extends Migration
             $table->tinyInteger('challenger_chara')->nullable();
             $table->unsignedTinyInteger('challenger_rand_num')->nullable();
             $table->tinyInteger('result')->default(0); //0=进行中；1=发起者胜利；2=挑战者胜利；3=平局
-            $table->integer('battle_olo');
+            $table->unsignedInteger('battle_olo');
             $table->timestamps();
         });
     }

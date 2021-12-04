@@ -18,8 +18,8 @@ class CreateGambleQuestionsTable extends Migration
             $table->integer('thread_id')->index();
             $table->text('title');
             $table->timestamp('end_date');
-            $table->integer('bet_total')->default(0);
-            $table->integer('olo_total')->default(0);
+            $table->unsignedInteger('bet_total')->default(0);
+            $table->unsignedInteger('olo_total')->default(0);
             $table->integer('result_option_id')->nullable();
             $table->tinyInteger('is_closed')->default(0); //0=进行中；1=已正常结束；2=已中止
             $table->timestamps();

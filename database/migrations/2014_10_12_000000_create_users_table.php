@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->boolean('is_banned')->default(0); //0=正常；1=banned；
             $table->timestamp('locked_until')->nullable(); //被暂时锁定直到某时间
             $table->tinyInteger('admin')->default(0); //1=一般管理员，99=超管
-            $table->integer('coin')->default(0); //通用货币
+            $table->unsignedInteger('coin')->default(0); //通用货币
             $table->timestamp('last_login')->nullable();
             $table->string('created_ip')->nullable();
             $table->string('created_UUID')->nullable();
