@@ -85,7 +85,7 @@ return [
     'mimes' => 'The :attribute must be a file of type: :values.',
     'mimetypes' => 'The :attribute must be a file of type: :values.',
     'min' => [
-        'numeric' => 'The :attribute must be at least :min.',
+        'numeric' => ':attribute必须大于:min',
         'file' => 'The :attribute must be at least :min kilobytes.',
         'string' => 'The :attribute must be at least :min characters.',
         'array' => 'The :attribute must have at least :min items.',
@@ -157,6 +157,7 @@ return [
         'title_pingbici' => '标题屏蔽词',
         'content_pingbici' => '内容屏蔽词',
         'IP' => 'IP',
+        'coin' => '奥利奥',
         'roll_event' => 'Roll点事件',
         'betting_olo' => '下注奥利奥',
         'chara_id' => '乱斗角色 ',

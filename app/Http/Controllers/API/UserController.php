@@ -247,7 +247,7 @@ class UserController extends Controller
         $request->validate([
             'binggan' => 'required|string',
             'post_floor_message' => 'required|string',
-            'coin' => 'required|integer',
+            'coin' => 'required|integer|min:1',
             'forum_id' => 'required|integer',
             'thread_id' => 'required|integer',
             'post_id' => 'required|integer',
