@@ -742,7 +742,6 @@ export default {
       roll_num: 1,
       roll_range: 100,
       roll_handling: false,
-      // random_heads_data: Object,
       admin_button_show: false,
       preview_show: false,
       post_with_admin: false,
@@ -750,7 +749,6 @@ export default {
       jump_page: "",
       jump_page_show: false,
       battle_olo: 100,
-      // battle_chara_options: [],
       battle_chara_id: undefined,
       z_bar_show: false,
       no_image_mode: false,
@@ -840,12 +838,6 @@ export default {
   },
   methods: {
     get_posts_data(remind = false, scroll_enable = false) {
-      // if (this.$refs["battle_component"] !== undefined) {
-      //   console.log(this.$refs["battle_component"]);
-      //   this.$refs["battle_component"].forEach((battle_component) => {
-      //     battle_component.get_battle_data();//同时刷新大乱斗数据
-      //   });
-      // }
       const config = {
         method: "get",
         url: "/api/threads/" + this.thread_id,
@@ -867,9 +859,6 @@ export default {
               response.data.forum_data
             );
             this.$store.commit("PostsLoadStatus_set", 1);
-            // this.random_heads_data = JSON.parse(
-            //   response.data.random_heads.random_heads
-            // );
             document.title = this.thread_title; //设置浏览器页面标签文字
             if (remind) {
               this.$bvToast.toast("已刷新帖子", {
@@ -881,7 +870,6 @@ export default {
             this.$nextTick(() => {
               //渲染完成后执行
               //如果有设定上次阅读进度，则滚动到上次进度
-              // const page = isNaN(this.page) ? 1 : this.page;
               if (
                 this.browse_current.page == this.page &&
                 typeof this.$store.state.User.BrowseLogger[
@@ -906,24 +894,6 @@ export default {
           alert(Object.values(error.response.data.errors)[0]);
         });
     },
-    // get_chara_index() {
-    //   const config = {
-    //     method: "get",
-    //     url: "/api/battles/chara_index",
-    //   };
-    //   axios(config)
-    //     .then((response) => {
-    //       if (response.data.code == 200) {
-    //         this.battle_chara_options = response.data.chara_index;
-    //       } else {
-    //         alert(response.data.message);
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       this.roll_handling = false;
-    //       alert(Object.values(error.response.data.errors)[0]);
-    //     });
-    // },
     get_browse_current() {
       if (
         typeof this.$store.state.User.BrowseLogger[this.thread_id.toString()] !=

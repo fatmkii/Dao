@@ -109,7 +109,6 @@ export default {
       name: "battle",
       get_data_handling: true,
       post_roll_handling: false,
-      // battle_chara_options: [],
       battle_chara_id: undefined,
     };
   },
@@ -119,52 +118,6 @@ export default {
     },
   },
   methods: {
-    // get_battle_data() {
-    //   const config = {
-    //     method: "get",
-    //     url: "/api/battles/" + this.battle_id,
-    //     params: {
-    //       binggan: this.$store.state.User.Binggan,
-    //     },
-    //   };
-    //   axios(config)
-    //     .then((response) => {
-    //       if (response.data.code == 200) {
-    //         this.battle_messages = response.data.battle_messages;
-    //         this.battle_data = response.data.battle;
-    //         if (
-    //           this.battle_data.progress == 0 &&
-    //           this.battle_data.is_your_battle == false
-    //         ) {
-    //           this.get_chara_index();
-    //         }
-    //         this.get_data_handling = false;
-    //       } else {
-    //         alert(response.data.message);
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       alert(Object.values(error.response.data.errors)[0]);
-    //     });
-    // },
-    // get_chara_index() {
-    //   const config = {
-    //     method: "get",
-    //     url: "/api/battles/chara_index",
-    //   };
-    //   axios(config)
-    //     .then((response) => {
-    //       if (response.data.code == 200) {
-    //         this.battle_chara_options = response.data.chara_index;
-    //       } else {
-    //         alert(response.data.message);
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       this.roll_handling = false;
-    //       alert(Object.values(error.response.data.errors)[0]);
-    //     });
-    // },
     challenger_roll_handle() {
       var confirmed = confirm(
         "要参加大乱斗吗？押注：" + this.battle_data.battle_olo + "个奥利奥"
@@ -219,14 +172,6 @@ export default {
         });
     },
   },
-  created() {
-    // this.get_battle_data();
-    // if (
-    //   this.battle_data.progress == 0 &&
-    //   this.battle_data.is_your_battle == false
-    // ) {
-    //   this.get_chara_index();
-    // }
-  },
+  created() {},
 };
 </script>

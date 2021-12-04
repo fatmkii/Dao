@@ -18,18 +18,6 @@ use App\Jobs\ProcessUserActive;
 
 class BattleController extends Controller
 {
-    public function chara_index()
-    {
-        $chara_index = Cache::remember('battle_chara_cache',  24 * 3600, function () {
-            return BattleChara::CharaHeadIndex();
-        });
-        return response()->json([
-            'code' => ResponseCode::SUCCESS,
-            'message' => ResponseCode::$codeMap[ResponseCode::SUCCESS],
-            'chara_index' => $chara_index,
-        ]);
-    }
-
     public function show(Request $request, $battle_id)
     {
         $battle = Battle::find($battle_id);

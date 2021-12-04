@@ -70,7 +70,6 @@ Route::prefix('gambles')->group(function () {
 
 //Battle系列
 Route::prefix('battles')->group(function () {
-    Route::get('/chara_index', [BattleController::class, 'chara_index']); //获取大乱斗头像组
     Route::get('/{battle_id}', [BattleController::class, 'show']); //显示大乱斗结果
     Route::post('', [BattleController::class, 'create'])->middleware('CheckBinggan:create');  //用户发起大乱斗
     Route::post('/c_roll', [BattleController::class, 'challenger_roll'])->middleware('CheckBinggan:create');  //挑战者投色子
