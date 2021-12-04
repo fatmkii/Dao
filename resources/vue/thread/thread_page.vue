@@ -750,7 +750,7 @@ export default {
       jump_page: "",
       jump_page_show: false,
       battle_olo: 100,
-      battle_chara_id: undefined,
+      battle_chara_id: 8,
       z_bar_show: false,
       no_image_mode: false,
       no_emoji_mode: false,
