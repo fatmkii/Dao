@@ -47,7 +47,7 @@ class ThreadController extends Controller
             'nissin_time' => 'integer',
             'random_heads_group' => 'integer',
             'post_with_admin' => 'boolean',
-            'locked_by_coin' => 'integer|max:1000000',
+            'locked_by_coin' => 'integer|max:1000000|min:1',
             'is_vote' => 'boolean|required',
             'is_gamble' => 'boolean|required',
         ]);

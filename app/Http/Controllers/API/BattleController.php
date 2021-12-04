@@ -48,7 +48,7 @@ class BattleController extends Controller
             'binggan' => 'required|string',
             'forum_id' => 'required|integer',
             'thread_id' => 'required|integer',
-            'battle_olo' => 'required|integer|max:100000',
+            'battle_olo' => 'required|integer|max:100000|min:1',
             'chara_id' => 'required|integer',
         ]);
 

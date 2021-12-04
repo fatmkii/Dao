@@ -52,7 +52,7 @@ class GambleController extends Controller
             'binggan' => 'required|string|max:100',
             'gamble_question_id' => 'integer|required',
             'bet_option' => 'integer|required',
-            'betting_olo' => 'required|integer|max:1000000',
+            'betting_olo' => 'required|integer|max:1000000|min:1',
         ]);
 
         $user = $request->user;
