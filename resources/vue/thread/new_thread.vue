@@ -190,6 +190,9 @@
           <div class="col-4">
             <span class="h6 my-2">选择随机头像组</span>
           </div>
+          <div class="col-4">
+            <span class="h6 my-2">启用大乱斗</span>
+          </div>
         </div>
         <div class="row align-items-center mt-3">
           <div class="col-4">
@@ -198,6 +201,12 @@
               :options="random_heads_group"
               value-field="id"
               text-field="name"
+            ></b-form-select>
+          </div>
+          <div class="col-4">
+            <b-form-select
+              v-model="can_battle_selected"
+              :options="can_battle_options"
             ></b-form-select>
           </div>
         </div>
@@ -307,7 +316,7 @@
           v-model="is_gamble"
           :disabled="forum_id != 12"
         >
-          开启菠菜（500奥利奥）  目前只能在海滨乐园岛开菠菜（避免被日清）
+          开启菠菜（500奥利奥） 目前只能在海滨乐园岛开菠菜（避免被日清）
         </b-form-checkbox>
         <div class="row align-items-center">
           <div class="col-auto">
@@ -430,6 +439,11 @@ export default {
         { value: 172800, text: "48小时" },
         { value: 259200, text: "72小时" },
       ],
+      can_battle_selected: 1,
+      can_battle_options: [
+        { value: 1, text: "开启" },
+        { value: 0, text: "禁止" },
+      ],
       nissin_time_selected: 86400,
       title_color_input: "",
       post_with_admin: false,
@@ -475,6 +489,14 @@ export default {
     is_gamble() {
       if (this.is_gamble) {
         this.is_vote = false;
+      }
+    },
+    subtitles_selected() {
+      if (this.subtitles_selected == "[专楼]") {
+        this.can_battle_selected = 0;
+      }
+      if (this.subtitles_selected == "[闲聊]") {
+        this.can_battle_selected = 1;
       }
     },
   },
@@ -549,6 +571,7 @@ export default {
           locked_by_coin: this.locked_by_coin_input,
           is_vote: this.is_vote,
           is_gamble: this.is_gamble,
+          can_battle: this.can_battle_selected,
         },
       };
       if (this.is_vote) {

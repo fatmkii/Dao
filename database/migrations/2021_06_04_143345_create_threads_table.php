@@ -30,7 +30,7 @@ class CreateThreadsTable extends Migration
             $table->boolean('anti_jingfen')->default(0);
             $table->timestamp('nissin_date')->nullable();
             $table->tinyInteger('is_deleted')->default(0); //0=正常；1=被用户删除；2=被管理员删除
-            $table->boolean('is_anonymous')->default(0);
+            $table->boolean('can_battle')->default(1);
             $table->mediumInteger('locked_by_coin')->unsigned()->default(0);
             $table->timestamps();
         });

@@ -48,6 +48,7 @@ class ResponseCode
     const BATTLE_HAS_BEEN_ROLL_I = 274031;
     const BATTLE_HAS_BEEN_ROLL_C = 274032;
     const BATTLE_HAS_BEEN_CLOSED = 274101;
+    const BATTLE_CANNOT_CREATED = 274112;
 
     const LOGIN_FAILED = 20001;
 
@@ -92,6 +93,7 @@ class ResponseCode
         self::BATTLE_HAS_BEEN_CLOSED => '大乱斗已关闭',
         self::BATTLE_HAS_BEEN_ROLL_C => '已经有挑战者参加了',
         self::BATTLE_HAS_BEEN_ROLL_I => '大乱斗还在等待挑战者',
+        self::BATTLE_CANNOT_CREATED => '本主题不能发起大乱斗',
     ];
 }
 

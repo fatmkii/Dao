@@ -40,8 +40,6 @@ class BattleController extends Controller
         ]);
     }
 
-
-
     public function create(Request $request)
     {
         $request->validate([
@@ -53,6 +51,14 @@ class BattleController extends Controller
         ]);
 
         $user = $request->user;
+
+        $can_battle = DB::table('threads')->where('id', $request->thread_id)->value('can_battle');
+        if ($can_battle == 0) {
+            return response()->json([
+                'code' => ResponseCode::BATTLE_CANNOT_CREATED,
+                'message' => ResponseCode::$codeMap[ResponseCode::BATTLE_CANNOT_CREATED],
+            ]);
+        }
 
         try {
             DB::beginTransaction();
@@ -141,7 +147,7 @@ class BattleController extends Controller
         $user = $request->user;
 
         // $battle = Battle::find($request->battle_id);
-        $battle = DB::table('battles')->where('id', $request->battle_id)->sharedLock()->first();//改用悲观锁
+        $battle = DB::table('battles')->where('id', $request->battle_id)->sharedLock()->first(); //改用悲观锁
         if (!$battle) {
             return response()->json([
                 'code' => ResponseCode::BATTLE_NOT_FOUND,
@@ -193,7 +199,7 @@ class BattleController extends Controller
                     'challenger_rand_num' => $rand_num,
                 ]
             );
-           
+
             DB::commit();
 
             //发起挑战的动作

@@ -30,7 +30,6 @@ class Post extends myModel
     protected $hidden = [
         'created_IP',
         'created_binggan',
-        'is_anonymous',
         'updated_at',
         'forum_id',
     ];

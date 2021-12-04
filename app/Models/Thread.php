@@ -18,7 +18,6 @@ class Thread extends myModel
     public $hidden = [
         'created_binggan',
         'created_IP',
-        'is_anonymous',
         'is_deleted',
         'forum',
     ];

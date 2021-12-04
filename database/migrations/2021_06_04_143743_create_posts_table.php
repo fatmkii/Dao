@@ -26,7 +26,6 @@ class CreatePostsTable extends Migration
                 $table->tinyInteger('created_by_admin')->default(0); //0=一般用户 1=管理员发布，2=系统发布
                 $table->mediumText('content')->nullable();
                 $table->string('nickname')->nullable();
-                $table->boolean('is_anonymous')->default('0');
                 $table->string('created_IP')->nullable()->default(null);
                 $table->string('created_binggan')->nullable()->default(null);
             });

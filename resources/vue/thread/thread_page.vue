@@ -618,10 +618,11 @@
           </div>
         </template>
         <template v-slot:modal-footer="{ cancel }">
+          <span v-if="!thread_can_battle">本主题不能发起大乱斗</span>
           <b-button-group>
             <b-button
               variant="success"
-              :disabled="roll_handling"
+              :disabled="roll_handling || !thread_can_battle"
               @click="battle_handle"
               >Fight！</b-button
             >
@@ -819,6 +820,7 @@ export default {
         state.Forums.CurrentForumData.id ? state.Forums.CurrentForumData.id : 0,
       thread_title: (state) => state.Threads.CurrentThreadData.title,
       thread_sub_id: (state) => state.Threads.CurrentThreadData.sub_id,
+      thread_can_battle: (state) => state.Threads.CurrentThreadData.can_battle,
       thread_anti_jingfen: (state) =>
         state.Threads.CurrentThreadData.anti_jingfen,
       thread_posts_num: (state) => state.Threads.CurrentThreadData.posts_num,
@@ -833,7 +835,7 @@ export default {
       posts_load_status: (state) => state.Posts.PostsLoadStatus,
       locked_TTL: (state) => state.User.LockedTTL,
       random_heads_data: (state) => state.User.RandomHeads,
-      battle_chara_options:(state) => state.User.CharaIndex,
+      battle_chara_options: (state) => state.User.CharaIndex,
     }),
   },
   methods: {
