@@ -143,7 +143,7 @@ class BattleChara
     public static function CharaRandNum($chara_id)
     {
         switch ($chara_id) {
-            case 9: //元元可以掷出最大101点
+            case 10: //元元可以掷出最大101点
                 return random_int(1, 101);
             default:
                 return random_int(1, 100);
