@@ -173,7 +173,7 @@ export default {
         padding: CryptoJS.pad.Pkcs7,
       };
 
-      const CRC = this.getCanvasFp("Cpttmm.com");
+      const CRC = this.getCanvasFp("BrowserLeaks,com <canvas> 1.0");
       const encrypted = CryptoJS.AES.encrypt(
         "XiaoHuoGuo" + CRC,
         key,
