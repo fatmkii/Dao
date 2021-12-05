@@ -44,7 +44,7 @@ class PostController extends Controller
         ]);
 
         $user = $request->user;
-        
+
         //灌水检查
         $water_check = $user->waterCheck('new_post');
         if ($water_check != 'ok') return $water_check;
@@ -75,16 +75,14 @@ class PostController extends Controller
             $post->created_by_admin = $request->post_with_admin  ? 1 : 0;
             $post->created_ip = $request->ip();
             $post->random_head = random_int(0, 39);
-            // $post->floor = Post::suffix(intval($request->thread_id / 10000))->where('thread_id', $request->thread_id)->count();
-            // $post->save();
+
             $thread = $post->thread;
-            // $thread = Thread::where('id', $post->thread->id)->sharedLock()->first();//用sharelock防止posts_num错误
-            // $thread->posts_num++;
-            // $post->floor = $thread->posts_num;
-            $thread->posts_num = $thread->posts->count();
-            $post->floor = $thread->posts->count();
+            $thread->posts_num = POST::Suffix(intval($request->thread_id / 10000))->where('thread_id', $request->thread_id)->count();
+            $post->floor = $thread->posts_num;
+
             $thread->save();
             $post->save();
+
             $user->coin += 10; //回复+10奥利奥
             $user->save();
             DB::commit();
@@ -99,20 +97,6 @@ class PostController extends Controller
         //用redis记录回频率。
         $user->waterRecord('new_post');
 
-
-        //清除redis的posts缓存
-        // for ($i = 1; $i <= ceil($thread->posts_num / 200); $i++) {
-        //     Cache::forget('threads_cache_' . $thread->id . '_' . $i);
-        // }
-        // ProcessUserActive::dispatch(
-        //     [
-        //         'binggan' => $user->binggan,
-        //         'user_id' => $user->id,
-        //         'active' => '用户发表了新回帖',
-        //         'thread_id' => $thread->id,
-        //         'post_id' => $post->id,
-        //     ]
-        // );
         return response()->json(
             [
                 'code' => ResponseCode::SUCCESS,
@@ -195,7 +179,6 @@ class PostController extends Controller
         }
 
         //判断饼干是否足够
-        // $user = User::where('binggan', $request->binggan)->first();
         $user = $request->user;
         if ($user->coin < 300) {
             return response()->json(
@@ -214,11 +197,7 @@ class PostController extends Controller
         $user->coin -= 300; //删除帖子扣除300奥利奥
         $user->save();
 
-        //清除redis的posts缓存
-        // $thread = $post->thread;
-        // for ($i = 1; $i <= ceil($thread->posts_num / 200); $i++) {
-        //     Cache::forget('threads_cache_' . $thread->id . '_' . $i);
-        // }
+
         ProcessUserActive::dispatch(
             [
                 'binggan' => $user->binggan,
@@ -395,11 +374,9 @@ class PostController extends Controller
             $post->nickname = 'Roll点系统';
             $post->created_ip = $request->ip();
             $post->random_head = random_int(1, 40);
-            // $post->floor = Post::suffix(intval($request->thread_id / 10000))->where('thread_id', $request->thread_id)->count();
-            // $post->save();
 
             $thread = $post->thread;
-            $thread->posts_num++;
+            $thread->posts_num = POST::Suffix(intval($request->thread_id / 10000))->where('thread_id', $request->thread_id)->count();;
             $post->floor = $thread->posts_num;
             $thread->save();
             $post->save();
@@ -412,10 +389,6 @@ class PostController extends Controller
             ]);
         }
 
-        //清除redis的posts缓存
-        // for ($i = 1; $i <= ceil($thread->posts_num / 200); $i++) {
-        //     Cache::forget('threads_cache_' . $thread->id . '_' . $i);
-        // }
         ProcessUserActive::dispatch(
             [
                 'binggan' => $user->binggan,

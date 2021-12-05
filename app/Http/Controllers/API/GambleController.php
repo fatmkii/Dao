@@ -146,8 +146,8 @@ class GambleController extends Controller
             $post->created_ip = $request->ip();
             $post->random_head = random_int(0, 39);
             $thread = $post->thread;
-            $thread->posts_num = $thread->posts->count();
-            $post->floor = $thread->posts->count();
+            $thread->posts_num = POST::Suffix(intval($request->thread_id / 10000))->where('thread_id', $request->thread_id)->count();
+            $post->floor = $thread->posts_num;
             $thread->save();
             $post->save();
             DB::commit();
@@ -315,8 +315,8 @@ class GambleController extends Controller
             $post->created_ip = $request->ip();
             $post->random_head = random_int(0, 39);
             $thread = $post->thread;
-            $thread->posts_num = $thread->posts->count();
-            $post->floor = $thread->posts->count();
+            $thread->posts_num = POST::Suffix(intval($request->thread_id / 10000))->where('thread_id', $request->thread_id)->count();
+            $post->floor = $thread->posts_num;
             $thread->save();
             $post->save();
             DB::commit();
@@ -403,8 +403,8 @@ class GambleController extends Controller
             $post->created_ip = $request->ip();
             $post->random_head = random_int(0, 39);
             $thread = $post->thread;
-            $thread->posts_num = $thread->posts->count();
-            $post->floor = $thread->posts->count();
+            $thread->posts_num = POST::Suffix(intval($request->thread_id / 10000))->where('thread_id', $request->thread_id)->count();
+            $post->floor = $thread->posts_num;
             $thread->save();
             $post->save();
             DB::commit();

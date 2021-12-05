@@ -78,7 +78,7 @@ class BattleController extends Controller
             $post->created_ip = $request->ip();
             $post->random_head = random_int(1, 40);
             $thread = $post->thread;
-            $thread->posts_num++;
+            $thread->posts_num = POST::Suffix(intval($request->thread_id / 10000))->where('thread_id', $request->thread_id)->count();
             $post->floor = $thread->posts_num;
             $post->save();
             $thread->save();
