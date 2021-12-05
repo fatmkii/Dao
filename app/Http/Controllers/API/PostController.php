@@ -43,51 +43,11 @@ class PostController extends Controller
             'post_with_admin' => 'boolean',
         ]);
 
-
-
-        // $user = User::where('binggan', $request->binggan)->first();
         $user = $request->user;
-        // if (!$user) {
-        //     return response()->json(
-        //         [
-        //             'code' => ResponseCode::USER_NOT_FOUND,
-        //             'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
-        //         ],
-        //     );
-        // }
-
-        //如果回帖频率过高，返回错误
-        if (Redis::GET('new_post_record_' . $request->binggan) >= 10 && $user->admin == 0) {
-            return response()->json([
-                'code' => ResponseCode::POST_TOO_MANY,
-                'message' => ResponseCode::$codeMap[ResponseCode::POST_TOO_MANY] . '为防止刷屏，每1分钟最多回帖10次',
-            ]);
-        }
-
-        //如果饼干被ban，直接返回错误
-        // if ($user->is_banned) {
-        //     return response()->json(
-        //         [
-        //             'code' => ResponseCode::USER_BANNED,
-        //             'message' => ResponseCode::$codeMap[ResponseCode::USER_BANNED],
-        //             'data' => [
-        //                 'binggan' => $user->binggan,
-        //             ],
-        //         ],
-        //         401
-        //     );
-        // }
-
-        //查询饼干是否在封禁期
-        // if ($user->lockedTTL) {
-        //     $lockTTL_hours = intval($user->lockedTTL / 3600) + 1;
-        //     return response()->json(
-        //         [
-        //             'code' => ResponseCode::USER_LOCKED,
-        //             'message' => ResponseCode::$codeMap[ResponseCode::USER_LOCKED] . '，将于' . $lockTTL_hours . '小时后解封',
-        //         ],
-        //     );
-        // }
+        
+        //灌水检查
+        $water_check = $user->waterCheck('new_post');
+        if ($water_check != 'ok') return $water_check;
 
         //确认是否冒充管理员发帖
         if (
@@ -136,12 +96,9 @@ class PostController extends Controller
             ]);
         }
 
-        //用redis记录回频率。限定1分钟内只能回帖10次。
-        if (Redis::exists('new_post_record_' . $request->binggan)) {
-            Redis::incr('new_post_record_' . $request->binggan);
-        } else {
-            Redis::setex('new_post_record_' . $request->binggan,  60, 1);
-        }
+        //用redis记录回频率。
+        $user->waterRecord('new_post');
+
 
         //清除redis的posts缓存
         // for ($i = 1; $i <= ceil($thread->posts_num / 200); $i++) {

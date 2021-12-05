@@ -247,24 +247,16 @@ class UserController extends Controller
         $request->validate([
             'binggan' => 'required|string',
             'post_floor_message' => 'required|string',
-            'coin' => 'required|integer|min:1',
+            'coin' => 'required|integer|min:1|max:1000000',
             'forum_id' => 'required|integer',
             'thread_id' => 'required|integer',
             'post_id' => 'required|integer',
         ]);
 
         $user = $request->user;
-        // $user = User::where('binggan', $request->binggan)->first();
         $post_target = Post::suffix(intval($request->thread_id / 10000))->find($request->post_id);
         $user_target = User::where('binggan', $post_target->created_binggan)->first();
 
-        //判断用户饼干是否存在
-        // if (!$user) {
-        //     return response()->json([
-        //         'code' => ResponseCode::USER_NOT_FOUND,
-        //         'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
-        //     ]);
-        // }
         //判断对象用户饼干是否存在
         if (!$user_target) {
             return response()->json([

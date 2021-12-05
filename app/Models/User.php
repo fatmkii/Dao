@@ -12,6 +12,7 @@ use App\Models\Pingbici;
 use App\Models\MyEmoji;
 use App\Models\Admin;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Redis;
 
 use function Symfony\Component\VarDumper\Dumper\esc;
 
@@ -63,6 +64,10 @@ class User extends Authenticatable
         'locked_TTL',
     ];
 
+    const NEW_THREAD_INTERVAL = 300; //发新主题频率
+    const NEW_POST_NUMBER = 10; //回帖次数（也就是60秒10次）
+    const NEW_POST_INTERVAL = 60; //回帖频率（含大乱斗）
+
     protected static function booted()
     {
         // static::retrieved(function ($user) {
@@ -72,6 +77,53 @@ class User extends Authenticatable
         // });
     }
 
+
+    //发帖、回帖频率检查
+    public function waterCheck(string $action)
+    {
+        switch ($action) {
+            case 'new_post': {
+                    if (Redis::GET('new_post_record_' . $this->binggan) >= self::NEW_POST_NUMBER && $this->admin == 0) {
+                        return response()->json([
+                            'code' => ResponseCode::POST_TOO_MANY,
+                            'message' => ResponseCode::$codeMap[ResponseCode::POST_TOO_MANY] . '为防止刷屏，每1分钟最多回帖10次（含大乱斗）',
+                        ]);
+                    }
+                    break;
+                }
+            case 'new_thread': {
+                    if (Redis::exists('new_thread_record_' . $this->binggan) &&  $this->admin == 0) {
+                        $limted_minutes = ceil(Redis::TTL('new_thread_record_' . $this->binggan) / 60);
+                        return response()->json([
+                            'code' => ResponseCode::THREAD_TOO_MANY,
+                            'message' => ResponseCode::$codeMap[ResponseCode::THREAD_TOO_MANY] . '，你只能在'
+                                . $limted_minutes . '分钟后再发新主题。',
+                        ]);
+                    }
+                    break;
+                }
+        }
+        return 'ok';
+    }
+
+    //发帖、回帖频率写入Redis
+    public function waterRecord(string $action)
+    {
+        switch ($action) {
+            case 'new_post': {
+                    if (Redis::exists('new_post_record_' . $this->binggan)) {
+                        Redis::incr('new_post_record_' . $this->binggan);
+                    } else {
+                        Redis::setex('new_post_record_' . $this->binggan,  self::NEW_POST_INTERVAL, 1);
+                    }
+                    break;
+                }
+            case 'new_thread': {
+                    Redis::setex('new_thread_record_' . $this->binggan, self::NEW_THREAD_INTERVAL, 1);
+                    break;
+                }
+        }
+    }
 
     public function Pingbici()
     {

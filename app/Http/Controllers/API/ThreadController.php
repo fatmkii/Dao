@@ -54,19 +54,10 @@ class ThreadController extends Controller
         ]);
 
 
-        // $user = User::where('binggan', $request->binggan)->first();
         $user = $request->user;
+        $water_check = $user->waterCheck('new_thread');
+        if ($water_check != 'ok') return $water_check;
 
-
-        //如果发帖频率过高，返回错误
-        if (Redis::exists('new_thread_record_' . $request->binggan) &&  $user->admin == 0) {
-            $limted_minutes = ceil(Redis::TTL('new_thread_record_' . $request->binggan) / 60);
-            return response()->json([
-                'code' => ResponseCode::THREAD_TOO_MANY,
-                'message' => ResponseCode::$codeMap[ResponseCode::THREAD_TOO_MANY] . '，你只能在'
-                    . $limted_minutes . '分钟后再发新主题。',
-            ]);
-        }
 
         //确认是否冒认管理员发公告或者管理员帖
         if (
@@ -162,8 +153,8 @@ class ThreadController extends Controller
                 ],
             );
         }
-        //用redis记录发帖频率。限定5分钟内只能发帖1次。
-        Redis::setex('new_thread_record_' . $request->binggan, 5 * 60, 1);
+
+        $user->waterRecord('new_thread'); //用redis记录发帖频率。
 
         ProcessUserActive::dispatch(
             [
@@ -173,6 +164,7 @@ class ThreadController extends Controller
                 'thread_id' => $thread->id,
             ]
         );
+
         return response()->json(
             [
                 'code' => ResponseCode::SUCCESS,

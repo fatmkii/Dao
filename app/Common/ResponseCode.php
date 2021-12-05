@@ -25,7 +25,7 @@ class ResponseCode
     const THREAD_WAS_NISSINED = 23410;
     const THREAD_TOO_MANY = 23429;
     const THREAD_UNAUTHORIZED = 23401;
-    const SEARCH_TOO_MANY = 23429;
+    const SEARCH_TOO_MANY = 234291;
 
     const POST_NOT_FOUND = 24404;
     const POST_TOO_MANY = 24429;
