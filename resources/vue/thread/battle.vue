@@ -109,7 +109,7 @@ export default {
       name: "battle",
       get_data_handling: true,
       post_roll_handling: false,
-      battle_chara_id: undefined,
+      battle_chara_id: 8,
     };
   },
   computed: {
