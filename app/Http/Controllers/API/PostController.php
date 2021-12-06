@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Exceptions\CoinException;
 use Illuminate\Support\Facades\DB;
 use App\Models\Forum;
 use App\Models\Post;
@@ -178,24 +179,30 @@ class PostController extends Controller
             );
         }
 
-        //判断饼干是否足够
-        $user = $request->user;
-        if ($user->coin < 300) {
+        try {
+            DB::beginTransaction();
+            //判断饼干是否足够
+            $user = $request->user;
+            $user->coinConsume(300); //删除帖子扣除300奥利奥
+
+            $post->is_deleted = 1;
+            $post->save();
+        } catch (QueryException $e) {
+            DB::rollback();
+            return response()->json([
+                'code' => ResponseCode::DATABASE_FAILED,
+                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
+            ]);
+        } catch (CoinException $e) {
+            DB::rollback();
             return response()->json(
                 [
                     'code' => ResponseCode::COIN_NOT_ENOUGH,
                     'message' => ResponseCode::$codeMap[ResponseCode::COIN_NOT_ENOUGH],
-                    'data' => [
-                        'post_id' => $id,
-                    ]
                 ],
             );
         }
 
-        $post->is_deleted = 1;
-        $post->save();
-        $user->coin -= 300; //删除帖子扣除300奥利奥
-        $user->save();
 
 
         ProcessUserActive::dispatch(
@@ -255,25 +262,31 @@ class PostController extends Controller
             );
         }
 
-        //判断饼干是否足够
-        // $user = User::where('binggan', $request->binggan)->first();
-        $user = $request->user;
-        if ($user->coin < 300) {
+
+        try {
+            DB::beginTransaction();
+            //判断饼干是否足够
+            $user = $request->user;
+            $user->coinConsume(300); //恢复帖子扣除300奥利奥
+
+            $post->is_deleted = 0;
+            $post->save();
+            DB::commit();
+        } catch (QueryException $e) {
+            DB::rollback();
+            return response()->json([
+                'code' => ResponseCode::DATABASE_FAILED,
+                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
+            ]);
+        } catch (CoinException $e) {
+            DB::rollback();
             return response()->json(
                 [
                     'code' => ResponseCode::COIN_NOT_ENOUGH,
                     'message' => ResponseCode::$codeMap[ResponseCode::COIN_NOT_ENOUGH],
-                    'data' => [
-                        'post_id' => $id,
-                    ]
                 ],
             );
         }
-
-        $post->is_deleted = 0;
-        $post->save();
-        $user->coin -= 300; //删除帖子扣除300奥利奥
-        $user->save();
 
         ProcessUserActive::dispatch(
             [
@@ -308,40 +321,7 @@ class PostController extends Controller
             'roll_range' => 'required|integer|max:100000000|min:1',
         ]);
 
-        // $user = User::where('binggan', $request->binggan)->first();
         $user = $request->user;
-        // if (!$user) {
-        //     return response()->json(
-        //         [
-        //             'code' => ResponseCode::USER_NOT_FOUND,
-        //             'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
-        //         ],
-        //     );
-        // }
-        //如果饼干被ban，直接返回错误
-        // if ($user->is_banned) {
-        //     return response()->json(
-        //         [
-        //             'code' => ResponseCode::USER_BANNED,
-        //             'message' => ResponseCode::$codeMap[ResponseCode::USER_BANNED],
-        //             'data' => [
-        //                 'binggan' => $user->binggan,
-        //             ],
-        //         ],
-        //         401
-        //     );
-        // }
-
-        //查询饼干是否在封禁期
-        // if ($user->lockedTTL) {
-        //     $lockTTL_hours = intval($user->lockedTTL / 3600) + 1;
-        //     return response()->json(
-        //         [
-        //             'code' => ResponseCode::USER_LOCKED,
-        //             'message' => ResponseCode::$codeMap[ResponseCode::USER_LOCKED] . '，将于' . $lockTTL_hours . '小时后解封',
-        //         ],
-        //     );
-        // }
 
         //生成roll点结果
         $roll_result_arr = array();

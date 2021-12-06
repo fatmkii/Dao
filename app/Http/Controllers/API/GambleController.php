@@ -126,11 +126,7 @@ class GambleController extends Controller
             $gamble_user->save();
 
             //扣除用户相应olo
-            $user->coin -= $request->betting_olo;
-            if ($user->coin < 0) {
-                throw new CoinException();
-            }
-            $user->save();
+            $user->coinConsume($request->betting_olo);
 
             //执行新回复流程
             $thread_id = $gamble_question->Thread->id;

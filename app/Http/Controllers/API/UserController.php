@@ -276,13 +276,10 @@ class UserController extends Controller
             DB::beginTransaction();
             $tax = ceil($request->coin * 0.07); //税率0.07
             $coin_pay = $request->coin + $tax;
-            $user->coin -= $coin_pay;
+            $user->coinConsume($coin_pay);
             $user_target->coin += $request->coin;
-            $user->save();
             $user_target->save();
-            if ($user->coin < 0) {
-                throw new CoinException();
-            }
+
             $post = new Post;
             $post->setSuffix(intval($request->thread_id / 10000));
             $post->created_binggan = $request->binggan;
@@ -296,8 +293,7 @@ class UserController extends Controller
             $post->created_by_admin = 2; //0=一般用户 1=管理员发布，2=系统发布
             $post->created_ip = $request->ip();
             $post->random_head = random_int(1, 40);
-            // $post->floor = Post::suffix(intval($request->thread_id / 10000))->where('thread_id', $request->thread_id)->count();
-            // $post->save();
+
             $thread = $post->thread;
             $thread->posts_num = POST::Suffix(intval($request->thread_id / 10000))->where('thread_id', $request->thread_id)->count();
             $post->floor = $thread->posts_num;

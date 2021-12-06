@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Exceptions\CoinException;
 use App\Common\ResponseCode;
 use App\Models\Pingbici;
 use App\Models\MyEmoji;
@@ -123,6 +124,15 @@ class User extends Authenticatable
                     break;
                 }
         }
+    }
+    
+    //消费奥利奥并检查是否足够
+    public function coinConsume(int $coin){
+        if ($this->coin < $coin) {
+            throw new CoinException();
+        }
+        $this->coin -= $coin;
+        $this->save();
     }
 
     public function Pingbici()

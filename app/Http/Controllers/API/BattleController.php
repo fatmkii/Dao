@@ -100,11 +100,7 @@ class BattleController extends Controller
             $battle_message->message = BattleChara::CharaName($request->chara_id) . "正在等待挑战者……押注：" . $request->battle_olo . "个奥利奥";
             $battle_message->save();
 
-            $user->coin -= $request->battle_olo;
-            if ($user->coin < 0) {
-                throw new CoinException();
-            }
-            $user->save();
+            $user->coinConsume($request->battle_olo);
 
             DB::commit();
         } catch (QueryException $e) {
@@ -231,11 +227,7 @@ class BattleController extends Controller
             $battle_message->message = '等待发起者迎战';
             $battle_message->save();
 
-            $user->coin -= $battle->battle_olo;
-            if ($user->coin < 0) {
-                throw new CoinException();
-            }
-            $user->save();
+            $user->coinConsume($battle->battle_olo);
 
             DB::commit();
         } catch (QueryException $e) {
