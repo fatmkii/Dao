@@ -17,7 +17,7 @@ class CreateGambleQuestionsTable extends Migration
             $table->id()->startingValue(10001);
             $table->integer('thread_id')->index();
             $table->text('title');
-            $table->timestamp('end_date');
+            $table->timestamp('end_date')->nullable();//在阿里云rds上，不知道为什么not null的话一定会default current_timestamp
             $table->unsignedInteger('bet_total')->default(0);
             $table->unsignedInteger('olo_total')->default(0);
             $table->integer('result_option_id')->nullable();
