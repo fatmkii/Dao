@@ -148,7 +148,7 @@ class BattleController extends Controller
         $user = $request->user;
 
         // $battle = Battle::find($request->battle_id);
-        $battle = DB::table('battles')->where('id', $request->battle_id)->sharedLock()->first(); //改用悲观锁
+        $battle = DB::table('battles')->where('id', $request->battle_id)->lockForUpdate()->first(); //改用悲观锁
         if (!$battle) {
             return response()->json([
                 'code' => ResponseCode::BATTLE_NOT_FOUND,
