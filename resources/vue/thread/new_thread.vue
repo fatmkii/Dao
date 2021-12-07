@@ -114,7 +114,7 @@
       :disabled="new_thread_handling || Boolean(locked_TTL)"
       @keyup.ctrl.enter="new_thread_handle"
     ></textarea>
-    <div class="row align-items-center mt-2">
+    <div class="d-flex align-items-center mt-2">
       <!-- <div class="col-7">
           原自费图床tietuku暂时关闭。
         <b-form-file
@@ -134,15 +134,20 @@
         </b-spinner>
       </div> -->
       <Imgtu></Imgtu>
-      <div class="col-6 ml-auto">
-        <b-button
-          variant="success"
-          class="float-right"
-          :disabled="new_thread_handling || Boolean(locked_TTL)"
-          @click="new_thread_handle"
-          >{{ new_thread_handling ? "提交中" : "发表" }}
-        </b-button>
-      </div>
+      <b-form-checkbox
+        class="mx-2 ml-auto"
+        v-model="is_delay"
+        v-b-popover.hover.bottom="'测试中，勿用'"
+      >
+        延时发送
+      </b-form-checkbox>
+      <b-button
+        variant="success"
+        class="float-right"
+        :disabled="new_thread_handling || Boolean(locked_TTL)"
+        @click="new_thread_handle"
+        >{{ new_thread_handling ? "提交中" : "发表" }}
+      </b-button>
     </div>
     <div class="row align-items-center mt-2">
       <div class="col-auto ml-auto" style="font-size: 0.875rem">
@@ -499,9 +504,7 @@ export default {
   data: function () {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    // 15th two months prior
     const minDate = new Date(today);
-    // 15th in two months
     const maxDate = new Date(today);
     maxDate.setMonth(maxDate.getMonth() + 1);
 
@@ -544,6 +547,7 @@ export default {
       preview_show: false,
       is_vote: false,
       is_gamble: false,
+      is_delay: false,
       vote_multiple: false,
       vote_title_input: "",
       vote_options: ["", "", ""],
@@ -653,6 +657,7 @@ export default {
           locked_by_coin: this.locked_by_coin_input,
           is_vote: this.is_vote,
           is_gamble: this.is_gamble,
+          is_delay: this.is_delay,
           can_battle: this.can_battle_selected,
         },
       };

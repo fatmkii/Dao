@@ -57,18 +57,6 @@ class ForumController extends Controller
             'sub_title' => 'string|max:20', //用来搜索副标题，暂时没用
         ]);
 
-        //用redis记录，每个ip只能1分钟只能搜索一次
-        // if ($request->has('search_title')) {
-        //     if (Redis::exists('search_record_' . $request->ip())) {
-        //         return response()->json([
-        //             'code' => ResponseCode::SEARCH_TOO_MANY,
-        //             'message' => ResponseCode::$codeMap[ResponseCode::SEARCH_TOO_MANY],
-        //         ]);
-        //     } else {
-        //         Redis::setex('search_record_' . $request->ip(),  60, 1);
-        //     }
-        // };
-
         //用redis记录，全局每10秒搜索20次限制
         if ($request->has('search_title')) {
             if (Redis::exists('search_record_global')) {
@@ -86,7 +74,7 @@ class ForumController extends Controller
 
         $CurrentForum = Forum::find($forum_id);
         $user = $request->user;
-        // $user = User::where('binggan', $request->query('binggan'))->first();
+
         //判断是否可无饼干访问的板块
         if (!$CurrentForum->is_anonymous && !$user) {
             return response()->json([
@@ -111,7 +99,7 @@ class ForumController extends Controller
             }
         }
 
-        $threads = $CurrentForum->threads()->where('is_deleted', 0);
+        $threads = $CurrentForum->threads()->where('is_deleted', 0)->where('is_delay', 0);
 
         //搜索标题
         if ($request->has('search_title')) {

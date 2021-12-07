@@ -10,6 +10,8 @@ use App\Models\Post;
 use App\Models\Forum;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Carbon\Carbon;
+use App\Models\VoteQuestion;
+use App\Models\GambleQuestion;
 
 class Thread extends myModel
 {
@@ -51,6 +53,11 @@ class Thread extends myModel
     public function VoteQuestion()
     {
         return $this->hasOne(VoteQuestion::class);
+    }
+
+    public function GambleQuestion()
+    {
+        return $this->hasOne(GambleQuestion::class);
     }
 
     protected function serializeDate($date)

@@ -50,6 +50,7 @@ class ThreadController extends Controller
             'locked_by_coin' => 'integer|max:1000000|min:1',
             'is_vote' => 'boolean|required',
             'is_gamble' => 'boolean|required',
+            'is_delay' => 'boolean|required',
             'can_battle' => 'boolean|required',
         ]);
 
@@ -95,11 +96,21 @@ class ThreadController extends Controller
             $thread->sub_title = $request->subtitle;
             $thread->random_heads_group = $request->random_heads_group;
             if ($request->nissin_time > 0) { //如果请求中带有nissin_time，才设定nissin_date
-                $thread->nissin_date = Carbon::now()->addSeconds($request->nissin_time);
+                if ($request->is_delay) { //如果是延迟发表主题，则从发表时刻计算日清时间
+                    $hour_now = Carbon::now()->hour;
+                    if ($hour_now < 8) { //根据时间确定8点日清的节点
+                        $thread->nissin_date  = Carbon::today()->addHours(8)->addSeconds($request->nissin_time);
+                    } else {
+                        $thread->nissin_date  = Carbon::tomorrow()->addHours(8)->addSeconds($request->nissin_time);
+                    }
+                } else { //如果是非延迟发表主题，则直接计算日清时间
+                    $thread->nissin_date = Carbon::now()->addSeconds($request->nissin_time);
+                }
             }
             $thread->title = $request->title;
             $thread->anti_jingfen = $request->anti_jingfen;
             $thread->can_battle = $request->can_battle;
+            $thread->is_delay = $request->is_delay;
             $thread->save();
             //发主题帖的第0楼（Post）
             $post = new Post;
