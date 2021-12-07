@@ -20,6 +20,8 @@ class GambleQuestion extends Model
         'thread_id',
         'created_at',
         'updated_at',
+        'GambleOptions',
+        'GambleUsers',
     ];
 
     public function GambleOptions()

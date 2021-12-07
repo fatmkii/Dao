@@ -16,6 +16,10 @@ class VoteQuestion extends Model
 
     public $hidden = [
         'thread_id',
+        'vote_total',
+        'created_at',
+        'updated_at',
+        'VoteOption',
     ];
 
     public function VoteOption()
