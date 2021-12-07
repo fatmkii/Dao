@@ -21,7 +21,7 @@ return [
     'alpha_dash' => 'The :attribute must only contain letters, numbers, dashes and underscores.',
     'alpha_num' => 'The :attribute must only contain letters and numbers.',
     'array' => 'The :attribute must be an array.',
-    'before' => 'The :attribute must be a date before :date.',
+    'before' => ':attribute不能晚于:date.',
     'before_or_equal' => 'The :attribute must be a date before or equal to :date.',
     'between' => [
         'numeric' => ':attribute大于:min及小于:max.',
@@ -31,9 +31,9 @@ return [
     ],
     'boolean' => 'The :attribute field must be true or false.',
     'confirmed' => 'The :attribute confirmation does not match.',
-    'date' => 'The :attribute is not a valid date.',
+    'date' => ':attribute不是有效的日期格式',
     'date_equals' => 'The :attribute must be a date equal to :date.',
-    'date_format' => 'The :attribute does not match the format :format.',
+    'date_format' => ':attribute不符合有效的日期格式： :format.',
     'different' => 'The :attribute and :other must be different.',
     'digits' => 'The :attribute must be :digits digits.',
     'digits_between' => 'The :attribute must be between :min and :max digits.',
@@ -161,6 +161,8 @@ return [
         'roll_event' => 'Roll点事件',
         'betting_olo' => '下注奥利奥',
         'chara_id' => '乱斗角色 ',
+        'gamble_end_time' => '菠菜结束时间',
+        'vote_end_time' => '投票结束时间'
     ],
 
 ];

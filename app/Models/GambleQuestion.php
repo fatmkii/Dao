@@ -9,6 +9,7 @@ use App\Models\GambleUser;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Carbon\Carbon;
+use Illuminate\Validation\Validator;
 
 class GambleQuestion extends Model
 {
@@ -59,15 +60,16 @@ class GambleQuestion extends Model
     {
         $request->validate([
             'gamble_title' => 'required|string|max:100',
-            'gamble_end_time' => 'integer|required',
+            'gamble_end_time' => 'required|date_format:Y-m-d H:i:s|before:' . Carbon::now()->addMonth(1), //菠菜时长最多一个月
             'gamble_options' => 'json|required|max:5000'
         ]);
+
 
         $request_options = json_decode($request->gamble_options, true);
 
         $this->thread_id = $thread_id;
         $this->title = $request->gamble_title;
-        $this->end_date = Carbon::now()->addSeconds($request->gamble_end_time);
+        $this->end_date = Carbon::parse($request->gamble_end_time);
         $this->save();
 
         foreach ($request_options as $request_option) {

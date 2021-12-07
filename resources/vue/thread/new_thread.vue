@@ -241,7 +241,7 @@
         <b-form-checkbox class="mr-3" v-model="is_vote">
           开启投票（1000奥利奥）
         </b-form-checkbox>
-        <div class="row align-items-center">
+        <div class="row align-items-center my-2">
           <div class="col-auto">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -270,7 +270,7 @@
               <path d="M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z" />
             </svg>
           </div>
-          <div class="col-auto">
+          <div class="col-auto my-2">
             <b-form-checkbox
               class="mr-3"
               v-show="is_vote"
@@ -281,13 +281,55 @@
               投票多选
             </b-form-checkbox>
           </div>
-          <div class="col-4">
-            <b-form-select
-              class="mr-3"
-              v-show="is_vote"
-              v-model="vote_time_selected"
-              :options="vote_time_options"
-            ></b-form-select>
+          <div class="col-auto my-2" v-show="is_vote">
+            <b-input-group style="max-width: 160px">
+              <b-form-input
+                v-model="end_date_selected"
+                size="sm"
+                type="text"
+                placeholder="结束日期"
+              ></b-form-input>
+              <b-input-group-append>
+                <b-form-datepicker
+                  v-model="end_date_selected"
+                  size="sm"
+                  placeholder="结束日期"
+                  locale="zh"
+                  button-only
+                  today-button
+                  reset-button
+                  close-button
+                  :date-format-options="{
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                  }"
+                  :min="minDate"
+                  :max="maxDate"
+                  label-help="请选择投票结束的日期"
+                ></b-form-datepicker>
+              </b-input-group-append>
+            </b-input-group>
+          </div>
+
+          <div class="col-auto my-2" v-show="is_vote">
+            <b-input-group style="max-width: 160px">
+              <b-form-input
+                v-model="end_time_selected"
+                size="sm"
+                type="text"
+                placeholder="结束时间"
+              ></b-form-input>
+              <b-input-group-append>
+                <b-form-timepicker
+                  v-model="end_time_selected"
+                  size="sm"
+                  locale="zh"
+                  reset-button
+                  button-only
+                ></b-form-timepicker>
+              </b-input-group-append>
+            </b-input-group>
           </div>
         </div>
 
@@ -347,13 +389,55 @@
               <path d="M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z" />
             </svg>
           </div>
-          <div class="col-4">
-            <b-form-select
-              class="mr-3"
-              v-show="is_gamble"
-              v-model="gamble_time_selected"
-              :options="gamble_time_options"
-            ></b-form-select>
+          <div class="col-auto my-2" v-show="is_gamble">
+            <b-input-group style="max-width: 160px">
+              <b-form-input
+                v-model="end_date_selected"
+                size="sm"
+                type="text"
+                placeholder="结束日期"
+              ></b-form-input>
+              <b-input-group-append>
+                <b-form-datepicker
+                  v-model="end_date_selected"
+                  size="sm"
+                  placeholder="结束日期"
+                  locale="zh"
+                  button-only
+                  today-button
+                  reset-button
+                  close-button
+                  :date-format-options="{
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                  }"
+                  :min="minDate"
+                  :max="maxDate"
+                  label-help="请选择投票结束的日期"
+                ></b-form-datepicker>
+              </b-input-group-append>
+            </b-input-group>
+          </div>
+
+          <div class="col-auto my-2" v-show="is_gamble">
+            <b-input-group style="max-width: 160px">
+              <b-form-input
+                v-model="end_time_selected"
+                size="sm"
+                type="text"
+                placeholder="结束时间"
+              ></b-form-input>
+              <b-input-group-append>
+                <b-form-timepicker
+                  v-model="end_time_selected"
+                  size="sm"
+                  locale="zh"
+                  reset-button
+                  button-only
+                ></b-form-timepicker>
+              </b-input-group-append>
+            </b-input-group>
           </div>
         </div>
 
@@ -413,6 +497,14 @@ export default {
     forum_id: Number, //来自router
   },
   data: function () {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    // 15th two months prior
+    const minDate = new Date(today);
+    // 15th in two months
+    const maxDate = new Date(today);
+    maxDate.setMonth(maxDate.getMonth() + 1);
+
     return {
       name: "new_thread",
       new_thread_handling: false,
@@ -455,20 +547,10 @@ export default {
       vote_multiple: false,
       vote_title_input: "",
       vote_options: ["", "", ""],
-      vote_time_options: [
-        { value: 86400, text: "24小时" },
-        { value: 172800, text: "48小时" },
-        { value: 259200, text: "72小时" },
-      ],
-      vote_time_selected: 86400,
-      gamble_time_options: [
-        { value: 86400, text: "1天" },
-        { value: 259200, text: "3天" },
-        { value: 432000, text: "5天" },
-        { value: 604800, text: "7天" },
-        { value: 1209600, text: "14天" },
-      ],
-      gamble_time_selected: 86400,
+      end_time_selected: undefined,
+      end_date_selected: undefined,
+      minDate: minDate,
+      maxDate: maxDate,
     };
   },
   watch: {
@@ -576,16 +658,29 @@ export default {
       };
       if (this.is_vote) {
         //如果是投票贴，追加投票相关的请求参数
+        if (!this.end_date_selected || !this.end_time_selected) {
+          this.new_thread_handling = false;
+          alert("请设定结束的日期和时间");
+          return;
+        }
+
         config.data.vote_multiple = this.vote_multiple;
         config.data.vote_title = this.vote_title_input;
         config.data.vote_options = JSON.stringify(this.vote_options);
-        config.data.vote_end_time = this.vote_time_selected;
+        config.data.vote_end_time =
+          this.end_date_selected + " " + this.end_time_selected;
       }
       if (this.is_gamble) {
         //如果是菠菜贴，追加投票相关的请求参数
+        if (!this.end_date_selected || !this.end_time_selected) {
+          this.new_thread_handling = false;
+          alert("请设定结束的日期和时间");
+          return;
+        }
         config.data.gamble_title = this.vote_title_input;
         config.data.gamble_options = JSON.stringify(this.vote_options);
-        config.data.gamble_end_time = this.gamble_time_selected;
+        config.data.gamble_end_time =
+          this.end_date_selected + " " + this.end_time_selected;
       }
       axios(config)
         .then((response) => {
@@ -724,6 +819,20 @@ export default {
     } else {
       this.emoji_auto_hide = Boolean(localStorage.emoji_auto_hide);
     }
+  },
+  mounted() {
+    var now = new Date();
+    var dateTime = new Date(now.setDate(now.getDate() + 1)); //默认日期是今天+1天
+    var year = dateTime.getFullYear();
+    var month = dateTime.getMonth() + 1;
+    if (month >= 1 && month <= 9) {
+      month = "0" + month;
+    }
+    var strDate = dateTime.getDate();
+    if (strDate >= 0 && strDate <= 9) {
+      strDate = "0" + strDate;
+    }
+    this.end_date_selected = year + "-" + month + "-" + strDate;
   },
 };
 </script>

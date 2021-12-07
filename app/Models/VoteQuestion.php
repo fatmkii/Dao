@@ -47,17 +47,16 @@ class VoteQuestion extends Model
     {
         $request->validate([
             'vote_title' => 'required|string|max:100',
-            'vote_end_time' => 'integer|required',
+            'vote_end_time' => 'required|date_format:Y-m-d H:i:s|before:' . Carbon::now()->addMonth(1), //投票时长最多一个月
             'vote_options' => 'json|required|max:5000',
             'vote_multiple' => 'boolean|required'
         ]);
 
         $request_options = json_decode($request->vote_options, true);
 
-        // $vote_question = new VoteQuestion;
         $this->thread_id = $thread_id;
         $this->title = $request->vote_title;
-        $this->end_date = Carbon::now()->addSeconds($request->vote_end_time);
+        $this->end_date = Carbon::parse($request->vote_end_time);
         $this->multiple = $request->vote_multiple;
         $this->save();
 
