@@ -187,6 +187,7 @@ class PostController extends Controller
 
             $post->is_deleted = 1;
             $post->save();
+            DB::commit();
         } catch (QueryException $e) {
             DB::rollback();
             return response()->json([
