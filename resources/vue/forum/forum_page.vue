@@ -105,10 +105,18 @@
       :forum_id="forum_id"
       :new_window_to_post="new_window_to_post"
     ></ForumThreadsMobile>
-    <ForumPaginator
-      :forum_id="forum_id"
-      :last_page="threads_last_page"
-    ></ForumPaginator>
+    <div class="d-flex align-items-center">
+      <ForumPaginator
+        :forum_id="forum_id"
+        :last_page="threads_last_page"
+      ></ForumPaginator>
+      <a v-if="show_delay" @click="get_threads_data" class="thread_title ml-auto"
+        >关闭</a
+      >
+      <a v-if="!show_delay" @click="get_delay_threads_data" class="thread_title ml-auto"
+        >查看延时发送主题</a
+      >
+    </div>
     <div class="z-sidebar">
       <transition-group name="z-sidebar" tag="div">
         <div
@@ -257,6 +265,7 @@ export default {
       z_bar_show: false,
       search_show: false,
       search_input: "",
+      show_delay: false,
     };
   },
   computed: {
@@ -300,6 +309,35 @@ export default {
                 appendToast: true,
               });
             }
+            this.show_delay = false;
+          } else {
+            alert(response.data.message);
+          }
+        })
+        .catch((error) => {
+          alert(Object.values(error.response.data.errors)[0]);
+        });
+    },
+    get_delay_threads_data() {
+      var config = {
+        method: "get",
+        url: "/api/forums/delay/" + this.forum_id,
+        params: {
+          page: this.page,
+          binggan: this.$store.state.User.Binggan,
+        },
+      };
+      axios(config)
+        .then((response) => {
+          if (response.data.code == 200) {
+            this.$store.commit("ThreadsData_set", response.data.threads_data);
+            this.$store.commit(
+              "CurrentForumData_set",
+              response.data.forum_data
+            );
+            this.$store.commit("ThreadsLoadStatus_set", 1);
+            document.title = this.forum_name;
+            this.show_delay = true;
           } else {
             alert(response.data.message);
           }

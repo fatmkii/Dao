@@ -50,6 +50,15 @@ class PostController extends Controller
         $water_check = $user->waterCheck('new_post');
         if ($water_check != 'ok') return $water_check;
 
+        $thread = Thread::find($request->thread_id);
+        if (!$thread || $thread->is_delay == 1) {
+            return response()->json([
+                'code' => ResponseCode::THREAD_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::THREAD_NOT_FOUND],
+            ]);
+        }
+
+
         //确认是否冒充管理员发帖
         if (
             $request->post_with_admin == true &&
@@ -77,7 +86,6 @@ class PostController extends Controller
             $post->created_ip = $request->ip();
             $post->random_head = random_int(0, 39);
 
-            $thread = $post->thread;
             $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
             $post->floor = $thread->posts_num;
 

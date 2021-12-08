@@ -137,7 +137,7 @@
       <b-form-checkbox
         class="mx-2 ml-auto"
         v-model="is_delay"
-        v-b-popover.hover.bottom="'测试中，勿用'"
+        v-b-popover.hover.bottom="'自动在第二天8点发出'"
       >
         延时发送
       </b-form-checkbox>

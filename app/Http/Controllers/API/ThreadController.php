@@ -208,7 +208,7 @@ class ThreadController extends Controller
     public function show(Request $request, $Thread_id)
     {
         $CurrentThread = Thread::find($Thread_id);
-        if (!$CurrentThread) {
+        if (!$CurrentThread || $CurrentThread->is_delay == 1) {
             return response()->json([
                 'code' => ResponseCode::THREAD_NOT_FOUND,
                 'message' => ResponseCode::$codeMap[ResponseCode::THREAD_NOT_FOUND],

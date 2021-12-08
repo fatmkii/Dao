@@ -160,6 +160,52 @@ class ForumController extends Controller
         ]);
     }
 
+    public function show_delay(Request $request, $forum_id)
+    {
+        $request->validate([
+            'binggan' => 'string|nullable',
+            'page' => 'integer|nullable',
+        ]);
+
+
+
+        $CurrentForum = Forum::find($forum_id);
+        $user = $request->user;
+
+        //判断是否可无饼干访问的板块
+        if (!$CurrentForum->is_anonymous && !$user) {
+            return response()->json([
+                'code' => ResponseCode::USER_NOT_FOUND,
+                'message' => '本小岛需要饼干才能查看喔',
+            ]);
+        }
+
+        //判断是否达到可以访问板块的最少奥利奥
+        if ($CurrentForum->accessible_coin > 0) {
+            if (!$user) {
+                return response()->json([
+                    'code' => ResponseCode::USER_NOT_FOUND,
+                    'message' => '本小岛需要饼干才能查看喔',
+                ]);
+            }
+            if ($user->coin < $CurrentForum->accessible_coin && $user->admin == 0) {
+                return response()->json([
+                    'code' => ResponseCode::THREAD_UNAUTHORIZED,
+                    'message' => sprintf("本小岛需要拥有大于%u奥利奥才能查看喔", $CurrentForum->accessible_coin),
+                ]);
+            }
+        }
+
+        $threads = $CurrentForum->threads()->where('is_deleted', 0)->where('is_delay', 1);
+
+        return response()->json([
+            'code' => ResponseCode::SUCCESS,
+            'message' => ResponseCode::$codeMap[ResponseCode::SUCCESS],
+            'forum_data' => $CurrentForum->makeVisible('banners'),
+            'threads_data' => $threads->paginate(30),
+        ]);
+    }
+
     /**
      * Update the specified resource in storage.
      *
