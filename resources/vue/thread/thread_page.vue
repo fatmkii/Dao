@@ -989,6 +989,7 @@ export default {
           content: this.content_input,
           nickname: this.nickname_input,
           post_with_admin: this.post_with_admin,
+          new_post_key: CryptoJS.MD5(this.thread_id + this.$store.state.User.Binggan).toString(),
         },
       };
       axios(config)
