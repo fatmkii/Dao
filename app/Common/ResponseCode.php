@@ -30,6 +30,7 @@ class ResponseCode
     const POST_NOT_FOUND = 24404;
     const POST_TOO_MANY = 24429;
     const POST_UNAUTHORIZED = 24401;
+    const POST_ROBOT = 24403;
 
     const VOTE_NOT_FOUND = 25404;
     const VOTE_OPTION_NOT_FOUND = 254041;
@@ -75,6 +76,7 @@ class ResponseCode
         self::SEARCH_TOO_MANY => '为保护服务器，设定了全局10秒只能搜索20次。',
         self::POST_NOT_FOUND => '未找到该帖子',
         self::POST_TOO_MANY => '回帖过于频繁',
+        self::POST_ROBOT => '请不要用脚本刷olo喔！',
         self::LOGIN_FAILED => '登录失败',
         self::DATABASE_FAILED => '数据库错误',
         self::USER_REGISTER_FAIL => '申请饼干失败',

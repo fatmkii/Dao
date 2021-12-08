@@ -42,6 +42,7 @@ class PostController extends Controller
             'content' => 'required|string|max:20000',
             'nickname' => '',
             'post_with_admin' => 'boolean',
+            'new_post_key' => 'required|string',
         ]);
 
         $user = $request->user;
@@ -50,6 +51,24 @@ class PostController extends Controller
         $water_check = $user->waterCheck('new_post');
         if ($water_check != 'ok') return $water_check;
 
+
+        //确认是否脚本机器人发帖
+        if ($request->new_post_key != md5($request->thread_id . $request->binggan)) {
+            ProcessUserActive::dispatch(
+                [
+                    'binggan' => $user->binggan,
+                    'user_id' => $user->id,
+                    'active' => '怀疑用户用机器人刷帖',
+                    'thread_id' => $request->thread_id,
+                    'content' => 'ip:' . $request->ip,
+                ]
+            );
+            return response()->json([
+                'code' => ResponseCode::POST_ROBOT,
+                'message' => ResponseCode::$codeMap[ResponseCode::POST_ROBOT],
+            ]);
+        }
+
         $thread = Thread::find($request->thread_id);
         if (!$thread || $thread->is_delay == 1) {
             return response()->json([
@@ -57,7 +76,6 @@ class PostController extends Controller
                 'message' => ResponseCode::$codeMap[ResponseCode::THREAD_NOT_FOUND],
             ]);
         }
-
 
         //确认是否冒充管理员发帖
         if (
