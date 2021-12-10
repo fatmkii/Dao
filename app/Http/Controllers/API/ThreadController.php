@@ -273,6 +273,7 @@ class ThreadController extends Controller
                 if (
                     $CurrentThread->created_at < $nissin_breakpoint
                     && $CurrentThread->sub_id == 0
+                    && $user->admin != 99
                 ) {
                     return response()->json([
                         'code' => ResponseCode::THREAD_WAS_NISSINED,
@@ -281,7 +282,12 @@ class ThreadController extends Controller
                 }
                 break;
             case 2: //按照24小时日清模式
-                if ($CurrentForum->is_nissin && $CurrentThread->nissin_date < Carbon::now() && $CurrentThread->sub_id == 0) {
+                if (
+                    $CurrentForum->is_nissin
+                    && $CurrentThread->nissin_date < Carbon::now()
+                    && $CurrentThread->sub_id == 0
+                    && $user->admin != 99
+                ) {
                     return response()->json([
                         'code' => ResponseCode::THREAD_WAS_NISSINED,
                         'message' => ResponseCode::$codeMap[ResponseCode::THREAD_WAS_NISSINED],
