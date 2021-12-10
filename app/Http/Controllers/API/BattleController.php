@@ -201,8 +201,6 @@ class BattleController extends Controller
                 ]
             );
 
-            DB::commit();
-
             //发起挑战的动作
             $battle_message = new BattleMessage;
             $battle_message->battle_id = $battle->id;
