@@ -317,6 +317,12 @@
         </div>
         <Imgtu v-if="this.forum_id !== 419 && this.forum_id !== 0"></Imgtu>
         <div class="col-6 ml-auto">
+          <!-- <b-button
+            variant="success"
+            class="ml-2 float-right"
+            @click="modal_toggle('captcha_modal')"
+            >测试</b-button
+          > -->
           <b-button
             variant="success"
             class="ml-2 float-right"
@@ -632,6 +638,35 @@
           </b-button-group>
         </template>
       </b-modal>
+      <b-modal ref="captcha_modal" id="captcha_modal" class="captcha_modal">
+        <template v-slot:modal-header>验证</template>
+        <template v-slot:default>
+          <p>嗷……你可能刷太多了，休息一下吧。</p>
+          <div class="my-1">
+            <div class="my-1">
+              <b-input-group prepend="输入：">
+                <b-form-input
+                  autofocus
+                  placeholder="输入验证码"
+                  @keyup.enter="get_captcha"
+                ></b-form-input>
+              </b-input-group>
+              <img
+                v-if="captcha_img"
+                :src="'data:image/png;base64,' + captcha_img"
+              />
+            </div>
+          </div>
+        </template>
+        <template v-slot:modal-footer="{ cancel }">
+          <b-button-group>
+            <b-button variant="success" @click="get_captcha">提交</b-button>
+            <b-button variant="outline-secondary" @click="cancel()">
+              取消
+            </b-button>
+          </b-button-group>
+        </template>
+      </b-modal>
       <b-modal
         ref="drawer_modal"
         id="drawer_modal"
@@ -763,6 +798,8 @@ export default {
         height: 0,
       },
       drawer_insert_img: undefined,
+      captcha_img: "",
+      captcha_code_input: "",
     };
   },
   computed: {
@@ -896,6 +933,26 @@ export default {
           alert(Object.values(error.response.data.errors)[0]);
         });
     },
+    get_captcha() {
+      const config = {
+        method: "get",
+        url: "/api/captcha/",
+        params: {
+          binggan: this.$store.state.User.Binggan,
+        },
+      };
+      axios(config)
+        .then((response) => {
+          if (response.data.code == 200) {
+            this.captcha_img = response.data.captcha_img;
+          } else {
+            alert(response.data.message);
+          }
+        })
+        .catch((error) => {
+          alert(Object.values(error.response.data.errors)[0]);
+        });
+    },
     get_browse_current() {
       if (
         typeof this.$store.state.User.BrowseLogger[this.thread_id.toString()] !=
@@ -989,7 +1046,9 @@ export default {
           content: this.content_input,
           nickname: this.nickname_input,
           post_with_admin: this.post_with_admin,
-          new_post_key: CryptoJS.MD5(this.thread_id + this.$store.state.User.Binggan).toString(),
+          new_post_key: CryptoJS.MD5(
+            this.thread_id + this.$store.state.User.Binggan
+          ).toString(),
         },
       };
       axios(config)
@@ -1064,7 +1123,13 @@ export default {
         });
     },
     emoji_append(emoji_src) {
-      this.content_input += "<img src='" + emoji_src + "' class='emoji_img'>";
+      let textarea = document.getElementById("content_input");
+      this.content_input = this.insertAtCursor(
+        textarea,
+        "<img src='" + emoji_src + "' class='emoji_img'>"
+      );
+      // this.content_input += "<img src='" + emoji_src + "' class='emoji_img'>";
+
       this.content_input_change();
       this.$refs.content_input.focus();
     },
@@ -1259,6 +1324,39 @@ export default {
     },
     drawer_insert(file) {
       this.$refs.drawer_component.drawer_insert(file);
+    },
+    insertAtCursor(f, value) {
+      /* eslint-disable */
+      let field = f;
+      let newValue = "";
+      // IE support
+      if (document.selection) {
+        field.focus();
+        const sel = document.selection.createRange();
+        sel.text = newValue = value;
+        sel.select();
+      } else if (field.selectionStart || field.selectionStart === 0) {
+        const startPos = field.selectionStart;
+        const endPos = field.selectionEnd;
+        const restoreTop = field.scrollTop;
+        newValue =
+          field.value.substring(0, startPos) +
+          value +
+          field.value.substring(endPos, field.value.length);
+        if (restoreTop > 0) {
+          field.scrollTop = restoreTop;
+        }
+        console.log(newValue);
+        field.focus();
+        setTimeout(() => {
+          field.selectionStart = startPos + value.length;
+          field.selectionEnd = startPos + value.length;
+        }, 0);
+      } else {
+        newValue = field.value + value;
+        field.focus();
+      }
+      return newValue;
     },
   },
   created() {
