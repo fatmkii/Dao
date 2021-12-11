@@ -99,12 +99,12 @@ class ThreadController extends Controller
                 if ($request->is_delay) { //如果是延迟发表主题，则从发表时刻计算日清时间
                     $hour_now = Carbon::now()->hour;
                     if ($hour_now < 8) { //根据时间确定8点日清的节点
-                        $thread->nissin_date  = Carbon::today()->addHours(8)->addSeconds($request->nissin_time);
+                        $thread->nissin_date  = Carbon::today()->addHours(8)->addDays($request->nissin_time);
                     } else {
-                        $thread->nissin_date  = Carbon::tomorrow()->addHours(8)->addSeconds($request->nissin_time);
+                        $thread->nissin_date  = Carbon::tomorrow()->addHours(8)->addDays($request->nissin_time);
                     }
                 } else { //如果是非延迟发表主题，则直接计算日清时间
-                    $thread->nissin_date = Carbon::now()->addSeconds($request->nissin_time);
+                    $thread->nissin_date = Carbon::now()->addDays($request->nissin_time);
                 }
             }
             $thread->title = $request->title;
@@ -281,7 +281,7 @@ class ThreadController extends Controller
                     ]);
                 }
                 break;
-            case 2: //按照24小时日清模式
+            case 2: //按照可选日清时间模式
                 if (
                     $CurrentForum->is_nissin
                     && $CurrentThread->nissin_date < Carbon::now()
