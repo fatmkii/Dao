@@ -110,10 +110,16 @@
         :forum_id="forum_id"
         :last_page="threads_last_page"
       ></ForumPaginator>
-      <a v-if="show_delay" @click="get_threads_data" class="thread_title ml-auto"
+      <a
+        v-if="show_delay"
+        @click="get_threads_data"
+        class="thread_title ml-auto"
         >关闭</a
       >
-      <a v-if="!show_delay" @click="get_delay_threads_data" class="thread_title ml-auto"
+      <a
+        v-if="!show_delay"
+        @click="get_delay_threads_data"
+        class="thread_title ml-auto"
         >查看延时发送主题</a
       >
     </div>
@@ -362,6 +368,11 @@ export default {
           break;
       }
     },
+    keyup_callee(event) {
+      if (event.ctrlKey && event.key === "q") {
+        this.get_threads_data(true);
+      }
+    },
   },
   created() {
     this.get_threads_data();
@@ -376,6 +387,12 @@ export default {
     } else {
       this.banner_hiden = Boolean(localStorage.banner_hiden);
     }
+  },
+  mounted() {
+    window.addEventListener("keyup", this.keyup_callee);
+  },
+  beforeDestroy() {
+    window.removeEventListener("keyup", this.keyup_callee);
   },
 };
 </script>
