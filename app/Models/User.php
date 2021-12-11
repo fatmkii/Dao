@@ -14,6 +14,7 @@ use App\Models\MyEmoji;
 use App\Models\Admin;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redis;
+use App\Jobs\ProcessUserActive;
 
 use function Symfony\Component\VarDumper\Dumper\esc;
 
@@ -66,8 +67,10 @@ class User extends Authenticatable
     ];
 
     const NEW_THREAD_INTERVAL = 300; //发新主题频率
-    const NEW_POST_NUMBER = 10; //回帖次数（也就是60秒10次）
-    const NEW_POST_INTERVAL = 60; //回帖频率（含大乱斗）
+    const NEW_POST_NUMBER = 10; //饼干回帖次数（也就是60秒10次）
+    const NEW_POST_INTERVAL = 60; //饼干回帖频率（含大乱斗）
+    const NEW_POST_NUMBER_IP = 3; //IP回帖次数（也就是1小时300次）
+    const NEW_POST_INTERVAL_IP = 3600; //IP回帖频率（含大乱斗）
 
     protected static function booted()
     {
@@ -80,7 +83,7 @@ class User extends Authenticatable
 
 
     //发帖、回帖频率检查
-    public function waterCheck(string $action)
+    public function waterCheck(string $action, string $ip)
     {
         switch ($action) {
             case 'new_post': {
@@ -89,6 +92,27 @@ class User extends Authenticatable
                             'code' => ResponseCode::POST_TOO_MANY,
                             'message' => ResponseCode::$codeMap[ResponseCode::POST_TOO_MANY] . '为防止刷屏，每1分钟最多回帖10次（含大乱斗）',
                         ]);
+                    }
+                    if (Redis::GET('new_post_record_IP_' . $ip) >= self::NEW_POST_NUMBER_IP && $this->admin == 0) {
+
+                        ProcessUserActive::dispatch(
+                            [
+                                'binggan' => $this->binggan,
+                                'user_id' => $this->id,
+                                'active' => '用户触发了机器人刷帖警报',
+                                'content' => 'ip:' . $ip,
+                            ]
+                        );
+
+                        //临时
+                        Redis::del('new_post_record_IP_' . $ip);
+                        return 'ok';
+
+                        //正式
+                        // return response()->json([
+                        //     'code' => ResponseCode::POST_TOO_MANY_MAYBE_ROBOT,
+                        //     'message' => ResponseCode::$codeMap[ResponseCode::POST_TOO_MANY_MAYBE_ROBOT],
+                        // ]);
                     }
                     break;
                 }
@@ -108,7 +132,7 @@ class User extends Authenticatable
     }
 
     //发帖、回帖频率写入Redis
-    public function waterRecord(string $action)
+    public function waterRecord(string $action, string $ip)
     {
         switch ($action) {
             case 'new_post': {
@@ -116,6 +140,11 @@ class User extends Authenticatable
                         Redis::incr('new_post_record_' . $this->binggan);
                     } else {
                         Redis::setex('new_post_record_' . $this->binggan,  self::NEW_POST_INTERVAL, 1);
+                    }
+                    if (Redis::exists('new_post_record_IP_' . $ip)) {
+                        Redis::incr('new_post_record_IP_' . $ip);
+                    } else {
+                        Redis::setex('new_post_record_IP_' . $ip,  self::NEW_POST_INTERVAL_IP, 1);
                     }
                     break;
                 }
@@ -125,9 +154,10 @@ class User extends Authenticatable
                 }
         }
     }
-    
+
     //消费奥利奥并检查是否足够
-    public function coinConsume(int $coin){
+    public function coinConsume(int $coin)
+    {
         if ($this->coin < $coin) {
             throw new CoinException();
         }

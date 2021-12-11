@@ -317,12 +317,6 @@
         </div>
         <Imgtu v-if="this.forum_id !== 419 && this.forum_id !== 0"></Imgtu>
         <div class="col-6 ml-auto">
-          <!-- <b-button
-            variant="success"
-            class="ml-2 float-right"
-            @click="modal_toggle('captcha_modal')"
-            >测试</b-button
-          > -->
           <b-button
             variant="success"
             class="ml-2 float-right"
@@ -639,7 +633,7 @@
         </template>
       </b-modal>
       <b-modal ref="captcha_modal" id="captcha_modal" class="captcha_modal">
-        <template v-slot:modal-header>验证</template>
+        <template v-slot:modal-header>反脚本验证</template>
         <template v-slot:default>
           <p>嗷……你可能刷太多了，休息一下吧。</p>
           <div class="my-1">
@@ -647,20 +641,22 @@
               <b-input-group prepend="输入：">
                 <b-form-input
                   autofocus
-                  placeholder="输入验证码"
-                  @keyup.enter="get_captcha"
+                  placeholder="输入验证码解锁"
+                  v-model="captcha_code_input"
+                  @keyup.enter="commit_captcha"
                 ></b-form-input>
               </b-input-group>
               <img
                 v-if="captcha_img"
                 :src="'data:image/png;base64,' + captcha_img"
+                @click="get_captcha"
               />
             </div>
           </div>
         </template>
         <template v-slot:modal-footer="{ cancel }">
           <b-button-group>
-            <b-button variant="success" @click="get_captcha">提交</b-button>
+            <b-button variant="success" @click="commit_captcha">提交</b-button>
             <b-button variant="outline-secondary" @click="cancel()">
               取消
             </b-button>
@@ -800,6 +796,7 @@ export default {
       drawer_insert_img: undefined,
       captcha_img: "",
       captcha_code_input: "",
+      captcha_key: "",
     };
   },
   computed: {
@@ -945,6 +942,7 @@ export default {
         .then((response) => {
           if (response.data.code == 200) {
             this.captcha_img = response.data.captcha_img;
+            this.captcha_key = response.data.captcha_key;
           } else {
             alert(response.data.message);
           }
@@ -952,6 +950,33 @@ export default {
         .catch((error) => {
           alert(Object.values(error.response.data.errors)[0]);
         });
+    },
+    commit_captcha() {
+      const config = {
+        method: "post",
+        url: "/api/user/water_unlock/",
+        params: {
+          binggan: this.$store.state.User.Binggan,
+          captcha_key: this.captcha_key,
+          captcha_code: this.captcha_code_input,
+        },
+      };
+      axios(config)
+        .then((response) => {
+          if (response.data.code == 200) {
+            this.new_post_handle();
+            this.modal_toggle("captcha_modal");
+          } else {
+            alert(response.data.message);
+          }
+        })
+        .catch((error) => {
+          alert(Object.values(error.response.data.errors)[0]);
+        });
+    },
+    show_captcha() {
+      this.get_captcha();
+      this.modal_toggle("captcha_modal");
     },
     get_browse_current() {
       if (
@@ -1062,6 +1087,9 @@ export default {
             this.content_input = "";
             this.new_post_handling = false;
             this.get_posts_data();
+          } else if (response.data.code == 244291) {
+            this.new_post_handling = false;
+            this.show_captcha();
           } else {
             this.new_post_handling = false;
             alert(response.data.message);

@@ -52,7 +52,7 @@ class BattleController extends Controller
 
         $user = $request->user;
 
-        $water_check = $user->waterCheck('new_post');
+        $water_check = $user->waterCheck('new_post', $request->ip());
         if ($water_check != 'ok') return $water_check;
 
 
@@ -119,7 +119,7 @@ class BattleController extends Controller
             );
         }
 
-        $user->waterRecord('new_post'); //用redis记录发帖频率。
+        $user->waterRecord('new_post', $request->ip()); //用redis记录发帖频率。
 
         ProcessUserActive::dispatch(
             [

@@ -48,7 +48,7 @@ class PostController extends Controller
         $user = $request->user;
 
         //灌水检查
-        $water_check = $user->waterCheck('new_post');
+        $water_check = $user->waterCheck('new_post', $request->ip());
         if ($water_check != 'ok') return $water_check;
 
 
@@ -122,7 +122,7 @@ class PostController extends Controller
         }
 
         //用redis记录回频率。
-        $user->waterRecord('new_post');
+        $user->waterRecord('new_post', $request->ip());
 
         return response()->json(
             [
@@ -229,8 +229,6 @@ class PostController extends Controller
                 ],
             );
         }
-
-
 
         ProcessUserActive::dispatch(
             [

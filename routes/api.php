@@ -85,7 +85,9 @@ Route::prefix('user')->group(function () {
     Route::get('/check_reg_record', [UserController::class, 'check_reg_record']); //返回注册记录TTL
     Route::post('/pingbici_set', [UserController::class, 'pingbici_set']);     //设定屏蔽词
     Route::post('/my_emoji_set', [UserController::class, 'my_emoji_set']);     //设定表情包
+    Route::post('/water_unlock', [UserController::class, 'water_unlock']);     //解除灌水锁定
 });
+
 
 //Admin系列
 Route::middleware('CheckTokenCan:admin', 'auth:sanctum')->prefix('admin')->group(function () {
@@ -110,3 +112,4 @@ Route::middleware('CheckTokenCan:super_admin', 'auth:sanctum')->prefix('admin')-
 Route::get('/emoji', [CommonController::class, 'emoji_index']);
 Route::get('/subtitles', [CommonController::class, 'subtitles_index']);
 Route::get('/random_heads', [CommonController::class, 'random_heads_index']);
+Route::get('/captcha', [CommonController::class, 'get_captcha']);

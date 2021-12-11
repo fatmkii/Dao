@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use App\Common\ResponseCode;
-
+use App\Common\Captcha;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Redis;
 
 class CommonController extends Controller
 {
@@ -57,5 +59,24 @@ class CommonController extends Controller
             'message' => ResponseCode::$codeMap[ResponseCode::SUCCESS],
             'data' => $random_heads,
         ]);
+    }
+
+    public function get_captcha()
+    {
+        $captcha = new Captcha(3);
+
+        do {
+            $key = Str::random(6);
+        } while (Redis::exists("captcha_key_" . $key));
+
+        Redis::setex("captcha_key_" . $key, 60, $captcha->getCode());
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'captcha_key' => $key,
+                'captcha_img' =>  $captcha->base64Img(),
+            ],
+        );
     }
 }

@@ -438,4 +438,34 @@ class UserController extends Controller
             ],
         );
     }
+
+    //解除灌水限制
+    public function water_unlock(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'captcha_key' => 'required|string',
+            'captcha_code' => 'required|string',
+        ]);
+
+        if (Redis::exists("captcha_key_" . $request->captcha_key)) {
+            if (Redis::get("captcha_key_" . $request->captcha_key) == $request->captcha_code) {
+                Redis::del('new_post_record_IP_' . $request->ip());
+                return response()->json([
+                    'code' => ResponseCode::SUCCESS,
+                    'message' => '已解除限制。',
+                ]);
+            } else {
+                return response()->json([
+                    'code' => ResponseCode::CAPTCHA_WRONG,
+                    'message' => ResponseCode::$codeMap[ResponseCode::CAPTCHA_WRONG],
+                ]);
+            }
+        } else {
+            return response()->json([
+                'code' => ResponseCode::CAPTCHA_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::CAPTCHA_NOT_FOUND],
+            ]);
+        }
+    }
 }

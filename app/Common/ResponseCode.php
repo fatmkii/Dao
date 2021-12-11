@@ -29,6 +29,7 @@ class ResponseCode
 
     const POST_NOT_FOUND = 24404;
     const POST_TOO_MANY = 24429;
+    const POST_TOO_MANY_MAYBE_ROBOT = 244291;
     const POST_UNAUTHORIZED = 24401;
     const POST_ROBOT = 24403;
 
@@ -50,6 +51,9 @@ class ResponseCode
     const BATTLE_HAS_BEEN_ROLL_C = 274032;
     const BATTLE_HAS_BEEN_CLOSED = 274101;
     const BATTLE_CANNOT_CREATED = 274112;
+
+    const CAPTCHA_NOT_FOUND = 28404;
+    const CAPTCHA_WRONG = 24401;
 
     const LOGIN_FAILED = 20001;
 
@@ -77,6 +81,7 @@ class ResponseCode
         self::POST_NOT_FOUND => '未找到该帖子',
         self::POST_TOO_MANY => '回帖过于频繁',
         self::POST_ROBOT => '请不要用脚本刷olo喔！',
+        self::POST_TOO_MANY_MAYBE_ROBOT => '你可能刷太多了，休息一下吧。',
         self::LOGIN_FAILED => '登录失败',
         self::DATABASE_FAILED => '数据库错误',
         self::USER_REGISTER_FAIL => '申请饼干失败',
@@ -96,6 +101,8 @@ class ResponseCode
         self::BATTLE_HAS_BEEN_ROLL_C => '已经有挑战者参加了',
         self::BATTLE_HAS_BEEN_ROLL_I => '大乱斗还在等待挑战者',
         self::BATTLE_CANNOT_CREATED => '本主题不能发起大乱斗',
+        self::CAPTCHA_NOT_FOUND => '验证码不存在或已过期',
+        self::CAPTCHA_WRONG => '验证码错误',
     ];
 }
 
