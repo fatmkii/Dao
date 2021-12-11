@@ -126,7 +126,8 @@ class BattleController extends Controller
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
                 'active' => '用户发起 了大乱斗',
-                'post_id' => $request->post_id,
+                'thread_id' => $request->thread_id,
+                'post_id' => $post->id,
             ]
         );
 
@@ -145,9 +146,6 @@ class BattleController extends Controller
             'chara_id' => 'required|integer',
         ]);
 
-        $user = $request->user;
-
-        // $battle = Battle::find($request->battle_id);
         $battle = DB::table('battles')->where('id', $request->battle_id)->lockForUpdate()->first(); //改用悲观锁
         if (!$battle) {
             return response()->json([
@@ -177,55 +175,171 @@ class BattleController extends Controller
             ]);
         }
 
+        $initiator_user = User::find($battle->initiator_user_id);
+        $challenger_user = $request->user;
 
-        $rand_num = BattleChara::CharaRandNum($request->chara_id);
+        $initiator_chara = $battle->initiator_chara;
+        $challenger_chara = $request->chara_id;
+
+        $initiator_rand_num = BattleChara::CharaRandNum($initiator_chara);
+        $challenger_rand_num = BattleChara::CharaRandNum($challenger_chara);
+
+        $difference = intval($initiator_rand_num - $challenger_rand_num);
+
 
         try {
             DB::beginTransaction();
 
-            // $battle->progress = 1;
-            // $battle->challenger_binggan = $request->binggan;
-            // $battle->challenger_user_id = $user->id;
-            // $battle->challenger_chara = $request->chara_id;
-            // $battle->challenger_rand_num = $rand_num;
-            // $battle->save();
+            $challenger_user->coinConsume($battle->battle_olo);
+
+            //挑战者发起挑战的动作
+            $battle_message = new BattleMessage;
+            $battle_message->battle_id = $battle->id;
+            $battle_message->chara_url = BattleChara::CharaHead($challenger_chara, 'against');
+            $battle_message->message_type = 2;
+            $battle_message->message = BattleChara::CharaName($challenger_chara) . '前来挑战！';
+            $battle_message->save();
+
+            //挑战者发起攻击（投色子）的动作
+            $battle_message = new BattleMessage;
+            $battle_message->battle_id = $battle->id;
+            $battle_message->chara_url = BattleChara::CharaHead($challenger_chara, 'attack');
+            $battle_message->message_type = 2;
+            $battle_message->message = BattleChara::CharaAttackMessage($challenger_chara, $challenger_rand_num);
+            $battle_message->save();
+
+            //等待迎战的系统公告
+            // $battle_message = new BattleMessage;
+            // $battle_message->battle_id = $battle->id;
+            // $battle_message->message_type = 0;
+            // $battle_message->message = '等待发起者迎战';
+            // $battle_message->save();
+
+            //发起者发起攻击（投色子）的动作
+            $battle_message = new BattleMessage;
+            $battle_message->battle_id = $battle->id;
+            $battle_message->chara_url = BattleChara::CharaHead($initiator_chara, 'attack');
+            $battle_message->message_type = 1;
+            $battle_message->message = BattleChara::CharaAttackMessage($initiator_chara, $initiator_rand_num);
+            $battle_message->save();
+
+
+            switch ($difference) {
+                case 0: { //平局！
+                        $battle_result = 3;
+                        $challenger_user->coin += intval($battle->battle_olo * 1.96);
+                        $initiator_user->coin += intval($battle->battle_olo * 1.96);
+                        $challenger_user->save();
+                        $initiator_user->save();
+
+                        //平局系统公告
+                        $battle_message = new BattleMessage;
+                        $battle_message->battle_id = $battle->id;
+                        $battle_message->message_type = 0;
+                        $battle_message->message = BattleChara::CharaName($challenger_chara) . '和' . BattleChara::CharaName($initiator_chara)
+                            . '的脑门闪过一道光，他们相互理解了！';
+                        $battle_message->save();
+
+
+                        //平局发起者公告
+                        $battle_message = new BattleMessage;
+                        $battle_message->battle_id = $battle->id;
+                        $battle_message->chara_url = BattleChara::CharaHead($initiator_chara, 'win');
+                        $battle_message->message_type = 1;
+                        $battle_message->message = BattleChara::CharaName($initiator_chara) .
+                            '获得奖金' .
+                            intval($battle->battle_olo * 1.96) . '个奥利奥';
+                        $battle_message->save();
+
+                        //平局挑战者公告
+                        $battle_message = new BattleMessage;
+                        $battle_message->battle_id = $battle->id;
+                        $battle_message->chara_url = BattleChara::CharaHead($challenger_chara, 'win');
+                        $battle_message->message_type = 2;
+                        $battle_message->message = BattleChara::CharaName($challenger_chara) .
+                            '获得奖金' .
+                            intval($battle->battle_olo * 1.96) . '个奥利奥';
+                        $battle_message->save();
+                        break;
+                    }
+                case $difference > 0: { //发起者胜利
+                        $battle_result = 1;
+                        $initiator_user->coin += intval($battle->battle_olo * 1.96);
+                        $initiator_user->save();
+
+                        //胜利者公告
+                        $battle_message = new BattleMessage;
+                        $battle_message->battle_id = $battle->id;
+                        $battle_message->chara_url = BattleChara::CharaHead($initiator_chara, 'win');
+                        $battle_message->message_type = 1;
+                        $battle_message->message = BattleChara::CharaName($initiator_chara) .
+                            '胜利！获得奖金' .
+                            intval($battle->battle_olo * 1.96) . '个奥利奥';
+                        $battle_message->save();
+
+                        //失败者公告
+                        $battle_message = new BattleMessage;
+                        $battle_message->battle_id = $battle->id;
+                        $battle_message->chara_url = BattleChara::CharaHead($challenger_chara, 'lose');
+                        $battle_message->message_type = 2;
+                        $battle_message->message = BattleChara::CharaName($challenger_chara) .
+                            '失败了…………哭哭';
+                        $battle_message->save();
+
+                        //结果系统公告
+                        $battle_message = new BattleMessage;
+                        $battle_message->battle_id = $battle->id;
+                        $battle_message->message_type = 0;
+                        $battle_message->message = '发起者胜利！';
+                        $battle_message->save();
+                        break;
+                    }
+                case $difference < 0: { //挑战者胜利
+                        $battle_result = 2;
+                        $challenger_user->coin += intval($battle->battle_olo * 1.96);
+                        $challenger_user->save();
+
+                        //胜利者公告
+                        $battle_message = new BattleMessage;
+                        $battle_message->battle_id = $battle->id;
+                        $battle_message->chara_url = BattleChara::CharaHead($challenger_chara, 'win');
+                        $battle_message->message_type = 2;
+                        $battle_message->message = BattleChara::CharaName($challenger_chara) .
+                            '胜利！获得奖金' .
+                            intval($battle->battle_olo * 1.96) . '个奥利奥';
+                        $battle_message->save();
+
+                        //失败者公告
+                        $battle_message = new BattleMessage;
+                        $battle_message->battle_id = $battle->id;
+                        $battle_message->chara_url = BattleChara::CharaHead($initiator_chara, 'lose');
+                        $battle_message->message_type = 1;
+                        $battle_message->message = BattleChara::CharaName($initiator_chara) .
+                            '失败了…………哭哭';
+                        $battle_message->save();
+
+                        //结果系统公告
+                        $battle_message = new BattleMessage;
+                        $battle_message->battle_id = $battle->id;
+                        $battle_message->message_type = 0;
+                        $battle_message->message = '挑战者胜利！';
+                        $battle_message->save();
+                        break;
+                    }
+            }
 
             //用了悲观锁，就不能用eloquent更新了？好像。
             DB::table('battles')->where('id', $request->battle_id)->update(
                 [
-                    'progress' => 1,
-                    'challenger_binggan' => $request->binggan,
-                    'challenger_user_id' => $user->id,
+                    'progress' => 2,
+                    'challenger_binggan' => $challenger_user->binggan,
+                    'challenger_user_id' => $challenger_user->id,
                     'challenger_chara' => $request->chara_id,
-                    'challenger_rand_num' => $rand_num,
+                    'challenger_rand_num' => $challenger_rand_num,
+                    'initiator_rand_num' => $initiator_rand_num,
+                    'result' => $battle_result,
                 ]
             );
-
-            //发起挑战的动作
-            $battle_message = new BattleMessage;
-            $battle_message->battle_id = $battle->id;
-            $battle_message->chara_url = BattleChara::CharaHead($request->chara_id, 'against');
-            $battle_message->message_type = 2;
-            $battle_message->message = BattleChara::CharaName($request->chara_id) . '前来挑战！';
-            $battle_message->save();
-
-            //发起攻击（投色子）的动作
-            $battle_message = new BattleMessage;
-            $battle_message->battle_id = $battle->id;
-            $battle_message->chara_url = BattleChara::CharaHead($request->chara_id, 'attack');
-            $battle_message->message_type = 2;
-            $battle_message->message = BattleChara::CharaAttackMessage($request->chara_id, $rand_num);
-            $battle_message->save();
-
-
-            //等待迎战的系统公告
-            $battle_message = new BattleMessage;
-            $battle_message->battle_id = $battle->id;
-            $battle_message->message_type = 0;
-            $battle_message->message = '等待发起者迎战';
-            $battle_message->save();
-
-            $user->coinConsume($battle->battle_olo);
 
             DB::commit();
         } catch (QueryException $e) {
@@ -245,20 +359,40 @@ class BattleController extends Controller
         }
 
 
+        switch ($battle_result) {
+            case 1:
+                $result_str = '发起者胜利，赌注：' . $battle->battle_olo;
+                break;
+            case 2:
+                $result_str = '挑战者胜利，赌注：' . $battle->battle_olo;
+                break;
+            case 3:
+                $result_str = '平局，赌注：' . $battle->battle_olo;
+                break;
+        }
+
         ProcessUserActive::dispatch(
             [
-                'binggan' => $user->binggan,
-                'user_id' => $user->id,
+                'binggan' => $challenger_user->binggan,
+                'user_id' => $challenger_user->id,
                 'active' => '用户参加了大乱斗（挑战者）',
-                'content' => '投出的点数：' . $rand_num,
-                'post_id' => $request->post_id,
+                'content' => '投出的点数：' . $challenger_rand_num . "。结果：" . $result_str,
+            ]
+        );
+
+        ProcessUserActive::dispatch(
+            [
+                'binggan' => $initiator_user->binggan,
+                'user_id' => $initiator_user->id,
+                'active' => '用户参加了大乱斗（发起者）',
+                'content' => '投出的点数：' . $initiator_rand_num . "。结果：" . $result_str,
             ]
         );
 
 
         return response()->json([
             'code' => ResponseCode::SUCCESS,
-            'message' => '已投出色子！',
+            'message' => '大乱斗已结束！',
         ]);
     }
 
