@@ -1386,6 +1386,11 @@ export default {
       }
       return newValue;
     },
+    keyup_callee(event) {
+      if (event.ctrlKey && event.key === "q") {
+        this.get_posts_data(true, false);
+      }
+    },
   },
   created() {
     this.get_posts_data(false, true);
@@ -1415,11 +1420,13 @@ export default {
     this.get_browse_current();
     window.addEventListener("beforeunload", this.browse_record_handle);
     window.addEventListener("scroll", this.scroll_watch);
+    window.addEventListener("keyup", this.keyup_callee);
   },
   beforeDestroy() {
     this.browse_record_handle();
     window.removeEventListener("beforeunload", this.browse_record_handle);
     window.removeEventListener("scroll", this.scroll_watch);
+    window.removeEventListener("keyup", this.keyup_callee);
   },
 };
 </script> 
