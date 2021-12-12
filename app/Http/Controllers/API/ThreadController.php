@@ -273,12 +273,15 @@ class ThreadController extends Controller
                 if (
                     $CurrentThread->created_at < $nissin_breakpoint
                     && $CurrentThread->sub_id == 0
-                    && $user->admin != 99
                 ) {
-                    return response()->json([
-                        'code' => ResponseCode::THREAD_WAS_NISSINED,
-                        'message' => ResponseCode::$codeMap[ResponseCode::THREAD_WAS_NISSINED],
-                    ]);
+                    if ($user != null && $user->admin == 99) {
+                        break;
+                    } else {
+                        return response()->json([
+                            'code' => ResponseCode::THREAD_WAS_NISSINED,
+                            'message' => ResponseCode::$codeMap[ResponseCode::THREAD_WAS_NISSINED],
+                        ]);
+                    }
                 }
                 break;
             case 2: //按照可选日清时间模式
@@ -286,12 +289,15 @@ class ThreadController extends Controller
                     $CurrentForum->is_nissin
                     && $CurrentThread->nissin_date < Carbon::now()
                     && $CurrentThread->sub_id == 0
-                    && $user->admin != 99
                 ) {
-                    return response()->json([
-                        'code' => ResponseCode::THREAD_WAS_NISSINED,
-                        'message' => ResponseCode::$codeMap[ResponseCode::THREAD_WAS_NISSINED],
-                    ]);
+                    if ($user != null && $user->admin == 99) {
+                        break;
+                    } else {
+                        return response()->json([
+                            'code' => ResponseCode::THREAD_WAS_NISSINED,
+                            'message' => ResponseCode::$codeMap[ResponseCode::THREAD_WAS_NISSINED],
+                        ]);
+                    }
                 }
                 break;
         }
