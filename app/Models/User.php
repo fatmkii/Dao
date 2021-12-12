@@ -69,7 +69,7 @@ class User extends Authenticatable
     const NEW_THREAD_INTERVAL = 300; //发新主题频率
     const NEW_POST_NUMBER = 10; //饼干回帖次数（也就是60秒10次）
     const NEW_POST_INTERVAL = 60; //饼干回帖频率（含大乱斗）
-    const NEW_POST_NUMBER_IP = 3; //IP回帖次数（也就是1小时300次）
+    const NEW_POST_NUMBER_IP = 300; //IP回帖次数（也就是1小时300次）
     const NEW_POST_INTERVAL_IP = 3600; //IP回帖频率（含大乱斗）
 
     protected static function booted()
