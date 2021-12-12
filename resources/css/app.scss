@@ -50,6 +50,16 @@ body {
 //     }
 // }
 
+//日清图
+.nissined_img {
+    position: fixed;
+    top: 40%;
+    width: 404px;
+    height: 240px;
+    left: 50%;
+    margin-left: -202px;
+}
+
 //侧边栏及其他
 .spinner.document-loading {
     @include font_color("icon_color1");

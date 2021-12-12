@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <div class="thread_body" v-show="posts_load_status">
+    <div class="thread_body" v-show="posts_load_status && !thread_nissined">
       <div class="row align-items-center mt-3">
         <div class="col-auto h5 d-none d-lg-block d-xl-block">
           <b-badge variant="secondary" pill class="float-left">
@@ -370,6 +370,12 @@
         </div>
       </div>
     </div>
+
+    <img
+      src="https://www.z4a.net/images/2021/12/12/122aaa3b43095a46a0c811e723a41d25.png"
+      v-if="posts_load_status && thread_nissined"
+      class="nissined_img"
+    />
 
     <div>
       <b-spinner
@@ -797,6 +803,7 @@ export default {
       captcha_img: "",
       captcha_code_input: "",
       captcha_key: "",
+      thread_nissined: false,
     };
   },
   computed: {
@@ -923,10 +930,16 @@ export default {
               }
             });
           } else {
-            alert(response.data.message);
+            this.$store.commit("PostsLoadStatus_set", 1);
+            if (response.data.code == 23410) {
+              this.thread_nissined = true;
+            } else {
+              alert(response.data.message);
+            }
           }
         })
         .catch((error) => {
+          this.$store.commit("PostsLoadStatus_set", 1);
           alert(Object.values(error.response.data.errors)[0]);
         });
     },
