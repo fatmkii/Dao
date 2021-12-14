@@ -69,7 +69,7 @@ class User extends Authenticatable
     const NEW_THREAD_INTERVAL = 300; //发新主题频率
     const NEW_POST_NUMBER = 10; //饼干回帖次数（也就是60秒10次）
     const NEW_POST_INTERVAL = 60; //饼干回帖频率（含大乱斗）
-    const NEW_POST_NUMBER_IP = 300; //IP回帖次数（也就是1小时300次）
+    const NEW_POST_NUMBER_IP = 100; //IP回帖次数（也就是1小时100次）
     const NEW_POST_INTERVAL_IP = 3600; //IP回帖频率（含大乱斗）
 
     protected static function booted()
@@ -104,15 +104,15 @@ class User extends Authenticatable
                             ]
                         );
 
-                        //临时
-                        Redis::del('new_post_record_IP_' . $ip);
-                        return 'ok';
+                        //不启用
+                        // Redis::del('new_post_record_IP_' . $ip);
+                        // return 'ok';
 
                         //正式
-                        // return response()->json([
-                        //     'code' => ResponseCode::POST_TOO_MANY_MAYBE_ROBOT,
-                        //     'message' => ResponseCode::$codeMap[ResponseCode::POST_TOO_MANY_MAYBE_ROBOT],
-                        // ]);
+                        return response()->json([
+                            'code' => ResponseCode::POST_TOO_MANY_MAYBE_ROBOT,
+                            'message' => ResponseCode::$codeMap[ResponseCode::POST_TOO_MANY_MAYBE_ROBOT],
+                        ]);
                     }
                     break;
                 }
