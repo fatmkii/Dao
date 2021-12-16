@@ -926,7 +926,7 @@ export default {
               if (this.$route.hash && scroll_enable) {
                 document
                   .querySelector(this.$route.hash)
-                  .scrollIntoView({ block: "start", behavior: "smooth" });
+                  .scrollIntoView({ block: "start", behavior: "auto" });
               }
             });
           } else {
@@ -1179,7 +1179,7 @@ export default {
       this.content_input_change();
       document
         .querySelector("#content_input")
-        .scrollIntoView({ block: "start", behavior: "smooth" });
+        .scrollIntoView({ block: "start", behavior: "auto" });
       this.$refs.content_input.focus();
     },
     scroll_icon_click(position) {

@@ -9,10 +9,11 @@ body {
     @include font_color("font_color2");
 }
 
-html,
-body {
-    scroll-behavior: smooth;
-}
+//平滑滚动
+// html,
+// body {
+//     scroll-behavior: smooth;
+// }
 
 .b-pagination {
     margin-bottom: 0;
