@@ -13,6 +13,11 @@
     >
     <hr />
     <b-tabs pills>
+      <b-tab title="一般设定">
+        <b-form-checkbox class="mx-2 my-2" switch v-model="z_bar_left">
+          侧边栏放左侧
+        </b-form-checkbox>
+      </b-tab>
       <b-tab title="屏蔽词">
         <div class="mx-2 my-2">
           <p class="my-2">
@@ -93,6 +98,12 @@ import { mapState } from "vuex";
 export default {
   components: {},
   props: {},
+  watch: {
+    z_bar_left: function () {
+      localStorage.setItem("z_bar_left", this.z_bar_left ? "true" : "");
+      window.document.documentElement.setAttribute("z-bar-left", this.z_bar_left);
+    },
+  },
   data: function () {
     return {
       name: "user_center",
@@ -104,6 +115,7 @@ export default {
       my_emoji_input:
         '[\n"https://z3.ax1x.com/2021/08/01/Wznvbq.jpg",\n"https://z3.ax1x.com/2021/08/01/Wznjrn.jpg"\n]',
       my_emoji_set_handling: false,
+      z_bar_left: false,
     };
   },
   computed: {
@@ -260,6 +272,11 @@ export default {
           }
           alert(error);
         }); // Todo:写异常返回代码;
+    }
+    if (localStorage.getItem("z_bar_left") == null) {
+      localStorage.z_bar_left = "";
+    } else {
+      this.z_bar_left = Boolean(localStorage.z_bar_left);
     }
   },
 };

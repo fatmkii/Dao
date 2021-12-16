@@ -80,13 +80,6 @@ body {
 .z-sidebar {
     position: fixed;
     z-index: 999;
-    //电脑屏幕大于1200px时，不要走到最右边
-    @media all and (min-width: 1200px) {
-        right: calc(50% - 600px);
-    }
-    @media not all and (min-width: 1200px) {
-        right: 15px;
-    }
     bottom: 40%;
     @include font_color("icon_color1");
     width: 40px;
@@ -103,6 +96,29 @@ body {
         position: relative;
     }
 }
+
+[z-bar-left="false"] .z-sidebar {
+    //侧边栏在右边模式
+    //电脑屏幕大于1200px时，不要走到最右边
+    @media all and (min-width: 1200px) {
+        right: calc(50% - 600px);
+    }
+    @media not all and (min-width: 1200px) {
+        right: 15px;
+    }
+}
+
+[z-bar-left="true"] .z-sidebar {
+    //侧边栏在左边模式
+    //电脑屏幕大于1200px时，不要走到最左边
+    @media all and (min-width: 1200px) {
+        left: calc(50% - 600px);
+    }
+    @media not all and (min-width: 1200px) {
+        left: 15px;
+    }
+}
+
 .z-sidebar {
     .icon-roll {
         cursor: pointer;

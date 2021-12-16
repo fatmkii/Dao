@@ -131,6 +131,16 @@ export default {
         localStorage.theme
       );
     }
+
+    //读取localStorage的侧边栏位置记录
+    if (localStorage.getItem("z_bar_left") != null) {
+      window.document.documentElement.setAttribute(
+        "z-bar-left",
+        Boolean(localStorage.z_bar_left)
+      );
+    } else {
+      window.document.documentElement.setAttribute("z-bar-left", "false");
+    }
   },
 };
 </script>
