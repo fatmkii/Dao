@@ -19,7 +19,6 @@ mix.js('resources/js/app.js', 'public/js')
     .copy('resources/json/heads.js', 'public/json')
     .copy('resources/json/chara_index.js', 'public/json')
     .vue()
-    .sourceMaps()
     .version();
 
 if (process.env.MIX_ENV == 'local')
