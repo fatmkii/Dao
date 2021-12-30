@@ -356,6 +356,20 @@ class ThreadController extends Controller
         //     return DB::table('random_heads')->find($CurrentThread->random_heads_group);
         // });
 
+        //记录搜索行为
+        if ($request->has('search_content')) {
+            ProcessUserActive::dispatch(
+                [
+                    'binggan' => $user->binggan,
+                    'user_id' => $user->id,
+                    'active' => '用户进行了搜索（帖子）',
+                    'content' => '关键词：' . $request->query('search_content'),
+                    'thread_id' => $Thread_id,
+                ]
+            );
+        }
+
+
         return response()->json([
             'code' => ResponseCode::SUCCESS,
             'forum_data' => $CurrentForum,

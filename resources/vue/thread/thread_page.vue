@@ -767,7 +767,11 @@ export default {
     // 如果路由有变化，再次获得数据
     $route(to) {
       this.get_browse_current();
-      this.get_posts_data(false, true);
+      if (this.search_input) {
+        this.get_posts_data(false, false, this.search_input);
+      } else {
+        this.get_posts_data();
+      }
       this.$store.commit("PostsLoadStatus_set", 0);
     },
     post_with_admin: function () {
