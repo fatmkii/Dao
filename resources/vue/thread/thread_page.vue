@@ -35,6 +35,31 @@
             无大乱斗
           </b-form-checkbox>
         </b-dropdown>
+        <b-button
+          size="sm"
+          class="my-1 ml-1 my-sm-0"
+          variant="outline-dark"
+          :disabled="!this.$store.state.User.LoginStatus"
+          @click="search_show = !search_show"
+          >搜索</b-button
+        >
+      </div>
+      <div class="d-flex flex-row my-2" v-if="search_show">
+        <b-form-input
+          id="search_input"
+          class="search_input"
+          style="max-width: 400px"
+          placeholder="搜索本楼内容"
+          v-model="search_input"
+        ></b-form-input>
+        <b-button
+          size="sm"
+          class="ml-1"
+          style="min-width: 46px"
+          variant="success"
+          @click="get_posts_data(false, false, search_input)"
+          >搜索</b-button
+        >
       </div>
       <ThreadPaginator
         :thread_id="thread_id"
@@ -803,6 +828,7 @@ export default {
       captcha_code_input: "",
       captcha_key: "",
       thread_nissined: false,
+      search_show: false,
     };
   },
   computed: {
@@ -887,8 +913,12 @@ export default {
     }),
   },
   methods: {
-    get_posts_data(remind = false, scroll_enable = false) {
-      const config = {
+    get_posts_data(
+      remind = false,
+      scroll_enable = false,
+      search_content = null
+    ) {
+      var config = {
         method: "get",
         url: "/api/threads/" + this.thread_id,
         params: {
@@ -896,6 +926,9 @@ export default {
           binggan: this.$store.state.User.Binggan,
         },
       };
+      if (search_content) {
+        config.params.search_content = search_content;
+      }
       axios(config)
         .then((response) => {
           if (response.data.code == 200) {

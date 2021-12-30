@@ -207,6 +207,12 @@ class ThreadController extends Controller
      */
     public function show(Request $request, $Thread_id)
     {
+        $request->validate([
+            'binggan' => 'string|nullable',
+            'page' => 'integer|nullable',
+            'search_content' => 'string|max:100', //搜索内容
+        ]);
+
         $CurrentThread = Thread::find($Thread_id);
         if (!$CurrentThread || $CurrentThread->is_delay == 1) {
             return response()->json([
@@ -216,8 +222,23 @@ class ThreadController extends Controller
         }
 
         $CurrentForum = $CurrentThread->forum;
-        // $user = User::where('binggan', $request->query('binggan'))->first();
         $user = $request->user;
+
+        //用redis记录，全局每10秒搜索20次限制
+        if ($request->has('search_content')) {
+            if (Redis::exists('search_record_global')) {
+                Redis::incr('search_record_global');
+                if (Redis::GET('search_record_global') > 20) {
+                    return response()->json([
+                        'code' => ResponseCode::SEARCH_TOO_MANY,
+                        'message' => ResponseCode::$codeMap[ResponseCode::SEARCH_TOO_MANY],
+                    ]);
+                }
+            } else {
+                Redis::setex('search_record_global',  10, 1);
+            }
+        }
+
 
         //判断是否可无饼干访问的板块
         if (!$CurrentForum->is_anonymous && !$user) {
@@ -302,19 +323,13 @@ class ThreadController extends Controller
                 break;
         }
 
-        $page = $request->query('page') == 'NaN' ? 1 : $request->query('page');
-        //使用缓存
-        // $posts = Cache::remember('threads_cache_' . $CurrentThread->id . '_' . $page, 3600, function () use ($CurrentThread) {
-        //     $result = $CurrentThread->posts()->orderBy('id', 'asc')->paginate(200);
-        //     if ($result->currentPage() > 1) {
-        //         $result->appendPost0($CurrentThread->posts()->first()); //为第2页及之后增加0楼
-        //         return $result;
-        //     }
-        //     return $result;
-        // });
 
-        //不使用缓存
-        $posts = $CurrentThread->posts()->orderBy('id', 'asc')->paginate(200);
+        if ($request->has('search_content')) { //搜索内容
+            $posts = $CurrentThread->posts()->where('content', 'like', '%' . $request->search_content . '%')->orderBy('id', 'asc')->paginate(200);
+        } else {
+            $posts = $CurrentThread->posts()->orderBy('id', 'asc')->paginate(200);
+        }
+
         if ($posts->currentPage() > 1) {
             $posts->appendPost0($CurrentThread->posts()->first()); //为第2页及之后增加0楼
         }
