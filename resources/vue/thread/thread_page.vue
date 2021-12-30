@@ -772,7 +772,6 @@ export default {
     return {
       name: "thread_page",
       new_post_handling: false,
-      nickname_input: "= =",
       content_input_array: [""],
       content_input: "",
       roll_name: "",
@@ -807,6 +806,14 @@ export default {
     };
   },
   computed: {
+    nickname_input: {
+      get() {
+        return this.$store.state.User.NickName;
+      },
+      set(value) {
+        this.$store.commit("NickName_set", value);
+      },
+    },
     nissin_TTL() {
       const seconds =
         (Date.parse(

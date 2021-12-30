@@ -18,7 +18,8 @@ const module_user = {
         Emojis: [],
         RandomHeads: [],
         CharaIndex: [],
-        BrowseLogger: {}
+        BrowseLogger: {},
+        NickName: "",
     }),
     mutations: {
         UserDataLoaded_set(state, payload) {
@@ -63,6 +64,9 @@ const module_user = {
         },
         CharaIndex_set(state, payload) {
             state.CharaIndex = payload
+        },
+        NickName_set(state, payload) {
+            state.NickName = payload
         },
         BrowseLogger_set(state, payload) {
             if (typeof state.BrowseLogger[payload.suffix] == "undefined") {

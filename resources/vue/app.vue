@@ -60,6 +60,14 @@ export default {
                 "UsePingbici_set",
                 response.data.data.binggan.use_pingbici
               );
+              if (response.data.data.binggan.nickname) {
+                this.$store.commit(
+                  "NickName_set",
+                  response.data.data.binggan.nickname
+                );
+              } else {
+                this.$store.commit("NickName_set", "= =");
+              }
               if (response.data.data.pingbici) {
                 this.$store.commit(
                   "TitlePingbici_set",

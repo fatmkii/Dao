@@ -511,7 +511,6 @@ export default {
     return {
       name: "new_thread",
       new_thread_handling: false,
-      nickname_input: "= =",
       content_input_array: [""],
       content_input: "",
       title_input: "",
@@ -535,7 +534,7 @@ export default {
         { value: 3, text: "72小时" },
         { value: 1095, text: "长期" },
       ],
-            nissin_time_selected: 1,
+      nissin_time_selected: 1,
       can_battle_selected: 1,
       can_battle_options: [
         { value: 1, text: "开启" },
@@ -588,6 +587,14 @@ export default {
     },
   },
   computed: {
+    nickname_input: {
+      get() {
+        return this.$store.state.User.NickName;
+      },
+      set(value) {
+        this.$store.commit("NickName_set", value);
+      },
+    },
     forum_name() {
       var forum_data = this.$store.getters.ForumData(this.forum_id);
       if (forum_data) {

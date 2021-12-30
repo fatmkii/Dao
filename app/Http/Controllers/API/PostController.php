@@ -111,6 +111,7 @@ class PostController extends Controller
             $post->save();
 
             $user->coin += 10; //回复+10奥利奥
+            $user->nickname = $request->nickname; //记录昵称
             $user->save();
             DB::commit();
         } catch (QueryException $e) {
