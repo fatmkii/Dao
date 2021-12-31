@@ -60,6 +60,14 @@
           @click="get_posts_data(false, false, search_input)"
           >搜索</b-button
         >
+        <b-button
+          size="sm"
+          class="ml-1"
+          style="min-width: 46px"
+          variant="outline-dark"
+          @click="search_clear"
+          >清空</b-button
+        >
       </div>
       <ThreadPaginator
         :thread_id="thread_id"
@@ -833,6 +841,7 @@ export default {
       captcha_key: "",
       thread_nissined: false,
       search_show: false,
+      search_input: "",
     };
   },
   computed: {
@@ -922,6 +931,7 @@ export default {
       scroll_enable = false,
       search_content = null
     ) {
+      this.$store.commit("PostsLoadStatus_set", 0);
       var config = {
         method: "get",
         url: "/api/threads/" + this.thread_id,
@@ -1007,6 +1017,14 @@ export default {
         .catch((error) => {
           alert(Object.values(error.response.data.errors)[0]);
         });
+    },
+    search_clear() {
+      this.search_input = "";
+      if (this.page == 1) {
+        this.get_posts_data();
+      } else {
+        this.$router.push("/thread/" + this.thread_id + "/1");
+      }
     },
     commit_captcha() {
       const config = {
