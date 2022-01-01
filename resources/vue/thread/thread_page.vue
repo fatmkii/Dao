@@ -775,12 +775,12 @@ export default {
     // 如果路由有变化，再次获得数据
     $route(to) {
       this.get_browse_current();
+      this.$store.commit("PostsLoadStatus_set", 0);
       if (this.search_input) {
         this.get_posts_data(false, false, this.search_input);
       } else {
         this.get_posts_data();
       }
-      this.$store.commit("PostsLoadStatus_set", 0);
     },
     post_with_admin: function () {
       this.nickname_input = this.post_with_admin ? "管理员" : "= =";
@@ -931,7 +931,9 @@ export default {
       scroll_enable = false,
       search_content = null
     ) {
-      this.$store.commit("PostsLoadStatus_set", 0);
+      if (search_content) {
+        this.$store.commit("PostsLoadStatus_set", 0);
+      }
       var config = {
         method: "get",
         url: "/api/threads/" + this.thread_id,
