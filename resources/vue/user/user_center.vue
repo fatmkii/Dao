@@ -14,9 +14,51 @@
     <hr />
     <b-tabs pills>
       <b-tab title="一般设定">
+        <hr />
         <b-form-checkbox class="mx-2 my-2" switch v-model="z_bar_left">
           侧边栏放左侧
         </b-form-checkbox>
+        <hr />
+        <div class="mt-2 d-flex align-items-center">
+          <span class="mb-2">帖子内容行距：</span>
+          <b-form-spinbutton
+            size="sm"
+            style="max-width: 120px"
+            class="mb-2"
+            min="16"
+            max="40"
+            v-model="PostsLineHeight"
+          ></b-form-spinbutton>
+          <span class="ml-1 mb-2">px</span>
+        </div>
+        <div class="mt-2 d-flex align-items-center">
+          <span class="mb-2">回复字体大小：</span>
+          <b-form-spinbutton
+            size="sm"
+            style="max-width: 120px"
+            class="mb-2"
+            min="10"
+            max="24"
+            v-model="PostsFontSize"
+          ></b-form-spinbutton>
+          <span class="ml-1 mb-2">px</span>
+        </div>
+        <div class="mt-2 d-flex align-items-center">
+          <span class="mb-2">楼层字体大小：</span>
+          <b-form-spinbutton
+            size="sm"
+            style="max-width: 120px"
+            class="mb-2"
+            min="10"
+            max="24"
+            v-model="SysInfoFontSize"
+          ></b-form-spinbutton>
+          <span class="ml-1 mb-2">px</span>
+        </div>
+        <b-button variant="success" @click="set_MyCSS">保存</b-button>
+        <b-button variant="outline-dark" @click="default_MyCSS"
+          >恢复默认</b-button
+        >
       </b-tab>
       <b-tab title="屏蔽词">
         <div class="mx-2 my-2">
@@ -101,7 +143,10 @@ export default {
   watch: {
     z_bar_left: function () {
       localStorage.setItem("z_bar_left", this.z_bar_left ? "true" : "");
-      window.document.documentElement.setAttribute("z-bar-left", this.z_bar_left);
+      window.document.documentElement.setAttribute(
+        "z-bar-left",
+        this.z_bar_left
+      );
     },
   },
   data: function () {
@@ -119,6 +164,30 @@ export default {
     };
   },
   computed: {
+    PostsLineHeight: {
+      get() {
+        return this.$store.state.MyCSS.PostsLineHeight;
+      },
+      set(value) {
+        this.$store.commit("PostsLineHeight_set", value);
+      },
+    },
+    PostsFontSize: {
+      get() {
+        return this.$store.state.MyCSS.PostsFontSize;
+      },
+      set(value) {
+        this.$store.commit("PostsFontSize_set", value);
+      },
+    },
+    SysInfoFontSize: {
+      get() {
+        return this.$store.state.MyCSS.SysInfoFontSize;
+      },
+      set(value) {
+        this.$store.commit("SysInfoFontSize_set", value);
+      },
+    },
     ...mapState({
       login_status: (state) => state.User.LoginStatus,
       binggan: (state) => state.User.Binggan,
@@ -230,6 +299,28 @@ export default {
           this.my_emoji_set_handling = false;
           alert(Object.values(error.response.data.errors)[0]);
         });
+    },
+    set_MyCSS() {
+      const my_css = {
+        PostsLineHeight: this.PostsLineHeight,
+        PostsFontSize: this.PostsFontSize,
+        SysInfoFontSize: this.SysInfoFontSize,
+      };
+      localStorage.my_css = JSON.stringify(my_css);
+      this.$bvToast.toast("已保存", {
+        title: "Done.",
+        autoHideDelay: 1500,
+        appendToast: true,
+      });
+    },
+    default_MyCSS() {
+      const my_css = {
+        PostsLineHeight: 28,
+        PostsFontSize: 16,
+        SysInfoFontSize: 14,
+      };
+      this.$store.commit("MyCSS_set_all", my_css);
+      this.set_MyCSS();
     },
   },
   created() {

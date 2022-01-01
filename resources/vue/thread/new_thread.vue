@@ -113,6 +113,7 @@
       ref="content_input"
       :disabled="new_thread_handling || Boolean(locked_TTL)"
       @keyup.ctrl.enter="new_thread_handle"
+      :style="post_content_css"
     ></textarea>
     <div class="d-flex align-items-center mt-2">
       <!-- <div class="col-7">
@@ -637,6 +638,12 @@ export default {
         is_your_post: false,
         nickname: this.nickname_input,
         random_head: null,
+      };
+    },
+    post_content_css() {
+      return {
+        lineHeight: this.$store.state.MyCSS.PostsLineHeight + "px",
+        fontSize: this.$store.state.MyCSS.PostsFontSize + "px",
       };
     },
   },

@@ -160,6 +160,30 @@ const module_posts = {
     actions: {}
 }
 
+const module_css = {
+    state: () => ({
+        PostsLineHeight: 28,
+        PostsFontSize: 16,
+        SysInfoFontSize: 14,
+    }),
+    mutations: {
+        MyCSS_set_all(state, payload) {
+            state.PostsLineHeight = payload.PostsLineHeight
+            state.PostsFontSize = payload.PostsFontSize
+            state.SysInfoFontSize = payload.SysInfoFontSize
+        },
+        PostsLineHeight_set(state, payload) {
+            state.PostsLineHeight = payload
+        },
+        PostsFontSize_set(state, payload) {
+            state.PostsFontSize = payload
+        },
+        SysInfoFontSize_set(state, payload) {
+            state.SysInfoFontSize = payload
+        },
+    },
+}
+
 
 export default new Vuex.Store({
     modules: {
@@ -167,5 +191,6 @@ export default new Vuex.Store({
         User: module_user,
         Threads: module_threads,
         Posts: module_posts,
+        MyCSS: module_css,
     }
 })

@@ -329,6 +329,7 @@
           new_post_handling
         "
         @keyup.ctrl.enter="new_post_handle"
+        :style="post_content_css"
       ></textarea>
       <div class="row align-items-center mt-2">
         <div class="col-7" v-if="this.forum_id === 419">
@@ -896,6 +897,12 @@ export default {
         is_deleted: 0,
         is_your_post: false,
         nickname: this.nickname_input,
+      };
+    },
+    post_content_css() {
+      return {
+        lineHeight: this.$store.state.MyCSS.PostsLineHeight + "px",
+        fontSize: this.$store.state.MyCSS.PostsFontSize + "px",
       };
     },
     ...mapState({

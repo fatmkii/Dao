@@ -124,7 +124,12 @@
         :class="'head_' + post_data.random_head"
       ></b-img>
     </div>
-    <div class="post_content mb-2" style="margin-top: 2rem" ref="post_centent">
+    <div
+      class="post_content mb-2"
+      style="margin-top: 2rem"
+      :style="post_content_css"
+      ref="post_centent"
+    >
       <span
         v-html="post_content"
         v-if="post_content_show"
@@ -135,7 +140,7 @@
       >
     </div>
     <slot name="battle"></slot>
-    <div class="post_footer" ref="post_author_info">
+    <div class="post_footer" ref="post_author_info" :style="post_footer_css">
       <span class="post_footer_text" @click="quote_click"
         >№{{ post_data.floor }} ☆☆☆</span
       >
@@ -241,6 +246,17 @@ export default {
     },
     use_pingbici() {
       return this.$store.state.User.UsePingbici;
+    },
+    post_content_css() {
+      return {
+        lineHeight: this.$store.state.MyCSS.PostsLineHeight + "px",
+        fontSize: this.$store.state.MyCSS.PostsFontSize + "px",
+      };
+    },
+    post_footer_css() {
+      return {
+        fontSize: this.$store.state.MyCSS.SysInfoFontSize + "px",
+      };
     },
   },
   created() {

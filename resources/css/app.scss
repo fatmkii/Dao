@@ -352,10 +352,6 @@ body {
 .post_content img {
     max-width: 100%;
 }
-.post_content,
-.content_input {
-    line-height: 32px;
-}
 
 label.custom-file-label {
     @include background_color("background_color_input");
