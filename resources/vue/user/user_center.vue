@@ -44,6 +44,18 @@
           <span class="ml-1 mb-2">px</span>
         </div>
         <div class="mt-2 d-flex align-items-center">
+          <span class="mb-2">引用字体大小：</span>
+          <b-form-spinbutton
+            size="sm"
+            style="max-width: 120px"
+            class="mb-2"
+            min="10"
+            max="24"
+            v-model="QuoteFontSize"
+          ></b-form-spinbutton>
+          <span class="ml-1 mb-2">px</span>
+        </div>
+        <div class="mt-2 d-flex align-items-center">
           <span class="mb-2">楼层字体大小：</span>
           <b-form-spinbutton
             size="sm"
@@ -180,6 +192,14 @@ export default {
         this.$store.commit("PostsFontSize_set", value);
       },
     },
+    QuoteFontSize: {
+      get() {
+        return this.$store.state.MyCSS.QuoteFontSize;
+      },
+      set(value) {
+        this.$store.commit("QuoteFontSize_set", value);
+      },
+    },
     SysInfoFontSize: {
       get() {
         return this.$store.state.MyCSS.SysInfoFontSize;
@@ -304,6 +324,7 @@ export default {
       const my_css = {
         PostsLineHeight: this.PostsLineHeight,
         PostsFontSize: this.PostsFontSize,
+        QuoteFontSize: this.QuoteFontSize,
         SysInfoFontSize: this.SysInfoFontSize,
       };
       localStorage.my_css = JSON.stringify(my_css);
@@ -317,6 +338,7 @@ export default {
       const my_css = {
         PostsLineHeight: 28,
         PostsFontSize: 16,
+        QuoteFontSize:16,
         SysInfoFontSize: 14,
       };
       this.$store.commit("MyCSS_set_all", my_css);

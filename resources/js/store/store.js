@@ -164,12 +164,14 @@ const module_css = {
     state: () => ({
         PostsLineHeight: 28,
         PostsFontSize: 16,
+        QuoteFontSize: 16,
         SysInfoFontSize: 14,
     }),
     mutations: {
         MyCSS_set_all(state, payload) {
             state.PostsLineHeight = payload.PostsLineHeight
             state.PostsFontSize = payload.PostsFontSize
+            state.QuoteFontSize = payload.QuoteFontSize
             state.SysInfoFontSize = payload.SysInfoFontSize
         },
         PostsLineHeight_set(state, payload) {
@@ -177,6 +179,9 @@ const module_css = {
         },
         PostsFontSize_set(state, payload) {
             state.PostsFontSize = payload
+        },
+        QuoteFontSize_set(state, payload) {
+            state.QuoteFontSize = payload
         },
         SysInfoFontSize_set(state, payload) {
             state.SysInfoFontSize = payload

@@ -262,6 +262,15 @@ export default {
   created() {
     this.pingbici_check();
   },
+  mounted() {
+    this.$nextTick(() => {
+      // 给回帖内容的引用部分单独加style
+      var quote_dom = this.$refs.post_centent.querySelector(".quote_content");
+      if (quote_dom) {
+        quote_dom.style.fontSize = this.$store.state.MyCSS.QuoteFontSize + "px";
+      }
+    });
+  },
   methods: {
     emit_reward() {
       const payload = {
