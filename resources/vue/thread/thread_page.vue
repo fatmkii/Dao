@@ -780,7 +780,7 @@ export default {
       if (this.search_input) {
         this.get_posts_data(false, false, this.search_input);
       } else {
-        this.get_posts_data();
+        this.get_posts_data(false, true);
       }
     },
     post_with_admin: function () {
