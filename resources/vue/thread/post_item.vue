@@ -126,7 +126,6 @@
     </div>
     <div
       class="post_content mb-2"
-      style="margin-top: 2rem"
       :style="post_content_css"
       ref="post_centent"
     >
@@ -251,6 +250,7 @@ export default {
       return {
         lineHeight: this.$store.state.MyCSS.PostsLineHeight + "px",
         fontSize: this.$store.state.MyCSS.PostsFontSize + "px",
+        marginTop: this.$store.state.MyCSS.PostsMarginTop + "px",
       };
     },
     post_footer_css() {

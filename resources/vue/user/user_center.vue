@@ -67,6 +67,18 @@
           ></b-form-spinbutton>
           <span class="ml-1 mb-2">px</span>
         </div>
+        <div class="mt-2 d-flex align-items-center">
+          <span class="mb-2">回复顶部留空：</span>
+          <b-form-spinbutton
+            size="sm"
+            style="max-width: 120px"
+            class="mb-2"
+            min="1"
+            max="48"
+            v-model="PostsMarginTop"
+          ></b-form-spinbutton>
+          <span class="ml-1 mb-2">px</span>
+        </div>
         <b-button variant="success" @click="set_MyCSS">保存</b-button>
         <b-button variant="outline-dark" @click="default_MyCSS"
           >恢复默认</b-button
@@ -208,6 +220,14 @@ export default {
         this.$store.commit("SysInfoFontSize_set", value);
       },
     },
+    PostsMarginTop: {
+      get() {
+        return this.$store.state.MyCSS.PostsMarginTop;
+      },
+      set(value) {
+        this.$store.commit("PostsMarginTop_set", value);
+      },
+    },
     ...mapState({
       login_status: (state) => state.User.LoginStatus,
       binggan: (state) => state.User.Binggan,
@@ -321,12 +341,7 @@ export default {
         });
     },
     set_MyCSS() {
-      const my_css = {
-        PostsLineHeight: this.PostsLineHeight,
-        PostsFontSize: this.PostsFontSize,
-        QuoteFontSize: this.QuoteFontSize,
-        SysInfoFontSize: this.SysInfoFontSize,
-      };
+      const my_css = this.$store.state.MyCSS;
       localStorage.my_css = JSON.stringify(my_css);
       this.$bvToast.toast("已保存", {
         title: "Done.",
@@ -338,8 +353,9 @@ export default {
       const my_css = {
         PostsLineHeight: 28,
         PostsFontSize: 16,
-        QuoteFontSize:16,
+        QuoteFontSize: 16,
         SysInfoFontSize: 14,
+        PostsMarginTop: 32,
       };
       this.$store.commit("MyCSS_set_all", my_css);
       this.set_MyCSS();

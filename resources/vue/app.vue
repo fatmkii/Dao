@@ -103,6 +103,11 @@ export default {
       //读取MyCss（自定义字体大小和行距等）
       if (localStorage.my_css != null) {
         this.$store.commit("MyCSS_set_all", JSON.parse(localStorage.my_css));
+        if (this.$store.state.MyCSS.PostsMarginTop == null) {
+          this.$store.commit("PostsMarginTop_set", 32); //临时的，给旧版本加默认值
+          const my_css = this.$store.state.MyCSS;
+          localStorage.my_css = JSON.stringify(my_css);
+        }
       }
     },
     set_VueStore(response_data) {
