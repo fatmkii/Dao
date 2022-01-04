@@ -640,12 +640,11 @@ export default {
       };
     },
     random_heads_group() {
-      return this.$store.state.User.RandomHeads.map(
-        (value, index) => ({
-          id: index + 1,
-          name: value.name,
-        })
-      );
+      this.random_heads_group_selected = this.forum_default_heads; //选择该板块的默认头像组
+      return this.$store.state.User.RandomHeads.map((value, index) => ({
+        id: index + 1,
+        name: value.name,
+      }));
     },
     post_content_css() {
       return {
