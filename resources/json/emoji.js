@@ -956,5 +956,31 @@ var emoji_json =
                 "https://z3.ax1x.com/2021/09/02/hsRfAO.jpg"
             ],
             "deleted_at": null
+        },
+        {
+            "id": "12",
+            "heads_id": "3",
+            "name": "国配专属",
+            "emojis": [
+                "https://s4.ax1x.com/2021/12/19/TeOoRg.png",
+                "https://s4.ax1x.com/2021/12/30/TWNlo8.png",
+                "https://s4.ax1x.com/2021/12/30/TWNwwV.png",
+                "https://s4.ax1x.com/2021/12/30/TWNDFU.png",
+                "https://s4.ax1x.com/2021/12/31/Tfjb4A.png",
+                "https://s4.ax1x.com/2021/12/30/TWNgyR.png",
+                "https://s4.ax1x.com/2021/12/30/TWN2O1.png",
+                "https://s4.ax1x.com/2021/12/30/TWNWex.png",
+                "https://s4.ax1x.com/2021/12/30/TWNcl9.png",
+                "https://s4.ax1x.com/2021/12/31/TfjHNd.png",
+                "https://s2.loli.net/2021/12/31/XsF9V4ZfvbElHuU.gif",
+                "https://s2.loli.net/2021/12/31/hFn9dwImPJg1DH6.gif",
+                "https://s2.loli.net/2021/12/31/NV8WhdSIHmbuULq.gif",
+                "https://s2.loli.net/2021/12/31/6QLZCHyDrck4POn.gif",
+                "https://s2.loli.net/2021/12/31/aLWT8xM7UGB5AwC.gif",
+                "https://s2.loli.net/2021/12/31/Job6BWilkS8QwG2.gif",
+                "https://s2.loli.net/2021/12/31/SUX6Lr9TqYkMFHa.gif",
+                "https://s2.loli.net/2021/12/31/W3jwLClbIKzs7hr.gif"
+            ],
+            "deleted_at": null
         }
     ]

@@ -516,7 +516,6 @@ export default {
       content_input: "",
       title_input: "",
       random_heads_group_selected: 1,
-      random_heads_group: [],
       subtitles_options: [],
       subtitles_selected: "[闲聊]",
       admin_subtitles_options: [
@@ -640,6 +639,14 @@ export default {
         random_head: null,
       };
     },
+    random_heads_group() {
+      return this.$store.state.User.RandomHeads.map(
+        (value, index) => ({
+          id: index + 1,
+          name: value.name,
+        })
+      );
+    },
     post_content_css() {
       return {
         lineHeight: this.$store.state.MyCSS.PostsLineHeight + "px",
@@ -762,21 +769,6 @@ export default {
           alert(error);
         }); // Todo:写异常返回代码;
     },
-    get_random_heads_index() {
-      const config = {
-        method: "get",
-        url: "/api/random_heads",
-        data: {},
-      };
-      axios(config)
-        .then((response) => {
-          this.random_heads_group = response.data.data;
-          this.random_heads_group_selected = this.forum_default_heads;
-        })
-        .catch((error) => {
-          alert(error);
-        }); // Todo:写异常返回代码;
-    },
     upload_img_handle(file) {
       if (!file) return;
       this.upload_img_handling = true;
@@ -833,7 +825,6 @@ export default {
   },
   created() {
     this.get_subtitles();
-    this.get_random_heads_index();
     if (localStorage.getItem("emoji_auto_hide") == null) {
       localStorage.emoji_auto_hide = "";
     } else {
