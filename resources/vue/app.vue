@@ -100,6 +100,14 @@ export default {
         window.document.documentElement.setAttribute("z-bar-left", "false");
       }
 
+      //读取是否折叠屏蔽词
+      if (localStorage.getItem("fold_pingbici") != null) {
+        this.$store.commit(
+          "FoldPingbici_set",
+          localStorage.getItem("fold_pingbici") === "true"
+        );
+      }
+
       //读取MyCss（自定义字体大小和行距等）
       if (localStorage.my_css != null) {
         this.$store.commit("MyCSS_set_all", JSON.parse(localStorage.my_css));

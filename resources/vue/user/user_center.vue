@@ -104,25 +104,30 @@
             rows="3"
             max-rows="20"
           ></b-form-textarea>
-          <div class="row align-items-center mt-2">
-            <div class="col-auto">
-              <b-button
-                variant="success"
-                :disabled="pingbici_set_handling"
-                @click="pingbici_set_handle"
-                >提交
-              </b-button>
-            </div>
-            <div class="col-auto">
-              <b-form-checkbox
-                class="mx-2"
-                switch
-                v-model="use_pingbici_input"
-                v-b-popover.hover.bottom="'切换后也要点击提交喔'"
-              >
-                启用屏蔽词
-              </b-form-checkbox>
-            </div>
+          <div class="d-flex align-items-center mt-2">
+            <b-button
+              variant="success"
+              :disabled="pingbici_set_handling"
+              @click="pingbici_set_handle"
+              >提交
+            </b-button>
+            <b-form-checkbox
+              switch
+              class="ml-2"
+              v-model="use_pingbici_input"
+              v-b-popover.hover.bottom="'切换后也要点击提交喔'"
+            >
+              启用屏蔽词
+            </b-form-checkbox>
+
+            <b-form-checkbox
+              class="ml-2"
+              switch
+              v-model="FoldPingbici"
+              v-b-popover.hover.bottom="'这个保存在本地不用提交'"
+            >
+              折叠楼层
+            </b-form-checkbox>
           </div>
         </div>
       </b-tab>
@@ -226,6 +231,15 @@ export default {
       },
       set(value) {
         this.$store.commit("PostsMarginTop_set", value);
+      },
+    },
+    FoldPingbici: {
+      get() {
+        return this.$store.state.User.FoldPingbici;
+      },
+      set(value) {
+        localStorage.setItem("fold_pingbici", value ? "true" : "");
+        this.$store.commit("FoldPingbici_set", value);
       },
     },
     ...mapState({

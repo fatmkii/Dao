@@ -1,5 +1,9 @@
 <template>
-  <div class="post_item my-2" :id="'f_' + post_data.floor">
+  <div
+    class="post_item my-2"
+    :id="'f_' + post_data.floor"
+    v-if="!(!this.post_content_show && this.fold_pingbici)"
+  >
     <slot name="header"></slot>
     <div class="float-right" v-if="this.$store.state.User.LoginStatus">
       <b-button
@@ -124,11 +128,7 @@
         :class="'head_' + post_data.random_head"
       ></b-img>
     </div>
-    <div
-      class="post_content mb-2"
-      :style="post_content_css"
-      ref="post_centent"
-    >
+    <div class="post_content mb-2" :style="post_content_css" ref="post_centent">
       <span
         v-html="post_content"
         v-if="post_content_show"
@@ -245,6 +245,9 @@ export default {
     },
     use_pingbici() {
       return this.$store.state.User.UsePingbici;
+    },
+    fold_pingbici() {
+      return this.$store.state.User.FoldPingbici;
     },
     post_content_css() {
       return {

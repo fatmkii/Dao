@@ -14,6 +14,7 @@ const module_user = {
         UsePingbici: false,
         TitlePingbici: [],
         ContentPingbici: [],
+        FoldPingbici: false,
         MyEmoji: "",
         Emojis: [],
         RandomHeads: [],
@@ -48,6 +49,9 @@ const module_user = {
         },
         TitlePingbici_set(state, payload) {
             state.TitlePingbici = payload
+        },
+        FoldPingbici_set(state, payload) {
+            state.FoldPingbici = payload
         },
         ContentPingbici_set(state, payload) {
             state.ContentPingbici = payload
