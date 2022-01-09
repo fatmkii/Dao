@@ -6,6 +6,7 @@ namespace App\Common;
 class BattleChara
 {
     //表情包索引表
+    //注意角色序号的数据库字段是tinyint(4)，最大255
     const chara_index = array(
         //group：0=共通组；1=咒术组；
         //message：0=共通组；其他=特别；
@@ -300,12 +301,12 @@ class BattleChara
             'lose' => 'https://z3.ax1x.com/2021/06/18/RpGEX4.jpg',
         ),
         199 => array(
-            'name' => '屁元',
-            'wait' => 'https://z3.ax1x.com/2021/06/18/Rp87kt.png',
-            'against' => 'https://z3.ax1x.com/2021/06/18/Rp8HtP.jpg',
-            'attack' => 'https://z3.ax1x.com/2021/05/09/gYotPO.jpg',
-            'win' => 'https://z3.ax1x.com/2021/05/26/2Cntbj.jpg',
-            'lose' => 'https://z3.ax1x.com/2021/06/18/RpGEX4.jpg',
+            'name' => '芥见下下',
+            'wait' => 'https://z3.ax1x.com/2021/05/11/gdFVHA.jpg',
+            'against' => 'https://z3.ax1x.com/2021/04/29/gFjrQJ.jpg',
+            'attack' => 'https://www.z4a.net/images/2021/12/01/Snipaste_2021-12-01_22-14-55.jpg',
+            'win' => 'https://www.z4a.net/images/2021/05/10/D5XNu.png',
+            'lose' => 'https://www.z4a.net/images/2021/05/10/D5sNh.png',
         ),
     );
 
