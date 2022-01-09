@@ -158,6 +158,7 @@ export default {
     this.$store.commit("Emojis_set", emoji_json);
     this.$store.commit("RandomHeads_set", random_heads_json);
     this.$store.commit("CharaIndex_set", chara_index);
+    this.$store.commit("CharaGroupIndex_set", chara_group_index);
 
     this.set_LocalStorage(); //把LocalStorage变量存到Vuex
   },

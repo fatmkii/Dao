@@ -48,6 +48,7 @@ class BattleController extends Controller
             'thread_id' => 'required|integer',
             'battle_olo' => 'required|integer|max:100000|min:1',
             'chara_id' => 'required|integer',
+            'chara_group' => 'required|integer',
         ]);
 
         $user = $request->user;
@@ -88,6 +89,7 @@ class BattleController extends Controller
             $battle->initiator_user_id = $user->id;
             $battle->initiator_chara = $request->chara_id;
             $battle->battle_olo = $request->battle_olo;
+            $battle->chara_group = $request->chara_group;
             $battle->save();
 
             $post->battle_id = $battle->id; //记得给post加上battle_id
@@ -205,7 +207,7 @@ class BattleController extends Controller
             $battle_message->battle_id = $battle->id;
             $battle_message->chara_url = BattleChara::CharaHead($challenger_chara, 'attack');
             $battle_message->message_type = 2;
-            $battle_message->message = BattleChara::CharaAttackMessage($challenger_chara, $challenger_rand_num);
+            $battle_message->message = BattleChara::CharaAttackMessage($challenger_chara, $initiator_chara, $challenger_rand_num);
             $battle_message->save();
 
             //等待迎战的系统公告
@@ -220,7 +222,7 @@ class BattleController extends Controller
             $battle_message->battle_id = $battle->id;
             $battle_message->chara_url = BattleChara::CharaHead($initiator_chara, 'attack');
             $battle_message->message_type = 1;
-            $battle_message->message = BattleChara::CharaAttackMessage($initiator_chara, $initiator_rand_num);
+            $battle_message->message = BattleChara::CharaAttackMessage($initiator_chara, $challenger_chara, $initiator_rand_num);
             $battle_message->save();
 
 
@@ -447,7 +449,7 @@ class BattleController extends Controller
             $battle_message->battle_id = $battle->id;
             $battle_message->chara_url = BattleChara::CharaHead($battle->initiator_chara, 'attack');
             $battle_message->message_type = 1;
-            $battle_message->message = BattleChara::CharaAttackMessage($battle->initiator_chara, $rand_num);
+            $battle_message->message = BattleChara::CharaAttackMessage($battle->initiator_chara, 0, $rand_num);//第二个参数是对手角色号，但是这里不需要
             $battle_message->save();
 
 

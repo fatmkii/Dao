@@ -640,13 +640,19 @@
         <template v-slot:default>
           <p>问苍茫大地 谁主沉浮</p>
           <div class="my-1">
-            <b-input-group prepend="角色：">
+            <b-input-group prepend="主题：" class="mt-1">
+              <b-form-select
+                v-model="battle_chara_group_id"
+                :options="battle_chara_group_options"
+              ></b-form-select>
+            </b-input-group>
+            <b-input-group prepend="角色：" class="mt-1">
               <b-form-select
                 v-model="battle_chara_id"
                 :options="battle_chara_options"
               ></b-form-select>
             </b-input-group>
-            <div class="my-1">
+            <div class="mt-1">
               <b-input-group prepend="下注：">
                 <b-form-input
                   v-model="battle_olo"
@@ -783,23 +789,33 @@ export default {
         this.get_posts_data(false, true);
       }
     },
-    post_with_admin: function () {
+    post_with_admin() {
       this.nickname_input = this.post_with_admin ? "管理员" : "= =";
     },
-    emoji_auto_hide: function () {
+    emoji_auto_hide() {
       localStorage.setItem(
         "emoji_auto_hide",
         this.emoji_auto_hide ? "true" : ""
       );
     },
-    no_image_mode: function () {
+    no_image_mode() {
       localStorage.setItem("no_image_mode", this.no_image_mode ? "true" : "");
     },
-    no_emoji_mode: function () {
+    no_emoji_mode() {
       localStorage.setItem("no_emoji_mode", this.no_emoji_mode ? "true" : "");
     },
-    no_battle_mode: function () {
+    no_battle_mode() {
       localStorage.setItem("no_battle_mode", this.no_battle_mode ? "true" : "");
+    },
+    battle_chara_group_id() {
+      if (
+        this.$store.state.User.CharaIndex[this.battle_chara_group_id] !=
+        undefined
+      ) {
+        this.battle_chara_options =
+          this.$store.state.User.CharaIndex[this.battle_chara_group_id];
+      }
+      this.battle_chara_id = this.battle_chara_options[0].value;
     },
   },
   beforeRouteUpdate(to, from, next) {
@@ -825,6 +841,8 @@ export default {
       jump_page_show: false,
       battle_olo: 100,
       battle_chara_id: 8,
+      battle_chara_group_id: 0,
+      battle_chara_options: this.$store.state.User.CharaIndex[0],
       z_bar_show: false,
       no_image_mode: false,
       no_emoji_mode: false,
@@ -905,6 +923,24 @@ export default {
         fontSize: this.$store.state.MyCSS.PostsFontSize + "px",
       };
     },
+    battle_chara_group_options() {
+      var group_options = [{ value: 0, text: "共通" }];
+      if (this.$store.state.Threads.CurrentThreadData) {
+        const random_heads_group =
+          this.$store.state.Threads.CurrentThreadData.random_heads_group;
+        if (
+          random_heads_group != 1 &&
+          this.$store.state.User.CharaGroupIndex[random_heads_group - 1] !=
+            undefined
+         ) {
+          this.battle_chara_group_id = random_heads_group - 1; //random_heads_group是从1开始数的
+          const chara_group =
+            this.$store.state.User.CharaGroupIndex[random_heads_group - 1];
+          group_options.push(chara_group);
+        }
+      }
+      return group_options;
+    },
     ...mapState({
       forum_name: (state) =>
         state.Forums.CurrentForumData.name
@@ -929,7 +965,7 @@ export default {
       posts_load_status: (state) => state.Posts.PostsLoadStatus,
       locked_TTL: (state) => state.User.LockedTTL,
       random_heads_data: (state) => state.User.RandomHeads,
-      battle_chara_options: (state) => state.User.CharaIndex,
+      // battle_chara_options: (state) => state.User.CharaIndex.chara_group_index,
     }),
   },
   methods: {
@@ -1315,6 +1351,7 @@ export default {
           binggan: this.$store.state.User.Binggan,
           forum_id: this.forum_id,
           thread_id: this.thread_id,
+          chara_group: this.battle_chara_group_id,
           battle_olo: this.battle_olo,
           chara_id: this.battle_chara_id,
         },

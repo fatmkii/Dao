@@ -114,7 +114,23 @@ export default {
   },
   computed: {
     battle_chara_options() {
-      return this.$store.state.User.CharaIndex;
+      var group_id = 0;
+      if (this.battle_data.chara_group > 0) {
+        if (
+          this.$store.state.User.CharaIndex[this.battle_data.chara_group] !=
+          undefined
+        ) {
+          group_id = this.battle_data.chara_group;
+        }
+      }
+      const chara_options = this.$store.state.User.CharaIndex[group_id];
+      if (group_id > 0) {
+        //如果是特别的乱斗主题group_id>0，则默认选择第一个
+        //如果是特别的共通主题group_id=0，则不改变默认选择（8，小豆泥）
+        this.battle_chara_id =
+          this.$store.state.User.CharaIndex[group_id][0].value;
+      }
+      return chara_options;
     },
   },
   methods: {

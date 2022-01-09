@@ -19,6 +19,7 @@ const module_user = {
         Emojis: [],
         RandomHeads: [],
         CharaIndex: [],
+        CharaGroupIndex: [],
         BrowseLogger: {},
         NickName: "",
     }),
@@ -65,6 +66,9 @@ const module_user = {
         },
         RandomHeads_set(state, payload) {
             state.RandomHeads = payload
+        },
+        CharaGroupIndex_set(state, payload) {
+            state.CharaGroupIndex = payload
         },
         CharaIndex_set(state, payload) {
             state.CharaIndex = payload
