@@ -13,9 +13,7 @@
 
       <b-card-body class="bulletin-card py-2">
         <b-card-text>
-          发帖、回帖、表情包、Roll点、打赏、日清等各基本功能已做好。欢迎测试。<br />
-          Bug可能较多，请在公告中反馈。<br />
-          因系统还不稳定，随时可能需要清空数据库，请了解。
+          <p class="my-2">这里是小火锅, 是个人论坛。欢迎来玩~</p>
         </b-card-text>
       </b-card-body>
     </b-card>
