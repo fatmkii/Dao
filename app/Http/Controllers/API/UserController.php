@@ -211,8 +211,8 @@ class UserController extends Controller
                 ]);
             }
 
-            //如果申请次数已经达到10次，则ban
-            if (DB::table('user_register')->where('created_UUID', $created_UUID_short)->value('count') >= 10) {
+            //如果申请次数已经达到5次，则ban
+            if (DB::table('user_register')->where('created_UUID', $created_UUID_short)->value('count') >= 5) {
                 DB::table('user_register')->where('created_UUID', $created_UUID_short)->update(['is_banned' => 1]);
             }
 
