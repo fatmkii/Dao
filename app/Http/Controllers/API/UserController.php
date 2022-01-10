@@ -157,9 +157,15 @@ class UserController extends Controller
         $iv = 'abcdef0123456789';
         $options = OPENSSL_ZERO_PADDING;
         $created_UUID = openssl_decrypt($request->register_key, 'aes-128-cbc', $key, $options, $iv);
-        $created_UUID_short = substr($created_UUID, 10, 8);
+        $created_UUID_short = substr($created_UUID, 10, 16);
         //并且字符串的开始应为：XiaoHuoGuo
         if (substr($created_UUID, 0, 10) != "XiaoHuoGuo") {
+            ProcessUserActive::dispatch(
+                [
+                    'active' => '怀疑有人用脚本申请饼干',
+                    'content' => 'ip:' . $request->ip(),
+                ]
+            );
             return response()->json([
                 'code' => ResponseCode::USER_REGISTER_FAIL,
                 'message' => ResponseCode::$codeMap[ResponseCode::USER_REGISTER_FAIL] . '，是否使用了非正常手段申请饼干？如有疑问请联络：Bombaxceiba@protonmail.com',
@@ -169,6 +175,12 @@ class UserController extends Controller
 
         //确认UUID是否被ban
         if (DB::table('user_register')->where('created_UUID', $created_UUID_short)->value('is_banned')) {
+            ProcessUserActive::dispatch(
+                [
+                    'active' => '申请饼干但UUID过多而失败',
+                    'content' => 'ip:' . $request->ip() . ' UUID:' . $created_UUID_short,
+                ]
+            );
             return response()->json([
                 'code' => ResponseCode::USER_REGISTER_FAIL,
                 'message' => ResponseCode::$codeMap[ResponseCode::USER_REGISTER_FAIL] .

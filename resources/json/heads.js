@@ -143,3 +143,4 @@ var random_heads_json =
         }
 
     ]
+var rgk = "XiaoHuoGuo";//用于申请饼干时候的密钥，藏在这里了。
