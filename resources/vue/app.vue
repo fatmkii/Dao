@@ -149,6 +149,20 @@ export default {
         this.$store.commit("MyEmoji_set", response_data.my_emoji);
       }
     },
+    get_ip() {
+      const config = {
+        method: "get",
+        url: "http://ip-api.com/json/" + "117.136.79.87",
+        params: {
+          fields: "16401",
+        },
+      };
+      axios(config)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => alert(error)); // Todo:写异常返回代码;}
+    },
   },
   created() {
     this.get_forums_data();

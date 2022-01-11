@@ -57,7 +57,7 @@
           class="ml-1"
           style="min-width: 46px"
           variant="success"
-          @click="get_posts_data(false, false, search_input)"
+          @click="search_handle"
           >搜索</b-button
         >
         <b-button
@@ -932,7 +932,7 @@ export default {
           random_heads_group != 1 &&
           this.$store.state.User.CharaGroupIndex[random_heads_group - 1] !=
             undefined
-         ) {
+        ) {
           this.battle_chara_group_id = random_heads_group - 1; //random_heads_group是从1开始数的
           const chara_group =
             this.$store.state.User.CharaGroupIndex[random_heads_group - 1];
@@ -1069,6 +1069,13 @@ export default {
         this.get_posts_data();
       } else {
         this.$router.push("/thread/" + this.thread_id + "/1");
+      }
+    },
+    search_handle() {
+      if (this.page != 1) {
+        this.$router.push("/thread/" + this.thread_id + "/1");
+      } else {
+        this.get_posts_data(false, false, this.search_input);
       }
     },
     commit_captcha() {
