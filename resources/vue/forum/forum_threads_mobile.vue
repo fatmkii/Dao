@@ -35,6 +35,14 @@
             class="thread_page ml-1"
             >[{{ Math.ceil((thread.posts_num + 1) / 200) }}]</router-link
           >
+          <router-link
+            class="thread_title"
+            v-if="thread.is_your_thread"
+            @click.native="delay_thread_withdraw_handle(thread.id)"
+            to=""
+          >
+            [撤回]
+          </router-link>
           <span v-if="thread.posts_num >= 1200">🔥</span>
         </div>
         <div class="my-1 py-1" style="font-size: 0.8rem">
@@ -97,7 +105,33 @@ export default {
       forum_is_nissin: (state) => state.Forums.CurrentForumData.is_nissin,
     }),
   },
-  methods: {},
+  methods: {
+    delay_thread_withdraw_handle(thread_id) {
+      var confirmed = confirm("确定要撤回此主题吗？");
+      if (!confirmed) {
+        return;
+      }
+      const config = {
+        method: "delete",
+        url: "/api/threads/delay/" + thread_id,
+        params: {
+          binggan: this.$store.state.User.Binggan,
+        },
+      };
+      axios(config)
+        .then((response) => {
+          if (response.data.code == 200) {
+            alert("已撤回延时主题");
+            this.$parent.get_delay_threads_data();
+          } else {
+            alert(response.data.message);
+          }
+        })
+        .catch((error) => {
+          alert(Object.values(error.response.data.errors)[0]);
+        });
+    },
+  },
   created() {
     this.$store.commit("ThreadsLoadStatus_set", 0); //避免显示上个ThreadsData
   },

@@ -8,6 +8,7 @@ class ResponseCode
     const FILED_ERROR = 20422;
 
     const USER_UNAUTHORIZED = 21401;
+    const USER_CANNOT = 214011;
     const USER_REGISTER_FAIL = 21403;
     const USER_NOT_FOUND = 21404;
     const USER_LOCKED = 21443;
@@ -70,6 +71,7 @@ class ResponseCode
         self::USER_BANNED => '你的饼干已碎',
         self::USER_UNAUTHORIZED => "饼干错误",
         self::USER_NEW_CLOSED => "饼干领取已暂停",
+        self::USER_CANNOT => "无法这样做",
         self::COIN_NOT_ENOUGH => "奥利奥不足了",
         self::USER_PASSWORD_ERROR => '密码输入错误',
         self::ADMIN_UNAUTHORIZED => '管理员权限不足',

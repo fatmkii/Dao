@@ -196,13 +196,21 @@ class ForumController extends Controller
             }
         }
 
-        $threads = $CurrentForum->threads()->where('is_deleted', 0)->where('is_delay', 1);
+        $threads = $CurrentForum->threads()->where('is_deleted', 0)->where('is_delay', 1)->paginate(30);
+
+        //如果有提供binggan，为每个thread输入binggan，用来判断is_your_thread（为前端提供是否是用户自己帖子的判据）
+        if ($request->query('binggan')) {
+            foreach ($threads as $thread) {
+                $thread->setBinggan($request->query('binggan'));
+                $thread->makeVisible('is_your_thread');
+            }
+        }
 
         return response()->json([
             'code' => ResponseCode::SUCCESS,
             'message' => ResponseCode::$codeMap[ResponseCode::SUCCESS],
             'forum_data' => $CurrentForum->makeVisible('banners'),
-            'threads_data' => $threads->paginate(30),
+            'threads_data' => $threads,
         ]);
     }
 

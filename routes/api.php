@@ -43,6 +43,7 @@ Route::prefix('forums')->group(function () {
 Route::prefix('threads')->group(function () {
     Route::get('/{Thread_id}', [ThreadController::class, 'show'])->middleware('CheckBinggan:show'); //查看主题
     Route::post('/create', [ThreadController::class, 'create'])->middleware('CheckBinggan:create'); //发新主题
+    Route::delete('/delay/{Thread_id}', [ThreadController::class, 'delay_thread_withdraw'])->middleware('CheckBinggan:create'); //撤回延时主题
 });
 // Route::apiResource('threads', ThreadController::class)->middleware('auth:sanctum');
 

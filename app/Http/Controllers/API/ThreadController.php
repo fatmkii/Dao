@@ -411,4 +411,51 @@ class ThreadController extends Controller
     {
         //
     }
+
+    //撤回延时发送的主题
+    public function delay_thread_withdraw(Request $request, $Thread_id)
+    {
+        $CurrentThread = Thread::find($Thread_id);
+        if (!$CurrentThread) {
+            return response()->json([
+                'code' => ResponseCode::THREAD_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::THREAD_NOT_FOUND],
+            ]);
+        }
+        //确认是否确实是延迟主题
+        if ($CurrentThread->is_delay != 1) {
+            return response()->json([
+                'code' => ResponseCode::USER_CANNOT,
+                'message' => ResponseCode::$codeMap[ResponseCode::USER_CANNOT],
+            ]);
+        }
+
+        $user = $request->user;
+        //只有主题发起者才能撤回主题
+        if ($CurrentThread->created_binggan != $user->binggan) {
+            return response()->json([
+                'code' => ResponseCode::USER_CANNOT,
+                'message' => ResponseCode::$codeMap[ResponseCode::USER_CANNOT],
+                'user' => $user,
+            ]);
+        }
+
+        try {
+            DB::beginTransaction();
+            $CurrentThread->is_deleted = 1;
+            $CurrentThread->save();
+            DB::commit();
+        } catch (QueryException $e) {
+            DB::rollback();
+            return response()->json([
+                'code' => ResponseCode::DATABASE_FAILED,
+                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
+            ]);
+        }
+
+        return response()->json([
+            'code' => ResponseCode::SUCCESS,
+            'thread_id' => $Thread_id,
+        ]);
+    }
 }

@@ -17,11 +17,14 @@ class Thread extends myModel
 {
     use HasFactory;
 
+    protected $binggan = '';
+
     public $hidden = [
         'created_binggan',
         'created_IP',
         'is_deleted',
         'forum',
+        'is_your_thread'
     ];
     protected $fillable = [
         'forum_id', 'title', 'content', 'created_binggan', 'created_IP',
@@ -29,6 +32,10 @@ class Thread extends myModel
     ];
     protected $guarded = [
         'id', 'created_at', 'updated_at',
+    ];
+
+    protected $appends = [
+        'is_your_thread',
     ];
 
     protected $casts = [];
@@ -65,4 +72,20 @@ class Thread extends myModel
         return $date->format('Y-m-d H:i');
     }
 
+    public function setBinggan($binggan)
+    {
+        $this->binggan = $binggan;
+    }
+    public function getIsYourThreadAttribute()
+    {
+        if ($this->binggan) {
+            if ($this->binggan == $this->created_binggan) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return null;
+        }
+    }
 }
