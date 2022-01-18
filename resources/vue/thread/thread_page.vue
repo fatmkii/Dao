@@ -861,6 +861,7 @@ export default {
       thread_nissined: false,
       search_show: false,
       search_input: "",
+      last_action: "",
     };
   },
   computed: {
@@ -1091,7 +1092,13 @@ export default {
       axios(config)
         .then((response) => {
           if (response.data.code == 200) {
-            this.new_post_handle();
+            if ((this.last_action == "new_post")) {
+              this.new_post_handle();
+              console.log("??")
+            }
+            if ((this.last_action == "new_battle")) {
+              this.battle_handle();
+            }
             this.modal_toggle("captcha_modal");
           } else {
             alert(response.data.message);
@@ -1188,6 +1195,7 @@ export default {
     },
     new_post_handle() {
       this.new_post_handling = true;
+      this.last_action = "new_post";
       const config = {
         method: "post",
         url: "/api/posts/create",
@@ -1351,6 +1359,7 @@ export default {
     },
     battle_handle() {
       this.roll_handling = true;
+      this.last_action = "new_battle";
       const config = {
         method: "post",
         url: "/api/battles",
@@ -1374,6 +1383,9 @@ export default {
             this.roll_handling = false;
             this.$refs["battle_modal"].hide();
             this.get_posts_data();
+          } else if (response.data.code == 244291) {
+            this.roll_handling = false;
+            this.show_captcha();
           } else {
             this.roll_handling = false;
             alert(response.data.message);
