@@ -79,6 +79,18 @@
           ></b-form-spinbutton>
           <span class="ml-1 mb-2">px</span>
         </div>
+        <div class="mt-2 d-flex align-items-center">
+          <span class="mb-2">回复多行折叠：</span>
+          <b-form-spinbutton
+            size="sm"
+            style="max-width: 120px"
+            class="mb-2"
+            min="3"
+            max="32"
+            v-model="PostsMaxLine"
+          ></b-form-spinbutton>
+          <span class="ml-1 mb-2">行</span>
+        </div>
         <b-button variant="success" @click="set_MyCSS">保存</b-button>
         <b-button variant="outline-dark" @click="default_MyCSS"
           >恢复默认</b-button
@@ -231,6 +243,14 @@ export default {
       },
       set(value) {
         this.$store.commit("PostsMarginTop_set", value);
+      },
+    },
+    PostsMaxLine: {
+      get() {
+        return this.$store.state.MyCSS.PostsMaxLine;
+      },
+      set(value) {
+        this.$store.commit("PostsMaxLine_set", value);
       },
     },
     FoldPingbici: {

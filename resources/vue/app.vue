@@ -116,6 +116,11 @@ export default {
           const my_css = this.$store.state.MyCSS;
           localStorage.my_css = JSON.stringify(my_css);
         }
+        if (this.$store.state.MyCSS.PostsMaxLine == null) {
+          this.$store.commit("PostsMaxLine_set", 16); //临时的，给旧版本加默认值
+          const my_css = this.$store.state.MyCSS;
+          localStorage.my_css = JSON.stringify(my_css);
+        }
       }
     },
     set_VueStore(response_data) {

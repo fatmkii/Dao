@@ -122,7 +122,7 @@
         />
       </svg>
     </div>
-    <div>
+    <div class="d-flex align-items-center">
       <b-img
         :src="random_head_add"
         :class="'head_' + post_data.random_head"
@@ -132,8 +132,16 @@
       <span
         v-html="post_content"
         v-if="post_content_show"
-        style="word-wrap: break-word; white-space: normal"
+        style="
+          word-wrap: break-word;
+          white-space: normal;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+        "
+        :style="post_span_css"
       ></span>
+      <span v-show="fold_content" @click="unfold_content">*此回复已折叠*</span>
       <span v-if="!post_content_show" @click="post_content_show_click"
         >*此回帖已屏蔽*</span
       >
@@ -200,6 +208,8 @@ export default {
       coin_reward_input: "",
       reward_handling: false,
       post_content_show: true,
+      post_max_height: "",
+      fold_content: false,
     };
   },
   watch: {
@@ -261,6 +271,11 @@ export default {
         fontSize: this.$store.state.MyCSS.SysInfoFontSize + "px",
       };
     },
+    post_span_css() {
+      return {
+        maxHeight: this.post_max_height,
+      };
+    },
   },
   created() {
     this.pingbici_check();
@@ -271,6 +286,17 @@ export default {
       var quote_dom = this.$refs.post_centent.querySelector(".quote_content");
       if (quote_dom) {
         quote_dom.style.fontSize = this.$store.state.MyCSS.QuoteFontSize + "px";
+      }
+      //确认post总行数，如果超过特定行数，则折叠（包括图片等高度）
+      const post_content_dom = this.$refs.post_centent;
+      const styles = window.getComputedStyle(post_content_dom);
+      const line_height = parseInt(styles.lineHeight, 10);
+      const height = parseInt(styles.height, 10);
+      const max_height =
+        this.$store.state.MyCSS.PostsMaxLine * line_height;
+      if (height > max_height) {
+        this.fold_content = true;
+        this.post_max_height = max_height + "px";
       }
     });
   },
@@ -489,6 +515,11 @@ export default {
           }
         }
       }
+    },
+    unfold_content() {
+      console.log("123");
+      this.fold_content = false;
+      this.post_max_height = "none";
     },
   },
 };
