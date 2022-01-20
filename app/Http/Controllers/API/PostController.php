@@ -78,12 +78,12 @@ class PostController extends Controller
         }
 
         $forum = Thread::find($request->forum_id);
-        if (!$forum) {
-            return response()->json([
-                'code' => ResponseCode::FORUM_NOT_FOUND,
-                'message' => ResponseCode::$codeMap[ResponseCode::FORUM_NOT_FOUND],
-            ]);
-        }
+        // if (!$forum) {
+        //     return response()->json([
+        //         'code' => ResponseCode::FORUM_NOT_FOUND,
+        //         'message' => ResponseCode::$codeMap[ResponseCode::FORUM_NOT_FOUND],
+        //     ]);
+        // }
 
         //确认是否冒充管理员发帖
         if (
