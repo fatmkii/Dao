@@ -77,6 +77,14 @@ class PostController extends Controller
             ]);
         }
 
+        $forum = Thread::find($request->forum_id);
+        if (!$forum) {
+            return response()->json([
+                'code' => ResponseCode::FORUM_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::FORUM_NOT_FOUND],
+            ]);
+        }
+
         //确认是否冒充管理员发帖
         if (
             $request->post_with_admin == true &&
@@ -88,6 +96,16 @@ class PostController extends Controller
                     'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
                 ],
             );
+        }
+
+        //判断是否达到可以访问板块的最少奥利奥
+        if ($forum->accessible_coin > 0) {
+            if ($user->coin < $forum->accessible_coin && $user->admin == 0) {
+                return response()->json([
+                    'code' => ResponseCode::THREAD_UNAUTHORIZED,
+                    'message' => sprintf("本小岛需要拥有大于%u奥利奥才能查看喔", $forum->accessible_coin),
+                ]);
+            }
         }
 
         //判断奥利奥锁定权限贴
