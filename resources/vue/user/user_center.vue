@@ -390,6 +390,7 @@ export default {
         QuoteFontSize: 16,
         SysInfoFontSize: 14,
         PostsMarginTop: 32,
+        PostsMaxLine: 16,
       };
       this.$store.commit("MyCSS_set_all", my_css);
       this.set_MyCSS();
