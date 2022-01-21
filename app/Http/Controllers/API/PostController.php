@@ -150,12 +150,12 @@ class PostController extends Controller
             ]);
         }
 
-        if (
-            $request->thread_id == 200000
-            && $request->content == "新春快乐"
-        ) {
-            CommonController::post_hongbao($request, $thread, $post); //执行送红包流程
-        }
+        // if (
+        //     $request->thread_id == 10159
+        //     && $request->content == "新春快乐"
+        // ) {
+        //     CommonController::post_hongbao($request, $thread, $post); //执行送红包流程
+        // }
 
         //用redis记录回频率。
         $user->waterRecord('new_post', $request->ip());
