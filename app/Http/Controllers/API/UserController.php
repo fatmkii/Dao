@@ -199,7 +199,7 @@ class UserController extends Controller
             $user->binggan = $binggan;
             $user->created_ip = $request->ip();
             $user->created_UUID = $created_UUID_short;
-            $user->coin = 1500;
+            $user->coin = 300;
             $user->save();
 
             //记录UUID申请次数
