@@ -141,7 +141,9 @@
         "
         :style="post_span_css"
       ></span>
-      <span v-show="fold_content" @click="unfold_content">*此回复已折叠*</span>
+      <span v-show="fold_content && post_content_show" @click="unfold_content"
+        >*点击展开*</span
+      >
       <span v-if="!post_content_show" @click="post_content_show_click"
         >*此回帖已屏蔽*</span
       >
@@ -282,22 +284,8 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      // 给回帖内容的引用部分单独加style
-      var quote_dom = this.$refs.post_centent.querySelector(".quote_content");
-      if (quote_dom) {
-        quote_dom.style.fontSize = this.$store.state.MyCSS.QuoteFontSize + "px";
-      }
-      //确认post总行数，如果超过特定行数，则折叠（包括图片等高度）
-      const post_content_dom = this.$refs.post_centent;
-      const styles = window.getComputedStyle(post_content_dom);
-      const line_height = parseInt(styles.lineHeight, 10);
-      const height = parseInt(styles.height, 10);
-      const max_height =
-        this.$store.state.MyCSS.PostsMaxLine * line_height;
-      if (height > max_height) {
-        this.fold_content = true;
-        this.post_max_height = max_height + "px";
-      }
+      this.set_quote_styles(); // 给回帖内容的引用部分单独加style
+      this.set_post_max_height(); //确认post总行数，如果超过特定行数，则折叠（包括图片等高度）
     });
   },
   methods: {
@@ -520,6 +508,25 @@ export default {
       console.log("123");
       this.fold_content = false;
       this.post_max_height = "none";
+    },
+    set_post_max_height() {
+      //确认post总行数，如果超过特定行数，则折叠（包括图片等高度）
+      const post_content_dom = this.$refs.post_centent;
+      const styles = window.getComputedStyle(post_content_dom);
+      const line_height = parseInt(styles.lineHeight, 10);
+      const height = parseInt(styles.height, 10);
+      const max_height = this.$store.state.MyCSS.PostsMaxLine * line_height;
+      if (height > max_height) {
+        this.fold_content = true;
+        this.post_max_height = max_height + "px";
+      }
+    },
+    set_quote_styles() {
+      // 给回帖内容的引用部分单独加style
+      var quote_dom = this.$refs.post_centent.querySelector(".quote_content");
+      if (quote_dom) {
+        quote_dom.style.fontSize = this.$store.state.MyCSS.QuoteFontSize + "px";
+      }
     },
   },
 };

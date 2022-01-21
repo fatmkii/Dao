@@ -138,7 +138,7 @@
               v-model="FoldPingbici"
               v-b-popover.hover.bottom="'这个保存在本地不用提交'"
             >
-              折叠楼层
+              完全隐藏屏蔽楼层
             </b-form-checkbox>
           </div>
         </div>
