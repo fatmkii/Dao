@@ -304,7 +304,7 @@ class UserController extends Controller
             $post->nickname = '奥利奥打赏系统';
             $post->created_by_admin = 2; //0=一般用户 1=管理员发布，2=系统发布
             $post->created_ip = $request->ip();
-            $post->random_head = random_int(1, 40);
+            $post->random_head = random_int(0,39);
 
             $thread = $post->thread;
             $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();

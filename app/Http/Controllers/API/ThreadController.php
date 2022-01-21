@@ -122,7 +122,7 @@ class ThreadController extends Controller
             $post->nickname = $request->nickname;
             $post->created_by_admin = $request->post_with_admin  ? 1 : 0;
             $post->created_ip = $request->ip();
-            $post->random_head = random_int(1, 40);
+            $post->random_head = random_int(0,39);
             $post->floor = 0;
             $post->save();
 

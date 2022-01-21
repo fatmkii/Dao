@@ -150,6 +150,13 @@ class PostController extends Controller
             ]);
         }
 
+        if (
+            $request->thread_id == 200000
+            && $request->content == "新春快乐"
+        ) {
+            CommonController::post_hongbao($request, $thread, $post); //执行送红包流程
+        }
+
         //用redis记录回频率。
         $user->waterRecord('new_post', $request->ip());
 
@@ -407,7 +414,7 @@ class PostController extends Controller
             $post->created_by_admin = 2; //0=一般用户 1=管理员发布，2=系统发布
             $post->nickname = 'Roll点系统';
             $post->created_ip = $request->ip();
-            $post->random_head = random_int(1, 40);
+            $post->random_head = random_int(0, 39);
 
             $thread = $post->thread;
             $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
