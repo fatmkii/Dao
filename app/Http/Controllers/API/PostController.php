@@ -58,7 +58,7 @@ class PostController extends Controller
                 [
                     'binggan' => $user->binggan,
                     'user_id' => $user->id,
-                    'active' => '怀疑用户用机器人刷帖',
+                    'active' => '怀疑用户用脚本刷帖(key错误)',
                     'thread_id' => $request->thread_id,
                     'content' => 'ip:' . $request->ip(),
                 ]

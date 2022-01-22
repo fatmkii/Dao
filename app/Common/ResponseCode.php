@@ -86,7 +86,7 @@ class ResponseCode
         self::SEARCH_TOO_MANY => '为保护服务器，设定了全局10秒只能搜索20次。',
         self::POST_NOT_FOUND => '未找到该帖子',
         self::POST_TOO_MANY => '回帖过于频繁',
-        self::POST_ROBOT => '请不要用脚本刷olo喔！',
+        self::POST_ROBOT => '操作失败，请重试',
         self::POST_TOO_MANY_MAYBE_ROBOT => '你可能刷太多了，休息一下吧。',
         self::LOGIN_FAILED => '登录失败',
         self::DATABASE_FAILED => '数据库错误',

@@ -70,6 +70,7 @@ class User extends Authenticatable
     const NEW_POST_NUMBER = 10; //饼干回帖次数（也就是60秒10次）
     const NEW_POST_INTERVAL = 60; //饼干回帖频率（含大乱斗）
     const NEW_POST_NUMBER_IP = 100; //IP回帖次数（也就是1小时100次）
+    const NEW_POST_NUMBER_IP2 = 5; //IP回帖不看帖次数
     const NEW_POST_INTERVAL_IP = 3600; //IP回帖频率（含大乱斗）
 
     protected static function booted()
@@ -87,20 +88,22 @@ class User extends Authenticatable
     {
         switch ($action) {
             case 'new_post': {
-                    if (Redis::GET('new_post_record_' . $this->binggan) >= self::NEW_POST_NUMBER && $this->admin == 0) {
+                    $new_post_record = Redis::GET('new_post_record_' . $this->binggan);
+                    if ($new_post_record >= self::NEW_POST_NUMBER && $this->admin == 0) {
                         return response()->json([
                             'code' => ResponseCode::POST_TOO_MANY,
                             'message' => ResponseCode::$codeMap[ResponseCode::POST_TOO_MANY] . '为防止刷屏，每1分钟最多回帖10次（含大乱斗）',
                         ]);
                     }
-                    if (Redis::GET('new_post_record_IP_' . $ip) >= self::NEW_POST_NUMBER_IP && $this->admin == 0) {
+                    $new_post_record_IP = Redis::GET('new_post_record_IP_' . $ip);
+                    if ($new_post_record_IP >= self::NEW_POST_NUMBER_IP && $this->admin == 0) {
 
                         ProcessUserActive::dispatch(
                             [
                                 'binggan' => $this->binggan,
                                 'user_id' => $this->id,
                                 'active' => '用户触发了机器人刷帖警报',
-                                'content' => 'ip:' . $ip,
+                                'content' => 'ip:' . $ip . ' record:' . $new_post_record_IP,
                             ]
                         );
 
@@ -113,6 +116,17 @@ class User extends Authenticatable
                             'code' => ResponseCode::POST_TOO_MANY_MAYBE_ROBOT,
                             'message' => ResponseCode::$codeMap[ResponseCode::POST_TOO_MANY_MAYBE_ROBOT],
                         ]);
+                    }
+                    $new_post_record_IP2 = Redis::GET('new_post_record_IP2_' . $ip);
+                    if ($new_post_record_IP2 >= self::NEW_POST_NUMBER_IP2 && $new_post_record_IP2 % 5 == 0 && $this->admin == 0) {
+                        ProcessUserActive::dispatch(
+                            [
+                                'binggan' => $this->binggan,
+                                'user_id' => $this->id,
+                                'active' => '怀疑用户用脚本刷帖(回帖不看帖)',
+                                'content' => 'ip:' . $ip . ' record:' . $new_post_record_IP2,
+                            ]
+                        );
                     }
                     break;
                 }
@@ -146,10 +160,26 @@ class User extends Authenticatable
                     } else {
                         Redis::setex('new_post_record_IP_' . $ip,  self::NEW_POST_INTERVAL_IP, 1);
                     }
+                    if (Redis::exists('new_post_record_IP2_' . $ip)) {
+                        Redis::incr('new_post_record_IP2_' . $ip);
+                    } else {
+                        Redis::setex('new_post_record_IP2_' . $ip,  self::NEW_POST_INTERVAL_IP, 1);
+                    }
                     break;
                 }
             case 'new_thread': {
                     Redis::setex('new_thread_record_' . $this->binggan, self::NEW_THREAD_INTERVAL, 1);
+                    break;
+                }
+        }
+    }
+
+    //有正常看帖行为则清除redis灌水检查记录
+    public function waterClear(string $action, string $ip)
+    {
+        switch ($action) {
+            case 'view_post': {
+                    // Redis::del('new_post_record_IP2_' . $ip);
                     break;
                 }
         }
