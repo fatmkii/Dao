@@ -179,7 +179,7 @@ class User extends Authenticatable
     {
         switch ($action) {
             case 'view_post': {
-                    // Redis::del('new_post_record_IP2_' . $ip);
+                    Redis::del('new_post_record_IP2_' . $ip);
                     break;
                 }
         }
