@@ -370,8 +370,9 @@ class ThreadController extends Controller
         }
 
         //有正常看帖行为则清除redis灌水检查记录
-        $user->waterClear('view_post', $request->ip());
-
+        if ($user) {
+            $user->waterClear('view_post', $request->ip());
+        }
         return response()->json([
             'code' => ResponseCode::SUCCESS,
             'forum_data' => $CurrentForum,
