@@ -128,7 +128,21 @@
         :class="'head_' + post_data.random_head"
       ></b-img>
     </div>
-    <div class="post_content mb-2" :style="post_content_css" ref="post_centent">
+    <span
+      v-show="fold_content && post_content_show"
+      @click="unfold_content"
+      style="position: relative"
+      >*点击展开*</span
+    >
+    <span v-if="!post_content_show" @click="post_content_show_click"
+      >*此回帖已屏蔽*</span
+    >
+    <div
+      class="post_content mb-2"
+      style="overflow: hidden"
+      :style="post_content_css"
+      ref="post_centent"
+    >
       <span
         v-html="post_content"
         v-if="post_content_show"
@@ -138,15 +152,10 @@
           overflow: hidden;
           display: -webkit-box;
           -webkit-box-orient: vertical;
+          position: relative;
         "
         :style="post_span_css"
       ></span>
-      <span v-show="fold_content && post_content_show" @click="unfold_content"
-        >*点击展开*</span
-      >
-      <span v-if="!post_content_show" @click="post_content_show_click"
-        >*此回帖已屏蔽*</span
-      >
     </div>
     <slot name="battle"></slot>
     <div class="post_footer" ref="post_author_info" :style="post_footer_css">
@@ -211,6 +220,7 @@ export default {
       reward_handling: false,
       post_content_show: true,
       post_max_height: "",
+      post_top_offset: "",
       fold_content: false,
     };
   },
@@ -262,10 +272,16 @@ export default {
       return this.$store.state.User.FoldPingbici;
     },
     post_content_css() {
+      if (this.post_max_height == 0) {
+        var maxHeight = "none";
+      } else {
+        var maxHeight = this.post_max_height + "px";
+      }
       return {
         lineHeight: this.$store.state.MyCSS.PostsLineHeight + "px",
         fontSize: this.$store.state.MyCSS.PostsFontSize + "px",
         marginTop: this.$store.state.MyCSS.PostsMarginTop + "px",
+        maxHeight: maxHeight,
       };
     },
     post_footer_css() {
@@ -275,7 +291,7 @@ export default {
     },
     post_span_css() {
       return {
-        maxHeight: this.post_max_height,
+        top: this.post_top_offset + "px",
       };
     },
   },
@@ -505,9 +521,9 @@ export default {
       }
     },
     unfold_content() {
-      console.log("123");
       this.fold_content = false;
-      this.post_max_height = "none";
+      this.post_top_offset = 0;
+      this.post_max_height = 0;
     },
     set_post_max_height() {
       //确认post总行数，如果超过特定行数，则折叠（包括图片等高度）
@@ -518,7 +534,8 @@ export default {
       const max_height = this.$store.state.MyCSS.PostsMaxLine * line_height;
       if (height > max_height) {
         this.fold_content = true;
-        this.post_max_height = max_height + "px";
+        this.post_top_offset = max_height - height;
+        this.post_max_height = max_height;
       }
     },
     set_quote_styles() {
