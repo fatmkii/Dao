@@ -70,7 +70,7 @@ class PostController extends Controller
         }
 
         $thread = Thread::find($request->thread_id);
-        if (!$thread || $thread->is_delay == 1) {
+        if (!$thread || $thread->is_delay == 1 || $thread->is_deleted != 0) {
             return response()->json([
                 'code' => ResponseCode::THREAD_NOT_FOUND,
                 'message' => ResponseCode::$codeMap[ResponseCode::THREAD_NOT_FOUND],
