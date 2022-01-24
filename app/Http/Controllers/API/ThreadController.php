@@ -21,7 +21,7 @@ use App\Models\VoteQuestion;
 
 class ThreadController extends Controller
 {
-    private function postsData($thread_id, $page)
+    private function postsData($thread_id, $page, $searchContent = null)
     {
         $limit = 200; //每页200;
         $offset = $page * 200 - 200;
@@ -37,7 +37,18 @@ class ThreadController extends Controller
         // $posts = DB::select($sql_posts, ['thread_id' => $thread_id, 'offset' => $offset]);
 
         //用子查询join
-        $sql_child = DB::table($posts_table)->select('id')->where('thread_id', $thread_id)->offset($offset)->limit($limit);
+        if ($searchContent == null) {
+            $sql_child = DB::table($posts_table)
+                ->select('id')
+                ->where('thread_id', $thread_id)
+                ->offset($offset)->limit($limit);
+        } else {
+            $sql_child = DB::table($posts_table)
+                ->select('id')
+                ->where('thread_id', $thread_id)
+                ->where('content', 'like', '%' . $searchContent . '%')
+                ->offset($offset)->limit($limit);
+        }
 
         $posts = Post::suffix((intval($thread_id / 10000)))
             ->joinSub($sql_child, 'sql_child', function ($join) use ($posts_table) {
@@ -50,7 +61,22 @@ class ThreadController extends Controller
             $posts->prepend($posts0); //为第2页及之后增加0楼
         }
 
-        return $posts;
+        //查询最大页数
+        if ($searchContent == null) {
+            $sql_posts_num = 'select count(*) as count from ' . $posts_table . ' where thread_id = :thread_id';
+            $lastPage = ceil(DB::select($sql_posts_num, ['thread_id' => $thread_id])[0]->count / 200);
+
+            //查询最大页数。这个可能效率更好些? 但是先不用
+            // $lastPage = ceil($CurrentThread->posts_num / 200);
+        } else {
+            $posts_num = DB::table($posts_table)
+                ->where('thread_id', $thread_id)
+                ->where('content', 'like', '%' . $searchContent . '%')
+                ->count();
+            $lastPage = ceil($posts_num / 200);
+        }
+
+        return array($posts, $lastPage);
     }
 
 
@@ -359,20 +385,13 @@ class ThreadController extends Controller
         $currentPage = $request->has("page") ? $request->page : 1;
 
         if ($request->has('search_content')) { //搜索内容
-            $posts = $CurrentThread->posts()->where('content', 'like', '%' . $request->search_content . '%')->orderBy('id', 'asc')->paginate(200);
+            // $posts = $CurrentThread->posts()->where('content', 'like', '%' . $request->search_content . '%')->orderBy('id', 'asc')->paginate(200);
+            list($posts, $lastPage) = $this->postsData($Thread_id, $currentPage, $request->search_content); //更好的分页sql语句
         } else {
             // $posts = $CurrentThread->posts()->orderBy('id', 'asc')->paginate(200);
-            $posts = $this->postsData($Thread_id, $currentPage); //更好的分页sql语句
+            list($posts, $lastPage) = $this->postsData($Thread_id, $currentPage); //更好的分页sql语句
         }
 
-
-        //查询最大页数
-        $posts_table = 'posts_' . intval($Thread_id / 10000);
-        $sql_posts_num = 'select count(*) as count from ' . $posts_table . ' where thread_id = :thread_id';
-        $lastPage = ceil(DB::select($sql_posts_num, ['thread_id' => $Thread_id])[0]->count / 200);
-
-        //查询最大页数。这个可能效率更好些? 但是先不用
-        // $lastPage = ceil($CurrentThread->posts_num / 200);
 
         // if ($posts->currentPage() > 1) {
         //     $posts->appendPost0($CurrentThread->posts()->first()); //为第2页及之后增加0楼
