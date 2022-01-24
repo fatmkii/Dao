@@ -301,7 +301,10 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.set_quote_styles(); // 给回帖内容的引用部分单独加style
-      this.set_post_max_height(); //确认post总行数，如果超过特定行数，则折叠（包括图片等高度）
+      if (this.post_data.floor != 0) {
+        //但是0楼不折叠
+        this.set_post_max_height(); //确认post总行数，如果超过特定行数，则折叠（包括图片等高度）
+      }
     });
   },
   methods: {
