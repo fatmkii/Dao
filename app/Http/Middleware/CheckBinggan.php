@@ -18,7 +18,9 @@ class CheckBinggan
      */
     public function handle(Request $request, Closure $next, $mode)
     {
-        $user = User::where('binggan', $request->binggan)->first();
+        if ($request->has('binggan')) {
+            $user = User::where('binggan', $request->binggan)->first();
+        }
         switch ($mode) {
             case 'create': //发帖等
                 {
