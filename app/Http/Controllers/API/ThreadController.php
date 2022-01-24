@@ -21,6 +21,39 @@ use App\Models\VoteQuestion;
 
 class ThreadController extends Controller
 {
+    private function postsData($thread_id, $page)
+    {
+        $limit = 200; //每页200;
+        $offset = $page * 200 - 200;
+        $posts_table = 'posts_' . intval($thread_id / 10000);
+
+        //原生SQL
+        // $sql_posts = 'select * from ' . $posts_table . ' where thread_id = :thread_id limit 200 offset :offset';
+        // $posts = DB::select($sql_posts, ['thread_id' => $thread_id, 'offset' => $offset]);
+
+        //原生SQL（子语句）
+        // $sql_posts = 'select * from ' . $posts_table .
+        //     ' join(select id from ' . $posts_table . ' where thread_id = :thread_id limit 200 offset :offset) as temp using(id)';
+        // $posts = DB::select($sql_posts, ['thread_id' => $thread_id, 'offset' => $offset]);
+
+        //用子查询join
+        $sql_child = DB::table($posts_table)->select('id')->where('thread_id', $thread_id)->offset($offset)->limit($limit);
+
+        $posts = Post::suffix((intval($thread_id / 10000)))
+            ->joinSub($sql_child, 'sql_child', function ($join) use ($posts_table) {
+                $join->on($posts_table . '.id', '=', 'sql_child.id');
+            })
+            ->get();
+
+        if ($page > 1) {
+            $posts0 = Post::suffix((intval($thread_id / 10000)))->where('thread_id', $thread_id)->first(); //为第2页及之后增加0楼
+            $posts->prepend($posts0); //为第2页及之后增加0楼
+        }
+
+        return $posts;
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -323,16 +356,27 @@ class ThreadController extends Controller
                 break;
         }
 
+        $currentPage = $request->has("page") ? $request->page : 1;
 
         if ($request->has('search_content')) { //搜索内容
             $posts = $CurrentThread->posts()->where('content', 'like', '%' . $request->search_content . '%')->orderBy('id', 'asc')->paginate(200);
         } else {
-            $posts = $CurrentThread->posts()->orderBy('id', 'asc')->paginate(200);
+            // $posts = $CurrentThread->posts()->orderBy('id', 'asc')->paginate(200);
+            $posts = $this->postsData($Thread_id, $currentPage); //更好的分页sql语句
         }
 
-        if ($posts->currentPage() > 1) {
-            $posts->appendPost0($CurrentThread->posts()->first()); //为第2页及之后增加0楼
-        }
+
+        //查询最大页数
+        $posts_table = 'posts_' . intval($Thread_id / 10000);
+        $sql_posts_num = 'select count(*) as count from ' . $posts_table . ' where thread_id = :thread_id';
+        $lastPage = ceil(DB::select($sql_posts_num, ['thread_id' => $Thread_id])[0]->count / 200);
+
+        //查询最大页数。这个可能效率更好些? 但是先不用
+        // $lastPage = ceil($CurrentThread->posts_num / 200);
+
+        // if ($posts->currentPage() > 1) {
+        //     $posts->appendPost0($CurrentThread->posts()->first()); //为第2页及之后增加0楼
+        // }
 
         //如果有提供binggan，为每个post输入binggan，用来判断is_your_post（为前端提供是否是用户自己帖子的判据）
         if ($request->query('binggan')) {
@@ -350,11 +394,6 @@ class ThreadController extends Controller
         if ($user && $user->admin == 99) {
             $posts->makeVisible('created_binggan');
         }
-
-        //提供该帖子的随机头像地址表
-        // $random_heads = Cache::remember('random_heads_cache_' . $CurrentThread->random_heads_group, 7 * 24 * 3600, function () use ($CurrentThread) {
-        //     return DB::table('random_heads')->find($CurrentThread->random_heads_group);
-        // });
 
         //记录搜索行为
         if ($request->has('search_content')) {
@@ -377,8 +416,12 @@ class ThreadController extends Controller
             'code' => ResponseCode::SUCCESS,
             'forum_data' => $CurrentForum,
             'thread_data' => $CurrentThread,
-            'posts_data' => $posts,
-            // 'random_heads' => $random_heads,
+            'posts_data' => array(
+                "currentPage" => intval($currentPage),
+                "data" => $posts,
+                "lastPage" => $lastPage,
+            ),
+            // 'posts_data' => $posts,
         ]);
     }
     /**
