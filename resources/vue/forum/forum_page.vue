@@ -41,6 +41,24 @@
           隐藏版头
         </b-form-checkbox>
       </div>
+      <div class="col-auto d-inline-flex">
+        <b-dropdown
+          id="shield-dropdown"
+          text="筛选"
+          variant="outline-dark"
+          size="sm"
+        >
+          <b-form-checkbox
+            v-for="(option, index) in subtitles_options"
+            :key="index"
+            v-model="subtitles_selected[option.value]"
+            @change="set_subtitltes_selected"
+            class="ml-2 my-2"
+          >
+            {{ option.value }}
+          </b-form-checkbox>
+        </b-dropdown>
+      </div>
       <div class="col-auto my-2 ml-auto d-flex">
         <span v-if="!this.$store.state.User.LoginStatus">
           请在先<router-link to="/login">导入或领取饼干 </router-link>
@@ -100,10 +118,12 @@
     <ForumThreads
       :forum_id="forum_id"
       :new_window_to_post="new_window_to_post"
+      :subtitles_selected="subtitles_selected"
     ></ForumThreads>
     <ForumThreadsMobile
       :forum_id="forum_id"
       :new_window_to_post="new_window_to_post"
+      :subtitles_selected="subtitles_selected"
     ></ForumThreadsMobile>
     <div class="d-flex align-items-center">
       <ForumPaginator
@@ -272,9 +292,15 @@ export default {
       search_show: false,
       search_input: "",
       show_delay: false,
+      subtitles_selected: {},
     };
   },
   computed: {
+    subtitles_options() {
+      let options = subtitles[0].subtitles; //subtitles来源于json.js全局变量
+      options = subtitles[1].subtitles.concat(options); //加上管理员选项
+      return options;
+    },
     ...mapState({
       forum_name: (state) =>
         state.Forums.CurrentForumData.name
@@ -373,9 +399,29 @@ export default {
         this.get_threads_data(true);
       }
     },
+    load_subtitles_selected() {
+      // subtitles来源于json.js的定义。
+      if (localStorage.subtitles_filter) {
+        this.subtitles_selected = JSON.parse(localStorage.subtitles_filter);
+      } else {
+        // 把所有副标题都选择true。
+        subtitles.forEach((o, index) => {
+          o.subtitles.forEach((i, index) => {
+            this.subtitles_selected[i.value] = true;
+          });
+        });
+      }
+    },
+    set_subtitltes_selected() {
+      localStorage.setItem(
+        "subtitles_filter",
+        JSON.stringify(this.subtitles_selected)
+      );
+    },
   },
   created() {
     this.get_threads_data();
+    this.load_subtitles_selected();
     this.$store.commit("ThreadsLoadStatus_set", 0);
     if (localStorage.getItem("new_window_to_post") == null) {
       localStorage.new_window_to_post = "";

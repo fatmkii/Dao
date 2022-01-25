@@ -9,6 +9,7 @@
         class="threads_container"
         v-for="thread in threads_data"
         :key="thread.id"
+        v-show="subtitles_selected[thread.sub_title]"
       >
         <div class="text-left my-1 py-1" :style="{ color: thread.title_color }">
           <span class="thread_sub_title"> {{ thread.sub_title }}&nbsp; </span>
@@ -70,6 +71,7 @@ export default {
   props: {
     forum_id: Number,
     new_window_to_post: Boolean,
+    subtitles_selected: Object,
   },
   data: function () {
     return {

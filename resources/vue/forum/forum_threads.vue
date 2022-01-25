@@ -12,7 +12,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="thread in threads_data" :key="thread.id">
+        <tr
+          v-for="thread in threads_data"
+          :key="thread.id"
+          v-show="subtitles_selected[thread.sub_title]"
+        >
           <td class="text-left" :style="{ color: thread.title_color }">
             <span class="thread_sub_title"> {{ thread.sub_title }}&nbsp; </span>
             <span v-if="thread.vote_question_id != null">🗳️</span>
@@ -74,6 +78,7 @@ export default {
   props: {
     forum_id: Number,
     new_window_to_post: Boolean,
+    subtitles_selected: Object,
   },
   data: function () {
     return {
@@ -105,7 +110,6 @@ export default {
         }
       }
     },
-
     ...mapState({
       threads_load_status: (state) => state.Threads.ThreadsLoadStatus,
       forum_is_nissin: (state) => state.Forums.CurrentForumData.is_nissin,
