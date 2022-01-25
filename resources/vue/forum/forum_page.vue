@@ -292,7 +292,12 @@ export default {
       search_show: false,
       search_input: "",
       show_delay: false,
-      subtitles_selected: {},
+      subtitles_selected: {
+        "[公告]": true,
+        "[闲聊]": true,
+        "[专楼]": true,
+        "[刷刷]": true,
+      },
     };
   },
   computed: {
@@ -403,13 +408,6 @@ export default {
       // subtitles来源于json.js的定义。
       if (localStorage.subtitles_filter) {
         this.subtitles_selected = JSON.parse(localStorage.subtitles_filter);
-      } else {
-        // 把所有副标题都选择true。
-        subtitles.forEach((o, index) => {
-          o.subtitles.forEach((i, index) => {
-            this.subtitles_selected[i.value] = true;
-          });
-        });
       }
     },
     set_subtitltes_selected() {
