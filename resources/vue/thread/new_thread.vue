@@ -176,6 +176,8 @@
             <b-form-select
               v-model="subtitles_selected"
               :options="subtitles_options"
+              value-field="value"
+              text-field="value"
             ></b-form-select>
           </div>
           <div class="col-4">
@@ -516,7 +518,6 @@ export default {
       content_input: "",
       title_input: "",
       random_heads_group_selected: 1,
-      subtitles_options: [],
       subtitles_selected: "[闲聊]",
       admin_subtitles_options: [
         { value: 1, text: "本版公告" },
@@ -652,6 +653,13 @@ export default {
         fontSize: this.$store.state.MyCSS.PostsFontSize + "px",
       };
     },
+    subtitles_options() {
+      let options = subtitles[0].subtitles; //subtitles来源于json.js全局变量
+      if (this.$store.state.User.AdminForums.includes(this.forum_id)) {
+        options = subtitles[1].subtitles.concat(options); //加上管理员选项
+      }
+      return options;
+    },
   },
   methods: {
     back_to_forum() {
@@ -746,28 +754,31 @@ export default {
       this.content_input_change();
       this.$refs.content_input.focus();
     },
-    get_subtitles() {
-      const config = {
-        method: "get",
-        url: "/api/subtitles",
-        data: {},
-      };
-      axios(config)
-        .then((response) => {
-          this.subtitles_options = response.data.data;
-          // 如果不是管理员，就删除部分管理员专用选项
-          if (!this.$store.state.User.AdminForums.includes(this.forum_id)) {
-            this.subtitles_options.forEach((subtitles_option, index) => {
-              if (subtitles_option.for_admin == 1) {
-                this.subtitles_options.splice(index, 1);
-              }
-            });
-          }
-        })
-        .catch((error) => {
-          alert(error);
-        }); // Todo:写异常返回代码;
-    },
+    // get_subtitles() {
+    //   const config = {
+    //     method: "get",
+    //     url: "/api/subtitles",
+    //     data: {},
+    //   };
+    //   axios(config)
+    //     .then((response) => {
+    //       this.subtitles_options = response.data.data;
+    //       // 如果不是管理员，就删除部分管理员专用选项
+    //       if (!this.$store.state.User.AdminForums.includes(this.forum_id)) {
+    //         this.subtitles_options.forEach((subtitles_option, index) => {
+    //           if (subtitles_option.for_admin == 1) {
+    //             this.subtitles_options.splice(index, 1);
+    //           }
+    //         });
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       alert(error);
+    //     }); // Todo:写异常返回代码;
+    // },
+    // set_subtitles() {
+    //   this.subtitles_options = subtitles[0].subtitles;
+    // },
     upload_img_handle(file) {
       if (!file) return;
       this.upload_img_handling = true;
@@ -823,7 +834,6 @@ export default {
     },
   },
   created() {
-    this.get_subtitles();
     if (localStorage.getItem("emoji_auto_hide") == null) {
       localStorage.emoji_auto_hide = "";
     } else {
