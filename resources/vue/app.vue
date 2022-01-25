@@ -173,7 +173,7 @@ export default {
     this.get_forums_data();
     this.get_user_data();
 
-    //把常用数据写入Vuex，变量来源于json/文件夹下的定义
+    //把常用数据写入Vuex，变量来源于json/json.js下的定义
     this.$store.commit("Emojis_set", emoji_json);
     this.$store.commit("RandomHeads_set", random_heads_json);
     this.$store.commit("CharaIndex_set", chara_index);
