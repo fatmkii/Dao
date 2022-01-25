@@ -31,6 +31,9 @@
           <b-form-checkbox v-model="no_emoji_mode" switch class="ml-2 my-2">
             无表情包
           </b-form-checkbox>
+          <b-form-checkbox v-model="no_head_mode" switch class="ml-2 my-2">
+            无头像
+          </b-form-checkbox>
           <b-form-checkbox v-model="no_battle_mode" switch class="ml-2 my-2">
             无大乱斗
           </b-form-checkbox>
@@ -171,6 +174,7 @@
             :admin_button_show="admin_button_show"
             :no_image_mode="no_image_mode"
             :no_emoji_mode="no_emoji_mode"
+            :no_head_mode="no_head_mode"
             @quote_click="quote_click_handle"
             @get_posts_data="get_posts_data"
             @emit_reward="emit_reward"
@@ -804,6 +808,9 @@ export default {
     no_emoji_mode() {
       localStorage.setItem("no_emoji_mode", this.no_emoji_mode ? "true" : "");
     },
+    no_head_mode() {
+      localStorage.setItem("no_head_mode", this.no_head_mode ? "true" : "");
+    },
     no_battle_mode() {
       localStorage.setItem("no_battle_mode", this.no_battle_mode ? "true" : "");
     },
@@ -846,6 +853,7 @@ export default {
       z_bar_show: false,
       no_image_mode: false,
       no_emoji_mode: false,
+      no_head_mode: false,
       no_battle_mode: false,
       emoji_auto_hide: true,
       upload_img_handling: false,
@@ -1092,11 +1100,10 @@ export default {
       axios(config)
         .then((response) => {
           if (response.data.code == 200) {
-            if ((this.last_action == "new_post")) {
+            if (this.last_action == "new_post") {
               this.new_post_handle();
-              console.log("??")
             }
-            if ((this.last_action == "new_battle")) {
+            if (this.last_action == "new_battle") {
               this.battle_handle();
             }
             this.modal_toggle("captcha_modal");
@@ -1549,6 +1556,11 @@ export default {
       localStorage.no_emoji_mode = "";
     } else {
       this.no_emoji_mode = Boolean(localStorage.no_emoji_mode);
+    }
+    if (localStorage.getItem("no_head_mode") == null) {
+      localStorage.no_head_mode = "";
+    } else {
+      this.no_head_mode = Boolean(localStorage.no_head_mode);
     }
     if (localStorage.getItem("no_battle_mode") == null) {
       localStorage.no_battle_mode = "";

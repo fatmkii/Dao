@@ -126,6 +126,7 @@
       <b-img
         :src="random_head_add"
         :class="'head_' + post_data.random_head"
+        v-if="!no_head_mode"
       ></b-img>
     </div>
     <span
@@ -208,6 +209,10 @@ export default {
       default: false,
     },
     no_emoji_mode: {
+      type: Boolean,
+      default: false,
+    },
+    no_head_mode: {
       type: Boolean,
       default: false,
     },
