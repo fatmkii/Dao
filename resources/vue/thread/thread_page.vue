@@ -1477,7 +1477,10 @@ export default {
       }
     },
     scroll_watch() {
-      if (this.browse_current.page <= this.page) {
+      if (
+        this.browse_current.page <= this.page &&
+        document.documentElement.scrollTop != 0
+      ) {
         this.browse_current["height"] = document.documentElement.scrollTop;
       }
     },
