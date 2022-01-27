@@ -548,6 +548,16 @@
         </div>
       </div>
 
+      <b-toast
+        id="save_emoji_toast"
+        title="保存为我的表情包？"
+        autoHideDelay="1500"
+      >
+        <a href="javascript:;" class="save_emoji" @click="save_emoji_handle"
+          >确定</a
+        >
+      </b-toast>
+
       <b-modal ref="roll_modal" id="roll_modal" class="roll_modal">
         <template v-slot:modal-header>
           <h5>Roll点面板</h5>
@@ -870,6 +880,7 @@ export default {
       search_show: false,
       search_input: "",
       last_action: "",
+      selected_img: undefined,
     };
   },
   computed: {
@@ -1036,6 +1047,7 @@ export default {
                   .querySelector(this.$route.hash)
                   .scrollIntoView({ block: "start", behavior: "auto" });
               }
+              this.set_img_callee();
             });
           } else {
             this.$store.commit("PostsLoadStatus_set", 1);
@@ -1524,7 +1536,6 @@ export default {
         if (restoreTop > 0) {
           field.scrollTop = restoreTop;
         }
-        console.log(newValue);
         field.focus();
         setTimeout(() => {
           field.selectionStart = startPos + value.length;
@@ -1540,6 +1551,52 @@ export default {
       if (event.ctrlKey && event.key === "q") {
         this.get_posts_data(true, false);
       }
+    },
+    set_img_callee() {
+      let img_dom = document.querySelectorAll(".post_span img");
+      var vm = this;
+      for (var i = 0; i < img_dom.length; i++) {
+        img_dom[i].onmousedown = function (e) {
+          if (e.button == 0) {
+            var clicked_dom = document.elementFromPoint(e.clientX, e.clientY);
+            vm.selected_img = clicked_dom;
+            vm.$bvToast.show("save_emoji_toast");
+          }
+        };
+      }
+    },
+
+    save_emoji_handle() {
+      var my_emoji = this.$store.state.User.MyEmoji.emojis;
+      if (my_emoji.includes(this.selected_img.src)) {
+        alert("该表情包已保存过了");
+        return;
+      }
+      my_emoji.push(this.selected_img.src);
+      const config = {
+        method: "post",
+        url: "/api/user/my_emoji_set",
+        data: {
+          binggan: this.$store.state.User.Binggan,
+          my_emoji: JSON.stringify(my_emoji),
+        },
+      };
+      axios(config)
+        .then((response) => {
+          if (response.data.code == 200) {
+            this.$bvToast.toast(response.data.message, {
+              title: "Done.",
+              autoHideDelay: 1500,
+              appendToast: true,
+            });
+          } else {
+            alert(response.data.message);
+          }
+        })
+        .catch((error) => {
+          this.my_emoji_set_handling = false;
+          alert(Object.values(error.response.data.errors)[0]);
+        });
     },
   },
   created() {

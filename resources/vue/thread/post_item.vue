@@ -147,6 +147,7 @@
       <span
         v-html="post_content"
         v-if="post_content_show"
+        class="post_span"
         style="
           word-wrap: break-word;
           white-space: normal;
