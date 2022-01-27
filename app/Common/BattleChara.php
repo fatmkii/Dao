@@ -98,7 +98,7 @@ class BattleChara
             'name' => '五条悟',
             'group' => 1,
             'head' => 103,
-            'message' => 102,
+            'message' => 103,
         ),
         104 => array(
             'name' => '七海建人',
@@ -146,7 +146,7 @@ class BattleChara
             'name' => '屁元',
             'group' => 1,
             'head' => 111,
-            'message' => 11,
+            'message' => 111,
         ),
         199 => array(
             'name' => '芥见下下',
