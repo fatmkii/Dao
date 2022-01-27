@@ -1329,30 +1329,42 @@ var chara_index = [
         },
         {
             "value": 102,
-            "text": "五条悟"
+            "text": "钉崎野蔷薇"
         },
         {
             "value": 103,
-            "text": "夏油杰"
+            "text": "五条悟"
         },
         {
             "value": 104,
-            "text": "狗卷棘"
+            "text": "七海建人"
         },
         {
             "value": 105,
-            "text": "两面宿傩"
+            "text": "夏油杰"
         },
         {
             "value": 106,
-            "text": "伏黑甚尔"
+            "text": "乙骨忧太"
         },
         {
             "value": 107,
-            "text": "禅院直哉"
+            "text": "狗卷棘"
         },
         {
             "value": 108,
+            "text": "两面宿傩"
+        },
+        {
+            "value": 109,
+            "text": "伏黑甚尔"
+        },
+        {
+            "value": 110,
+            "text": "禅院直哉"
+        },
+        {
+            "value": 111,
             "text": "屁元"
         },
         {
