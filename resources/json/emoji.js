@@ -850,6 +850,7 @@ var emoji_json =
                 "https://z3.ax1x.com/2021/07/30/WXK6fJ.jpg",
                 "https://z3.ax1x.com/2021/07/30/WXK2lR.jpg",
                 "https://z3.ax1x.com/2021/07/30/WXKWOx.jpg",
+                "https://s4.ax1x.com/2022/01/27/7jhDR1.jpg",
                 "https://z3.ax1x.com/2021/07/30/WXKgp9.jpg",
                 "https://z3.ax1x.com/2021/07/30/WXKhm6.jpg",
                 "https://z3.ax1x.com/2021/07/30/WXK40K.jpg",
