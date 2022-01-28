@@ -99,7 +99,7 @@ class UserController extends Controller
                 'data' => [
                     'binggan' => $user,
                     'pingbici' => $user->pingbici,
-                    'my_emoji' => $user->MyEmoji,
+                    'my_emoji' => $user->MyEmoji->emojis,
                     // 'emojis' => $emojis,
                 ],
             ],

@@ -422,7 +422,7 @@ export default {
           }
           //设定表情包相关状态
           if (response.data.data.my_emoji) {
-            this.my_emoji_input = response.data.data.my_emoji.emojis;
+            this.my_emoji_input = response.data.data.my_emoji;
             this.my_emoji_input = this.my_emoji_input.replace(/,/g, ",\n"); //把,改成换行，方便看
             this.my_emoji_input = this.my_emoji_input.replace(/\[/g, "[\n");
             this.my_emoji_input = this.my_emoji_input.replace(/]/g, "\n]");

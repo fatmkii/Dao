@@ -15,7 +15,7 @@ const module_user = {
         TitlePingbici: [],
         ContentPingbici: [],
         FoldPingbici: false,
-        MyEmoji: "",
+        MyEmoji: { name: '我的表情包', emojis: [] },
         Emojis: [],
         RandomHeads: [],
         CharaIndex: [],
@@ -58,8 +58,7 @@ const module_user = {
             state.ContentPingbici = payload
         },
         MyEmoji_set(state, payload) {
-            state.MyEmoji = payload
-            state.MyEmoji.emojis = JSON.parse(state.MyEmoji.emojis) //因为数据库传送过来的是纯文本json，要手动转换为数组
+            state.MyEmoji.emojis = JSON.parse(payload) //因为数据库传送过来的是纯文本json，要手动转换为数组
         },
         Emojis_set(state, payload) {
             state.Emojis = payload

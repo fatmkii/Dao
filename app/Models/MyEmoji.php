@@ -16,6 +16,8 @@ class MyEmoji extends Model
     protected $hidden = [
         'id',
         'user_id',
+        'deleted_at',
+        'name',
     ];
 
     public function user()
