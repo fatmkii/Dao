@@ -100,6 +100,9 @@ class CommonController extends Controller
         } elseif (DB::table("hongbao_record")->where('user_id', $user->id)->lockForUpdate()->exists()) {
             $coin = 0;
             $message = "你已经领取过了，不要贪心喔！";
+        } elseif (Carbon::parse($user->created_at) > Carbon::create("2022-1-30 0:0:0")) {
+            $coin = 0;
+            $message = "你的饼干不符合领取条件";
         } else {
             $rand_num = random_int(1, 10000);
             switch ($rand_num) {
