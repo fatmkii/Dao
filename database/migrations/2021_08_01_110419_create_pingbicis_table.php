@@ -18,6 +18,7 @@ class CreatePingbicisTable extends Migration
             $table->integer('user_id')->unique();
             $table->json('title_pingbici')->nullable();
             $table->json('content_pingbici')->nullable();
+            $table->json('fjf_pingbici')->nullable();
         });
     }
 

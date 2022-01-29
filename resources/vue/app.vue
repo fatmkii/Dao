@@ -140,7 +140,7 @@ export default {
       } else {
         this.$store.commit("NickName_set", "= =");
       }
-      if (response_data.pingbici) {
+      if (response_data.binggan.use_pingbici && response_data.pingbici) {
         this.$store.commit(
           "TitlePingbici_set",
           response_data.pingbici.title_pingbici
@@ -148,6 +148,10 @@ export default {
         this.$store.commit(
           "ContentPingbici_set",
           response_data.pingbici.content_pingbici
+        );
+        this.$store.commit(
+          "FjfPingbici_set",
+          response_data.pingbici.fjf_pingbici
         );
       }
       if (response_data.my_emoji != null) {

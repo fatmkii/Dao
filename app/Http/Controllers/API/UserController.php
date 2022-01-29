@@ -365,6 +365,7 @@ class UserController extends Controller
             'use_pingbici' => 'required|boolean',
             'title_pingbici' => 'json|max:1000',
             'content_pingbici' => 'json|max:1000',
+            'fjf_pingbici' => 'json|max:1000',
         ]);
 
         $user = User::where('binggan', $request->binggan)->first();
@@ -388,6 +389,7 @@ class UserController extends Controller
             $pingbici->user_id = $user->id;
             $pingbici->title_pingbici = $request->title_pingbici;
             $pingbici->content_pingbici = $request->content_pingbici;
+            $pingbici->fjf_pingbici = $request->fjf_pingbici;
             $user->save();
             $pingbici->save();
             DB::commit();
