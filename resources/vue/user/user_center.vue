@@ -155,23 +155,42 @@
       <b-tab title="我的表情包">
         <div class="mx-2 my-2">
           <p class="my-2">
-            我的表情包：（请参考下述JSON格式。前后有[]，最后一个不要有,逗号）
+            我的表情包：（新饼干要提交一次，才能使用喔）
           </p>
           <b-form-textarea
             id="my_emoji_input"
-            v-model="my_emoji_input"
+            v-model.lazy="my_emoji_input"
             rows="3"
-            max-rows="20"
+            max-rows="8"
+            @change="my_emoji_input_change"
           ></b-form-textarea>
-          <div class="row align-items-center mt-2">
-            <div class="col-auto">
-              <b-button
-                variant="success"
-                :disabled="my_emoji_set_handling"
-                @click="my_emoji_set_handle"
-                >提交
-              </b-button>
-            </div>
+          <div
+            class="emoji_box m-1 d-inline-flex"
+            v-for="(emoji_src, index) in my_emoji"
+            :key="index"
+          >
+            <b-img
+              :src="emoji_src"
+              fluid
+              alt="Fluid-grow image"
+              @click="emoji_delete(index)"
+            ></b-img>
+          </div>
+          <div class="d-flex align-items-center mt-2">
+            <b-button
+              variant="success"
+              :disabled="my_emoji_set_handling"
+              @click="my_emoji_set_handle"
+              >提交
+            </b-button>
+            <b-form-checkbox
+              switch
+              class="ml-2"
+              v-model="emoji_delete_mode"
+              v-b-popover.hover.bottom="'整理后记得提交喔'"
+            >
+              {{ this.emoji_delete_mode ? "点击表情包可删除" : "整理表情包" }}
+            </b-form-checkbox>
           </div>
         </div>
       </b-tab>
@@ -212,6 +231,7 @@ export default {
         '[\n"https://z3.ax1x.com/2021/08/01/Wznvbq.jpg",\n"https://z3.ax1x.com/2021/08/01/Wznjrn.jpg"\n]',
       my_emoji_set_handling: false,
       z_bar_left: false,
+      emoji_delete_mode: false,
     };
   },
   computed: {
@@ -275,6 +295,7 @@ export default {
     ...mapState({
       login_status: (state) => state.User.LoginStatus,
       binggan: (state) => state.User.Binggan,
+      my_emoji: (state) => state.User.MyEmoji.emojis,
     }),
   },
   methods: {
@@ -338,6 +359,7 @@ export default {
             }
             //设定表情包相关状态
             if (response.data.data.my_emoji) {
+              this.$store.commit("MyEmoji_set", response.data.data.my_emoji);
               this.my_emoji_input = response.data.data.my_emoji;
               this.my_emoji_input = this.my_emoji_input.replace(/,/g, ",\n"); //把,改成换行，方便看
               this.my_emoji_input = this.my_emoji_input.replace(/\[/g, "[\n");
@@ -455,6 +477,20 @@ export default {
       };
       this.$store.commit("MyCSS_set_all", my_css);
       this.set_MyCSS();
+    },
+    emoji_delete(index) {
+      if (this.emoji_delete_mode) {
+        this.$store.state.User.MyEmoji.emojis.splice(index, 1);
+        this.my_emoji_input = JSON.stringify(this.my_emoji);
+        this.my_emoji_input = this.my_emoji_input.replace(/,/g, ",\n"); //把,改成换行，方便看
+        this.my_emoji_input = this.my_emoji_input.replace(/\[/g, "[\n");
+        this.my_emoji_input = this.my_emoji_input.replace(/]/g, "\n]");
+      }
+    },
+    my_emoji_input_change(value) {
+      try {
+        this.$store.commit("MyEmoji_set", value);
+      } catch (e) {} //没什么用，就是不想在输入过程中报错
     },
   },
   created() {
