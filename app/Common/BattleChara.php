@@ -89,46 +89,64 @@ class BattleChara
             'message' => 101,
         ),
         102 => array(
-            'name' => '五条悟',
+            'name' => '钉崎野蔷薇',
             'group' => 1,
             'head' => 102,
             'message' => 102,
         ),
         103 => array(
-            'name' => '夏油杰',
+            'name' => '五条悟',
             'group' => 1,
             'head' => 103,
             'message' => 103,
         ),
         104 => array(
-            'name' => '狗卷棘',
+            'name' => '七海建人',
             'group' => 1,
             'head' => 104,
             'message' => 104,
         ),
         105 => array(
-            'name' => '两面宿傩',
+            'name' => '夏油杰',
             'group' => 1,
             'head' => 105,
             'message' => 105,
         ),
         106 => array(
-            'name' => '伏黑甚尔',
+            'name' => '乙骨忧太',
             'group' => 1,
             'head' => 106,
             'message' => 106,
         ),
         107 => array(
-            'name' => '禅院直哉',
+            'name' => '狗卷棘',
             'group' => 1,
             'head' => 107,
             'message' => 107,
         ),
         108 => array(
-            'name' => '屁元',
+            'name' => '两面宿傩',
             'group' => 1,
             'head' => 108,
             'message' => 108,
+        ),
+        109 => array(
+            'name' => '伏黑甚尔',
+            'group' => 1,
+            'head' => 109,
+            'message' => 109,
+        ),
+        110 => array(
+            'name' => '禅院直哉',
+            'group' => 1,
+            'head' => 110,
+            'message' => 110,
+        ),
+        111 => array(
+            'name' => '屁元',
+            'group' => 1,
+            'head' => 111,
+            'message' => 111,
         ),
         199 => array(
             'name' => '芥见下下',
@@ -245,6 +263,14 @@ class BattleChara
             'lose' => 'https://z3.ax1x.com/2021/05/11/gdi26g.jpg',
         ),
         102 => array(
+            'name' => '钉崎野蔷薇',
+            'wait' => 'https://s4.ax1x.com/2022/01/27/7jgoYq.jpg',
+            'against' => 'https://z3.ax1x.com/2021/04/29/gFjkxH.jpg',
+            'attack' => 'https://s4.ax1x.com/2022/01/27/7jgTf0.jpg',
+            'win' => 'https://z3.ax1x.com/2021/05/16/ggCxRH.png',
+            'lose' => 'https://z3.ax1x.com/2021/07/30/WXK3TS.jpg',
+        ),
+        103 => array(
             'name' => '五条悟',
             'wait' => 'https://z3.ax1x.com/2021/05/09/gYIjVP.jpg',
             'against' => 'https://z3.ax1x.com/2021/07/30/WXKR61.jpg',
@@ -252,7 +278,15 @@ class BattleChara
             'win' => 'https://z3.ax1x.com/2021/05/16/ggPpQA.png',
             'lose' => 'https://www.z4a.net/images/2021/04/29/QQ20210429165856.png',
         ),
-        103 => array(
+        104 => array(
+            'name' => '七海建人',
+            'wait' => 'https://z3.ax1x.com/2021/07/30/WXKOXt.jpg',
+            'against' => 'https://z3.ax1x.com/2021/04/28/giOyGQ.jpg',
+            'attack' => 'https://z3.ax1x.com/2021/04/29/gFjEMd.jpg',
+            'win' => 'https://s4.ax1x.com/2022/01/27/7jWnQf.jpg',
+            'lose' => 'https://s4.ax1x.com/2022/01/27/7jWuy8.jpg',
+        ),
+        105 => array(
             'name' => '夏油杰',
             'wait' => 'https://z3.ax1x.com/2021/04/29/gFj1zQ.jpg',
             'against' => 'https://z3.ax1x.com/2021/05/09/gYorZt.jpg',
@@ -260,7 +294,15 @@ class BattleChara
             'win' => 'https://z3.ax1x.com/2021/04/28/giO62j.jpg',
             'lose' => 'https://www.z4a.net/images/2021/12/01/iFonQ.jpg',
         ),
-        104 => array(
+        106=> array(
+            'name' => '乙骨忧太',
+            'wait' => 'https://s4.ax1x.com/2022/01/27/7j2rB4.jpg',
+            'against' => 'https://s4.ax1x.com/2022/01/27/7j26E9.jpg',
+            'attack' => 'https://s4.ax1x.com/2022/01/27/7j2sHJ.jpg',
+            'win' => 'https://z3.ax1x.com/2021/04/28/giODIS.jpg',
+            'lose' => 'https://s4.ax1x.com/2022/01/27/7j2cNR.jpg',
+        ),
+        107=> array(
             'name' => '狗卷棘',
             'wait' => 'https://z3.ax1x.com/2021/04/29/gFjdiT.jpg',
             'against' => 'https://z3.ax1x.com/2021/06/18/RpGxgO.gif',
@@ -268,7 +310,7 @@ class BattleChara
             'win' => 'https://z3.ax1x.com/2021/07/30/WXKhm6.jpg',
             'lose' => 'https://z3.ax1x.com/2021/05/16/ggP9sI.png',
         ),
-        105 => array(
+        108 => array(
             'name' => '两面宿傩',
             'wait' => 'https://s4.ax1x.com/2022/01/09/7FRzbF.jpg',
             'against' => 'https://z3.ax1x.com/2021/04/29/gFjsy9.jpg',
@@ -276,7 +318,7 @@ class BattleChara
             'win' => 'https://z3.ax1x.com/2021/07/30/WXKokD.jpg',
             'lose' => 'https://z3.ax1x.com/2021/04/29/gFjuIf.jpg',
         ),
-        106 => array(
+        109 => array(
             'name' => '伏黑甚尔',
             'wait' => 'https://q7501.bvimg.com/10368/efa0f2a34638954a.jpg',
             'against' => 'https://z3.ax1x.com/2021/05/09/gYoVaV.gif',
@@ -284,7 +326,7 @@ class BattleChara
             'win' => 'https://q7501.bvimg.com/10368/cab90b41784dab0d.gif',
             'lose' => 'https://q7501.bvimg.com/10368/269e3bc4c680bdac.gif',
         ),
-        107 => array(
+        110 => array(
             'name' => '禅院直哉',
             'wait' => 'https://q7501.bvimg.com/10368/069fc0c61de0c8e4.jpg',
             'against' => 'https://q7501.bvimg.com/10368/8a587dd853bdf8d2.gif',
@@ -292,7 +334,7 @@ class BattleChara
             'win' => 'https://z3.ax1x.com/2021/05/16/ggC7s1.jpg',
             'lose' => 'https://z3.ax1x.com/2021/05/09/gYoZ5T.gif',
         ),
-        108 => array(
+        111 => array(
             'name' => '屁元',
             'wait' => 'https://z3.ax1x.com/2021/06/18/Rp87kt.png',
             'against' => 'https://z3.ax1x.com/2021/06/18/Rp8HtP.jpg',
@@ -350,6 +392,18 @@ class BattleChara
             9 => '%name布瑠部由良由良，异界神将魔虚罗！掷出了「%rand_num」点。',
         ),
         102 => array(
+            0 => '%name早上起来找不到校服裙子了，抓狂地掷出了「%rand_num」点。',
+            1 => '%name因为虎杖伏黑都没看出自己新换的发型，不爽地掷出了「%rand_num」点。',
+            2 => '%name又被老师套路了以为去逛街结果出任务，气得掷出了「%rand_num」点。',
+            3 => '%name和虎杖争执寿司吃哪家没争过，在回转寿司店生无可恋的掷出了「%rand_num」点。',
+            4 => '%name观察%opponent颜值，得出结论长得像土豆，失去兴趣地掷出了「%rand_num」点。',
+            5 => '%name和虎杖伏黑猜拳决定谁去买饮料结果连续平局20次，掷出了「%rand_num」点。',
+            6 => '%name买的新裙子被真希夸好看，开心掷出了「%rand_num」点。',
+            7 => '%name发现伏黑惠和女生在聊天，戏瘾大发假装抓奸掷出了「%rand_num」点。',
+            8 => '%name黑五买到心水很久的限定款包包，掷出了「%rand_num」点。',
+            9 => '%name把钉子甩出黑闪怒扎%opponent，掷出了「%rand_num」点。',     
+        ),
+        103 => array(
             0 => '%name不慎踩到御门疆，掷出了「%rand_num」点。',
             1 => '%name执行任务遇到刀疤男人，掷出了「%rand_num」点。',
             2 => '%name被烂橘子抓去开会，掷出了「%rand_num」点。',
@@ -361,7 +415,19 @@ class BattleChara
             8 => '%name烂橘子被迫乖乖听话，心情格外舒畅地掷出了「%rand_num」点。',
             9 => '%name终于打开御门疆啦！重获自由后帅气地掷出了「%rand_num」点。',
         ),
-        103 => array(
+        104 => array(
+            0 => '%name临时被通知周末也要加班，生无可恋地掷出了「%rand_num」点。',
+            1 => '%name在枕头边发现了一些脱落的头发，郁闷地掷出了「%rand_num」点。',
+            2 => '%name没买到喜欢的面包，烦躁地掷出了「%rand_num」点。',
+            3 => '%name收到了来自某白毛的奇怪的画，生气地掷出了「%rand_num」点。',
+            4 => '%name没睡好熬出了黑眼圈，不慌不忙地掷出了「%rand_num」点。',
+            5 => '%name今天下班后去喝酒玩骰子，掷出了「%rand_num」点。',
+            6 => '%name收到了这个月的工资，开心地掷出了「%rand_num」点。',
+            7 => '%name休息日在家悠闲地看书，掷出了「%rand_num」点。',
+            8 => '%name吃到了喜欢的西班牙橄榄蒜虾，掷出了「%rand_num」点。',
+            9 => '%name获得连休10天，激动地掷出了「%rand_num」点。', 
+        ),
+        105 => array(
             0 => '%name被一群猴子绊倒，掷出了「%rand_num」点。',
             1 => '%name执行任务遇到刀疤男人，掷出了「%rand_num」点。',
             2 => '%name吃了一个味道奇怪的咒灵球，掷出了「%rand_num」点。',
@@ -373,7 +439,19 @@ class BattleChara
             8 => '%name对乙姓男子的咒灵一见钟情，掷出了「%rand_num」点。',
             9 => '%name骗到了猴子的钱，掷出了「%rand_num」点。',
         ),
-        104 => array(
+        106 => array(
+            0 => '%name不小心踩到自己鞋带在教室里摔倒，掷出了「%rand_num」点。',
+            1 => '%name奇怪的丑男同学想要对自己做奇怪的事情，掷出了「%rand_num」点。',
+            2 => '%name吃到了讨厌的牛排油脂，掷出了「%rand_num」点。',
+            3 => '%name在非洲出差，见不到二年级同学，掷出了「%rand_num」点。',
+            4 => '%name把自己的海胆头梳成中分，并掷出了「%rand_num」点。',
+            5 => '%name听说有人要抢自己老婆，大为震撼掷出了「%rand_num」点。',
+            6 => '%name在非洲吃到了好吃的肉卷，高兴的掷出了「%rand_num」点。',
+            7 => '%name复制了狗卷棘的咒言术，用大喇叭说%opponent必须输，掷出了「%rand_num」点。',
+            8 => '%name跟里香深情告白放闪光弹，闪瞎了大家并掷出了「%rand_num」点。',
+            9 => '%name严正声明%opponent真失礼并指出自己这可是纯爱，掷出了「%rand_num」点。', 
+        ),
+        107 => array(
             0 => '%name喉咙药用完了，无法发出声音，掷出了「%rand_num」点。',
             1 => '%name饭团语没有被岛神理解，伤心的掷出了「%rand_num」点。',
             2 => '%name遇到了比自己强大的%opponent，咒言被反噬了！掷出了「%rand_num」点。',
@@ -385,7 +463,7 @@ class BattleChara
             8 => '%name发明了新的恶作剧道具【魔鬼辣椒饭团】，骗了「%rand_num」人。',
             9 => '%name在油管上投稿的熊猫吃肉丸视频播放破亿，掷出了「%rand_num」点。',
         ),
-        105 => array(
+        108 => array(
             0 => '%name不小心被关进容器里，掷出了「%rand_num」点。',
             1 => '%name被缝合脸挑衅，不爽地掷出了「%rand_num」点。',
             2 => '%name吃到了不好吃的菜，掷出了「%rand_num」点。',
@@ -397,7 +475,7 @@ class BattleChara
             8 => '%name伏黑惠召唤出来魔虚罗，很满意地掷出了「%rand_num」点。',
             9 => '%name完成大业如有神助般，掷出了「%rand_num」点。',
         ),
-        106 => array(
+        109 => array(
             0 => '%name被禅院家扔进咒灵堆，掷出了「%rand_num」点。',
             1 => '%name出任务碰到两个难缠的高中生，不爽地掷出了「%rand_num」点。',
             2 => '%name赌狗赌狗一无所有，被孔老叔无情嘲笑，掷出了「%rand_num」点。',
@@ -409,7 +487,7 @@ class BattleChara
             8 => '%name准备打完回去和老婆结婚，掷出了「%rand_num」点。',
             9 => '%name想起自己还有个儿子，掷出了「%rand_num」点。',
         ),
-        107 => array(
+        110 => array(
             0 => '%name被煮饭的女人偷袭，奄奄一息地掷出了「%rand_num」点。',
             1 => '%name听说甚尔君结婚了，悲愤地掷出了「%rand_num」点。',
             2 => '%name听到家主之位没了，心不在焉掷出了「%rand_num」点。',
@@ -421,7 +499,7 @@ class BattleChara
             8 => '%name知道自己将来是家主，得意地掷出了「%rand_num」点。',
             9 => '%name运气大爆棚人气排名就在甚尔君后面，掷出了「%rand_num」点。',
         ),
-        108 => array(
+        111 => array(
             0 => '%name和自己玩瞪眼游戏，被吓得掷出了「%rand_num」点。',
             1 => '%name被腌入味的大哥99殴打，掷出了「%rand_num」点。',
             2 => '%name头上被套了塑料袋，看不清的情况下掷出了「%rand_num」点。',

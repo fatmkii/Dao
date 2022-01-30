@@ -12,10 +12,11 @@ const module_user = {
         AdminForums: [],
         LockedTTL: 0,
         UsePingbici: false,
-        TitlePingbici: [],
-        ContentPingbici: [],
+        TitlePingbici: "",
+        ContentPingbici: "",
+        FjfPingbici: "",
         FoldPingbici: false,
-        MyEmoji: "",
+        MyEmoji: { name: '我的表情包', emojis: [] },
         Emojis: [],
         RandomHeads: [],
         CharaIndex: [],
@@ -51,15 +52,17 @@ const module_user = {
         TitlePingbici_set(state, payload) {
             state.TitlePingbici = payload
         },
-        FoldPingbici_set(state, payload) {
-            state.FoldPingbici = payload
-        },
         ContentPingbici_set(state, payload) {
             state.ContentPingbici = payload
         },
+        FjfPingbici_set(state, payload) {
+            state.FjfPingbici = payload
+        },
+        FoldPingbici_set(state, payload) {
+            state.FoldPingbici = payload
+        },
         MyEmoji_set(state, payload) {
-            state.MyEmoji = payload
-            state.MyEmoji.emojis = JSON.parse(state.MyEmoji.emojis) //因为数据库传送过来的是纯文本json，要手动转换为数组
+            state.MyEmoji.emojis = JSON.parse(payload) //因为数据库传送过来的是纯文本json，要手动转换为数组
         },
         Emojis_set(state, payload) {
             state.Emojis = payload

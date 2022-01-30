@@ -1421,6 +1421,8 @@ var emoji_json = [
             "https://www.z4a.net/images/2021/04/29/6c5b846cb652f2e48.png",
             "https://www.z4a.net/images/2021/04/29/74e39063717f38943.jpg",
             "https://www.z4a.net/images/2021/04/29/8f648cfa36f92414d.jpg",
+            "https://s4.ax1x.com/2022/01/27/7jfFXT.jpg",
+            "https://s4.ax1x.com/2022/01/27/7jfAnU.jpg",
             "https://www.z4a.net/images/2021/04/29/9.jpg",
             "https://www.z4a.net/images/2021/04/29/10.jpg",
             "https://www.z4a.net/images/2021/04/29/1.gif",
@@ -2158,6 +2160,7 @@ var emoji_json = [
             "https://z3.ax1x.com/2021/07/30/WXK6fJ.jpg",
             "https://z3.ax1x.com/2021/07/30/WXK2lR.jpg",
             "https://z3.ax1x.com/2021/07/30/WXKWOx.jpg",
+            "https://s4.ax1x.com/2022/01/27/7jhDR1.jpg",
             "https://z3.ax1x.com/2021/07/30/WXKgp9.jpg",
             "https://z3.ax1x.com/2021/07/30/WXKhm6.jpg",
             "https://z3.ax1x.com/2021/07/30/WXK40K.jpg",
@@ -2185,6 +2188,7 @@ var emoji_json = [
             "https://z3.ax1x.com/2021/04/29/gFjPPO.jpg",
             "https://www.z4a.net/images/2021/11/16/I1cZP1.jpg",
             "https://z3.ax1x.com/2021/04/29/gFj9IK.jpg",
+            "https://s4.ax1x.com/2022/01/27/7jfnhR.jpg",
             "https://z3.ax1x.com/2021/04/29/gFjEMd.jpg",
             "https://z3.ax1x.com/2021/04/28/giOyGQ.jpg",
             "https://z3.ax1x.com/2021/04/28/giODIS.jpg",
@@ -2260,6 +2264,7 @@ var emoji_json = [
             "https://z3.ax1x.com/2021/08/09/f84C8K.gif",
             "https://z3.ax1x.com/2021/08/09/f84ivD.jpg",
             "https://z3.ax1x.com/2021/08/09/f84PgO.jpg",
+            "https://s4.ax1x.com/2022/01/27/7jhmqS.jpg",
             "https://z3.ax1x.com/2021/08/22/hpGK7n.jpg",
             "https://z3.ax1x.com/2021/09/02/hsR44e.jpg",
             "https://www.z4a.net/images/2021/12/06/50d9c4fb36d392aec.gif",
@@ -2486,30 +2491,42 @@ var chara_index = [
         },
         {
             "value": 102,
-            "text": "五条悟"
+            "text": "钉崎野蔷薇"
         },
         {
             "value": 103,
-            "text": "夏油杰"
+            "text": "五条悟"
         },
         {
             "value": 104,
-            "text": "狗卷棘"
+            "text": "七海建人"
         },
         {
             "value": 105,
-            "text": "两面宿傩"
+            "text": "夏油杰"
         },
         {
             "value": 106,
-            "text": "伏黑甚尔"
+            "text": "乙骨忧太"
         },
         {
             "value": 107,
-            "text": "禅院直哉"
+            "text": "狗卷棘"
         },
         {
             "value": 108,
+            "text": "两面宿傩"
+        },
+        {
+            "value": 109,
+            "text": "伏黑甚尔"
+        },
+        {
+            "value": 110,
+            "text": "禅院直哉"
+        },
+        {
+            "value": 111,
             "text": "屁元"
         },
         {

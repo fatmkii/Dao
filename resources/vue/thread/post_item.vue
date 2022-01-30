@@ -135,8 +135,8 @@
       style="position: relative"
       >*点击展开*</span
     >
-    <span v-if="!post_content_show" @click="post_content_show_click"
-      >*此回帖已屏蔽*</span
+    <span v-if="!post_content_show" @click="post_content_show = true"
+      >*此回帖已屏蔽{{ hide_reason }}*</span
     >
     <div
       class="post_content mb-2"
@@ -147,6 +147,7 @@
       <span
         v-html="post_content"
         v-if="post_content_show"
+        class="post_span"
         style="
           word-wrap: break-word;
           white-space: normal;
@@ -227,6 +228,7 @@ export default {
       post_max_height: "",
       post_top_offset: "",
       fold_content: false,
+      hide_reason: "", //屏蔽词原因
     };
   },
   watch: {
@@ -512,11 +514,9 @@ export default {
         "\n";
       return this.$emit("quote_click", quote_content);
     },
-    post_content_show_click() {
-      this.post_content_show = true;
-    },
     pingbici_check() {
       if (this.$store.state.User.UsePingbici) {
+        //处理内容屏蔽词
         const content_pingbici = JSON.parse(
           this.$store.state.User.ContentPingbici
         );
@@ -524,6 +524,18 @@ export default {
           var reg = new RegExp(content_pingbici[i], "g");
           if (reg.test(this.post_data.content)) {
             this.post_content_show = false; //回帖是否显示的开关
+            this.hide_reason = "（屏蔽词）";
+          }
+        }
+        //处理fjf屏蔽词
+        if (this.thread_anti_jingfen) {
+          const fjf_pingbici = JSON.parse(this.$store.state.User.FjfPingbici);
+          for (var i = 0; i < fjf_pingbici.length; i++) {
+            var reg = new RegExp(fjf_pingbici[i], "g");
+            if (reg.test(this.post_data.created_binggan_hash.slice(0, 5))) {
+              this.post_content_show = false; //回帖是否显示的开关
+              this.hide_reason = "（小尾巴黑名单）";
+            }
           }
         }
       }

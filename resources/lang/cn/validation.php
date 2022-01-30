@@ -162,7 +162,8 @@ return [
         'betting_olo' => '下注奥利奥',
         'chara_id' => '乱斗角色 ',
         'gamble_end_time' => '菠菜结束时间',
-        'vote_end_time' => '投票结束时间'
+        'vote_end_time' => '投票结束时间',
+        'my_emoji' => '表情包',
     ],
 
 ];

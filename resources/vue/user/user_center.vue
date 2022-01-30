@@ -116,6 +116,15 @@
             rows="3"
             max-rows="20"
           ></b-form-textarea>
+          <p class="my-2">
+            FJF小尾巴黑名单：（注意：同一个饼干在不同FJF主题中，小尾巴会不同）
+          </p>
+          <b-form-textarea
+            id="fjf_pingbici_input"
+            v-model="fjf_pingbici_input"
+            rows="3"
+            max-rows="20"
+          ></b-form-textarea>
           <div class="d-flex align-items-center mt-2">
             <b-button
               variant="success"
@@ -129,7 +138,7 @@
               v-model="use_pingbici_input"
               v-b-popover.hover.bottom="'切换后也要点击提交喔'"
             >
-              启用屏蔽词
+              启用
             </b-form-checkbox>
 
             <b-form-checkbox
@@ -138,7 +147,7 @@
               v-model="FoldPingbici"
               v-b-popover.hover.bottom="'这个保存在本地不用提交'"
             >
-              完全隐藏屏蔽楼层
+              完全隐藏楼层
             </b-form-checkbox>
           </div>
         </div>
@@ -146,23 +155,42 @@
       <b-tab title="我的表情包">
         <div class="mx-2 my-2">
           <p class="my-2">
-            我的表情包：（请参考下述JSON格式。前后有[]，最后一个不要有,逗号）
+            我的表情包：（新饼干要提交一次，才能使用喔）
           </p>
           <b-form-textarea
             id="my_emoji_input"
-            v-model="my_emoji_input"
+            v-model.lazy="my_emoji_input"
             rows="3"
-            max-rows="20"
+            max-rows="8"
+            @change="my_emoji_input_change"
           ></b-form-textarea>
-          <div class="row align-items-center mt-2">
-            <div class="col-auto">
-              <b-button
-                variant="success"
-                :disabled="my_emoji_set_handling"
-                @click="my_emoji_set_handle"
-                >提交
-              </b-button>
-            </div>
+          <div
+            class="emoji_box m-1 d-inline-flex"
+            v-for="(emoji_src, index) in my_emoji"
+            :key="index"
+          >
+            <b-img
+              :src="emoji_src"
+              fluid
+              alt="Fluid-grow image"
+              @click="emoji_delete(index)"
+            ></b-img>
+          </div>
+          <div class="d-flex align-items-center mt-2">
+            <b-button
+              variant="success"
+              :disabled="my_emoji_set_handling"
+              @click="my_emoji_set_handle"
+              >提交
+            </b-button>
+            <b-form-checkbox
+              switch
+              class="ml-2"
+              v-model="emoji_delete_mode"
+              v-b-popover.hover.bottom="'整理后记得提交喔'"
+            >
+              {{ this.emoji_delete_mode ? "点击表情包可删除" : "整理表情包" }}
+            </b-form-checkbox>
           </div>
         </div>
       </b-tab>
@@ -194,14 +222,16 @@ export default {
     return {
       name: "user_center",
       user_coin: 0,
-      title_pingbici_input: '["屏蔽词#1","屏蔽词#2"]',
-      content_pingbici_input: '["屏蔽词#1","屏蔽词#2"]',
+      title_pingbici_input: '["屏蔽词1","屏蔽词2"]',
+      content_pingbici_input: '["屏蔽词1","屏蔽词2"]',
+      fjf_pingbici_input: '["小尾巴1","小尾巴2"]',
       use_pingbici_input: false,
       pingbici_set_handling: false,
       my_emoji_input:
         '[\n"https://z3.ax1x.com/2021/08/01/Wznvbq.jpg",\n"https://z3.ax1x.com/2021/08/01/Wznjrn.jpg"\n]',
       my_emoji_set_handling: false,
       z_bar_left: false,
+      emoji_delete_mode: false,
     };
   },
   computed: {
@@ -265,6 +295,7 @@ export default {
     ...mapState({
       login_status: (state) => state.User.LoginStatus,
       binggan: (state) => state.User.Binggan,
+      my_emoji: (state) => state.User.MyEmoji.emojis,
     }),
   },
   methods: {
@@ -295,6 +326,56 @@ export default {
         })
         .catch((error) => alert(error)); // Todo:写异常返回代码
     },
+    get_user_data() {
+      //更新用户信息
+      if (localStorage.Token != null && localStorage.Binggan != null) {
+        const config = {
+          method: "post",
+          url: "/api/user/show",
+          data: {
+            binggan: localStorage.Binggan,
+          },
+        };
+        axios(config)
+          .then((response) => {
+            this.user_coin = response.data.data.binggan.coin;
+            //设定屏蔽词相关状态
+            this.use_pingbici_input = Boolean(
+              response.data.data.binggan.use_pingbici
+            );
+            if (response.data.data.pingbici) {
+              if (response.data.data.pingbici.title_pingbici) {
+                this.title_pingbici_input =
+                  response.data.data.pingbici.title_pingbici;
+              }
+              if (response.data.data.pingbici.content_pingbici) {
+                this.content_pingbici_input =
+                  response.data.data.pingbici.content_pingbici;
+              }
+              if (response.data.data.pingbici.fjf_pingbici) {
+                this.fjf_pingbici_input =
+                  response.data.data.pingbici.fjf_pingbici;
+              }
+            }
+            //设定表情包相关状态
+            if (response.data.data.my_emoji) {
+              this.$store.commit("MyEmoji_set", response.data.data.my_emoji);
+              this.my_emoji_input = response.data.data.my_emoji;
+              this.my_emoji_input = this.my_emoji_input.replace(/,/g, ",\n"); //把,改成换行，方便看
+              this.my_emoji_input = this.my_emoji_input.replace(/\[/g, "[\n");
+              this.my_emoji_input = this.my_emoji_input.replace(/]/g, "\n]");
+            }
+          })
+          .catch((error) => {
+            if (error.response.status === 401) {
+              localStorage.clear("Binggan"); //如果遇到401错误(用户未认证)，就清除Binggan和Token
+              localStorage.clear("Token");
+              delete axios.defaults.headers.Authorization;
+            }
+            alert(error);
+          }); // Todo:写异常返回代码;
+      }
+    },
     pingbici_set_handle() {
       try {
         //转换并确认用户输入是否满足JSON格式
@@ -304,6 +385,7 @@ export default {
         var content_pingbici = JSON.stringify(
           JSON.parse(this.content_pingbici_input)
         );
+        var fjf_pingbici = JSON.stringify(JSON.parse(this.fjf_pingbici_input));
       } catch (e) {
         alert("屏蔽词格式输入有误，请检查");
         return;
@@ -316,6 +398,7 @@ export default {
           binggan: this.$store.state.User.Binggan,
           title_pingbici: title_pingbici,
           content_pingbici: content_pingbici,
+          fjf_pingbici: fjf_pingbici,
           use_pingbici: this.use_pingbici_input,
         },
       };
@@ -395,48 +478,24 @@ export default {
       this.$store.commit("MyCSS_set_all", my_css);
       this.set_MyCSS();
     },
+    emoji_delete(index) {
+      if (this.emoji_delete_mode) {
+        this.$store.state.User.MyEmoji.emojis.splice(index, 1);
+        this.my_emoji_input = JSON.stringify(this.my_emoji);
+        this.my_emoji_input = this.my_emoji_input.replace(/,/g, ",\n"); //把,改成换行，方便看
+        this.my_emoji_input = this.my_emoji_input.replace(/\[/g, "[\n");
+        this.my_emoji_input = this.my_emoji_input.replace(/]/g, "\n]");
+      }
+    },
+    my_emoji_input_change(value) {
+      try {
+        this.$store.commit("MyEmoji_set", value);
+      } catch (e) {} //没什么用，就是不想在输入过程中报错
+    },
   },
   created() {
     document.title = "个人中心";
-    //更新用户信息
-    if (localStorage.Token != null && localStorage.Binggan != null) {
-      const config = {
-        method: "post",
-        url: "/api/user/show",
-        data: {
-          binggan: localStorage.Binggan,
-        },
-      };
-      axios(config)
-        .then((response) => {
-          this.user_coin = response.data.data.binggan.coin;
-          //设定屏蔽词相关状态
-          this.use_pingbici_input = Boolean(
-            response.data.data.binggan.use_pingbici
-          );
-          if (response.data.data.pingbici) {
-            this.title_pingbici_input =
-              response.data.data.pingbici.title_pingbici;
-            this.content_pingbici_input =
-              response.data.data.pingbici.content_pingbici;
-          }
-          //设定表情包相关状态
-          if (response.data.data.my_emoji) {
-            this.my_emoji_input = response.data.data.my_emoji.emojis;
-            this.my_emoji_input = this.my_emoji_input.replace(/,/g, ",\n"); //把,改成换行，方便看
-            this.my_emoji_input = this.my_emoji_input.replace(/\[/g, "[\n");
-            this.my_emoji_input = this.my_emoji_input.replace(/]/g, "\n]");
-          }
-        })
-        .catch((error) => {
-          if (error.response.status === 401) {
-            localStorage.clear("Binggan"); //如果遇到401错误(用户未认证)，就清除Binggan和Token
-            localStorage.clear("Token");
-            delete axios.defaults.headers.Authorization;
-          }
-          alert(error);
-        }); // Todo:写异常返回代码;
-    }
+    this.get_user_data();
     if (localStorage.getItem("z_bar_left") == null) {
       localStorage.z_bar_left = "";
     } else {
