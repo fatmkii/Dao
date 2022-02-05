@@ -16,6 +16,7 @@ use App\Exceptions\CoinException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use App\Jobs\ProcessUserActive;
+use App\Models\Crowd;
 use App\Models\GambleQuestion;
 use App\Models\VoteQuestion;
 
@@ -107,8 +108,7 @@ class ThreadController extends Controller
             'random_heads_group' => 'integer',
             'post_with_admin' => 'boolean',
             'locked_by_coin' => 'integer|max:1000000|min:1',
-            'is_vote' => 'boolean|required',
-            'is_gamble' => 'boolean|required',
+            'thread_type' => 'required|string',
             'is_delay' => 'boolean|required',
             'can_battle' => 'boolean|required',
         ]);
@@ -122,6 +122,19 @@ class ThreadController extends Controller
         //确认是否冒认管理员发公告或者管理员帖
         if (
             ($request->subtitle == "[公告]" || $request->post_with_admin == true) &&
+            !in_array($request->forum_id, json_decode($user->AdminPermissions->forums))
+        ) {
+            return response()->json(
+                [
+                    'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+                    'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+                ],
+            );
+        }
+
+        //只有管理员可以发众筹
+        if (
+            $request->thread_type == "crowd"  &&
             !in_array($request->forum_id, json_decode($user->AdminPermissions->forums))
         ) {
             return response()->json(
@@ -186,7 +199,7 @@ class ThreadController extends Controller
             $post->save();
 
             //追加投票贴
-            if ($request->is_vote) {
+            if ($request->thread_type == "vote") {
                 $user->coin -= 1000; //发投票主题减1000奥利奥  
                 $vote_question = new VoteQuestion();
                 $thread->vote_question_id = $vote_question->create($request, $thread->id); //$vote_question->create会返回id
@@ -194,10 +207,17 @@ class ThreadController extends Controller
             }
 
             //追加菠菜贴
-            if ($request->is_gamble) {
+            if ($request->thread_type == "gamble") {
                 $user->coin -= 500; //发菠菜主题减500奥利奥  
                 $gamble_question = new GambleQuestion();
                 $thread->gamble_question_id = $gamble_question->create($request, $thread->id); //$gamble_question->create会返回id
+                $thread->save();
+            }
+
+            //追加菠众筹贴
+            if ($request->thread_type == "crowd") {
+                $crowd = new Crowd();
+                $thread->crowd_id = $crowd->create($request, $thread->id); //$crowd->create会返回id
                 $thread->save();
             }
 

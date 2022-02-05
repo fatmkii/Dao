@@ -246,7 +246,12 @@
         </div>
       </b-tab>
       <b-tab title="投票">
-        <b-form-checkbox class="mr-3" v-model="is_vote">
+        <b-form-checkbox
+          class="mr-3"
+          v-model="thread_type"
+          value="vote"
+          unchecked-value=""
+        >
           开启投票（1000奥利奥）
         </b-form-checkbox>
         <div class="row align-items-center my-2">
@@ -258,7 +263,7 @@
               fill="currentColor"
               class="mr-3 svg-icon bi bi-plus-lg"
               viewBox="0 0 16 16"
-              v-show="is_vote"
+              v-show="thread_type == 'vote'"
               @click="vote_option_control('push')"
             >
               <path
@@ -272,7 +277,7 @@
               fill="currentColor"
               class="mr-3 svg-icon bi bi-dash-lg"
               viewBox="0 0 16 16"
-              v-show="is_vote"
+              v-show="thread_type == 'vote'"
               @click="vote_option_control('pop')"
             >
               <path d="M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z" />
@@ -281,7 +286,7 @@
           <div class="col-auto my-2">
             <b-form-checkbox
               class="mr-3"
-              v-show="is_vote"
+              v-show="thread_type == 'vote'"
               v-model="vote_multiple"
               v-b-popover.hover.right="'未启用'"
               disabled
@@ -289,7 +294,7 @@
               投票多选
             </b-form-checkbox>
           </div>
-          <div class="col-auto my-2" v-show="is_vote">
+          <div class="col-auto my-2" v-show="thread_type == 'vote'">
             <b-input-group style="max-width: 160px">
               <b-form-input
                 v-model="end_date_selected"
@@ -320,7 +325,7 @@
             </b-input-group>
           </div>
 
-          <div class="col-auto my-2" v-show="is_vote">
+          <div class="col-auto my-2" v-show="thread_type == 'vote'">
             <b-input-group style="max-width: 160px">
               <b-form-input
                 v-model="end_time_selected"
@@ -341,7 +346,7 @@
           </div>
         </div>
 
-        <div v-show="is_vote">
+        <div v-show="thread_type == 'vote'">
           <div class="my-2" style="font-size: 0.875rem">投票标题</div>
           <b-form-input
             id="vote_title_input"
@@ -352,7 +357,7 @@
         </div>
         <div
           class="my-2"
-          v-show="is_vote"
+          v-show="thread_type == 'vote'"
           v-for="(vote_option, index) in vote_options"
           :key="index"
         >
@@ -363,8 +368,10 @@
       <b-tab title="菠菜">
         <b-form-checkbox
           class="mr-3"
-          v-model="is_gamble"
+          v-model="thread_type"
           :disabled="forum_id != 12"
+          value="gamble"
+          unchecked-value=""
         >
           开启菠菜（500奥利奥） 目前只能在海滨乐园岛开菠菜（避免被日清）
         </b-form-checkbox>
@@ -377,7 +384,7 @@
               fill="currentColor"
               class="mr-3 svg-icon bi bi-plus-lg"
               viewBox="0 0 16 16"
-              v-show="is_gamble"
+              v-show="thread_type == 'gamble'"
               @click="vote_option_control('push')"
             >
               <path
@@ -391,13 +398,13 @@
               fill="currentColor"
               class="mr-3 svg-icon bi bi-dash-lg"
               viewBox="0 0 16 16"
-              v-show="is_gamble"
+              v-show="thread_type == 'gamble'"
               @click="vote_option_control('pop')"
             >
               <path d="M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z" />
             </svg>
           </div>
-          <div class="col-auto my-2" v-show="is_gamble">
+          <div class="col-auto my-2" v-show="thread_type == 'gamble'">
             <b-input-group style="max-width: 160px">
               <b-form-input
                 v-model="end_date_selected"
@@ -428,7 +435,7 @@
             </b-input-group>
           </div>
 
-          <div class="col-auto my-2" v-show="is_gamble">
+          <div class="col-auto my-2" v-show="thread_type == 'gamble'">
             <b-input-group style="max-width: 160px">
               <b-form-input
                 v-model="end_time_selected"
@@ -449,7 +456,7 @@
           </div>
         </div>
 
-        <div v-show="is_gamble">
+        <div v-show="thread_type == 'gamble'">
           <div class="my-2" style="font-size: 0.875rem">菠菜标题</div>
           <b-form-input
             id="vote_title_input"
@@ -460,7 +467,7 @@
         </div>
         <div
           class="my-2"
-          v-show="is_gamble"
+          v-show="thread_type == 'gamble'"
           v-for="(vote_option, index) in vote_options"
           :key="index"
         >
@@ -546,8 +553,7 @@ export default {
       locked_by_coin_input: undefined,
       upload_img_handling: false,
       preview_show: false,
-      is_vote: false,
-      is_gamble: false,
+      thread_type: "",
       is_delay: false,
       vote_multiple: false,
       vote_title_input: "",
@@ -567,16 +573,6 @@ export default {
         "emoji_auto_hide",
         this.emoji_auto_hide ? "true" : ""
       );
-    },
-    is_vote() {
-      if (this.is_vote) {
-        this.is_gamble = false;
-      }
-    },
-    is_gamble() {
-      if (this.is_gamble) {
-        this.is_vote = false;
-      }
     },
     subtitles_selected() {
       if (this.subtitles_selected == "[专楼]") {
@@ -684,13 +680,12 @@ export default {
           admin_subtitle: this.admin_subtitles_selected,
           post_with_admin: this.post_with_admin,
           locked_by_coin: this.locked_by_coin_input,
-          is_vote: this.is_vote,
-          is_gamble: this.is_gamble,
+          thread_type: this.thread_type,
           is_delay: this.is_delay,
           can_battle: this.can_battle_selected,
         },
       };
-      if (this.is_vote) {
+      if (this.thread_type == "vote") {
         //如果是投票贴，追加投票相关的请求参数
         if (!this.end_date_selected || !this.end_time_selected) {
           this.new_thread_handling = false;
@@ -704,7 +699,7 @@ export default {
         config.data.vote_end_time =
           this.end_date_selected + " " + this.end_time_selected;
       }
-      if (this.is_gamble) {
+      if (this.thread_type == "gamble") {
         //如果是菠菜贴，追加投票相关的请求参数
         if (!this.end_date_selected || !this.end_time_selected) {
           this.new_thread_handling = false;
