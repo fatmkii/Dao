@@ -250,7 +250,7 @@
           class="mr-3"
           v-model="thread_type"
           value="vote"
-          unchecked-value=""
+          unchecked-value="normal"
         >
           开启投票（1000奥利奥）
         </b-form-checkbox>
@@ -366,7 +366,7 @@
           v-model="thread_type"
           :disabled="forum_id != 12"
           value="gamble"
-          unchecked-value=""
+          unchecked-value="normal"
         >
           开启菠菜（500奥利奥） 目前只能在海滨乐园岛开菠菜（避免被日清）
         </b-form-checkbox>
@@ -476,7 +476,7 @@
           v-model="thread_type"
           :disabled="forum_id != 12"
           value="crowd"
-          unchecked-value=""
+          unchecked-value="normal"
         >
           开启众筹（仅管理员可见） 目前只能在海滨乐园岛开菠菜（避免被日清）
         </b-form-checkbox>
@@ -629,7 +629,7 @@ export default {
       locked_by_coin_input: undefined,
       upload_img_handling: false,
       preview_show: false,
-      thread_type: "",
+      thread_type: "normal",
       is_delay: false,
       vote_multiple: false,
       vote_title_input: "",
