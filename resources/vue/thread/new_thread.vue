@@ -254,7 +254,7 @@
         >
           开启投票（1000奥利奥）
         </b-form-checkbox>
-        <div class="row align-items-center my-2">
+        <div class="row align-items-center my-2" v-show="thread_type == 'vote'">
           <div class="col-auto">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -263,7 +263,6 @@
               fill="currentColor"
               class="mr-3 svg-icon bi bi-plus-lg"
               viewBox="0 0 16 16"
-              v-show="thread_type == 'vote'"
               @click="vote_option_control('push')"
             >
               <path
@@ -277,7 +276,6 @@
               fill="currentColor"
               class="mr-3 svg-icon bi bi-dash-lg"
               viewBox="0 0 16 16"
-              v-show="thread_type == 'vote'"
               @click="vote_option_control('pop')"
             >
               <path d="M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z" />
@@ -286,7 +284,6 @@
           <div class="col-auto my-2">
             <b-form-checkbox
               class="mr-3"
-              v-show="thread_type == 'vote'"
               v-model="vote_multiple"
               v-b-popover.hover.right="'未启用'"
               disabled
@@ -294,7 +291,7 @@
               投票多选
             </b-form-checkbox>
           </div>
-          <div class="col-auto my-2" v-show="thread_type == 'vote'">
+          <div class="col-auto my-2">
             <b-input-group style="max-width: 160px">
               <b-form-input
                 v-model="end_date_selected"
@@ -324,8 +321,7 @@
               </b-input-group-append>
             </b-input-group>
           </div>
-
-          <div class="col-auto my-2" v-show="thread_type == 'vote'">
+          <div class="col-auto my-2">
             <b-input-group style="max-width: 160px">
               <b-form-input
                 v-model="end_time_selected"
@@ -345,7 +341,6 @@
             </b-input-group>
           </div>
         </div>
-
         <div v-show="thread_type == 'vote'">
           <div class="my-2" style="font-size: 0.875rem">投票标题</div>
           <b-form-input
@@ -375,7 +370,7 @@
         >
           开启菠菜（500奥利奥） 目前只能在海滨乐园岛开菠菜（避免被日清）
         </b-form-checkbox>
-        <div class="row align-items-center">
+        <div class="row align-items-center" v-show="thread_type == 'gamble'">
           <div class="col-auto">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -384,7 +379,6 @@
               fill="currentColor"
               class="mr-3 svg-icon bi bi-plus-lg"
               viewBox="0 0 16 16"
-              v-show="thread_type == 'gamble'"
               @click="vote_option_control('push')"
             >
               <path
@@ -398,13 +392,12 @@
               fill="currentColor"
               class="mr-3 svg-icon bi bi-dash-lg"
               viewBox="0 0 16 16"
-              v-show="thread_type == 'gamble'"
               @click="vote_option_control('pop')"
             >
               <path d="M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z" />
             </svg>
           </div>
-          <div class="col-auto my-2" v-show="thread_type == 'gamble'">
+          <div class="col-auto my-2">
             <b-input-group style="max-width: 160px">
               <b-form-input
                 v-model="end_date_selected"
@@ -434,8 +427,7 @@
               </b-input-group-append>
             </b-input-group>
           </div>
-
-          <div class="col-auto my-2" v-show="thread_type == 'gamble'">
+          <div class="col-auto my-2">
             <b-input-group style="max-width: 160px">
               <b-form-input
                 v-model="end_time_selected"
@@ -466,13 +458,97 @@
           ></b-form-input>
         </div>
         <div
-          class="my-2"
           v-show="thread_type == 'gamble'"
+          class="my-2"
           v-for="(vote_option, index) in vote_options"
           :key="index"
         >
           <div style="font-size: 0.875rem">选项{{ index + 1 }}</div>
           <b-form-input v-model="vote_options[index]"></b-form-input>
+        </div>
+      </b-tab>
+      <b-tab
+        title="众筹"
+        v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
+      >
+        <b-form-checkbox
+          class="mr-3"
+          v-model="thread_type"
+          :disabled="forum_id != 12"
+          value="crowd"
+          unchecked-value=""
+        >
+          开启众筹（仅管理员可见） 目前只能在海滨乐园岛开菠菜（避免被日清）
+        </b-form-checkbox>
+        <div class="row align-items-center" v-show="thread_type == 'crowd'">
+          <div class="col-auto my-2">
+            <b-input-group style="max-width: 160px">
+              <b-form-input
+                v-model="end_date_selected"
+                size="sm"
+                type="text"
+                placeholder="结束日期"
+              ></b-form-input>
+              <b-input-group-append>
+                <b-form-datepicker
+                  v-model="end_date_selected"
+                  size="sm"
+                  placeholder="结束日期"
+                  locale="zh"
+                  button-only
+                  today-button
+                  reset-button
+                  close-button
+                  :date-format-options="{
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                  }"
+                  :min="minDate"
+                  :max="maxDate"
+                  label-help="请选择投票结束的日期"
+                ></b-form-datepicker>
+              </b-input-group-append>
+            </b-input-group>
+          </div>
+          <div class="col-auto my-2">
+            <b-input-group style="max-width: 160px">
+              <b-form-input
+                v-model="end_time_selected"
+                size="sm"
+                type="text"
+                placeholder="结束时间"
+              ></b-form-input>
+              <b-input-group-append>
+                <b-form-timepicker
+                  v-model="end_time_selected"
+                  size="sm"
+                  locale="zh"
+                  reset-button
+                  button-only
+                ></b-form-timepicker>
+              </b-input-group-append>
+            </b-input-group>
+          </div>
+        </div>
+
+        <div v-show="thread_type == 'crowd'">
+          <div class="my-2" style="font-size: 0.875rem">众筹项目</div>
+          <b-form-input
+            id="vote_title_input"
+            class="vote_title_input"
+            placeholder="众筹项目标题，必填"
+            v-model="vote_title_input"
+          ></b-form-input>
+        </div>
+        <div v-show="thread_type == 'crowd'">
+          <div class="my-2" style="font-size: 0.875rem">目标金额</div>
+          <b-form-input
+            id="vote_title_input"
+            class="vote_title_input"
+            placeholder="目标金额，最大1000万"
+            v-model="crowd_olo_input"
+          ></b-form-input>
         </div>
       </b-tab>
       <b-tab
@@ -558,7 +634,8 @@ export default {
       vote_multiple: false,
       vote_title_input: "",
       vote_options: ["", "", ""],
-      end_time_selected: undefined,
+      crowd_olo_input: undefined,
+      end_time_selected: "00:00:00",
       end_date_selected: undefined,
       minDate: minDate,
       maxDate: maxDate,
@@ -700,7 +777,7 @@ export default {
           this.end_date_selected + " " + this.end_time_selected;
       }
       if (this.thread_type == "gamble") {
-        //如果是菠菜贴，追加投票相关的请求参数
+        //如果是菠菜贴，追加菠菜相关的请求参数
         if (!this.end_date_selected || !this.end_time_selected) {
           this.new_thread_handling = false;
           alert("请设定结束的日期和时间");
@@ -710,6 +787,18 @@ export default {
         config.data.gamble_options = JSON.stringify(this.vote_options);
         config.data.gamble_end_time =
           this.end_date_selected + " " + this.end_time_selected;
+      }
+      if (this.thread_type == "crowd") {
+        //如果是众筹贴，追加众筹相关的请求参数
+        if (!this.end_date_selected || !this.end_time_selected) {
+          this.new_thread_handling = false;
+          alert("请设定结束的日期和时间");
+          return;
+        }
+        config.data.crowd_title = this.vote_title_input;
+        config.data.crowd_end_time =
+          this.end_date_selected + " " + this.end_time_selected;
+        config.data.crowd_olo_target = this.crowd_olo_input;
       }
       axios(config)
         .then((response) => {
