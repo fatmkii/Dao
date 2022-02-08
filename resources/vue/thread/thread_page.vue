@@ -1282,7 +1282,7 @@ export default {
       formData.append("file", file);
       formData.append(
         "Token",
-        "ofdns1jjalu6efhl4ahlgmqack2lm3ll:J7Io2WOTXnIUZ2G0ibCcNsJ1BsY=:eyJkZWFkbGluZSI6MTYyOTIxMjIyOSwiYWN0aW9uIjoiZ2V0IiwidWlkIjoxMDM2OCwiYWlkIjoiMTEwMDQiLCJmcm9tIjoiZmlsZSJ9"
+        "k2phoj6wvpsb7qdbm0cqq297oawvindi:U8nJgezAK3Kp19Uoof2cSyDnxH4=:eyJkZWFkbGluZSI6MTY0NDMxNTkzMSwiYWN0aW9uIjoiZ2V0IiwidWlkIjoxNTA4MSwiYWlkIjoiMjMzODAiLCJmcm9tIjoiZmlsZSJ9"
       );
       delete axios.defaults.headers.Authorization; //正常用的transFormRequest会影响data，只能把Authorization删了再加回去
       const config = {
