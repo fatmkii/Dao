@@ -34,8 +34,7 @@ class ProcessUserCreatedLocation implements ShouldQueue
      */
     public function handle()
     {
-        // $ip_location = CommonController::get_IP_location($this->user_info["IP"]);
-        $ip_location = CommonController::get_IP_location("35.229.214.71");
+        $ip_location = CommonController::get_IP_location($this->user_info["IP"]);
         $ip_location_log = sprintf(
             "country:%s city:%s district:%s hosting:%s mobile:%s",
             $ip_location->country,
