@@ -181,4 +181,23 @@ class CommonController extends Controller
             DB::rollback();
         }
     }
+
+    public static  function get_IP_location(string $IP)
+    {
+        $url = "http://ip-api.com/json/" . $IP . '?fields=17425937';
+        // $post_data = array();
+        // $postdata = http_build_query($post_data);
+        $options = array(
+            'http' => array(
+                'method' => 'GET',
+                'header' => 'Content-type:application/x-www-form-urlencoded',
+                // 'content' => $postdata,
+                'timeout' => 15 // 超时时间（单位:s）
+            )
+        );
+        $context = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+
+        return json_decode($result);
+    }
 }

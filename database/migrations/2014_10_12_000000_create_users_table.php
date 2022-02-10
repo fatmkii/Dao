@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('last_login')->nullable();
             $table->string('created_ip')->nullable();
             $table->string('created_UUID')->nullable();
+            $table->string('created_location')->nullable();
             $table->boolean('use_pingbici')->default(0); 
             $table->timestamps();
         });

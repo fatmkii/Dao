@@ -17,6 +17,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use App\Jobs\ProcessUserActive;
+use App\Jobs\ProcessUserCreatedLocation;
 
 class UserController extends Controller
 {
@@ -233,6 +234,14 @@ class UserController extends Controller
         $token = $user->createToken($binggan, ['normal'])->plainTextToken;
         //用redis记录饼干申请ip。限定7天内只能申请1次。
         Redis::setex('reg_record_' . $request->ip(), 7 * 24 * 3600, 1);
+
+        //记录申请饼干IP所在地
+        ProcessUserCreatedLocation::dispatch(
+            [
+                'IP' => $request->ip(),
+                'user_id' => $user->id,
+            ]
+        );
 
         return response()->json(
             [
