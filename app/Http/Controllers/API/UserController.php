@@ -479,7 +479,7 @@ class UserController extends Controller
 
         if (Redis::exists("captcha_key_" . $request->captcha_key)) {
             $captcha_code = Redis::get("captcha_key_" . $request->captcha_key);
-            if ($captcha_code == $request->captcha_code) {
+            if ($captcha_code == strtolower($request->captcha_code)) {
                 Redis::del('new_post_record_IP_' . $request->ip());
                 return response()->json([
                     'code' => ResponseCode::SUCCESS,
