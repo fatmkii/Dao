@@ -717,6 +717,7 @@
                 :src="'data:image/png;base64,' + captcha_img"
                 @click="get_captcha"
               />
+              <p>点击更换验证码。不区分大小写。</p>
             </div>
           </div>
         </template>
