@@ -478,13 +478,22 @@ class UserController extends Controller
         ]);
 
         if (Redis::exists("captcha_key_" . $request->captcha_key)) {
-            if (Redis::get("captcha_key_" . $request->captcha_key) == $request->captcha_code) {
+            $captcha_code = Redis::get("captcha_key_" . $request->captcha_key);
+            if ($captcha_code == $request->captcha_code) {
                 Redis::del('new_post_record_IP_' . $request->ip());
                 return response()->json([
                     'code' => ResponseCode::SUCCESS,
                     'message' => '已解除限制。',
                 ]);
             } else {
+                ProcessUserActive::dispatch(
+                    [
+                        'binggan' => $request->user->binggan,
+                        'user_id' => $request->user->id,
+                        'active' => '用户输入验证码错误',
+                        'content' => 'code:' . $captcha_code . ' input:' . $request->captcha_code,
+                    ]
+                );
                 return response()->json([
                     'code' => ResponseCode::CAPTCHA_WRONG,
                     'message' => ResponseCode::$codeMap[ResponseCode::CAPTCHA_WRONG],

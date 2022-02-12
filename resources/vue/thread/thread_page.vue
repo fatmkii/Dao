@@ -706,6 +706,7 @@
               <b-input-group prepend="输入：">
                 <b-form-input
                   autofocus
+                  maxlength="4"
                   placeholder="输入验证码解锁"
                   v-model="captcha_code_input"
                   @keyup.enter="commit_captcha"
