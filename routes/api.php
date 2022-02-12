@@ -12,6 +12,7 @@ use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\BattleController;
 use App\Http\Controllers\API\VoteController;
 use App\Http\Controllers\API\GambleController;
+use App\Http\Controllers\API\CrowdController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,6 +79,13 @@ Route::prefix('battles')->group(function () {
     Route::post('/i_roll', [BattleController::class, 'initiator_roll'])->middleware('CheckBinggan:create');  //发起者投色子
 });
 
+//Crowd系列
+Route::prefix('crowds')->group(function () {
+    Route::get('/{crowd_id}', [CrowdController::class, 'show']); //显示众筹结果
+    Route::post('', [CrowdController::class, 'create'])->middleware('CheckBinggan:create');  //用户参加众筹
+    Route::post('/repeal', [CrowdController::class, 'repeal'])->middleware('auth:sanctum');  //中止众筹（只能由管理员操作）
+});
+
 //User系列
 Route::prefix('user')->group(function () {
     Route::post('/show', [UserController::class, 'show'])->middleware('auth:sanctum'); //获得用户信息
@@ -86,7 +94,7 @@ Route::prefix('user')->group(function () {
     Route::get('/check_reg_record', [UserController::class, 'check_reg_record']); //返回注册记录TTL
     Route::post('/pingbici_set', [UserController::class, 'pingbici_set']);     //设定屏蔽词
     Route::post('/my_emoji_set', [UserController::class, 'my_emoji_set']);     //设定表情包
-    Route::post('/water_unlock', [UserController::class, 'water_unlock']);     //解除灌水锁定
+    Route::post('/water_unlock', [UserController::class, 'water_unlock'])->middleware('CheckBinggan:create');     //解除灌水锁定
 });
 
 
