@@ -1,25 +1,23 @@
 <template>
-  <b-tabs
-    class="emoji_tabs my-2"
-    content-class="py-2 px2 "
-    style="font-size: 0.875rem"
-    no-fade
-    pills
-  >
-    <b-tab
-      id="placeholder"
-      title-link-class="placeholder"
-      active
-      title="多余占位"
-    ></b-tab>
-    <b-tab
-      class="emoji_container"
-      :title="emoji_data.name"
-      v-for="(emoji_data, index) in emojis_data"
-      :key="index"
-      lazy
-      @click="emoji_open()"
-      ><div v-show="emoji_show">
+  <div class="my-2">
+    <div class="d-flex">
+      <div
+        class="emoji-nav-button"
+        :class="{ active: emoji_show == index }"
+        v-for="(emoji_data, index) in emojis_data"
+        :key="index"
+        @click="emoji_open(index)"
+      >
+        {{ emoji_data.name }}
+      </div>
+    </div>
+    <div class="d-flex py-1">
+      <div
+        class="emoji_container"
+        v-for="(emoji_data, index) in emojis_data"
+        :key="index"
+        v-show="emoji_show == index"
+      >
         <div
           class="emoji_box m-1 d-inline-flex"
           v-for="(emoji_src, index) in emoji_data.emojis"
@@ -33,8 +31,8 @@
           ></b-img>
         </div>
       </div>
-    </b-tab>
-  </b-tabs>
+    </div>
+  </div>
 </template>
 
 
@@ -54,7 +52,7 @@ export default {
   data: function () {
     return {
       name: "emoji",
-      emoji_show: false,
+      emoji_show: -1,
     };
   },
   computed: {
@@ -79,11 +77,16 @@ export default {
     emoji_click(emoji_src) {
       this.$emit("emoji_append", emoji_src);
       if (this.emoji_auto_hide) {
-        this.emoji_show = false;
+        this.emoji_show = -1;
+
       }
     },
-    emoji_open() {
-      this.emoji_show = true;
+    emoji_open(index) {
+      if (this.emoji_show == index) {
+        this.emoji_show = -1;
+      } else {
+        this.emoji_show = index;
+      }
     },
   },
   created() {},

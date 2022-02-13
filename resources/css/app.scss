@@ -208,16 +208,35 @@ body {
     max-height: 250px;
     overflow-y: auto;
 }
-#placeholder___BV_tab_button__ {
-    display: none !important;
-}
 //1.0的emoji
 .emotion {
     max-width: 48px;
     max-height: 48px;
 }
+//新emoji面板用
+.emoji-nav-button {
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 8px;
+    padding-bottom: 7px;
+    line-height: 21px;
+    font-size: 14px;
+    box-sizing: border-box;
+    border-radius: 0.25rem;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+    cursor: pointer;
+    @include background_color("background_color6");
+    @include font_color("font_color2");
+}
+.emoji-nav-button.active {
+    @include background_color("icon_color2");
+    color: #fff;
+}
 
-//emoji的nav
+//个人中心里的的nav组件用
 .nav {
     @include background_color("background_color6");
     a {
