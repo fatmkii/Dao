@@ -1,6 +1,6 @@
 <template>
   <div class="my-2">
-    <div class="d-flex">
+    <div class="d-flex flex-wrap">
       <div
         class="emoji-nav-button"
         :class="{ active: emoji_show == index }"
@@ -11,7 +11,7 @@
         {{ emoji_data.name }}
       </div>
     </div>
-    <div class="d-flex py-1">
+    <div class="d-flex flex-wrap py-1">
       <div
         class="emoji_container"
         v-for="(emoji_data, index) in emojis_data"
