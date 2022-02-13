@@ -246,7 +246,8 @@ body {
     cursor: pointer;
 }
 //菠菜下注列表
-.gamble_table {
+.gamble_table,
+.crowd_table {
     width: 100%;
     margin-bottom: 1rem;
     @include background_color("backgroud_color1");
@@ -373,6 +374,14 @@ label.custom-file-label::after {
     position: relative;
     left: -124px;
     z-index: -1;
+}
+.crowd-progress {
+    .progress {
+        // background-color: transparent;
+        position: relative;
+        left: -124px;
+        z-index: -1;
+    }
 }
 
 //大乱斗相关

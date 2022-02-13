@@ -19,6 +19,7 @@ class CreateThreadsTable extends Migration
             $table->integer('forum_id')->index();
             $table->integer('vote_question_id')->nullable(); //投票贴的id
             $table->integer('gamble_question_id')->nullable(); //菠菜贴的id
+            $table->integer('crowd_id')->nullable(); //众筹贴的id
             $table->string('nickname');
             $table->text('title');
             $table->string('sub_title')->default('[闲聊]');
