@@ -11,7 +11,7 @@
         {{ emoji_data.name }}
       </div>
     </div>
-    <div class="d-flex flex-wrap py-1">
+    <div class="d-flex flex-wrap py-1" v-if="emoji_show != -1">
       <div
         class="emoji_container"
         v-for="(emoji_data, index) in emojis_data"
@@ -78,7 +78,6 @@ export default {
       this.$emit("emoji_append", emoji_src);
       if (this.emoji_auto_hide) {
         this.emoji_show = -1;
-
       }
     },
     emoji_open(index) {
