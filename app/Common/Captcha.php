@@ -11,7 +11,7 @@ namespace App\Common;
 
 class Captcha
 {
-    private $str = "ABCDEFGHIJKLMNOPQRSTUVWXYZaabcdefghijklmnopqrstuvwxyz1234567890";
+    private $str = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnprstuvwxyz1234567890";
     private $font;
     private $imageResource;
     private $level;
