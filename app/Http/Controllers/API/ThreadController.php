@@ -16,7 +16,6 @@ use App\Exceptions\CoinException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use App\Jobs\ProcessUserActive;
-use App\Models\Crowd;
 use App\Models\GambleQuestion;
 use App\Models\VoteQuestion;
 
@@ -211,13 +210,6 @@ class ThreadController extends Controller
                 $user->coin -= 500; //发菠菜主题减500奥利奥  
                 $gamble_question = new GambleQuestion();
                 $thread->gamble_question_id = $gamble_question->create($request, $thread->id); //$gamble_question->create会返回id
-                $thread->save();
-            }
-
-            //追加菠众筹贴
-            if ($request->thread_type == "crowd") {
-                $crowd = new Crowd();
-                $thread->crowd_id = $crowd->create($request, $thread->id); //$crowd->create会返回id
                 $thread->save();
             }
 
