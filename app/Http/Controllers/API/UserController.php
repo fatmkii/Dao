@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use App\Jobs\ProcessUserActive;
 use App\Jobs\ProcessUserCreatedLocation;
+use App\Models\IncomeStatement;
 
 class UserController extends Controller
 {
@@ -506,5 +507,31 @@ class UserController extends Controller
                 'message' => ResponseCode::$codeMap[ResponseCode::CAPTCHA_NOT_FOUND],
             ]);
         }
+    }
+
+    //查询收益表
+    public function income_show(Request $request)
+    {
+        $request->validate([
+            'income_date' => 'required|date',
+            'page' => 'integer',
+        ]);
+
+        $user = $request->user;
+        $currentPage = $request->has("page") ? $request->page : 1;
+
+        list($income_data, $lastPage) = IncomeStatement::incomeData($user->id, $request->income_date, $currentPage); //更好的分页sql语句
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '返回收益表',
+                'data' => array(
+                    "currentPage" => intval($currentPage),
+                    "data" => $income_data,
+                    "lastPage" => $lastPage,
+                )
+            ]
+        );
     }
 }

@@ -15,6 +15,8 @@ use App\Models\Admin;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redis;
 use App\Jobs\ProcessUserActive;
+use App\Models\IncomeStatement;
+use App\Jobs\ProcessIncomeStatement;
 
 use function Symfony\Component\VarDumper\Dumper\esc;
 
@@ -213,6 +215,11 @@ class User extends Authenticatable
     public function VoteUser()
     {
         return $this->hasMany(VoteUser::class);
+    }
+
+    public function IncomeStatement()
+    {
+        return $this->hasMany(IncomeStatement::class);
     }
 
     public function getAdminForumsAttribute()

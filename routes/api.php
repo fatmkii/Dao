@@ -116,6 +116,10 @@ Route::middleware('CheckTokenCan:super_admin', 'auth:sanctum')->prefix('admin')-
     Route::get('/check_user_post', [AdminController::class, 'check_user_post']); //查询用户发帖记录
 });
 
+//IncomeStatement系列
+Route::prefix('income')->group(function () {
+    Route::get('/show', [UserController::class, 'income_show'])->middleware('CheckBinggan:show'); //查看olo收益表
+});
 
 //杂项
 Route::get('/emoji', [CommonController::class, 'emoji_index']);

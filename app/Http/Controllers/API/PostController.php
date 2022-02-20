@@ -15,6 +15,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use App\Jobs\ProcessUserActive;
+use App\Jobs\ProcessIncomeStatement;
+use Carbon\Carbon;
 
 class PostController extends Controller
 {
@@ -159,6 +161,24 @@ class PostController extends Controller
 
         //用redis记录回频率。
         $user->waterRecord('new_post', $request->ip());
+
+        //记录olo变动
+        ProcessIncomeStatement::dispatch(
+            'post',//记录类型
+            [
+                'created_at' => Carbon::now(),
+                'olo' => 10,
+                'user_id' => $user->id,
+                'binggan' => $user->binggan,
+                'user_id_target' => null,
+                'binggan_target' => null,
+                'content' => '回帖',
+                'thread_id' => $thread->id,
+                'thread_title' => $thread->title,
+                'post_id' => $post->id,
+                'floor' => $post->floor,
+            ]
+        );
 
         return response()->json(
             [
