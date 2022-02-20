@@ -200,9 +200,10 @@ class UserController extends Controller
         try {
             DB::beginTransaction();
             $user = new User;
+            $binggan = '';
             do {
                 $binggan = Str::random(9);
-            } while (!empty(User::where('binggan', $binggan)->first));
+            } while (User::where('binggan', $binggan)->exists());
             $user->binggan = $binggan;
             $user->created_ip = $request->ip();
             $user->created_UUID = $created_UUID_short;
