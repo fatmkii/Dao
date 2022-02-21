@@ -140,7 +140,14 @@ class PostController extends Controller
             $thread->save();
             $post->save();
 
-            $user->coin += 10; //回复+10奥利奥
+            // $user->coin += 10; //回复+10奥利奥
+            $user->coinChange(
+                'post', //记录类型
+                [
+                    'olo' => 10,
+                    'content' => '回帖',
+                ]
+            ); //回复+10奥利奥（通过统一接口、记录操作）
             $user->nickname = $request->nickname; //记录昵称
             $user->save();
             DB::commit();
@@ -161,24 +168,6 @@ class PostController extends Controller
 
         //用redis记录回频率。
         $user->waterRecord('new_post', $request->ip());
-
-        //记录olo变动
-        ProcessIncomeStatement::dispatch(
-            'post',//记录类型
-            [
-                'created_at' => Carbon::now(),
-                'olo' => 10,
-                'user_id' => $user->id,
-                'binggan' => $user->binggan,
-                'user_id_target' => null,
-                'binggan_target' => null,
-                'content' => '回帖',
-                'thread_id' => $thread->id,
-                'thread_title' => $thread->title,
-                'post_id' => $post->id,
-                'floor' => $post->floor,
-            ]
-        );
 
         return response()->json(
             [
@@ -265,7 +254,20 @@ class PostController extends Controller
             DB::beginTransaction();
             //判断饼干是否足够
             $user = $request->user;
-            $user->coinConsume(300); //删除帖子扣除300奥利奥
+            // $user->coinConsume(300); //删除帖子扣除300奥利奥
+            $thread = $post->thread;
+            $user->coinChange(
+                'normal', //记录类型
+                [
+                    'olo' => -300,
+                    'content' => '删除帖子',
+                    'thread_id' => $thread->id,
+                    'thread_title' => $thread->title,
+                    'post_id' => $post->id,
+                    'floor' => $post->floor,
+                ]
+            ); //删除帖子扣除300奥利奥（通过统一接口、记录操作）
+
 
             $post->is_deleted = 1;
             $post->save();
@@ -348,7 +350,19 @@ class PostController extends Controller
             DB::beginTransaction();
             //判断饼干是否足够
             $user = $request->user;
-            $user->coinConsume(300); //恢复帖子扣除300奥利奥
+            // $user->coinConsume(300); //恢复帖子扣除300奥利奥
+            $thread = $post->thread;
+            $user->coinChange(
+                'normal', //记录类型
+                [
+                    'olo' => -300,
+                    'content' => '恢复帖子',
+                    'thread_id' => $thread->id,
+                    'thread_title' => $thread->title,
+                    'post_id' => $post->id,
+                    'floor' => $post->floor,
+                ]
+            ); //恢复帖子扣除300奥利奥（通过统一接口、记录操作）
 
             $post->is_deleted = 0;
             $post->save();

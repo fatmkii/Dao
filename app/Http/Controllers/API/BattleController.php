@@ -15,6 +15,9 @@ use App\Exceptions\CoinException;
 use Illuminate\Support\Facades\DB;
 use App\Common\ResponseCode;
 use App\Jobs\ProcessUserActive;
+use App\Jobs\ProcessIncomeStatement;
+use App\Models\Thread;
+use Illuminate\Support\Carbon;
 
 class BattleController extends Controller
 {
@@ -77,7 +80,7 @@ class BattleController extends Controller
             $post->nickname = '大乱斗系统';
             $post->created_by_admin = 2; //0=一般用户 1=管理员发布，2=系统发布
             $post->created_ip = $request->ip();
-            $post->random_head = random_int(0,39);
+            $post->random_head = random_int(0, 39);
             $thread = $post->thread;
             $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
             $post->floor = $thread->posts_num;
@@ -85,6 +88,8 @@ class BattleController extends Controller
             $thread->save();
 
             $battle = new Battle;
+            $battle->thread_id = $thread->id;
+            $battle->post_id = $post->id;
             $battle->created_binggan = $user->binggan;
             $battle->initiator_user_id = $user->id;
             $battle->initiator_chara = $request->chara_id;
@@ -360,25 +365,36 @@ class BattleController extends Controller
             );
         }
 
-
         switch ($battle_result) {
             case 1:
-                $result_str = '发起者胜利，赌注：' . $battle->battle_olo;
+                $initiator_income_olo = intval($battle->battle_olo * 1.96);
+                $initiator_income_content = '大乱斗（胜利）';
+                $challenger_income_olo = -$battle->battle_olo;
+                $challenger_income_content = '大乱斗（失败）';
                 break;
             case 2:
-                $result_str = '挑战者胜利，赌注：' . $battle->battle_olo;
+                $initiator_income_olo = -$battle->battle_olo;
+                $initiator_income_content = '大乱斗（失败）';
+                $challenger_income_olo = intval($battle->battle_olo * 1.96);
+                $challenger_income_content = '大乱斗（胜利）';
                 break;
             case 3:
-                $result_str = '平局，赌注：' . $battle->battle_olo;
+                $initiator_income_olo = intval($battle->battle_olo * 1.96);
+                $initiator_income_content = '大乱斗（平局）';
+                $challenger_income_olo = intval($battle->battle_olo * 1.96);
+                $challenger_income_content = '大乱斗（平局）';
                 break;
         }
+
+        $thread = Thread::find($battle->thread_id);
+        $post = Post::suffix(intval($thread->id / 10000))->find($battle->post_id);
 
         ProcessUserActive::dispatch(
             [
                 'binggan' => $challenger_user->binggan,
                 'user_id' => $challenger_user->id,
                 'active' => '用户参加了大乱斗（挑战者）',
-                'content' => '投出的点数：' . $challenger_rand_num . "。结果：" . $result_str,
+                'content' => '投出的点数：' . $challenger_rand_num . "。结果：" . $challenger_income_content . "。赌注：" . $challenger_income_olo,
             ]
         );
 
@@ -387,9 +403,46 @@ class BattleController extends Controller
                 'binggan' => $initiator_user->binggan,
                 'user_id' => $initiator_user->id,
                 'active' => '用户参加了大乱斗（发起者）',
-                'content' => '投出的点数：' . $initiator_rand_num . "。结果：" . $result_str,
+                'content' => '投出的点数：' . $initiator_rand_num . "。结果：" . $initiator_income_content . "。赌注：" . $initiator_income_olo,
             ]
         );
+
+        //记录olo变动（发起者）
+        ProcessIncomeStatement::dispatch(
+            'normal', //记录类型
+            [
+                'created_at' => Carbon::now(),
+                'olo' => $initiator_income_olo,
+                'user_id' => $initiator_user->id,
+                'binggan' => $initiator_user->binggan,
+                'user_id_target' => $challenger_user->id,
+                'binggan_target' => $challenger_user->binggan,
+                'content' => $initiator_income_content,
+                'thread_id' => $thread->id,
+                'thread_title' => $thread->title,
+                'post_id' => $post->id,
+                'floor' => $post->floor,
+            ]
+        );
+
+        //记录olo变动（挑战者）
+        ProcessIncomeStatement::dispatch(
+            'normal', //记录类型
+            [
+                'created_at' => Carbon::now(),
+                'olo' => $challenger_income_olo,
+                'user_id' => $challenger_user->id,
+                'binggan' => $challenger_user->binggan,
+                'user_id_target' => $initiator_user->id,
+                'binggan_target' => $initiator_user->binggan,
+                'content' => $challenger_income_content,
+                'thread_id' => $thread->id,
+                'thread_title' => $thread->title,
+                'post_id' => $post->id,
+                'floor' => $post->floor,
+            ]
+        );
+
 
 
         return response()->json([
@@ -398,6 +451,7 @@ class BattleController extends Controller
         ]);
     }
 
+    //已废弃
     public function initiator_roll(Request $request)
     {
         $request->validate([
@@ -449,7 +503,7 @@ class BattleController extends Controller
             $battle_message->battle_id = $battle->id;
             $battle_message->chara_url = BattleChara::CharaHead($battle->initiator_chara, 'attack');
             $battle_message->message_type = 1;
-            $battle_message->message = BattleChara::CharaAttackMessage($battle->initiator_chara, 0, $rand_num);//第二个参数是对手角色号，但是这里不需要
+            $battle_message->message = BattleChara::CharaAttackMessage($battle->initiator_chara, 0, $rand_num); //第二个参数是对手角色号，但是这里不需要
             $battle_message->save();
 
 

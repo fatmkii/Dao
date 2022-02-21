@@ -18,8 +18,6 @@ use App\Jobs\ProcessUserActive;
 use App\Models\IncomeStatement;
 use App\Jobs\ProcessIncomeStatement;
 
-use function Symfony\Component\VarDumper\Dumper\esc;
-
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
@@ -187,7 +185,7 @@ class User extends Authenticatable
         }
     }
 
-    //消费奥利奥并检查是否足够
+    //消费奥利奥并检查是否足够（用于不留下income_statement的操作）
     public function coinConsume(int $coin)
     {
         if ($this->coin < $coin) {
@@ -196,6 +194,33 @@ class User extends Authenticatable
         $this->coin -= $coin;
         $this->save();
     }
+
+    //统一的奥利奥变更接口，并且留下income_statement记录
+    public function coinChange(string $action = "normal", array $income_statement)
+    {
+        //检查olo是否足够
+        if ($income_statement['olo'] < 0 && $this->coin < -$income_statement['olo']) {
+            throw new CoinException();
+        }
+
+        //如果没有传入user_id、binggan、created_at，则使用此模型的饼干（简化传参）
+        if (!array_key_exists('user_id', $income_statement)) {
+            $income_statement['user_id'] = $this->id;
+        }
+        if (!array_key_exists('binggan', $income_statement)) {
+            $income_statement['binggan'] = $this->binggan;
+        }
+        if (!array_key_exists('created_at', $income_statement)) {
+            $income_statement['created_at'] = Carbon::now();
+        }
+
+        //执行异步的队列，记录olo变动操作
+        ProcessIncomeStatement::dispatch($action, $income_statement);
+
+        $this->coin += $income_statement['olo'];
+        $this->save();
+    }
+
 
     public function Pingbici()
     {

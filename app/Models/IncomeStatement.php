@@ -13,6 +13,8 @@ class IncomeStatement extends myModel
 {
     use HasFactory;
 
+    const UPDATED_AT = null;//不使用updated_at
+
     protected $table = 'income_statement';
 
     protected $fillable = [

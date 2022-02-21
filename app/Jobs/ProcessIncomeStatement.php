@@ -41,9 +41,13 @@ class ProcessIncomeStatement implements ShouldQueue
     {
         $this->IncomeStatement = $IncomeStatement;
         $this->action = $action;
-        if (strlen($this->IncomeStatement['content']) > 255) {
+        if (array_key_exists('content', $this->IncomeStatement) && strlen($this->IncomeStatement['content']) > 255) {
             //数据库最长记录255
             $this->IncomeStatement['content'] = substr($this->IncomeStatement['content'], 0, 255);
+        }
+        if (array_key_exists('thread_title', $this->IncomeStatement) && strlen($this->IncomeStatement['thread_title']) > 255) {
+            //数据库最长记录255
+            $this->IncomeStatement['thread_title'] = substr($this->IncomeStatement['thread_title'], 0, 255);
         }
     }
 

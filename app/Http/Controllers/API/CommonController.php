@@ -69,6 +69,7 @@ class CommonController extends Controller
     {
         $captcha = new Captcha(3);
 
+        $key = "";
         do {
             $key = Str::random(6);
         } while (Redis::exists("captcha_key_" . $key));
@@ -163,7 +164,18 @@ class CommonController extends Controller
             $post->save();
 
             if ($coin > 0) {
-                $user->coin += $coin;
+                // $user->coin += $coin;
+                $user->coinChange(
+                    'normal', //记录类型
+                    [
+                        'olo' => $coin,
+                        'content' => '新春红包奖励',
+                        'thread_id' => $thread->id,
+                        'thread_title' => $thread->title,
+                        'post_id' => $post->id,
+                        'floor' => $post->floor,
+                    ]
+                ); //回复+10奥利奥（通过统一接口、记录操作）
                 $user->save();
 
                 DB::table("hongbao_record")->insert([

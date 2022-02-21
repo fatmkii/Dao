@@ -303,12 +303,6 @@ class UserController extends Controller
 
         try {
             DB::beginTransaction();
-            $tax = ceil($request->coin * 0.07); //税率0.07
-            $coin_pay = $request->coin + $tax;
-            $user->coinConsume($coin_pay);
-            $user_target->coin += $request->coin;
-            $user_target->save();
-
             $post = new Post;
             $post->setSuffix(intval($request->thread_id / 10000));
             $post->created_binggan = $request->binggan;
@@ -328,6 +322,39 @@ class UserController extends Controller
             $post->floor = $thread->posts_num;
             $thread->save();
             $post->save();
+
+            $tax = ceil($request->coin * 0.07); //税率0.07
+            $coin_pay = $request->coin + $tax;
+            // $user->coinConsume($coin_pay);
+            $user->coinChange(
+                'normal', //记录类型
+                [
+                    'olo' => -$coin_pay,
+                    'content' => '打赏olo   ——留言：' . $request->content,
+                    'user_id_target' => $user_target->id,
+                    'binggan_target' => $user_target->binggan,
+                    'thread_id' => $thread->id,
+                    'thread_title' => $thread->title,
+                    'post_id' => $post->id,
+                    'floor' => $post->floor,
+                ]
+            ); //通过统一接口、记录操作  
+
+            // $user_target->coin += $request->coin;
+            // $user_target->save();
+            $user_target->coinChange(
+                'normal', //记录类型
+                [
+                    'olo' => $request->coin,
+                    'user_id_target' => $user->id,
+                    'binggan_target' => $user->binggan,
+                    'content' => '被打赏olo   ——留言：' . $request->content,
+                    'thread_id' => $thread->id,
+                    'thread_title' => $thread->title,
+                    'post_id' => $post->id,
+                    'floor' => $post->floor,
+                ]
+            ); //通过统一接口、记录操作  
 
             DB::commit();
         } catch (QueryException $e) {

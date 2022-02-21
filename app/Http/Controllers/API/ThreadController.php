@@ -150,11 +150,25 @@ class ThreadController extends Controller
             //发主题帖（Thread）
             $thread = new Thread;
             if ($request->title_color) {
-                $user->coin -= 500; //设置标题颜色减500奥利奥   
+                // $user->coin -= 500; //设置标题颜色减500奥利奥 
+                $user->coinChange(
+                    'normal', //记录类型
+                    [
+                        'olo' => -500,
+                        'content' => '发布主题设置标题颜色',
+                    ]
+                ); //通过统一接口、记录操作  
                 $thread->title_color = $request->title_color;
             }
             if ($request->locked_by_coin > 0) {
-                $user->coin -= 500; //设置奥利奥权限贴减500奥利奥  
+                // $user->coin -= 500; //设置奥利奥权限贴减500奥利奥  
+                $user->coinChange(
+                    'normal', //记录类型
+                    [
+                        'olo' => -500,
+                        'content' => '发布olo权限主题',
+                    ]
+                ); //通过统一接口、记录操作
                 $thread->locked_by_coin = $request->locked_by_coin;
             }
             $thread->created_binggan = $request->binggan;
@@ -199,7 +213,16 @@ class ThreadController extends Controller
 
             //追加投票贴
             if ($request->thread_type == "vote") {
-                $user->coin -= 1000; //发投票主题减1000奥利奥  
+                // $user->coin -= 1000; //发投票主题减1000奥利奥  
+                $user->coinChange(
+                    'normal', //记录类型
+                    [
+                        'olo' => -1000,
+                        'content' => '发布投票主题',
+                        'thread_id' => $thread->id,
+                        'thread_title' => $thread->title,
+                    ]
+                ); //通过统一接口、记录操作  
                 $vote_question = new VoteQuestion();
                 $thread->vote_question_id = $vote_question->create($request, $thread->id); //$vote_question->create会返回id
                 $thread->save();
@@ -207,7 +230,16 @@ class ThreadController extends Controller
 
             //追加菠菜贴
             if ($request->thread_type == "gamble") {
-                $user->coin -= 500; //发菠菜主题减500奥利奥  
+                // $user->coin -= 500; //发菠菜主题减500奥利奥  
+                $user->coinChange(
+                    'normal', //记录类型
+                    [
+                        'olo' => -500,
+                        'content' => '发布菠菜主题',
+                        'thread_id' => $thread->id,
+                        'thread_title' => $thread->title,
+                    ]
+                ); //通过统一接口、记录操作  
                 $gamble_question = new GambleQuestion();
                 $thread->gamble_question_id = $gamble_question->create($request, $thread->id); //$gamble_question->create会返回id
                 $thread->save();
