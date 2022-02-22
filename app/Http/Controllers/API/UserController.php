@@ -185,6 +185,7 @@ class UserController extends Controller
         if (DB::table('user_register')->where('created_UUID', $created_UUID_short)->value('is_banned')) {
             ProcessUserActive::dispatch(
                 [
+                    'user_id' => 'none',
                     'active' => '申请饼干但UUID过多而失败',
                     'content' => 'ip:' . $request->ip() . ' UUID:' . $created_UUID_short,
                 ]
