@@ -214,7 +214,7 @@ body {
     max-height: 48px;
 }
 //新emoji面板用
-.emoji-nav-button {
+.nav-button {
     padding-left: 12px;
     padding-right: 12px;
     padding-top: 8px;
@@ -231,7 +231,7 @@ body {
     @include background_color("background_color6");
     @include font_color("font_color2");
 }
-.emoji-nav-button.active {
+.nav-button.active {
     @include background_color("icon_color2");
     color: #fff;
 }
@@ -282,6 +282,30 @@ body {
         border-bottom: 1px solid;
         @include border_color("border_color1");
         padding: 0.5rem;
+    }
+    tr:hover {
+        @include background_color("background_color_hover");
+    }
+}
+
+//收支记录列表
+.income_table {
+    width: 100%;
+    margin-bottom: 1rem;
+    @include background_color("backgroud_color1");
+    thead {
+        @include background_color("background_color2");
+    }
+    th {
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        @include border_color("border_color0");
+        padding: 0.3rem;
+    }
+    td {
+        border-bottom: 1px solid;
+        @include border_color("border_color1");
+        padding: 0.3rem;
     }
     tr:hover {
         @include background_color("background_color_hover");

@@ -154,9 +154,7 @@
       </b-tab>
       <b-tab title="我的表情包">
         <div class="mx-2 my-2">
-          <p class="my-2">
-            我的表情包：（新饼干要提交一次，才能使用喔）
-          </p>
+          <p class="my-2">我的表情包：（新饼干要提交一次，才能使用喔）</p>
           <b-form-textarea
             id="my_emoji_input"
             v-model.lazy="my_emoji_input"
@@ -194,6 +192,80 @@
           </div>
         </div>
       </b-tab>
+      <b-tab title="收支记录">
+        <div class="d-flex">
+          <b-input-group style="max-width: 160px">
+            <b-form-input
+              v-model="income_date_selected"
+              size="sm"
+              type="text"
+              placeholder="结束日期"
+            ></b-form-input>
+            <b-input-group-append>
+              <b-form-datepicker
+                v-model="income_date_selected"
+                size="sm"
+                placeholder="结束日期"
+                locale="zh"
+                button-only
+                today-button
+                reset-button
+                close-button
+                :date-format-options="{
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric',
+                }"
+                label-help="请选择投票结束的日期"
+              ></b-form-datepicker>
+            </b-input-group-append>
+          </b-input-group>
+          <b-button
+            class="ml-2"
+            variant="success"
+            size="sm"
+            :disabled="pingbici_set_handling"
+            @click="get_income_data(1)"
+            >查询
+          </b-button>
+          <span class="ml-2" v-show="income_no_data">无数据</span>
+        </div>
+        <table class="income_table mt-1">
+          <thead>
+            <tr class="text-left">
+              <th width="20%">时间</th>
+              <th width="15%">收支</th>
+              <th width="25%">内容</th>
+              <th width="40%">主题</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(income, index) in income_data" :key="index">
+              <td class="text-left">
+                {{ income.created_at }}
+              </td>
+              <td class="text-left">{{ income.olo }}</td>
+              <td class="text-left">{{ income.content }}</td>
+              <td class="text-left">
+                <router-link
+                  class="thread_title"
+                  style="word-wrap: break-word; white-space: normal"
+                  :to="income_thread_link(income.thread_id, income.floor)"
+                  >{{ income.thread_title }}</router-link
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <b-pagination-nav
+          :number-of-pages="income_last_page"
+          v-model="income_page"
+          :link-gen="linkGen"
+          limit="10"
+          class="my-2"
+          size="sm"
+        ></b-pagination-nav>
+      </b-tab>
     </b-tabs>
     <hr />
     <router-link to="admin_center" tag="a" style="font-size: 0.875rem">
@@ -217,6 +289,9 @@ export default {
         this.z_bar_left
       );
     },
+    income_page() {
+      this.get_income_data(this.income_page);
+    },
   },
   data: function () {
     return {
@@ -232,6 +307,11 @@ export default {
       my_emoji_set_handling: false,
       z_bar_left: false,
       emoji_delete_mode: false,
+      income_date_selected: undefined,
+      income_page: 1,
+      income_last_page: 1,
+      income_data: undefined,
+      income_no_data: false,
     };
   },
   computed: {
@@ -492,6 +572,61 @@ export default {
         this.$store.commit("MyEmoji_set", value);
       } catch (e) {} //没什么用，就是不想在输入过程中报错
     },
+    set_income_date_default() {
+      var dateTime = new Date(); //默认日期是今天
+      var year = dateTime.getFullYear();
+      var month = dateTime.getMonth() + 1;
+      if (month >= 1 && month <= 9) {
+        month = "0" + month;
+      }
+      var strDate = dateTime.getDate();
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+      }
+      this.income_date_selected = year + "-" + month + "-" + strDate;
+    },
+    get_income_data(page) {
+      this.income_no_data = false;
+      var config = {
+        method: "get",
+        url: "/api/income/show",
+        params: {
+          page: page,
+          binggan: this.$store.state.User.Binggan,
+          income_date: this.income_date_selected,
+        },
+      };
+      axios(config)
+        .then((response) => {
+          if (response.data.code == 200) {
+            if (response.data.data.lastPage === 0) {
+              this.income_last_page = 1;
+              this.income_page = 1;
+              this.income_data = undefined;
+              this.income_no_data = true;
+            } else {
+              this.income_page = response.data.data.currentPage;
+              this.income_last_page = response.data.data.lastPage;
+              this.income_data = response.data.data.income_data;
+            }
+          } else {
+            alert(response.data.message);
+          }
+        })
+        .catch((error) => {
+          alert(Object.values(error.response.data.errors)[0]);
+        });
+    },
+    linkGen() {
+      return ``;
+    },
+    income_thread_link(thread_id, floor) {
+      if (floor !== null) {
+        return "/thread/" + thread_id + "/1" + "#f_" + floor;
+      } else {
+        return "/thread/" + thread_id + "/1";
+      }
+    },
   },
   created() {
     document.title = "个人中心";
@@ -501,6 +636,9 @@ export default {
     } else {
       this.z_bar_left = Boolean(localStorage.z_bar_left);
     }
+  },
+  mounted() {
+    this.set_income_date_default();
   },
 };
 </script>

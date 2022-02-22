@@ -2,7 +2,7 @@
   <div class="my-2">
     <div class="d-flex flex-wrap">
       <div
-        class="emoji-nav-button"
+        class="nav-button"
         :class="{ active: emoji_show == index }"
         v-for="(emoji_data, index) in emojis_data"
         :key="index"

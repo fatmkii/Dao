@@ -555,7 +555,7 @@ class UserController extends Controller
                 'message' => '返回收益表',
                 'data' => array(
                     "currentPage" => intval($currentPage),
-                    "data" => $income_data,
+                    "income_data" => $income_data,
                     "lastPage" => $lastPage,
                 )
             ]

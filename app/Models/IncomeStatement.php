@@ -13,7 +13,7 @@ class IncomeStatement extends myModel
 {
     use HasFactory;
 
-    const UPDATED_AT = null;//不使用updated_at
+    const UPDATED_AT = null; //不使用updated_at
 
     protected $table = 'income_statement';
 
@@ -59,7 +59,7 @@ class IncomeStatement extends myModel
     //查询收支表
     public static function incomeData($user_id, $date, $page)
     {
-        $limit = 50; //每页50;
+        $limit = 30; //每页30;
         $offset = $page * $limit - $limit;
         $date = Carbon::parse($date);
         $income_table = 'income_statement_' . $date->year;
@@ -68,7 +68,7 @@ class IncomeStatement extends myModel
         $sql_child = DB::table($income_table)
             ->select('id')
             ->where('user_id', $user_id)
-            ->whereDate('created_at', $date->toDateString())
+            ->whereDate('created_at', '=', $date->toDateString())
             ->offset($offset)->limit($limit);
         $income = IncomeStatement::suffix($date->year)
             ->joinSub($sql_child, 'sql_child', function ($join) use ($income_table) {
@@ -81,7 +81,7 @@ class IncomeStatement extends myModel
         $income_num = DB::table($income_table)
             ->select('id')
             ->where('user_id', $user_id)
-            ->whereDate('created_at', $date->toDateString())
+            ->whereDate('created_at', '=', $date->toDateString())
             ->count();
         $lastPage = ceil($income_num / $limit);
 
