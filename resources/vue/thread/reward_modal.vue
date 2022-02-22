@@ -76,7 +76,7 @@ export default {
           thread_id: this.thread_id,
           post_id: this.post_id,
           content: this.content_reward_input,
-          coin: this.coin_reward_input,
+          coin: parseInt(this.coin_reward_input),
           post_floor_message: this.post_floor_message,
         },
       };
