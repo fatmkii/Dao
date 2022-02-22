@@ -622,7 +622,8 @@ export default {
     },
     income_thread_link(thread_id, floor) {
       if (floor !== null) {
-        return "/thread/" + thread_id + "/1" + "#f_" + floor;
+        const page = Math.ceil(floor / 200);
+        return "/thread/" + thread_id + "/" + page + "#f_" + floor;
       } else {
         return "/thread/" + thread_id + "/1";
       }
