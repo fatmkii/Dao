@@ -99,7 +99,7 @@ export default {
         .catch((error) => {
           this.reward_handling = false;
           alert(Object.values(error.response.data.errors)[0]);
-        }); 
+        });
     },
   },
 };
