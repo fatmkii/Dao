@@ -230,33 +230,74 @@
           </b-button>
           <span class="ml-2" v-show="income_no_data">无数据</span>
         </div>
-        <table class="income_table mt-1">
-          <thead>
-            <tr class="text-left">
-              <th width="20%">时间</th>
-              <th width="15%">收支</th>
-              <th width="25%">内容</th>
-              <th width="40%">主题</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(income, index) in income_data" :key="index">
-              <td class="text-left">
-                {{ income.created_at }}
-              </td>
-              <td class="text-left">{{ income.olo }}</td>
-              <td class="text-left">{{ income.content }}</td>
-              <td class="text-left">
-                <router-link
-                  class="thread_title"
-                  style="word-wrap: break-word; white-space: normal"
-                  :to="income_thread_link(income.thread_id, income.floor)"
-                  >{{ income.thread_title }}</router-link
-                >
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="d-none d-lg-block d-xl-block">
+          <table class="income_table mt-1" style="table-layout: fixed">
+            <thead>
+              <tr class="text-left">
+                <th width="20%">时间</th>
+                <th width="15%">收支</th>
+                <th width="25%">内容</th>
+                <th width="40%">主题</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(income, index) in income_data" :key="index">
+                <td class="text-left">{{ income.created_at }}</td>
+                <td class="text-left">{{ income.olo }}</td>
+                <td class="text-left">{{ income.content }}</td>
+                <td class="text-left">
+                  <div
+                    style="
+                      text-overflow: ellipsis;
+                      overflow: hidden;
+                      white-space: nowrap;
+                    "
+                  >
+                    <router-link
+                      class="thread_title"
+                      :to="income_thread_link(income.thread_id, income.floor)"
+                      >{{ income.thread_title }}</router-link
+                    >
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="d-block d-lg-none d-xl-none my-2" style="font-size: 0.8rem">
+          <div class="threads_table_header my-2 py-1 text-center">
+            <span>收支记录</span>
+          </div>
+          <div
+            class="threads_container"
+            v-for="(income, index) in income_data"
+            :key="index"
+          >
+            <div class="my-1 py-1">
+              <span>时间：{{ income.created_at }} </span>
+              <span class="float-right">收支：{{ income.olo }}</span>
+            </div>
+            <div class="my-1 py-1">
+              <span>内容：{{ income.content }}</span>
+            </div>
+            <div
+              class="text-left my-1 py-1"
+              style="
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+              "
+            >
+              <span>主题：</span>
+              <router-link
+                class="thread_title"
+                :to="income_thread_link(income.thread_id, income.floor)"
+              >
+                {{ income.thread_title }}</router-link
+              >
+            </div>
+          </div>
+        </div>
         <b-pagination-nav
           :number-of-pages="income_last_page"
           v-model="income_page"
