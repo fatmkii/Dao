@@ -193,7 +193,7 @@
         </div>
       </b-tab>
       <b-tab title="收支记录">
-        <div class="d-flex">
+        <div class="d-flex mt-1">
           <b-input-group style="max-width: 160px">
             <b-form-input
               v-model="income_date_selected"
