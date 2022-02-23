@@ -287,6 +287,7 @@
                 overflow: hidden;
                 white-space: nowrap;
               "
+              v-if="income.thread_title !== null"
             >
               <span>主题：</span>
               <router-link
