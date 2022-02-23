@@ -380,7 +380,7 @@ class UserController extends Controller
                 'user_id' => $user->id,
                 'active' => '用户打赏了',
                 'binggan_target' => $user_target->binggan,
-                'content' => $request->coin . '个饼干',
+                'content' => $request->coin . '个饼干 ip:' . $request->ip(),
             ]
         );
 
