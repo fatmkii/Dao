@@ -230,6 +230,9 @@
           </b-button>
           <span class="ml-2" v-show="income_no_data">无数据</span>
         </div>
+        <div class="my-2">
+          <span>当日总计：{{ income_total }}</span>
+        </div>
         <div class="d-none d-lg-block d-xl-block">
           <table class="income_table mt-1" style="table-layout: fixed">
             <thead>
@@ -241,7 +244,13 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(income, index) in income_data" :key="index">
+              <tr
+                v-for="(income, index) in income_data.slice(
+                  income_offset,
+                  income_offset + 30
+                )"
+                :key="index"
+              >
                 <td class="text-left">{{ income.created_at }}</td>
                 <td class="text-left">{{ income.olo }}</td>
                 <td class="text-left">{{ income.content }}</td>
@@ -270,7 +279,10 @@
           </div>
           <div
             class="threads_container"
-            v-for="(income, index) in income_data"
+            v-for="(income, index) in income_data.slice(
+              income_offset,
+              income_offset + 30
+            )"
             :key="index"
           >
             <div class="my-1 py-1">
@@ -299,14 +311,12 @@
             </div>
           </div>
         </div>
-        <b-pagination-nav
-          :number-of-pages="income_last_page"
+        <b-pagination
           v-model="income_page"
-          :link-gen="linkGen"
-          limit="10"
-          class="my-2"
+          :total-rows="income_rows"
+          per-page="30"
           size="sm"
-        ></b-pagination-nav>
+        ></b-pagination>
       </b-tab>
     </b-tabs>
     <hr />
@@ -331,9 +341,6 @@ export default {
         this.z_bar_left
       );
     },
-    income_page() {
-      this.get_income_data(this.income_page);
-    },
   },
   data: function () {
     return {
@@ -351,8 +358,7 @@ export default {
       emoji_delete_mode: false,
       income_date_selected: undefined,
       income_page: 1,
-      income_last_page: 1,
-      income_data: undefined,
+      income_data: [],
       income_no_data: false,
     };
   },
@@ -413,6 +419,19 @@ export default {
         localStorage.setItem("fold_pingbici", value ? "true" : "");
         this.$store.commit("FoldPingbici_set", value);
       },
+    },
+    income_rows() {
+      return this.income_data.length;
+    },
+    income_offset() {
+      return (this.income_page - 1) * 30;
+    },
+    income_total() {
+      var total = 0;
+      this.income_data.forEach((income) => {
+        total += income.olo;
+      });
+      return total;
     },
     ...mapState({
       login_status: (state) => state.User.LoginStatus,
@@ -629,11 +648,12 @@ export default {
     },
     get_income_data(page) {
       this.income_no_data = false;
+      this.income_page = page;
       var config = {
         method: "get",
         url: "/api/income/show",
         params: {
-          page: page,
+          // page: page,
           binggan: this.$store.state.User.Binggan,
           income_date: this.income_date_selected,
         },
@@ -641,14 +661,11 @@ export default {
       axios(config)
         .then((response) => {
           if (response.data.code == 200) {
-            if (response.data.data.lastPage === 0) {
-              this.income_last_page = 1;
+            if (response.data.data.income_data.length === 0) {
               this.income_page = 1;
-              this.income_data = undefined;
+              this.income_data = [];
               this.income_no_data = true;
             } else {
-              this.income_page = response.data.data.currentPage;
-              this.income_last_page = response.data.data.lastPage;
               this.income_data = response.data.data.income_data;
             }
           } else {
@@ -658,9 +675,6 @@ export default {
         .catch((error) => {
           alert(Object.values(error.response.data.errors)[0]);
         });
-    },
-    linkGen() {
-      return ``;
     },
     income_thread_link(thread_id, floor) {
       if (floor !== null) {

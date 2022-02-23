@@ -542,22 +542,23 @@ class UserController extends Controller
     {
         $request->validate([
             'income_date' => 'required|date',
-            'page' => 'integer',
+            // 'page' => 'integer',
         ]);
 
         $user = $request->user;
-        $currentPage = $request->has("page") ? $request->page : 1;
+        // $currentPage = $request->has("page") ? $request->page : 1;
 
-        list($income_data, $lastPage) = IncomeStatement::incomeData($user->id, $request->income_date, $currentPage); //更好的分页sql语句
+        // list($income_data, $lastPage) = IncomeStatement::incomeData($user->id, $request->income_date); //更好的分页sql语句
+        $income_data = IncomeStatement::incomeData($user->id, $request->income_date); //更好的分页sql语句
 
         return response()->json(
             [
                 'code' => ResponseCode::SUCCESS,
                 'message' => '返回收益表',
                 'data' => array(
-                    "currentPage" => intval($currentPage),
+                    // "currentPage" => intval($currentPage),
                     "income_data" => $income_data,
-                    "lastPage" => $lastPage,
+                    // "lastPage" => $lastPage,
                 )
             ]
         );

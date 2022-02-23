@@ -57,10 +57,10 @@ class IncomeStatement extends myModel
     }
 
     //查询收支表
-    public static function incomeData($user_id, $date, $page)
+    public static function incomeData($user_id, $date)
     {
-        $limit = 30; //每页30;
-        $offset = $page * $limit - $limit;
+        // $limit = 30; //每页30;
+        // $offset = $page * $limit - $limit;
         $date = Carbon::parse($date);
         $income_table = 'income_statement_' . $date->year;
 
@@ -68,8 +68,8 @@ class IncomeStatement extends myModel
         $sql_child = DB::table($income_table)
             ->select('id')
             ->where('user_id', $user_id)
-            ->whereDate('created_at', '=', $date->toDateString())
-            ->offset($offset)->limit($limit);
+            ->whereDate('created_at', '=', $date->toDateString());
+
         $income = IncomeStatement::suffix($date->year)
             ->joinSub($sql_child, 'sql_child', function ($join) use ($income_table) {
                 $join->on($income_table . '.id', '=', 'sql_child.id');
@@ -78,13 +78,14 @@ class IncomeStatement extends myModel
 
 
         //查询最大页数
-        $income_num = DB::table($income_table)
-            ->select('id')
-            ->where('user_id', $user_id)
-            ->whereDate('created_at', '=', $date->toDateString())
-            ->count();
-        $lastPage = ceil($income_num / $limit);
+        // $income_num = DB::table($income_table)
+        //     ->select('id')
+        //     ->where('user_id', $user_id)
+        //     ->whereDate('created_at', '=', $date->toDateString())
+        //     ->count();
+        // $lastPage = ceil($income_num / $limit);
 
-        return array($income, $lastPage);
+        // return array($income, $lastPage);
+        return $income;
     }
 }
