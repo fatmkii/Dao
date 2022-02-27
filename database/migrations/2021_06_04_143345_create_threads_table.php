@@ -34,6 +34,7 @@ class CreateThreadsTable extends Migration
             $table->boolean('is_delay')->default(0);
             $table->mediumInteger('locked_by_coin')->unsigned()->default(0);
             $table->timestamps();
+            $table->index('updated_at');
         });
     }
 
