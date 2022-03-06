@@ -21,7 +21,7 @@
             <span class="thread_sub_title"> {{ thread.sub_title }}&nbsp; </span>
             <span
               v-if="
-                focus_threads.hasOwnProperty(thread.id) ||
+                focus_threads.hasOwnProperty(thread.id) &&
                 focus_threads[thread.id] < thread.posts_num
               "
               >🟠</span
