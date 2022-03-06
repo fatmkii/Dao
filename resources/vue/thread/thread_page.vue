@@ -102,7 +102,7 @@
         </div>
         <div
           v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
-          class="d-flex align-items-center"
+          class="d-flex flex-wrap align-items-center"
         >
           <b-form-checkbox class="mr-auto" v-model="admin_button_show" switch>
             显示管理员按钮
@@ -111,27 +111,21 @@
             class="ml-1"
             size="sm"
             variant="warning"
-            v-if="
-              this.thread_sub_id == 0 &&
-              this.$store.state.User.AdminForums.includes(this.forum_id)
-            "
+            v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
             v-show="admin_button_show"
-            @click="thread_set_top"
+            @click="set_focus_threads"
           >
-            置顶
+            {{ is_focus ? "取消关注" : "关注主题" }}
           </b-button>
           <b-button
             class="ml-1"
             size="sm"
             variant="warning"
-            v-if="
-              this.thread_sub_id != 0 &&
-              this.$store.state.User.AdminForums.includes(this.forum_id)
-            "
+            v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
             v-show="admin_button_show"
-            @click="thread_cancel_top"
+            @click="thread_set_top"
           >
-            取消置顶
+            {{ thread_sub_id === 0 ? "置顶" : "取消置顶" }}
           </b-button>
           <b-button
             class="ml-1"
@@ -888,6 +882,7 @@ export default {
       search_input: "",
       last_action: "",
       selected_img: undefined,
+      is_focus: false,
     };
   },
   computed: {
@@ -1055,6 +1050,7 @@ export default {
                   .scrollIntoView({ block: "start", behavior: "auto" });
               }
               this.set_img_callee();
+              this.load_focus_threads();
             });
           } else {
             this.$store.commit("PostsLoadStatus_set", 1);
@@ -1438,47 +1434,48 @@ export default {
       this.$refs["jump_modal"].hide();
     },
     thread_set_top() {
-      var user_confirm = confirm("把这个主题置顶吗？");
-      if (user_confirm == true) {
-        const config = {
-          method: "post",
-          url: "/api/admin/thread_set_top/",
-          data: {
-            thread_id: this.thread_id,
-          },
-        };
-        axios(config)
-          .then((response) => {
-            if (response.data.code == 200) {
-              alert(response.data.message);
-              this.get_posts_data();
-            } else {
-              alert(response.data.message);
-            }
-          })
-          .catch((error) => alert(error));
-      }
-    },
-    thread_cancel_top() {
-      var user_confirm = confirm("把这个主题取消置顶吗？");
-      if (user_confirm == true) {
-        const config = {
-          method: "post",
-          url: "/api/admin/thread_cancel_top/",
-          data: {
-            thread_id: this.thread_id,
-          },
-        };
-        axios(config)
-          .then((response) => {
-            if (response.data.code == 200) {
-              alert(response.data.message);
-              this.get_posts_data();
-            } else {
-              alert(response.data.message);
-            }
-          })
-          .catch((error) => alert(error));
+      if (this.thread_sub_id === 0) {
+        var user_confirm = confirm("把这个主题置顶吗？");
+        if (user_confirm == true) {
+          const config = {
+            method: "post",
+            url: "/api/admin/thread_set_top/",
+            data: {
+              thread_id: this.thread_id,
+            },
+          };
+          axios(config)
+            .then((response) => {
+              if (response.data.code == 200) {
+                alert(response.data.message);
+                this.get_posts_data();
+              } else {
+                alert(response.data.message);
+              }
+            })
+            .catch((error) => alert(error));
+        }
+      } else if (this.thread_sub_id !== 1) {
+        var user_confirm = confirm("把这个主题取消置顶吗？");
+        if (user_confirm == true) {
+          const config = {
+            method: "post",
+            url: "/api/admin/thread_cancel_top/",
+            data: {
+              thread_id: this.thread_id,
+            },
+          };
+          axios(config)
+            .then((response) => {
+              if (response.data.code == 200) {
+                alert(response.data.message);
+                this.get_posts_data();
+              } else {
+                alert(response.data.message);
+              }
+            })
+            .catch((error) => alert(error));
+        }
       }
     },
     scroll_to_lasttime() {
@@ -1604,35 +1601,66 @@ export default {
           alert(Object.values(error.response.data.errors)[0]);
         });
     },
+    set_focus_threads() {
+      if (this.is_focus === false) {
+        this.$store.commit("FocusThreads_set", {
+          suffix: this.thread_id.toString(),
+          posts_num: this.thread_posts_num,
+        });
+        this.is_focus = true;
+        alert("已关注此主题");
+      } else {
+        this.$store.commit("FocusThreads_unset", {
+          suffix: this.thread_id.toString(),
+        });
+        this.is_focus = false;
+        alert("已取消关注此主题");
+      }
+    },
+    load_focus_threads() {
+      if (
+        typeof this.$store.state.User.FocusThreads[this.thread_id.toString()] !=
+        "undefined"
+      ) {
+        this.is_focus = true;
+        this.$store.commit("FocusThreads_set", {
+          suffix: this.thread_id.toString(),
+          posts_num: this.thread_posts_num,
+        });
+      }
+    },
+    load_LocalStorage() {
+      if (localStorage.getItem("emoji_auto_hide") == null) {
+        localStorage.emoji_auto_hide = "";
+      } else {
+        this.emoji_auto_hide = Boolean(localStorage.emoji_auto_hide);
+      }
+      if (localStorage.getItem("no_image_mode") == null) {
+        localStorage.no_image_mode = "";
+      } else {
+        this.no_image_mode = Boolean(localStorage.no_image_mode);
+      }
+      if (localStorage.getItem("no_emoji_mode") == null) {
+        localStorage.no_emoji_mode = "";
+      } else {
+        this.no_emoji_mode = Boolean(localStorage.no_emoji_mode);
+      }
+      if (localStorage.getItem("no_head_mode") == null) {
+        localStorage.no_head_mode = "";
+      } else {
+        this.no_head_mode = Boolean(localStorage.no_head_mode);
+      }
+      if (localStorage.getItem("no_battle_mode") == null) {
+        localStorage.no_battle_mode = "";
+      } else {
+        this.no_battle_mode = Boolean(localStorage.no_battle_mode);
+      }
+    },
   },
   created() {
     this.get_posts_data(false, true);
+    this.load_LocalStorage();
     this.$store.commit("PostsLoadStatus_set", 0); //避免显示上个ThreadsData
-    if (localStorage.getItem("emoji_auto_hide") == null) {
-      localStorage.emoji_auto_hide = "";
-    } else {
-      this.emoji_auto_hide = Boolean(localStorage.emoji_auto_hide);
-    }
-    if (localStorage.getItem("no_image_mode") == null) {
-      localStorage.no_image_mode = "";
-    } else {
-      this.no_image_mode = Boolean(localStorage.no_image_mode);
-    }
-    if (localStorage.getItem("no_emoji_mode") == null) {
-      localStorage.no_emoji_mode = "";
-    } else {
-      this.no_emoji_mode = Boolean(localStorage.no_emoji_mode);
-    }
-    if (localStorage.getItem("no_head_mode") == null) {
-      localStorage.no_head_mode = "";
-    } else {
-      this.no_head_mode = Boolean(localStorage.no_head_mode);
-    }
-    if (localStorage.getItem("no_battle_mode") == null) {
-      localStorage.no_battle_mode = "";
-    } else {
-      this.no_battle_mode = Boolean(localStorage.no_battle_mode);
-    }
   },
   mounted() {
     this.get_browse_current();

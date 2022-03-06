@@ -19,6 +19,13 @@
         >
           <td class="text-left" :style="{ color: thread.title_color }">
             <span class="thread_sub_title"> {{ thread.sub_title }}&nbsp; </span>
+            <span
+              v-if="
+                focus_threads.hasOwnProperty(thread.id) ||
+                focus_threads[thread.id] < thread.posts_num
+              "
+              >🟠</span
+            >
             <span v-if="thread.vote_question_id != null">🗳️</span>
             <span v-if="thread.gamble_question_id != null">🎲</span>
             <router-link
@@ -113,6 +120,7 @@ export default {
     ...mapState({
       threads_load_status: (state) => state.Threads.ThreadsLoadStatus,
       forum_is_nissin: (state) => state.Forums.CurrentForumData.is_nissin,
+      focus_threads: (state) => state.User.FocusThreads,
     }),
   },
   methods: {

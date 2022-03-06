@@ -23,6 +23,7 @@ const module_user = {
         CharaGroupIndex: [],
         BrowseLogger: {},
         NickName: "",
+        FocusThreads: {},
     }),
     mutations: {
         UserDataLoaded_set(state, payload) {
@@ -93,7 +94,18 @@ const module_user = {
                     delete state.BrowseLogger[logger]
                 }
             }
-        }
+        },
+        FocusThreads_set(state, payload) {
+            state.FocusThreads[payload.suffix] = payload.posts_num
+            localStorage.focus_threads = JSON.stringify(state.FocusThreads);
+        },
+        FocusThreads_unset(state, payload) {
+            delete state.FocusThreads[payload.suffix]
+            localStorage.focus_threads = JSON.stringify(state.FocusThreads);
+        },
+        FocusThreads_set_all(state, payload) {
+            state.FocusThreads = payload
+        },
     },
     actions: {},
     getters: {}

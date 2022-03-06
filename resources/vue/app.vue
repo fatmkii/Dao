@@ -122,6 +122,15 @@ export default {
           localStorage.my_css = JSON.stringify(my_css);
         }
       }
+
+      //读取关注帖子的上次回帖数（用于新回复提醒）
+      if (localStorage.focus_threads != null) {
+        this.$store.commit(
+          "FocusThreads_set_all",
+          JSON.parse(localStorage.focus_threads)
+        );
+      }
+      
     },
     set_VueStore(response_data) {
       if (response_data.binggan.admin) {
