@@ -191,6 +191,7 @@ const module_css = {
         SysInfoFontSize: 14,
         PostsMarginTop: 32,
         PostsMaxLine: 16,
+        QuoteMax: 3,
     }),
     mutations: {
         MyCSS_set_all(state, payload) {
@@ -200,6 +201,7 @@ const module_css = {
             state.SysInfoFontSize = payload.SysInfoFontSize
             state.PostsMarginTop = payload.PostsMarginTop
             state.PostsMaxLine = payload.PostsMaxLine
+            state.QuoteMax = payload.QuoteMax
         },
         PostsLineHeight_set(state, payload) {
             state.PostsLineHeight = payload
@@ -218,6 +220,9 @@ const module_css = {
         },
         PostsMaxLine_set(state, payload) {
             state.PostsMaxLine = payload
+        },
+        QuoteMax_set(state, payload) {
+            state.QuoteMax = payload
         },
     },
 }

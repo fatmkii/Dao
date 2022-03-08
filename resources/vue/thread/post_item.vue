@@ -187,6 +187,7 @@
 
 
 <script>
+import { mapState } from "vuex";
 export default {
   props: {
     post_data: {
@@ -301,6 +302,9 @@ export default {
         top: this.post_top_offset + "px",
       };
     },
+    ...mapState({
+      quote_max: (state) => state.MyCSS.QuoteMax,
+    }),
   },
   created() {
     this.pingbici_check();
@@ -489,7 +493,7 @@ export default {
       }
     },
     quote_click() {
-      const max_quote = 3; //最大可引用的层数
+      const max_quote = this.quote_max; //最大可引用的层数
       var post_lines = this.$refs.post_centent.innerText.split("\n");
       var index_array = [];
       //搜索引用的层数

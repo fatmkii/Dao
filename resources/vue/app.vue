@@ -121,6 +121,11 @@ export default {
           const my_css = this.$store.state.MyCSS;
           localStorage.my_css = JSON.stringify(my_css);
         }
+        if (this.$store.state.MyCSS.QuoteMax == null) {
+          this.$store.commit("QuoteMax_set", 3); //临时的，给旧版本加默认值
+          const my_css = this.$store.state.MyCSS;
+          localStorage.my_css = JSON.stringify(my_css);
+        }
       }
 
       //读取关注帖子的上次回帖数（用于新回复提醒）
@@ -130,7 +135,6 @@ export default {
           JSON.parse(localStorage.focus_threads)
         );
       }
-      
     },
     set_VueStore(response_data) {
       if (response_data.binggan.admin) {

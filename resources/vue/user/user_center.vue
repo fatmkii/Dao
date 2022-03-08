@@ -91,6 +91,18 @@
           ></b-form-spinbutton>
           <span class="ml-1 mb-2">行</span>
         </div>
+        <div class="mt-2 d-flex align-items-center">
+          <span class="mb-2">回复最大引用：</span>
+          <b-form-spinbutton
+            size="sm"
+            style="max-width: 120px"
+            class="mb-2"
+            min="1"
+            max="10"
+            v-model="QuoteMax"
+          ></b-form-spinbutton>
+          <span class="ml-1 mb-2">层</span>
+        </div>
         <b-button variant="success" @click="set_MyCSS">保存</b-button>
         <b-button variant="outline-dark" @click="default_MyCSS"
           >恢复默认</b-button
@@ -411,6 +423,14 @@ export default {
         this.$store.commit("PostsMaxLine_set", value);
       },
     },
+    QuoteMax: {
+      get() {
+        return this.$store.state.MyCSS.QuoteMax;
+      },
+      set(value) {
+        this.$store.commit("QuoteMax_set", value);
+      },
+    },
     FoldPingbici: {
       get() {
         return this.$store.state.User.FoldPingbici;
@@ -615,6 +635,7 @@ export default {
         SysInfoFontSize: 14,
         PostsMarginTop: 32,
         PostsMaxLine: 16,
+        QuoteMax: 3,
       };
       this.$store.commit("MyCSS_set_all", my_css);
       this.set_MyCSS();
