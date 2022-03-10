@@ -551,6 +551,14 @@ export default {
         alert("屏蔽词格式输入有误，请检查");
         return;
       }
+      if (
+        JSON.parse(this.title_pingbici_input).includes("") ||
+        JSON.parse(this.content_pingbici_input).includes("") ||
+        JSON.parse(this.fjf_pingbici_input).includes("")
+      ) {
+        alert('屏蔽词请勿包含空字符""，否则会屏蔽所有主题和回帖');
+        return;
+      }
       this.pingbici_set_handling = true;
       const config = {
         method: "post",
