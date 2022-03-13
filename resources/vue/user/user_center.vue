@@ -138,6 +138,11 @@
             max-rows="20"
           ></b-form-textarea>
           <div class="d-flex align-items-center mt-2">
+            <a href="javascript:;" @click="pingbici_set_unique"
+              >去除重复的屏蔽词</a
+            >
+          </div>
+          <div class="d-flex align-items-center mt-2">
             <b-button
               variant="success"
               :disabled="pingbici_set_handling"
@@ -589,6 +594,29 @@ export default {
           this.pingbici_set_handling = false;
           alert(Object.values(error.response.data.errors)[0]);
         });
+    },
+    pingbici_set_unique() {
+      function unique(arr) {
+        //去重函数
+        return Array.from(new Set(arr));
+      }
+      try {
+        //转换并确认用户输入是否满足JSON格式
+        var title_pingbici = JSON.parse(this.title_pingbici_input);
+        var content_pingbici = JSON.parse(this.content_pingbici_input);
+        var fjf_pingbici = JSON.parse(this.fjf_pingbici_input);
+      } catch (e) {
+        alert("屏蔽词格式输入有误，请检查");
+        return;
+      }
+      this.title_pingbici_input = JSON.stringify(unique(title_pingbici));
+      this.content_pingbici_input = JSON.stringify(unique(content_pingbici));
+      this.fjf_pingbici_input = JSON.stringify(unique(fjf_pingbici));
+      this.$bvToast.toast("已去除重复的屏蔽词", {
+        title: "Done.",
+        autoHideDelay: 1500,
+        appendToast: true,
+      });
     },
     my_emoji_set_handle() {
       try {
