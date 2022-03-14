@@ -672,6 +672,9 @@ export default {
         return;
       }
       this.my_emoji_input = JSON.stringify(unique(my_emoji));
+      this.my_emoji_input = this.my_emoji_input.replace(/,/g, ",\n"); //把,改成换行，方便看
+      this.my_emoji_input = this.my_emoji_input.replace(/\[/g, "[\n");
+      this.my_emoji_input = this.my_emoji_input.replace(/]/g, "\n]");
       this.$bvToast.toast("已去除重复的表情包", {
         title: "Done.",
         autoHideDelay: 1500,
