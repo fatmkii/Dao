@@ -139,7 +139,7 @@
           ></b-form-textarea>
           <div class="d-flex align-items-center mt-2">
             <a href="javascript:;" @click="pingbici_set_unique"
-              >去除重复的屏蔽词</a
+              >去除重复的屏蔽词（之后要点提交喔）</a
             >
           </div>
           <div class="d-flex align-items-center mt-2">
@@ -190,6 +190,11 @@
               alt="Fluid-grow image"
               @click="emoji_delete(index)"
             ></b-img>
+          </div>
+          <div class="d-flex align-items-center mt-2">
+            <a href="javascript:;" @click="my_emoji_set_unique"
+              >去除重复的表情包（之后要点提交喔）</a
+            >
           </div>
           <div class="d-flex align-items-center mt-2">
             <b-button
@@ -653,6 +658,25 @@ export default {
           this.my_emoji_set_handling = false;
           alert(Object.values(error.response.data.errors)[0]);
         });
+    },
+    my_emoji_set_unique() {
+      function unique(arr) {
+        //去重函数
+        return Array.from(new Set(arr));
+      }
+      try {
+        //转换并确认用户输入是否满足JSON格式
+        var my_emoji = JSON.parse(this.my_emoji_input);
+      } catch (e) {
+        alert("屏蔽词格式输入有误，请检查");
+        return;
+      }
+      this.my_emoji_input = JSON.stringify(unique(my_emoji));
+      this.$bvToast.toast("已去除重复的表情包", {
+        title: "Done.",
+        autoHideDelay: 1500,
+        appendToast: true,
+      });
     },
     set_MyCSS() {
       const my_css = this.$store.state.MyCSS;
