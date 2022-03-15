@@ -12,7 +12,7 @@ class ResponseCode
     const USER_REGISTER_FAIL = 21403;
     const USER_NOT_FOUND = 21404;
     const USER_LOCKED = 21443;
-
+    const USER_ERROR = 21422;
     const USER_BANNED = 21499;
     const COIN_NOT_ENOUGH = 21412;
     const USER_PASSWORD_ERROR = 21001;

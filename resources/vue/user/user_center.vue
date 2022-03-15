@@ -3,6 +3,7 @@
   <div>
     <p class="mt-2">你好！别来无恙。</p>
     <p>你的饼干是：{{ binggan }}</p>
+    <p>饼干等级是：Lv. {{ user_lv }}</p>
     <p>你的奥利奥：{{ user_coin }} 个</p>
     <b-button
       size="md"
@@ -340,6 +341,38 @@
           size="sm"
         ></b-pagination>
       </b-tab>
+      <b-tab title="升级饼干">
+        <p class="my-2">
+          说明：可通过支付奥利奥升级饼干，以增加屏蔽词或表情包容量。
+        </p>
+        <a
+          href="http://td7291.bvimg.com/15081/4476d72f839fb84a.png"
+          target="view_frame"
+          class="my-2"
+          >饼干升级价目表</a
+        >
+        <p class="my-2">现在容量：(字符数)</p>
+        <div
+          v-for="(line, index) in user_lv_sheet"
+          :key="index"
+          class="my-2 d-flex align-items-center"
+        >
+          <span style="min-width: 100px">{{ line.chinese }}</span>
+          <b-form-input
+            size="sm"
+            style="max-width: 65px"
+            disabled
+            v-model="user_lv_data[line.name]"
+          ></b-form-input>
+          <a
+            href="javascript:;"
+            class="ml-2"
+            @click="user_lv_up_handle(line.name, line.chinese)"
+            :disabled="user_lv_up_handling"
+            >升级</a
+          >
+        </div>
+      </b-tab>
     </b-tabs>
     <hr />
     <router-link to="admin_center" tag="a" style="font-size: 0.875rem">
@@ -367,12 +400,26 @@ export default {
   data: function () {
     return {
       name: "user_center",
-      user_coin: 0,
+      user_coin: "读取中",
+      user_lv: "读取中",
+      user_lv_data: {
+        title_pingbici: 1000,
+        content_pingbici: 1000,
+        fjf_pingbici: 1000,
+        my_emoji: 5000,
+      },
+      user_lv_sheet: [
+        { name: "title_pingbici", chinese: "标题屏蔽词" },
+        { name: "content_pingbici", chinese: "内容屏蔽词" },
+        { name: "fjf_pingbici", chinese: "FJF黑名单" },
+        { name: "my_emoji", chinese: "我的表情包" },
+      ],
       title_pingbici_input: '["屏蔽词1","屏蔽词2"]',
       content_pingbici_input: '["屏蔽词1","屏蔽词2"]',
       fjf_pingbici_input: '["小尾巴1","小尾巴2"]',
       use_pingbici_input: false,
       pingbici_set_handling: false,
+      user_lv_up_handling: false,
       my_emoji_input:
         '[\n"https://z3.ax1x.com/2021/08/01/Wznvbq.jpg",\n"https://z3.ax1x.com/2021/08/01/Wznjrn.jpg"\n]',
       my_emoji_set_handling: false,
@@ -510,6 +557,9 @@ export default {
         axios(config)
           .then((response) => {
             this.user_coin = response.data.data.binggan.coin;
+            this.user_lv = response.data.data.binggan.user_lv;
+            this.user_lv_data = response.data.data.user_lv;
+            console.log(response.data.data.user_lv);
             //设定屏蔽词相关状态
             this.use_pingbici_input = Boolean(
               response.data.data.binggan.use_pingbici
@@ -672,6 +722,7 @@ export default {
         return;
       }
       this.my_emoji_input = JSON.stringify(unique(my_emoji));
+      this.$store.commit("MyEmoji_set", this.my_emoji_input);
       this.my_emoji_input = this.my_emoji_input.replace(/,/g, ",\n"); //把,改成换行，方便看
       this.my_emoji_input = this.my_emoji_input.replace(/\[/g, "[\n");
       this.my_emoji_input = this.my_emoji_input.replace(/]/g, "\n]");
@@ -680,6 +731,42 @@ export default {
         autoHideDelay: 1500,
         appendToast: true,
       });
+    },
+    user_lv_up_handle(name, chinese_name) {
+      var confirmed = confirm(
+        "要升级" + chinese_name + "吗？将会花费olo（价格请参考价目表）"
+      );
+      if (confirmed == false) {
+        return;
+      }
+      this.user_lv_up_handling = true;
+      const config = {
+        method: "post",
+        url: "/api/user/user_lv_up",
+        data: {
+          binggan: this.$store.state.User.Binggan,
+          mode: name,
+        },
+      };
+      axios(config)
+        .then((response) => {
+          if (response.data.code == 200) {
+            this.get_user_data();
+            this.$bvToast.toast(response.data.message, {
+              title: "Done.",
+              autoHideDelay: 1500,
+              appendToast: true,
+            });
+            this.user_lv_up_handling = false;
+          } else {
+            this.user_lv_up_handling = false;
+            alert(response.data.message);
+          }
+        })
+        .catch((error) => {
+          this.my_emoji_set_handling = false;
+          alert(Object.values(error.response.data.errors)[0]);
+        });
     },
     set_MyCSS() {
       const my_css = this.$store.state.MyCSS;

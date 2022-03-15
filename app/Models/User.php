@@ -11,6 +11,7 @@ use App\Exceptions\CoinException;
 use App\Common\ResponseCode;
 use App\Models\Pingbici;
 use App\Models\MyEmoji;
+use App\Models\UserLV;
 use App\Models\Admin;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redis;
@@ -38,6 +39,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
+        'id',   
         'binggan',
         'admin',
         'password',
@@ -50,6 +52,7 @@ class User extends Authenticatable
         'AdminPermissions',
         'pingbici',
         'MyEmoji',
+        'UserLV',
     ];
 
     /**
@@ -66,6 +69,7 @@ class User extends Authenticatable
         'locked_TTL',
     ];
 
+    //防灌水相关
     const NEW_THREAD_INTERVAL = 300; //发新主题频率
     const NEW_POST_NUMBER = 10; //饼干回帖次数（也就是60秒10次）
     const NEW_POST_INTERVAL = 60; //饼干回帖频率（含大乱斗）
@@ -221,7 +225,6 @@ class User extends Authenticatable
         $this->save();
     }
 
-
     public function Pingbici()
     {
         return $this->hasOne(Pingbici::class);
@@ -230,6 +233,11 @@ class User extends Authenticatable
     public function MyEmoji()
     {
         return $this->hasOne(MyEmoji::class);
+    }
+
+    public function UserLV()
+    {
+        return $this->hasOne(UserLV::class);
     }
 
     public function AdminPermissions()
