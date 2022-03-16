@@ -44,6 +44,7 @@ class User extends Authenticatable
         'admin',
         'password',
         'last_login',
+        'locked_count',
         'created_ip',
         'created_at',
         'updated_at',

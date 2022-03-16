@@ -426,6 +426,14 @@ class AdminController extends Controller
         }
 
         $user_to_lock->locked_until = Carbon::now()->addDays(3);
+        $user_to_lock->locked_count += 1;
+        if ($user_to_lock->locked_count >= 4) {
+            //如果被锁定超过3次（≥4），则碎饼干
+            $user_to_lock->is_banned = true;
+            $msg = '该饼干已被累计封禁4次，已永久碎饼干。';
+        } else {
+            $msg = '该饼干已封禁3天。';
+        }
         $user_to_lock->save();
         ProcessUserActive::dispatch(
             [
@@ -438,7 +446,7 @@ class AdminController extends Controller
         );
         return response()->json([
             'code' => ResponseCode::SUCCESS,
-            'message' => '该饼干已封禁3天。',
+            'message' => $msg,
         ]);
     }
 
