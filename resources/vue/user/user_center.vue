@@ -367,7 +367,7 @@
           <a
             href="javascript:;"
             class="ml-2"
-            @click="user_lv_up_handle(line.name, line.chinese)"
+            @click="user_lv_up_handle(line.name, line.chinese, line.price)"
             :disabled="user_lv_up_handling"
             >升级</a
           >
@@ -409,10 +409,10 @@ export default {
         my_emoji: 5000,
       },
       user_lv_sheet: [
-        { name: "title_pingbici", chinese: "标题屏蔽词" },
-        { name: "content_pingbici", chinese: "内容屏蔽词" },
-        { name: "fjf_pingbici", chinese: "FJF黑名单" },
-        { name: "my_emoji", chinese: "我的表情包" },
+        { name: "title_pingbici", chinese: "标题屏蔽词", price: 4000 },
+        { name: "content_pingbici", chinese: "内容屏蔽词", price: 4000 },
+        { name: "fjf_pingbici", chinese: "FJF黑名单", price: 4000 },
+        { name: "my_emoji", chinese: "我的表情包", price: 20000 },
       ],
       title_pingbici_input: '["屏蔽词1","屏蔽词2"]',
       content_pingbici_input: '["屏蔽词1","屏蔽词2"]',
@@ -732,9 +732,9 @@ export default {
         appendToast: true,
       });
     },
-    user_lv_up_handle(name, chinese_name) {
+    user_lv_up_handle(name, chinese_name, price) {
       var confirmed = confirm(
-        "要升级" + chinese_name + "吗？将会花费olo（价格请参考价目表）"
+        "要升级" + chinese_name + "吗？将会花费" + price + "个olo"
       );
       if (confirmed == false) {
         return;
