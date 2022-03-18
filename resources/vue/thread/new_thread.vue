@@ -834,9 +834,48 @@ export default {
       }
     },
     emoji_append(emoji_src) {
-      this.content_input += "<img src='" + emoji_src + "' class='emoji_img'>";
+      // this.content_input += "<img src='" + emoji_src + "' class='emoji_img'>";
+      // this.content_input_change();
+      // this.$refs.content_input.focus();
+      let textarea = document.getElementById("content_input");
+      this.content_input = this.insertAtCursor(
+        textarea,
+        "<img src='" + emoji_src + "' class='emoji_img'>"
+      );
       this.content_input_change();
       this.$refs.content_input.focus();
+    },
+    insertAtCursor(f, value) {
+      /* eslint-disable */
+      let field = f;
+      let newValue = "";
+      // IE support
+      if (document.selection) {
+        field.focus();
+        const sel = document.selection.createRange();
+        sel.text = newValue = value;
+        sel.select();
+      } else if (field.selectionStart || field.selectionStart === 0) {
+        const startPos = field.selectionStart;
+        const endPos = field.selectionEnd;
+        const restoreTop = field.scrollTop;
+        newValue =
+          field.value.substring(0, startPos) +
+          value +
+          field.value.substring(endPos, field.value.length);
+        if (restoreTop > 0) {
+          field.scrollTop = restoreTop;
+        }
+        field.focus();
+        setTimeout(() => {
+          field.selectionStart = startPos + value.length;
+          field.selectionEnd = startPos + value.length;
+        }, 0);
+      } else {
+        newValue = field.value + value;
+        field.focus();
+      }
+      return newValue;
     },
     // get_subtitles() {
     //   const config = {

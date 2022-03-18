@@ -1313,8 +1313,6 @@ export default {
         textarea,
         "<img src='" + emoji_src + "' class='emoji_img'>"
       );
-      // this.content_input += "<img src='" + emoji_src + "' class='emoji_img'>";
-
       this.content_input_change();
       this.$refs.content_input.focus();
     },
