@@ -1012,7 +1012,7 @@ var emoji_json = [
     },
     {
         "id": "10",
-        "heads_id": "1",
+        "heads_id": "0",
         "name": "小黄脸",
         "emojis": [
             "https://www.z4a.net/images/2022/03/21/10001.png",
