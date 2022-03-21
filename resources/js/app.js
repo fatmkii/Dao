@@ -26,10 +26,15 @@ axios.interceptors.response.use(
             localStorage.clear('Binggan')   //如果遇到401错误(用户未认证)，就清除Binggan和Token
             localStorage.clear('Token')
             delete axios.defaults.headers.Authorization;
-            alert('此页面需先登录喔！');
+            if (error.response.data !== undefined) {
+                alert(error.response.data.message)
+            } else {
+                alert('此页面需先登录喔！');
+            }
             window.location.href = '/login' //统一跳转到登陆页面
+        } else {
+            throw error
         }
-        throw error
     }
 );
 
