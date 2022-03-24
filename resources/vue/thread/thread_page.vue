@@ -330,7 +330,7 @@
         :style="post_content_css"
       ></textarea>
       <div class="row align-items-center mt-2">
-        <div class="col-7" v-if="this.forum_id === 419">
+        <!-- <div class="col-7" v-if="this.forum_id === 419">
           <b-form-file
             browse-text="上传图片"
             size="sm"
@@ -346,8 +346,9 @@
             label="上传中"
           >
           </b-spinner>
-        </div>
-        <Imgtu v-if="this.forum_id !== 419 && this.forum_id !== 0"></Imgtu>
+        </div> -->
+        <!-- <Imgtu v-if="this.forum_id !== 419 && this.forum_id !== 0"></Imgtu> -->
+        <Imgtu></Imgtu>
         <div class="col-6 ml-auto">
           <b-button
             variant="success"
