@@ -164,6 +164,7 @@ return [
         'gamble_end_time' => '菠菜结束时间',
         'vote_end_time' => '投票结束时间',
         'my_emoji' => '表情包',
+        'locked_by_coin' => '看帖权限的olo',
     ],
 
 ];
