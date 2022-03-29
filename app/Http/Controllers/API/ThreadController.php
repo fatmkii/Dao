@@ -106,7 +106,7 @@ class ThreadController extends Controller
             'nissin_time' => 'integer',
             'random_heads_group' => 'integer',
             'post_with_admin' => 'boolean',
-            'locked_by_coin' => 'integer|max:1000000|min:1',
+            'locked_by_coin' => 'integer|max:25000|min:1',
             'thread_type' => 'required|string',
             'is_delay' => 'boolean|required',
             'can_battle' => 'boolean|required',
