@@ -622,6 +622,7 @@
           <div class="my-1">
             <b-input-group prepend="跳页：">
               <b-form-input
+                type="number"
                 v-model="jump_page"
                 autofocus
                 @keyup.enter="jump_handle"
@@ -631,6 +632,7 @@
           <div class="my-1">
             <b-input-group prepend="跳楼：">
               <b-form-input
+                type="number"
                 v-model="jump_floor"
                 @keyup.enter="jump_handle"
               ></b-form-input>
@@ -1421,6 +1423,14 @@ export default {
       if (this.jump_floor == "" && this.jump_page == "") {
         return;
       }
+      if (this.jump_floor > this.thread_posts_num) {
+        alert("最大跳到第" + this.thread_posts_num + "楼喔！");
+        return;
+      }
+      if (this.jump_page > this.posts_last_page) {
+        alert("最大跳到第" + this.posts_last_page + "页喔！");
+        return;
+      }
       if (this.jump_page) {
         const page = this.jump_page;
         var link = "/thread/" + this.thread_id + "/" + page;
@@ -1501,7 +1511,7 @@ export default {
     },
     browse_record_handle() {
       //写入本次阅读进度
-      if (this.browse_current.page <= this.page) {
+      if (this.browse_current.page <= this.page && this.posts_data.length > 1) {
         this.browse_current.page = this.page;
         this.$store.commit("BrowseLogger_set", {
           suffix: this.thread_id.toString(),
