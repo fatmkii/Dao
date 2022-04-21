@@ -150,10 +150,8 @@
         class="post_span"
         style="
           word-wrap: break-word;
-          white-space: normal;
+          white-space: pre-wrap;
           overflow: hidden;
-          display: -webkit-box;
-          -webkit-box-orient: vertical;
           position: relative;
         "
         :style="post_span_css"
