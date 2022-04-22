@@ -509,7 +509,7 @@ export default {
       }
       const quote_content =
         "<span class='quote_content'>" +
-        post_lines.join("\n").trim() +
+        post_lines.join("\n") +
         "\n" +
         this.$refs.post_author_info.innerText +
         "</span>" +
