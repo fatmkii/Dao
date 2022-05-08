@@ -20,6 +20,8 @@ class CheckBinggan
     {
         if ($request->has('binggan')) {
             $user = User::where('binggan', $request->binggan)->first();
+        } else {
+            $user = null;
         }
         switch ($mode) {
             case 'create': //发帖等
