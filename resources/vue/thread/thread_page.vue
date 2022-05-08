@@ -1025,7 +1025,6 @@ export default {
               "CurrentForumData_set",
               response.data.forum_data
             );
-            this.$store.commit("PostsLoadStatus_set", 1);
             document.title = this.thread_title; //设置浏览器页面标签文字
             if (remind) {
               this.$bvToast.toast("已刷新帖子", {
@@ -1056,13 +1055,13 @@ export default {
               this.load_focus_threads();
             });
           } else {
-            this.$store.commit("PostsLoadStatus_set", 1);
             if (response.data.code == 23410 || response.data.code == 23401) {
               this.thread_reject_code = response.data.code;
             } else {
               alert(response.data.message);
             }
           }
+          this.$store.commit("PostsLoadStatus_set", 1);
         })
         .catch((error) => {
           this.$store.commit("PostsLoadStatus_set", 1);
