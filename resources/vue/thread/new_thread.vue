@@ -117,7 +117,6 @@
     ></textarea>
     <div class="d-flex align-items-center mt-2">
       <!-- <div class="col-7">
-          原自费图床tietuku暂时关闭。
         <b-form-file
           browse-text="上传图片"
           size="sm"
@@ -125,7 +124,7 @@
           accept="image/jpeg, image/png, image/gif"
           style="max-width: 300px"
           :disabled="!this.$store.state.User.LoginStatus"
-          @input="upload_img_handle"
+          @input="upload_img_handle($event,'img')"
         ></b-form-file>
         <b-spinner
           class="spinner img-uploading"
@@ -902,19 +901,17 @@ export default {
     // set_subtitles() {
     //   this.subtitles_options = subtitles[0].subtitles;
     // },
-    upload_img_handle(file) {
+    upload_img_handle(file, mode) {
       if (!file) return;
       this.upload_img_handling = true;
       const formData = new FormData();
       formData.append("file", file);
-      formData.append(
-        "Token",
-        "ofdns1jjalu6efhl4ahlgmqack2lm3ll:J7Io2WOTXnIUZ2G0ibCcNsJ1BsY=:eyJkZWFkbGluZSI6MTYyOTIxMjIyOSwiYWN0aW9uIjoiZ2V0IiwidWlkIjoxMDM2OCwiYWlkIjoiMTEwMDQiLCJmcm9tIjoiZmlsZSJ9"
-      );
-      delete axios.defaults.headers.Authorization; //正常用的transFormRequest会影响data，只能把Authorization删了再加回去
+      formData.append("mode", mode);
+      formData.append("binggan", this.$store.state.User.Binggan);
+      formData.append("thread_id", this.thread_id); //正常上传要提供thread_id，但是新主题不用
       const config = {
         method: "post",
-        url: "https://up.tietuku.cn/",
+        url: "/api/img_upload",
         headers: {
           "content-type": "multipart/form-data",
         },
@@ -923,16 +920,11 @@ export default {
       axios(config)
         .then((response) => {
           this.upload_img_handling = false;
-          this.content_input +=
-            "<img src='" +
-            response.data.linkurl.replace(/http/g, "https") +
-            "' >";
+          this.content_input += "<img src='" + response.data.file_url + "' >";
           this.content_input_change();
-          axios.defaults.headers.Authorization = "Bearer " + localStorage.Token;
         })
         .catch((error) => {
           this.upload_img_handling = false;
-          axios.defaults.headers.Authorization = "Bearer " + localStorage.Token;
           alert(error);
         });
     },

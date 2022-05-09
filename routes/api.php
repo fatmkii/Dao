@@ -127,3 +127,4 @@ Route::get('/emoji', [CommonController::class, 'emoji_index']);
 Route::get('/subtitles', [CommonController::class, 'subtitles_index']);
 Route::get('/random_heads', [CommonController::class, 'random_heads_index']);
 Route::get('/captcha', [CommonController::class, 'get_captcha']);
+Route::post('/img_upload', [CommonController::class, 'img_upload'])->middleware('CheckBinggan:create');//上传图片

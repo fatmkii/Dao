@@ -400,7 +400,7 @@ export default {
       image.onload = function () {
         vm.background_context.drawImage(image, 0, 0); //把前景写进背景，再一起上传
         const src = vm.canvas_background.toDataURL("image/png");
-        vm.$emit("upload_emit", vm.dataUrlToBlob(src, "image/png"));
+        vm.$emit("upload_emit", vm.dataUrlToBlob(src, "image/png"), "draw");
         vm.$emit("drawer_click");
       };
     },

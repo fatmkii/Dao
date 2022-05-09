@@ -330,7 +330,7 @@
         :style="post_content_css"
       ></textarea>
       <div class="row align-items-center mt-2">
-        <!-- <div class="col-7" v-if="this.forum_id === 419">
+        <div class="col-7" v-if="this.forum_id === 419">
           <b-form-file
             browse-text="上传图片"
             size="sm"
@@ -338,7 +338,7 @@
             accept="image/jpeg, image/png, image/gif"
             style="max-width: 300px"
             :disabled="!this.$store.state.User.LoginStatus"
-            @input="upload_img_handle"
+            @input="upload_img_handle($event, 'img')"
           ></b-form-file>
           <b-spinner
             class="spinner img-uploading"
@@ -346,9 +346,9 @@
             label="上传中"
           >
           </b-spinner>
-        </div> -->
-        <!-- <Imgtu v-if="this.forum_id !== 419 && this.forum_id !== 0"></Imgtu> -->
-        <Imgtu></Imgtu>
+        </div>
+        <Imgtu v-if="this.forum_id !== 419 && this.forum_id !== 0"></Imgtu>
+        <!-- <Imgtu></Imgtu> -->
         <div class="col-6 ml-auto">
           <b-button
             variant="success"
@@ -1271,23 +1271,17 @@ export default {
         this.content_input = this.content_input_array[0];
       }
     },
-    upload_img_handle(file) {
+    upload_img_handle(file, mode) {
       if (!file) return;
-      if (file.size > 1048576) {
-        alert("图片最多支持1M大小");
-        return;
-      }
       this.upload_img_handling = true;
       const formData = new FormData();
       formData.append("file", file);
-      formData.append(
-        "Token",
-        "k2phoj6wvpsb7qdbm0cqq297oawvindi:U8nJgezAK3Kp19Uoof2cSyDnxH4=:eyJkZWFkbGluZSI6MTY0NDMxNTkzMSwiYWN0aW9uIjoiZ2V0IiwidWlkIjoxNTA4MSwiYWlkIjoiMjMzODAiLCJmcm9tIjoiZmlsZSJ9"
-      );
-      delete axios.defaults.headers.Authorization; //正常用的transFormRequest会影响data，只能把Authorization删了再加回去
+      formData.append("mode", mode);
+      formData.append("binggan", this.$store.state.User.Binggan);
+      formData.append("thread_id", this.thread_id); //正常上传要提供thread_id，但是新主题不用
       const config = {
         method: "post",
-        url: "https://up.tietuku.cn/",
+        url: "/api/img_upload",
         headers: {
           "content-type": "multipart/form-data",
         },
@@ -1296,16 +1290,11 @@ export default {
       axios(config)
         .then((response) => {
           this.upload_img_handling = false;
-          this.content_input +=
-            "<img src='" +
-            response.data.linkurl.replace(/http/g, "https") +
-            "' >";
+          this.content_input += "<img src='" + response.data.file_url + "' >";
           this.content_input_change();
-          axios.defaults.headers.Authorization = "Bearer " + localStorage.Token;
         })
         .catch((error) => {
           this.upload_img_handling = false;
-          axios.defaults.headers.Authorization = "Bearer " + localStorage.Token;
           alert(error);
         });
     },

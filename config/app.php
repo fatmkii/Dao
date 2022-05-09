@@ -6,7 +6,13 @@ return [
     'new_binggan' => env('NEW_BINGGAN', false),
 
     //密码加盐
-    'password_salt'=> env('PASSWORD_SALT',''),
+    'password_salt' => env('PASSWORD_SALT', ''),
+
+    //oss权限相关
+    'oss_endpoint' => env('OSS_ENDPOINT', ''),
+    'oss_key' => env('OSS_KEY', ''),
+    'oss_secret' => env('OSS_SECRET', ''),
+
 
     /*
     |--------------------------------------------------------------------------
