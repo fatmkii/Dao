@@ -346,7 +346,7 @@
           说明：可通过支付奥利奥升级饼干，以增加屏蔽词或表情包容量。
         </p>
         <a
-          href="http://td7291.bvimg.com/15081/4476d72f839fb84a.png"
+          href="https://oss.cpttmm.com/xhg_other/price_list.png"
           target="view_frame"
           class="my-2"
           >饼干升级价目表</a
