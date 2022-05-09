@@ -10,6 +10,7 @@ return [
 
     //oss权限相关
     'oss_endpoint' => env('OSS_ENDPOINT', ''),
+    'oss_url' => env('OSS_URL', ''),
     'oss_key' => env('OSS_KEY', ''),
     'oss_secret' => env('OSS_SECRET', ''),
 

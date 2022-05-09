@@ -27,6 +27,8 @@ class CommonController extends Controller
         $accessKeySecret = config('app.oss_secret');
         // yourEndpoint填写Bucket所在地域对应的Endpoint。以华东1（杭州）为例，Endpoint填写为https://oss-cn-hangzhou.aliyuncs.com。
         $endpoint = config('app.oss_endpoint');
+        //实际返回的连接（OSS配置的域名绑定）
+        $url = config('app.oss_url');
         // 填写Bucket名称，例如examplebucket。
         $bucket = "/cpttmm/";
         // 填写Object完整路径，例如exampledir/exampleobject.txt。Object完整路径中不能包含Bucket名称。
@@ -60,7 +62,7 @@ class CommonController extends Controller
             ->put($endpoint . '/' . $object);
 
         if ($response->successful()) {
-            $file_url = "https://cpttmm.oss-cn-hongkong.aliyuncs.com/" . $object;
+            $file_url = $url . $object;
             return
                 [
                     'code' => ResponseCode::SUCCESS,
