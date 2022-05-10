@@ -1278,7 +1278,8 @@ export default {
       formData.append("file", file);
       formData.append("mode", mode);
       formData.append("binggan", this.$store.state.User.Binggan);
-      formData.append("thread_id", this.thread_id); //正常上传要提供thread_id，但是新主题不用
+      formData.append("thread_id", this.thread_id); //正常上传要提供thread_id，新主题要传入0
+      formData.append("forum_id", this.forum_id); 
       const config = {
         method: "post",
         url: "/api/img_upload",

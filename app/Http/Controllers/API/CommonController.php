@@ -32,7 +32,8 @@ class CommonController extends Controller
         // 填写Bucket名称，例如examplebucket。
         $bucket = "/cpttmm/";
         // 填写Object完整路径，例如exampledir/exampleobject.txt。Object完整路径中不能包含Bucket名称。
-        $object = $dir . md5(file_get_contents($file)) . '.' . $file->extension();
+        $file_md5  = md5(file_get_contents($file));
+        $object = $dir . $file_md5 . '.' . $file->extension();
 
         $date = str_replace('+0000', 'GMT', Carbon::now('GMT')->toRssString());
         // $x_oss_meta = sprintf('x-oss-meta-binggan:binggan=%s&IP=%s', $binggan, $IP);
@@ -68,6 +69,7 @@ class CommonController extends Controller
                     'code' => ResponseCode::SUCCESS,
                     'message' => '上传成功！',
                     'file_url' => $file_url,
+                    'img_md5' => $file_md5,
                 ];
         } else {
             return
@@ -75,6 +77,7 @@ class CommonController extends Controller
                     'code' => 500,
                     'message' => '上传文件失败',
                     'file_url' => "",
+                    'img_md5' => $file_md5,
                 ];
         }
     }
@@ -150,8 +153,9 @@ class CommonController extends Controller
     public function img_upload(Request $request)
     {
         $request->validate([
-            'file' => 'required|image|max:20480',
+            'file' => 'required|image|max:10240',
             'thread_id' => 'required|integer', //如果是在新建主题时候上传，应传入0
+            'forum_id' => 'required|integer',
             'mode' => 'required|string'
         ]);
 
@@ -172,15 +176,7 @@ class CommonController extends Controller
         $upload_status = $this->oss_upload($request->file, $upload_dir);
 
 
-        if ($upload_status['code'] == ResponseCode::SUCCESS) {
-            return response()->json(
-                [
-                    'code' => ResponseCode::SUCCESS,
-                    'message' => '上传成功！',
-                    'file_url' => $upload_status['file_url'],
-                ]
-            );
-        } else {
+        if ($upload_status['code'] != ResponseCode::SUCCESS) {
             return response()->json(
                 [
                     'code' => 500,
@@ -189,6 +185,27 @@ class CommonController extends Controller
                 ]
             );
         }
+
+        //记录用户上传行为
+        DB::table('users_upload')->insert([
+            [
+                'user_id' => $user->id,
+                'forum_id' => $request->forum_id,
+                'thread_id' => $request->thread_id,
+                'img_md5' => $upload_status['img_md5'],
+                'img_size' => filesize($request->file),
+                'created_at' => Carbon::now(),
+            ],
+
+        ]);
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '上传成功！',
+                'file_url' => $upload_status['file_url'],
+            ]
+        );
     }
 
     public static  function post_hongbao(Request $request, Thread $thread, Post $post)
