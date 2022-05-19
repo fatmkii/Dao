@@ -442,10 +442,13 @@ class ThreadController extends Controller
         // }
 
         //如果有提供binggan，为每个post输入binggan，用来判断is_your_post（为前端提供是否是用户自己帖子的判据）
+        //如果有提供binggan，为每个thread输入binggan，用来判断is_your_thread（为前端提供是否是用户自己帖子的判据）
         if ($request->query('binggan')) {
             foreach ($posts as $post) {
                 $post->setBinggan($request->query('binggan'));
             }
+            $CurrentThread->setBinggan($request->query('binggan'));
+            $CurrentThread->makeVisible('is_your_thread');
         }
 
         //为反精分帖子加上created_binggan_hash
@@ -565,6 +568,72 @@ class ThreadController extends Controller
         return response()->json([
             'code' => ResponseCode::SUCCESS,
             'thread_id' => $Thread_id,
+        ]);
+    }
+
+    //改变标题颜色
+    public function change_color(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'thread_id' => 'required|integer',
+            'color' => 'required|string',
+        ]);
+
+        //验证是否颜色代码
+        if (preg_match('/^#([0-9a-fA-F]{6})$/', $request->color) == false) {
+            return response()->json([
+                'code' => 422,
+                'message' => '颜色代码有误，请确认。',
+            ]);
+        }
+
+
+        $CurrentThread = Thread::find($request->thread_id);
+        if (!$CurrentThread) {
+            return response()->json([
+                'code' => ResponseCode::THREAD_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::THREAD_NOT_FOUND],
+            ]);
+        }
+
+        $user = $request->user;
+        //只有主题发起者才能改标题颜色
+        if ($CurrentThread->created_binggan != $user->binggan) {
+            return response()->json([
+                'code' => ResponseCode::USER_CANNOT,
+                'message' => ResponseCode::$codeMap[ResponseCode::USER_CANNOT],
+                'user' => $user,
+            ]);
+        }
+
+        try {
+            DB::beginTransaction();
+            $CurrentThread->title_color = $request->color;
+            $CurrentThread->save();
+            $user->coinChange(
+                'normal', //记录类型
+                [
+                    'olo' => -500,
+                    'content' => '标题改色',
+                    'thread_id' => $CurrentThread->id,
+                    'thread_title' => $CurrentThread->title,
+                ]
+            ); //扣除用户相应olo（通过统一接口、记录操作）
+            DB::commit();
+        } catch (QueryException $e) {
+            DB::rollback();
+            return response()->json([
+                'code' => ResponseCode::DATABASE_FAILED,
+                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
+            ]);
+        }
+
+        return response()->json([
+            'code' => ResponseCode::SUCCESS,
+            'message' => '已变更标题颜色为' . $request->color,
+            'thread_id' => $request->thread_id,
+            'color' => $request->color
         ]);
     }
 }

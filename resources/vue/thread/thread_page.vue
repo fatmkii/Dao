@@ -147,6 +147,20 @@
             删主题
           </b-button>
         </div>
+        <div
+          v-if="is_your_thread && posts_load_status"
+          class="d-flex flex-wrap align-items-center"
+        >
+          <b-button
+            class="ml-auto"
+            size="sm"
+            variant="warning"
+            v-if="is_your_thread"
+            @click="change_thread_color"
+          >
+            标题改色
+          </b-button>
+        </div>
         <VoteComponent
           v-if="vote_question_id && posts_load_status"
           :vote_question_id="vote_question_id"
@@ -979,6 +993,7 @@ export default {
       thread_anti_jingfen: (state) =>
         state.Threads.CurrentThreadData.anti_jingfen,
       thread_posts_num: (state) => state.Threads.CurrentThreadData.posts_num,
+      is_your_thread: (state) => state.Threads.CurrentThreadData.is_your_thread,
       vote_question_id: (state) =>
         state.Threads.CurrentThreadData.vote_question_id,
       gamble_question_id: (state) =>
@@ -1184,6 +1199,33 @@ export default {
           .catch((error) => alert(error));
       }
     },
+    change_thread_color() {
+      var color = prompt(
+        "要更换标题颜色吗？每次收费500个olo喔",
+        "请输入颜色代码，例如：#212529"
+      );
+      if (color != null) {
+        const config = {
+          method: "post",
+          url: "/api/threads/change_color/",
+          data: {
+            thread_id: this.thread_id,
+            color: color,
+            binggan: this.$store.state.User.Binggan,
+          },
+        };
+        axios(config)
+          .then((response) => {
+            if (response.data.code == 200) {
+              alert(response.data.message);
+              this.get_posts_data();
+            } else {
+              alert(response.data.message);
+            }
+          })
+          .catch((error) => alert(error));
+      }
+    },
     check_jingfen_admin() {
       alert("现在不需要这样喔~~");
       return; //暂时关闭此功能
@@ -1279,7 +1321,7 @@ export default {
       formData.append("mode", mode);
       formData.append("binggan", this.$store.state.User.Binggan);
       formData.append("thread_id", this.thread_id); //正常上传要提供thread_id，新主题要传入0
-      formData.append("forum_id", this.forum_id); 
+      formData.append("forum_id", this.forum_id);
       const config = {
         method: "post",
         url: "/api/img_upload",
