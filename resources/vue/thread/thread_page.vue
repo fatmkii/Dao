@@ -149,7 +149,7 @@
         </div>
         <div
           v-if="is_your_thread && posts_load_status"
-          class="d-flex flex-wrap align-items-center"
+          class="d-flex flex-wrap align-items-center mt-1"
         >
           <b-button
             class="ml-auto"
