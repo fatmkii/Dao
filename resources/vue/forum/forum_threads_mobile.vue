@@ -39,6 +39,7 @@
             :to="
               '/thread/' + thread.id + '/' + Math.ceil((thread.posts_num + 1) / 200)
             "
+            :target="router_target"
             v-if="thread.posts_num > 200"
             class="thread_page ml-1"
             >[{{ Math.ceil((thread.posts_num + 1) / 200) }}]</router-link
