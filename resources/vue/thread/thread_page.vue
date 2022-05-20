@@ -1005,6 +1005,7 @@ export default {
       posts_load_status: (state) => state.Posts.PostsLoadStatus,
       locked_TTL: (state) => state.User.LockedTTL,
       random_heads_data: (state) => state.User.RandomHeads,
+      less_toast: (state) => state.User.LessToast,
       // battle_chara_options: (state) => state.User.CharaIndex.chara_group_index,
     }),
   },
@@ -1525,11 +1526,13 @@ export default {
         document.body.scrollTop = this.browse_current.height;
         document.documentElement.scrollTop = this.browse_current.height;
         window.scrollTop = this.browse_current.height;
-        this.$bvToast.toast("已滚动到上次阅读进度", {
-          title: "Done.",
-          autoHideDelay: 1500,
-          appendToast: true,
-        });
+        if (!this.less_toast) {
+          this.$bvToast.toast("已滚动到上次阅读进度", {
+            title: "Done.",
+            autoHideDelay: 1500,
+            appendToast: true,
+          });
+        }
       }
     },
     scroll_watch() {

@@ -16,6 +16,7 @@ const module_user = {
         ContentPingbici: "",
         FjfPingbici: "",
         FoldPingbici: false,
+        LessToast: false,
         MyEmoji: { name: '我的表情包', emojis: [] },
         Emojis: [],
         RandomHeads: [],
@@ -61,6 +62,9 @@ const module_user = {
         },
         FoldPingbici_set(state, payload) {
             state.FoldPingbici = payload
+        },
+        LessToast_set(state, payload) {
+            state.LessToast = payload
         },
         MyEmoji_set(state, payload) {
             state.MyEmoji.emojis = JSON.parse(payload) //因为数据库传送过来的是纯文本json，要手动转换为数组
@@ -192,6 +196,7 @@ const module_css = {
         PostsMarginTop: 32,
         PostsMaxLine: 16,
         QuoteMax: 3,
+        ThreadsPerPage: 50,
     }),
     mutations: {
         MyCSS_set_all(state, payload) {
@@ -202,6 +207,7 @@ const module_css = {
             state.PostsMarginTop = payload.PostsMarginTop
             state.PostsMaxLine = payload.PostsMaxLine
             state.QuoteMax = payload.QuoteMax
+            state.ThreadsPerPage = payload.ThreadsPerPage
         },
         PostsLineHeight_set(state, payload) {
             state.PostsLineHeight = payload
@@ -223,6 +229,9 @@ const module_css = {
         },
         QuoteMax_set(state, payload) {
             state.QuoteMax = payload
+        },
+        ThreadsPerPage_set(state, payload) {
+            state.ThreadsPerPage = payload
         },
     },
 }

@@ -111,7 +111,7 @@
         class="ml-1"
         style="min-width: 46px"
         variant="success"
-        @click="get_threads_data(true, search_input)"
+        @click="get_threads_data(true, threads_per_page, search_input)"
         >搜索</b-button
       >
     </div>
@@ -267,7 +267,7 @@ export default {
     // 如果路由有变化，再次获得数据
     $route(to) {
       if (this.search_input) {
-        this.get_threads_data(false, this.search_input);
+        this.get_threads_data(false, this.threads_per_page, this.search_input);
       } else {
         this.get_threads_data();
       }
@@ -314,16 +314,22 @@ export default {
       forum_banners: (state) => state.Forums.CurrentForumData.banners,
       threads_load_status: (state) => state.Threads.ThreadsLoadStatus,
       threads_last_page: (state) => state.Threads.ThreadsData.lastPage,
+      threads_per_page: (state) => state.MyCSS.ThreadsPerPage,
     }),
   },
   methods: {
-    get_threads_data(remind, search_title) {
+    get_threads_data(
+      remind = false,
+      threads_per_page = this.threads_per_page,
+      search_title = undefined
+    ) {
       var config = {
         method: "get",
         url: "/api/forums/" + this.forum_id,
         params: {
           page: this.page,
           binggan: this.$store.state.User.Binggan,
+          threads_per_page: threads_per_page,
         },
       };
       if (search_title) {

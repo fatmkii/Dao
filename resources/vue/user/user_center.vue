@@ -19,6 +19,11 @@
         <b-form-checkbox class="mx-2 my-2" switch v-model="z_bar_left">
           侧边栏放左侧
         </b-form-checkbox>
+        <b-form-checkbox class="mx-2 my-2" switch v-model="LessToast">
+          <span v-b-popover.hover.bottom="'“已滚动到阅读进度”等'"
+            >减少弹窗提示</span
+          >
+        </b-form-checkbox>
         <hr />
         <div class="mt-2 d-flex align-items-center">
           <span class="mb-2">帖子内容行距：</span>
@@ -104,6 +109,21 @@
           ></b-form-spinbutton>
           <span class="ml-1 mb-2">层</span>
         </div>
+        <hr />
+        <div class="mt-2 d-flex align-items-center">
+          <span class="mb-2">每页的主题数：</span>
+          <b-form-spinbutton
+            size="sm"
+            style="max-width: 120px"
+            class="mb-2"
+            step="5"
+            min="30"
+            max="100"
+            v-model="ThreadsPerPage"
+          ></b-form-spinbutton>
+          <span class="ml-1 mb-2">个</span>
+        </div>
+        <hr />
         <b-button variant="success" @click="set_MyCSS">保存</b-button>
         <b-button variant="outline-dark" @click="default_MyCSS"
           >恢复默认</b-button
@@ -424,6 +444,7 @@ export default {
         '[\n"https://z3.ax1x.com/2021/08/01/Wznvbq.jpg",\n"https://z3.ax1x.com/2021/08/01/Wznjrn.jpg"\n]',
       my_emoji_set_handling: false,
       z_bar_left: false,
+      less_toast: false,
       emoji_delete_mode: false,
       income_date_selected: undefined,
       income_page: 1,
@@ -488,6 +509,14 @@ export default {
         this.$store.commit("QuoteMax_set", value);
       },
     },
+    ThreadsPerPage: {
+      get() {
+        return this.$store.state.MyCSS.ThreadsPerPage;
+      },
+      set(value) {
+        this.$store.commit("ThreadsPerPage_set", value);
+      },
+    },
     FoldPingbici: {
       get() {
         return this.$store.state.User.FoldPingbici;
@@ -495,6 +524,15 @@ export default {
       set(value) {
         localStorage.setItem("fold_pingbici", value ? "true" : "");
         this.$store.commit("FoldPingbici_set", value);
+      },
+    },
+    LessToast: {
+      get() {
+        return this.$store.state.User.LessToast;
+      },
+      set(value) {
+        localStorage.setItem("less_toast", value ? "true" : "");
+        this.$store.commit("LessToast_set", value);
       },
     },
     income_rows() {
@@ -559,8 +597,6 @@ export default {
             this.user_coin = response.data.data.binggan.coin;
             this.user_lv = response.data.data.binggan.user_lv;
             this.user_lv_data = response.data.data.user_lv;
-            console.log(response.data.data.user_lv);
-            //设定屏蔽词相关状态
             this.use_pingbici_input = Boolean(
               response.data.data.binggan.use_pingbici
             );
@@ -786,6 +822,7 @@ export default {
         PostsMarginTop: 32,
         PostsMaxLine: 16,
         QuoteMax: 3,
+        ThreadsPerPage: 50,
       };
       this.$store.commit("MyCSS_set_all", my_css);
       this.set_MyCSS();

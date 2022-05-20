@@ -53,6 +53,7 @@ class ForumController extends Controller
         $request->validate([
             'binggan' => 'string|nullable',
             'page' => 'integer|nullable',
+            'threads_per_page' => 'integer|nullable|max:100|min:1',
             'search_title' => 'string|max:100', //搜索标题
             'sub_title' => 'string|max:20', //用来搜索副标题，暂时没用
         ]);
@@ -74,6 +75,7 @@ class ForumController extends Controller
 
         $CurrentForum = Forum::find($forum_id);
         $user = $request->user;
+        $threads_per_page = $request->threads_per_page ? $request->threads_per_page : 50; //默认值是50个主题每页
 
         //判断是否可无饼干访问的板块
         if (!$CurrentForum->is_anonymous && !$user) {
@@ -156,7 +158,7 @@ class ForumController extends Controller
             'code' => ResponseCode::SUCCESS,
             'message' => ResponseCode::$codeMap[ResponseCode::SUCCESS],
             'forum_data' => $CurrentForum->makeVisible('banners'),
-            'threads_data' => $threads->paginate(30),
+            'threads_data' => $threads->paginate($threads_per_page),
         ]);
     }
 

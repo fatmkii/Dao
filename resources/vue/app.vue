@@ -98,24 +98,32 @@ export default {
         );
       }
 
+      //读取是否减少toast提示
+      if (localStorage.getItem("less_toast") != null) {
+        this.$store.commit(
+          "LessToast_set",
+          localStorage.getItem("less_toast") === "true"
+        );
+      }
+
       //读取MyCss（自定义字体大小和行距等）
       if (localStorage.my_css != null) {
         this.$store.commit("MyCSS_set_all", JSON.parse(localStorage.my_css));
+
         if (this.$store.state.MyCSS.PostsMarginTop == null) {
           this.$store.commit("PostsMarginTop_set", 32); //临时的，给旧版本加默认值
-          const my_css = this.$store.state.MyCSS;
-          localStorage.my_css = JSON.stringify(my_css);
         }
         if (this.$store.state.MyCSS.PostsMaxLine == null) {
           this.$store.commit("PostsMaxLine_set", 16); //临时的，给旧版本加默认值
-          const my_css = this.$store.state.MyCSS;
-          localStorage.my_css = JSON.stringify(my_css);
         }
         if (this.$store.state.MyCSS.QuoteMax == null) {
           this.$store.commit("QuoteMax_set", 3); //临时的，给旧版本加默认值
-          const my_css = this.$store.state.MyCSS;
-          localStorage.my_css = JSON.stringify(my_css);
         }
+        if (this.$store.state.MyCSS.ThreadsPerPage == null) {
+          this.$store.commit("ThreadsPerPage_set", 50); //临时的，给旧版本加默认值
+        }
+        const my_css = this.$store.state.MyCSS;
+        localStorage.my_css = JSON.stringify(my_css);
       }
 
       //读取关注帖子的上次回帖数（用于新回复提醒）
