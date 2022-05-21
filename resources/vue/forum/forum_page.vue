@@ -111,7 +111,14 @@
         class="ml-1"
         style="min-width: 46px"
         variant="success"
-        @click="get_threads_data(true, threads_per_page, search_input)"
+        @click="
+          get_threads_data(
+            true,
+            threads_per_page,
+            subtitles_excluded,
+            search_input
+          )
+        "
         >搜索</b-button
       >
     </div>
@@ -267,7 +274,12 @@ export default {
     // 如果路由有变化，再次获得数据
     $route(to) {
       if (this.search_input) {
-        this.get_threads_data(false, this.threads_per_page, this.search_input);
+        this.get_threads_data(
+          false,
+          this.threads_per_page,
+          this.subtitles_excluded,
+          this.search_input
+        );
       } else {
         this.get_threads_data();
       }
@@ -306,6 +318,15 @@ export default {
       options = subtitles[1].subtitles.concat(options); //加上管理员选项
       return options;
     },
+    subtitles_excluded() {
+      let result = [];
+      for (let key in this.subtitles_selected) {
+        if (this.subtitles_selected[key] == false) {
+          result.push(key);
+        }
+      }
+      return result;
+    },
     ...mapState({
       forum_name: (state) =>
         state.Forums.CurrentForumData.name
@@ -321,6 +342,7 @@ export default {
     get_threads_data(
       remind = false,
       threads_per_page = this.threads_per_page,
+      subtitles_excluded = this.subtitles_excluded,
       search_title = undefined
     ) {
       var config = {
@@ -330,6 +352,7 @@ export default {
           page: this.page,
           binggan: this.$store.state.User.Binggan,
           threads_per_page: threads_per_page,
+          subtitles_excluded: JSON.stringify(subtitles_excluded),
         },
       };
       if (search_title) {
@@ -421,11 +444,12 @@ export default {
         "subtitles_filter",
         JSON.stringify(this.subtitles_selected)
       );
+      this.get_threads_data()
     },
   },
   created() {
+    this.load_subtitles_selected(); //一定要先load_subtitle再get_threads，不然subttitles不生效
     this.get_threads_data();
-    this.load_subtitles_selected();
     this.$store.commit("ThreadsLoadStatus_set", 0);
     if (localStorage.getItem("new_window_to_post") == null) {
       localStorage.new_window_to_post = "";

@@ -93,12 +93,12 @@
         <div class="post_title px-1 py-2 h5 d-none d-lg-block d-xl-block">
           <span style="word-wrap: break-word; white-space: normal"
             >标题：{{ thread_title }}</span
-          >
+          ><span> [{{ thread_posts_num }}]</span>
         </div>
         <div class="post_title px-1 py-2 h6 d-block d-lg-none d-xl-none">
           <span style="word-wrap: break-word; white-space: normal"
             >标题：{{ thread_title }}</span
-          >
+          ><span> [{{ thread_posts_num }}]</span>
         </div>
         <div
           v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
@@ -1042,7 +1042,7 @@ export default {
               response.data.forum_data
             );
             document.title = this.thread_title; //设置浏览器页面标签文字
-            if (remind) {
+            if (remind && !this.less_toast) {
               this.$bvToast.toast("已刷新帖子", {
                 title: "Done.",
                 autoHideDelay: 1500,
@@ -1281,11 +1281,13 @@ export default {
       axios(config)
         .then((response) => {
           if (response.data.code == 200) {
-            this.$bvToast.toast(response.data.message, {
-              title: "Done.",
-              autoHideDelay: 1500,
-              appendToast: true,
-            });
+            if (!this.less_toast) {
+              this.$bvToast.toast(response.data.message, {
+                title: "Done.",
+                autoHideDelay: 1500,
+                appendToast: true,
+              });
+            }
             this.content_input = "";
             this.new_post_handling = false;
             this.get_posts_data();
