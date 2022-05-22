@@ -74,6 +74,7 @@ class IncomeStatement extends myModel
             ->joinSub($sql_child, 'sql_child', function ($join) use ($income_table) {
                 $join->on($income_table . '.id', '=', 'sql_child.id');
             })
+            ->orderByDesc('created_at')
             ->get();
 
 

@@ -66,10 +66,10 @@ class ProcessIncomeStatement implements ShouldQueue
                 $model->save();
                 break;
             case 'post':
-                //用当天的0:0:0作为回帖的聚合记录时间
+                //用当天的23:59:0作为回帖的聚合记录时间
                 $post_date = $carbon_date;
-                $post_date->hour = 0;
-                $post_date->minute = 0;
+                $post_date->hour = 23;
+                $post_date->minute = 59;
                 $post_date->second = 0;
 
                 $model = IncomeStatement::suffix($carbon_date->year)
