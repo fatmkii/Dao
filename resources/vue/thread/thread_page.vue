@@ -1715,7 +1715,7 @@ export default {
   },
   beforeDestroy() {
     this.browse_record_handle();
-    window.removeEventListener("beforeunload", this.browse_record_handle);
+    // window.removeEventListener("beforeunload", this.browse_record_handle);
     window.removeEventListener("scroll", this.scroll_watch);
     window.removeEventListener("keyup", this.keyup_callee);
   },
