@@ -37,6 +37,9 @@
           <b-form-checkbox v-model="no_battle_mode" switch class="ml-2 my-2">
             无大乱斗
           </b-form-checkbox>
+          <b-form-checkbox v-model="no_roll_mode" switch class="ml-2 my-2">
+            无roll点
+          </b-form-checkbox>
         </b-dropdown>
         <b-button
           size="sm"
@@ -183,6 +186,7 @@
             :no_image_mode="no_image_mode"
             :no_emoji_mode="no_emoji_mode"
             :no_head_mode="no_head_mode"
+            :no_roll_mode="no_roll_mode"
             @quote_click="quote_click_handle"
             @get_posts_data="get_posts_data"
             @emit_reward="emit_reward"
@@ -842,6 +846,9 @@ export default {
     no_battle_mode() {
       localStorage.setItem("no_battle_mode", this.no_battle_mode ? "true" : "");
     },
+    no_roll_mode() {
+      localStorage.setItem("no_roll_mode", this.no_roll_mode ? "true" : "");
+    },
     battle_chara_group_id() {
       if (
         this.$store.state.User.CharaIndex[this.battle_chara_group_id] !=
@@ -883,6 +890,7 @@ export default {
       no_emoji_mode: false,
       no_head_mode: false,
       no_battle_mode: false,
+      no_roll_mode: false,
       emoji_auto_hide: true,
       upload_img_handling: false,
       browse_current: {
@@ -1675,30 +1683,24 @@ export default {
       }
     },
     load_LocalStorage() {
-      if (localStorage.getItem("emoji_auto_hide") == null) {
-        localStorage.emoji_auto_hide = "";
-      } else {
-        this.emoji_auto_hide = Boolean(localStorage.emoji_auto_hide);
-      }
-      if (localStorage.getItem("no_image_mode") == null) {
-        localStorage.no_image_mode = "";
-      } else {
-        this.no_image_mode = Boolean(localStorage.no_image_mode);
-      }
-      if (localStorage.getItem("no_emoji_mode") == null) {
-        localStorage.no_emoji_mode = "";
-      } else {
-        this.no_emoji_mode = Boolean(localStorage.no_emoji_mode);
-      }
-      if (localStorage.getItem("no_head_mode") == null) {
-        localStorage.no_head_mode = "";
-      } else {
-        this.no_head_mode = Boolean(localStorage.no_head_mode);
-      }
-      if (localStorage.getItem("no_battle_mode") == null) {
-        localStorage.no_battle_mode = "";
-      } else {
-        this.no_battle_mode = Boolean(localStorage.no_battle_mode);
+      var localStorage_array = new Array(
+        "emoji_auto_hide",
+        "no_image_mode",
+        "no_emoji_mode",
+        "no_head_mode",
+        "no_battle_mode",
+        "no_roll_mode"
+      );
+
+      //遍历读取上述LocalStorage
+      for (var i = 0; i < localStorage_array.length; i++) {
+        if (localStorage.getItem(localStorage_array[i]) == null) {
+          localStorage[localStorage_array[i]] = "";
+        } else {
+          this[localStorage_array[i]] = Boolean(
+            localStorage[localStorage_array[i]]
+          );
+        }
       }
     },
   },
