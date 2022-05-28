@@ -347,8 +347,8 @@
         @keyup.ctrl.enter="new_post_handle"
         :style="post_content_css"
       ></textarea>
-      <div class="row align-items-center mt-2">
-        <div class="col-7" v-if="this.forum_id === 419">
+      <div class="d-flex align-items-center mt-2">
+        <div v-if="this.forum_id === 419">
           <b-form-file
             browse-text="上传图片"
             size="sm"
@@ -367,7 +367,7 @@
         </div>
         <Imgtu v-if="this.forum_id !== 419 && this.forum_id !== 0"></Imgtu>
         <!-- <Imgtu></Imgtu> -->
-        <div class="col-6 ml-auto">
+        <div class="ml-auto">
           <b-button
             variant="success"
             class="ml-2 float-right"
