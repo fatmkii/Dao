@@ -186,7 +186,6 @@
             :no_image_mode="no_image_mode"
             :no_emoji_mode="no_emoji_mode"
             :no_head_mode="no_head_mode"
-            :no_roll_mode="no_roll_mode"
             @quote_click="quote_click_handle"
             @get_posts_data="get_posts_data"
             @emit_reward="emit_reward"
@@ -988,6 +987,30 @@ export default {
       }
       return group_options;
     },
+    posts_data() {
+      var filtered = this.$store.state.Posts.PostsData.data;
+      //当屏蔽大乱斗点时，过滤不需要的数据
+      if (this.no_battle_mode == true) {
+        filtered = filtered.filter((post) => {
+          if (post.battle_id != null) {
+            return false;
+          } else {
+            return true;
+          }
+        });
+      }
+      //当屏蔽roll点时，过滤不需要的数据
+      if (this.no_roll_mode == true) {
+        filtered = filtered.filter((post) => {
+          if (post.created_by_admin == 2 && post.nickname == "Roll点系统") {
+            return false;
+          } else {
+            return true;
+          }
+        });
+      }
+      return filtered;
+    },
     ...mapState({
       forum_name: (state) =>
         state.Forums.CurrentForumData.name
@@ -1009,13 +1032,11 @@ export default {
       random_heads_group: (state) =>
         state.Threads.CurrentThreadData.random_heads_group,
       posts_last_page: (state) => state.Posts.PostsData.lastPage,
-      posts_data: (state) => state.Posts.PostsData.data, // 记得ThreadsData要比ForumsData多.data，因为多了分页数据
       posts_load_status: (state) => state.Posts.PostsLoadStatus,
       locked_TTL: (state) => state.User.LockedTTL,
       random_heads_data: (state) => state.User.RandomHeads,
       less_toast: (state) => state.User.LessToast,
-      // battle_chara_options: (state) => state.User.CharaIndex.chara_group_index,
-    }),
+}),
   },
   methods: {
     get_posts_data(

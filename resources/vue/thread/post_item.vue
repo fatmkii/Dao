@@ -216,10 +216,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    no_roll_mode: {
-      type: Boolean,
-      default: false,
-    },
   },
   data: function () {
     return {
@@ -236,9 +232,6 @@ export default {
   },
   watch: {
     use_pingbici() {
-      this.pingbici_check();
-    },
-    no_roll_mode() {
       this.pingbici_check();
     },
   },
@@ -547,14 +540,6 @@ export default {
             }
           }
         }
-      }
-      if (
-        this.no_roll_mode &&
-        this.post_data.created_by_admin == 2 &&
-        this.post_data.nickname == "Roll点系统"
-      ) {
-        this.post_content_show = false; //回帖是否显示的开关
-        this.hide_reason = "（屏蔽roll点）";
       }
     },
     unfold_content() {
