@@ -629,26 +629,55 @@ class UserController extends Controller
     {
         $request->validate([
             'income_date' => 'required|date',
-            // 'page' => 'integer',
+            'mode' => 'string',
         ]);
 
         $user = $request->user;
-        // $currentPage = $request->has("page") ? $request->page : 1;
+        $mode = $request->mode == null ? 'list_day' : $request->mode; //默认是day
 
-        // list($income_data, $lastPage) = IncomeStatement::incomeData($user->id, $request->income_date); //更好的分页sql语句
-        $income_data = IncomeStatement::incomeData($user->id, $request->income_date); //更好的分页sql语句
+        switch ($mode) {
+            case 'list_day': {
+                    //获得查询当天的全部数据
+                    $income_data = IncomeStatement::incomeData($user->id, $request->income_date); //更好的分页sql语句
+                    return response()->json(
+                        [
+                            'code' => ResponseCode::SUCCESS,
+                            'message' => '返回收益表',
+                            'data' => array(
+                                "income_data" => $income_data,
+                            )
+                        ]
+                    );
+                }
+            case 'sum_month&year': {
+                    //获得查询当年和当月的合计
+                    $date = Carbon::parse($request->income_date);
+                    $sum_year = IncomeStatement::suffix($date->year)->where('user_id', $user->id)->sum('olo');
 
-        return response()->json(
-            [
-                'code' => ResponseCode::SUCCESS,
-                'message' => '返回收益表',
-                'data' => array(
-                    // "currentPage" => intval($currentPage),
-                    "income_data" => $income_data,
-                    // "lastPage" => $lastPage,
-                )
-            ]
-        );
+                    $from_date = $date->copy()->firstOfMonth()->toDateString();
+                    $to_date = $date->copy()->addMonthNoOverflow()->firstOfMonth()->toDateString();
+
+                    $sum_month = IncomeStatement::suffix($date->year)->where('user_id', $user->id)->whereBetween('created_at', [$from_date, $to_date])->sum('olo');
+                    return response()->json(
+                        [
+                            'code' => ResponseCode::SUCCESS,
+                            'message' => '返回收益表',
+                            'data' => array(
+                                "sum_year" => $sum_year,
+                                "sum_month" => $sum_month,
+                            )
+                        ]
+                    );
+                }
+            default: {
+                    return response()->json(
+                        [
+                            'code' => ResponseCode::FILED_ERROR,
+                            'message' => '请求参数mode错误',
+                        ]
+                    );
+                }
+        }
     }
 
     //饼干升级

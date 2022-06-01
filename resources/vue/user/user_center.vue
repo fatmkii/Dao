@@ -273,8 +273,24 @@
           </b-button>
           <span class="ml-2" v-show="income_no_data">无数据</span>
         </div>
-        <div class="my-2">
-          <span>当日总计：{{ income_total }}</span>
+        <div
+          v-show="income_loading == 2"
+          class="my-2"
+          style="font-size: 0.9rem"
+        >
+          <div>当日总计：{{ income_total }}</div>
+          <div>
+            <span>当月总计：</span
+            ><span v-if="income_sum_loading == 0" @click="get_income_data_sum"
+              >*点击查询*</span
+            ><span v-else> {{ income_sum_month }}</span>
+          </div>
+          <div>
+            <span>全年总计：</span
+            ><span v-if="income_sum_loading == 0" @click="get_income_data_sum"
+              >*点击查询*</span
+            ><span v-else> {{ income_sum_year }}</span>
+          </div>
         </div>
         <div class="d-none d-lg-block d-xl-block">
           <table class="income_table mt-1" style="table-layout: fixed">
@@ -450,6 +466,10 @@ export default {
       income_page: 1,
       income_data: [],
       income_no_data: false,
+      income_sum_year: 0,
+      income_sum_month: 0,
+      income_loading: 0,
+      income_sum_loading: 0,
     };
   },
   computed: {
@@ -857,13 +877,14 @@ export default {
     get_income_data(page) {
       this.income_no_data = false;
       this.income_page = page;
+      this.income_loading = 1;
       var config = {
         method: "get",
         url: "/api/income/show",
         params: {
-          // page: page,
           binggan: this.$store.state.User.Binggan,
           income_date: this.income_date_selected,
+          mode: "list_day", //查询当日详细数据
         },
       };
       axios(config)
@@ -876,11 +897,45 @@ export default {
             } else {
               this.income_data = response.data.data.income_data;
             }
+            this.income_loading = 2;
+            this.income_sum_loading = 0;
+            this.income_sum_year = 0;
+            this.income_sum_month = 0;
           } else {
+            this.income_loading = 0;
             alert(response.data.message);
           }
         })
         .catch((error) => {
+          this.income_loading = 0;
+          alert(Object.values(error.response.data.errors)[0]);
+        });
+    },
+    get_income_data_sum() {
+      this.income_no_data = false;
+      this.income_sum_loading = 1;
+      var config = {
+        method: "get",
+        url: "/api/income/show",
+        params: {
+          binggan: this.$store.state.User.Binggan,
+          income_date: this.income_date_selected,
+          mode: "sum_month&year", //查询全年和全月总和
+        },
+      };
+      axios(config)
+        .then((response) => {
+          if (response.data.code == 200) {
+            this.income_sum_year = response.data.data.sum_year;
+            this.income_sum_month = response.data.data.sum_month;
+            this.income_sum_loading = 2;
+          } else {
+            this.income_sum_loading = 0;
+            alert(response.data.message);
+          }
+        })
+        .catch((error) => {
+          this.income_sum_loading = 0;
           alert(Object.values(error.response.data.errors)[0]);
         });
     },
