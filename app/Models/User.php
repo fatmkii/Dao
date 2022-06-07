@@ -13,6 +13,7 @@ use App\Models\Pingbici;
 use App\Models\MyEmoji;
 use App\Models\UserLV;
 use App\Models\Admin;
+use App\Models\Post;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redis;
 use App\Jobs\ProcessUserActive;
@@ -39,7 +40,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'id',   
+        'id',
         'binggan',
         'admin',
         'password',
@@ -87,12 +88,31 @@ class User extends Authenticatable
         // });
     }
 
+    //计算平均值和方差
+    private function get_avg_var(array $array)
+    {
+        $sum = 0;
+        $count = count($array);
+        foreach ($array as $num) {
+            $sum += $num;
+        }
+        $avg = $sum / $count;
+
+        $square = 0;
+        foreach ($array as $num) {
+            $square += pow($num - $avg, 2);
+        }
+        $variance = $square / $count;
+
+        return [$avg, $variance];
+    }
 
     //发帖、回帖频率检查
-    public function waterCheck(string $action, string $ip)
+    public function waterCheck(string $action, string $ip, int $thread_id = null)
     {
         switch ($action) {
             case 'new_post': {
+                    //第1类检查：饼干记录，1分钟最多10贴
                     $new_post_record = Redis::GET('new_post_record_' . $this->binggan);
                     if ($new_post_record >= self::NEW_POST_NUMBER && $this->admin == 0) {
                         return response()->json([
@@ -100,6 +120,7 @@ class User extends Authenticatable
                             'message' => ResponseCode::$codeMap[ResponseCode::POST_TOO_MANY] . '为防止刷屏，每1分钟最多回帖10次（含大乱斗）',
                         ]);
                     }
+                    //第2类检查：IP记录，3600秒内100次弹出验证码
                     $new_post_record_IP = Redis::GET('new_post_record_IP_' . $ip);
                     if ($new_post_record_IP >= self::NEW_POST_NUMBER_IP && $this->admin == 0) {
 
@@ -112,16 +133,32 @@ class User extends Authenticatable
                             ]
                         );
 
-                        //不启用
-                        // Redis::del('new_post_record_IP_' . $ip);
-                        // return 'ok';
+                        //第2.2类检查：弹出验证码时，回顾该用户前10个帖子的毫秒值看是否相似
+                        if ($thread_id != null) {
+                            $user_posts_millis = Post::suffix(intval($thread_id / 10000))
+                                ->where('created_binggan', $this->binggan)
+                                ->orderBy('id', 'desc')->limit(10)->pluck('milliseccond');
 
-                        //正式
+                            list($avg, $variance) = $this->get_avg_var($user_posts_millis);
+
+                            if ($variance < 1000) {
+                                ProcessUserActive::dispatch(
+                                    [
+                                        'binggan' => $this->binggan,
+                                        'user_id' => $this->id,
+                                        'active' => '怀疑用户用脚本刷帖(毫秒值相似)',
+                                        'content' => 'ip:' . $ip . ' avg:' . $avg . ' var:' . $variance,
+                                    ]
+                                );
+                            }
+                        }
                         return response()->json([
                             'code' => ResponseCode::POST_TOO_MANY_MAYBE_ROBOT,
                             'message' => ResponseCode::$codeMap[ResponseCode::POST_TOO_MANY_MAYBE_ROBOT],
                         ]);
                     }
+
+                    //第3类检查：IP记录，只回帖不看帖（防止直接操作API的脚本）
                     $new_post_record_IP2 = Redis::GET('new_post_record_IP2_' . $ip);
                     if ($new_post_record_IP2 >= self::NEW_POST_NUMBER_IP2 && $new_post_record_IP2 % 5 == 0 && $this->admin == 0) {
                         ProcessUserActive::dispatch(

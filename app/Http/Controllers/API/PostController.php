@@ -51,7 +51,7 @@ class PostController extends Controller
         $user = $request->user;
 
         //灌水检查
-        $water_check = $user->waterCheck('new_post', $request->ip());
+        $water_check = $user->waterCheck('new_post', $request->ip(), $request->thread_id);
         if ($water_check != 'ok') return $water_check;
 
 
