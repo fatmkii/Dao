@@ -1036,7 +1036,7 @@ export default {
       locked_TTL: (state) => state.User.LockedTTL,
       random_heads_data: (state) => state.User.RandomHeads,
       less_toast: (state) => state.User.LessToast,
-}),
+    }),
   },
   methods: {
     get_posts_data(
@@ -1305,6 +1305,7 @@ export default {
           new_post_key: CryptoJS.MD5(
             this.thread_id + this.$store.state.User.Binggan
           ).toString(),
+          timestamp: new Date().getTime(),
         },
       };
       axios(config)
