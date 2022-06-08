@@ -521,15 +521,6 @@ class UserController extends Controller
         ]);
 
         $user = $request->user;
-        // $user = User::where('binggan', $request->binggan)->first();
-        // if (!$user) {
-        //     return response()->json(
-        //         [
-        //             'code' => ResponseCode::USER_NOT_FOUND,
-        //             'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
-        //         ],
-        //     );
-        // }
 
         //检查我的表情包长度是否符合饼干等级
         $user_lv = $user->UserLV;
@@ -572,6 +563,15 @@ class UserController extends Controller
                 'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
             ]);
         }
+
+        ProcessUserActive::dispatch(
+            [
+                'binggan' => $user->binggan,
+                'user_id' => $user->id,
+                'active' => '用户更新了表情包',
+                'content' => '长度:' . mb_strlen($request->my_emoji),
+            ]
+        );
 
         return response()->json(
             [
