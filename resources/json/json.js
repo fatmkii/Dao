@@ -260,7 +260,7 @@ var emoji_json = [
     {
         "id": "2",
         "name": "鹦鹉鸡",
-        "heads_id": "0", 
+        "heads_id": "0",
         "emojis": [
             "https://www.z4a.net/images/2021/04/29/1529ac0405fec0d7d.jpg",
             "https://www.z4a.net/images/2021/04/29/2af496558488939ac.jpg",
@@ -1688,7 +1688,7 @@ var chara_group_index = [
     { "value": 1, "text": "咒术回战" },
 ]
 
-//发新主题时候的副标题。id=1是一般的、id=2是管理员专用
+//发新主题时候的副标题。id=1是一般的、id=2是管理员专用、id=3是只能显示时筛选、发主题时不能主动选择的
 var subtitles = [
     {
         "id": 1,
@@ -1704,6 +1704,13 @@ var subtitles = [
         "for_admin": 1,
         "subtitles": [
             { "value": "[公告]" },
+        ],
+    },
+    {
+        "id": 2,
+        "for_admin": 0,
+        "subtitles": [
+            { "value": "[私密]" },
         ],
     }
 ]

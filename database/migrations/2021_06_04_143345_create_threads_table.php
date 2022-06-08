@@ -33,6 +33,7 @@ class CreateThreadsTable extends Migration
             $table->boolean('can_battle')->default(1);
             $table->boolean('is_delay')->default(0);
             $table->mediumInteger('locked_by_coin')->unsigned()->default(0);
+            $table->boolean('is_private')->default(0);   //是否私密主题
             $table->timestamps();
             $table->index('updated_at');
         });

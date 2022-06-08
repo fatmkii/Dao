@@ -28,6 +28,7 @@ class ResponseCode
     const THREAD_WAS_NISSINED = 23410;
     const THREAD_TOO_MANY = 23429;
     const THREAD_UNAUTHORIZED = 23401;
+    const THREAD_IS_PRIVATE = 234011;
     const SEARCH_TOO_MANY = 234291;
 
     const POST_NOT_FOUND = 24404;
@@ -83,6 +84,7 @@ class ResponseCode
         self::THREAD_NOT_FOUND => '主题贴不存在',
         self::THREAD_WAS_NISSINED => '主题已被日清',
         self::THREAD_TOO_MANY => '发新主题过于频繁',
+        self::THREAD_IS_PRIVATE => '本贴是私密主题，只有发帖者可以查看喔',
         self::SEARCH_TOO_MANY => '为保护服务器，设定了全局10秒只能搜索20次。',
         self::POST_NOT_FOUND => '未找到该帖子',
         self::POST_TOO_MANY => '回帖过于频繁',

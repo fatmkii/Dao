@@ -109,6 +109,7 @@ class ThreadController extends Controller
             'locked_by_coin' => 'integer|max:25000|min:1',
             'thread_type' => 'required|string',
             'is_delay' => 'boolean|required',
+            'is_private' => 'boolean|required',
             'can_battle' => 'boolean|required',
         ]);
 
@@ -170,6 +171,16 @@ class ThreadController extends Controller
                     ]
                 ); //通过统一接口、记录操作
                 $thread->locked_by_coin = $request->locked_by_coin;
+            }
+            if ($request->is_private == true) {
+                $user->coinChange(
+                    'normal', //记录类型
+                    [
+                        'olo' => -500,
+                        'content' => '发布私密主题',
+                    ]
+                ); //通过统一接口、记录操作
+                $thread->is_private = $request->is_private;
             }
             $thread->created_binggan = $request->binggan;
             $thread->forum_id = $request->forum_id;
@@ -379,6 +390,22 @@ class ThreadController extends Controller
                 return response()->json([
                     'code' => ResponseCode::THREAD_UNAUTHORIZED,
                     'message' => sprintf("本贴需要拥有大于%u奥利奥才能查看喔", $CurrentThread->locked_by_coin),
+                ]);
+            }
+        }
+
+        //判断是否私密主题 
+        if ($CurrentThread->is_private == true) {
+            if (!$user) {
+                return response()->json([
+                    'code' => ResponseCode::USER_NOT_FOUND,
+                    'message' => '本贴需要饼干才能查看喔',
+                ]);
+            }
+            if ($user->binggan != $CurrentThread->created_binggan && $user->admin == 0) {
+                return response()->json([
+                    'code' => ResponseCode::THREAD_IS_PRIVATE,
+                    'message' => '本贴是私密主题，只有发帖者可以查看喔',
                 ]);
             }
         }

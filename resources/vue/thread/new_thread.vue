@@ -177,6 +177,7 @@
               :options="subtitles_options"
               value-field="value"
               text-field="value"
+              :disabled="is_private_selected == true"
             ></b-form-select>
           </div>
           <div class="col-4">
@@ -226,6 +227,9 @@
           <div class="col-4">
             <span class="h6 my-2">设定看帖权限（500奥利奥）</span>
           </div>
+          <div class="col-4">
+            <span class="h6 my-2">设为私密主题（500奥利奥）</span>
+          </div>
         </div>
         <div class="row align-items-center mt-3">
           <div class="col-4">
@@ -241,6 +245,12 @@
               v-model="locked_by_coin_input"
               class="common_input"
             ></b-form-input>
+          </div>
+          <div class="col-4">
+            <b-form-select
+              v-model="is_private_selected"
+              :options="is_private_options"
+            ></b-form-select>
           </div>
         </div>
       </b-tab>
@@ -623,6 +633,11 @@ export default {
         { value: 1, text: "开启" },
         { value: 0, text: "禁止" },
       ],
+      is_private_selected: false,
+      is_private_options: [
+        { value: false, text: "一般主题" },
+        { value: true, text: "私密主题" },
+      ],
       title_color_input: "",
       post_with_admin: false,
       locked_by_coin_input: undefined,
@@ -656,6 +671,13 @@ export default {
       }
       if (this.subtitles_selected == "[闲聊]") {
         this.can_battle_selected = 1;
+      }
+    },
+    is_private_selected() {
+      if (this.is_private_selected == true) {
+        this.subtitles_selected = "[私密]";
+      } else {
+        this.subtitles_selected = "[闲聊]";
       }
     },
   },
@@ -758,6 +780,7 @@ export default {
           locked_by_coin: this.locked_by_coin_input,
           thread_type: this.thread_type,
           is_delay: this.is_delay,
+          is_private: this.is_private_selected,
           can_battle: this.can_battle_selected,
         },
       };

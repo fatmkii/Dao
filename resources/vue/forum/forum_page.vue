@@ -309,6 +309,7 @@ export default {
         "[闲聊]": true,
         "[专楼]": true,
         "[刷刷]": true,
+        "[私密]": true,
       },
     };
   },
@@ -316,6 +317,7 @@ export default {
     subtitles_options() {
       let options = subtitles[0].subtitles; //subtitles来源于json.js全局变量
       options = subtitles[1].subtitles.concat(options); //加上管理员选项
+      options = subtitles[2].subtitles.concat(options); //加上[私密]等选项
       return options;
     },
     subtitles_excluded() {
@@ -444,7 +446,7 @@ export default {
         "subtitles_filter",
         JSON.stringify(this.subtitles_selected)
       );
-      this.get_threads_data()
+      this.get_threads_data();
     },
   },
   created() {

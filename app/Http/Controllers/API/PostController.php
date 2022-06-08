@@ -121,6 +121,16 @@ class PostController extends Controller
             }
         }
 
+        //判断是否私密主题 
+        if ($thread->is_private == true) {
+            if ($user->binggan != $thread->created_binggan && $user->admin == 0) {
+                return response()->json([
+                    'code' => ResponseCode::THREAD_IS_PRIVATE,
+                    'message' => '本贴是私密主题，只有发帖者可以查看喔',
+                ]);
+            }
+        }
+
         //执行追加新回复流程
         try {
             DB::beginTransaction();
