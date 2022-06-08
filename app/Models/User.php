@@ -137,7 +137,7 @@ class User extends Authenticatable
                         if ($thread_id != null) {
                             $user_posts_millis = Post::suffix(intval($thread_id / 10000))
                                 ->where('created_binggan', $this->binggan)
-                                ->orderBy('id', 'desc')->limit(10)->pluck('milliseccond');
+                                ->orderBy('id', 'desc')->limit(10)->pluck('millisecond')->toArray();
 
                             list($avg, $variance) = $this->get_avg_var($user_posts_millis);
 
