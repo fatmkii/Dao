@@ -568,7 +568,7 @@ class UserController extends Controller
             [
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
-                'active' => '用户更新了表情包',
+                'active' => '用户更新了表情包(更新)',
                 'content' => '长度:' . mb_strlen($request->my_emoji),
             ]
         );
@@ -645,7 +645,7 @@ class UserController extends Controller
             [
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
-                'active' => '用户更新了表情包',
+                'active' => '用户更新了表情包(追加)',
                 'content' => '长度:' . mb_strlen($request->my_emoji),
             ]
         );
