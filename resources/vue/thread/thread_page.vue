@@ -570,7 +570,7 @@
         title="保存为我的表情包？"
         autoHideDelay="1500"
       >
-        <a href="javascript:;" class="save_emoji" @click="save_emoji_handle"
+        <a href="javascript:;" class="save_emoji" @click="add_emoji_handle"
           >确定</a
         >
       </b-toast>
@@ -1644,19 +1644,19 @@ export default {
         };
       }
     },
-    save_emoji_handle() {
+    add_emoji_handle() {
       var my_emoji = this.$store.state.User.MyEmoji.emojis;
       if (my_emoji.includes(this.selected_img.src)) {
         alert("该表情包已保存过了");
         return;
       }
-      my_emoji.push(this.selected_img.src);
+      // my_emoji.push(this.selected_img.src);
       const config = {
         method: "post",
-        url: "/api/user/my_emoji_set",
+        url: "/api/user/my_emoji_add",
         data: {
           binggan: this.$store.state.User.Binggan,
-          my_emoji: JSON.stringify(my_emoji),
+          my_emoji: this.selected_img.src,
         },
       };
       axios(config)
@@ -1667,6 +1667,9 @@ export default {
               autoHideDelay: 1500,
               appendToast: true,
             });
+            if (response.data.data.my_emoji != null) {
+              this.$store.commit("MyEmoji_set", response.data.data.my_emoji);
+            }
           } else {
             alert(response.data.message);
           }

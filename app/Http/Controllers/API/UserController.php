@@ -578,7 +578,84 @@ class UserController extends Controller
                 'code' => ResponseCode::SUCCESS,
                 'message' => '已设定我的表情包',
                 'data' => [
-                    'my_emoji' => $my_emoji,
+                    'my_emoji' => $my_emoji->emojis,
+                    'len' => mb_strlen($request['my_emoji']),
+                ]
+            ],
+        );
+    }
+
+    //最爱我的表情包
+    public function my_emoji_add(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'my_emoji' => 'required|string',
+        ]);
+
+        $user = $request->user;
+
+        if ($user->MyEmoji) {
+            $my_emoji = $user->MyEmoji;
+        } else {
+            $my_emoji = new MyEmoji();
+        }
+
+        //检查我的表情包长度是否符合饼干等级
+        $user_lv = $user->UserLV;
+        if (!$user_lv) {
+            //如果不存在，则输入默认值
+            $user_lv = array(
+                'title_pingbici' => self::TITLE_PINGBICI_MIN,
+                'content_pingbici' => self::CONTENT_PINGBICI_MIN,
+                'fjf_pingbici' => self::FJF_PINGBICI_MIN,
+                'my_emoji' => self::MYEMOJI_MIN,
+            );
+        }
+        $user_lv_array = array(
+            'my_emoji' => '我的表情包',
+        );
+        foreach ($user_lv_array as $name => $error_msg) {
+            if (mb_strlen($request[$name]) + mb_strlen($my_emoji->emojis) > $user_lv[$name]) {
+                return response()->json([
+                    'code' => ResponseCode::USER_ERROR,
+                    'message' => $error_msg . '长度为' . mb_strlen($request[$name]) + mb_strlen($my_emoji->emojis) . '。已超出了最大限制，可在个人中心升级限制。',
+                ]);
+            }
+        }
+
+        $my_emoji_array = json_decode($my_emoji->emojis);
+        array_push($my_emoji_array, $request->my_emoji);
+
+        try {
+            DB::beginTransaction();
+            $my_emoji->user_id = $user->id;
+            $my_emoji->emojis = $my_emoji_array;
+            $my_emoji->save();
+            DB::commit();
+        } catch (QueryException $e) {
+            DB::rollback();
+            return response()->json([
+                'code' => ResponseCode::DATABASE_FAILED,
+                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
+            ]);
+        }
+
+        ProcessUserActive::dispatch(
+            [
+                'binggan' => $user->binggan,
+                'user_id' => $user->id,
+                'active' => '用户更新了表情包',
+                'content' => '长度:' . mb_strlen($request->my_emoji),
+            ]
+        );
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '已设定我的表情包',
+                'data' => [
+                    'my_emoji' => json_encode($my_emoji->emojis),
                     'len' => mb_strlen($request['my_emoji']),
                 ]
             ],
