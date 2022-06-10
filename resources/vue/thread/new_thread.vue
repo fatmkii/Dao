@@ -625,6 +625,7 @@ export default {
         { value: 1, text: "24小时" },
         { value: 2, text: "48小时" },
         { value: 3, text: "72小时" },
+        { value: 7, text: "一周" },
         { value: 1095, text: "长期" },
       ],
       nissin_time_selected: 1,
