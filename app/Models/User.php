@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Redis;
 use App\Jobs\ProcessUserActive;
 use App\Models\IncomeStatement;
 use App\Jobs\ProcessIncomeStatement;
+use App\Models\UserMessages;
 
 class User extends Authenticatable
 {
@@ -291,6 +292,11 @@ class User extends Authenticatable
     public function IncomeStatement()
     {
         return $this->hasMany(IncomeStatement::class);
+    }
+
+    public function UserMessages()
+    {
+        return $this->hasMany(UserMessages::class);
     }
 
     public function getAdminForumsAttribute()

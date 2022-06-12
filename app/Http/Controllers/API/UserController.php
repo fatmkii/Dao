@@ -17,8 +17,10 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
 use App\Jobs\ProcessUserActive;
 use App\Jobs\ProcessUserCreatedLocation;
+use App\Models\AnnoucementMessages;
 use App\Models\IncomeStatement;
 use App\Models\UserLV;
+use App\Models\UserMessages;
 use Exception;
 
 class UserController extends Controller
@@ -271,6 +273,34 @@ class UserController extends Controller
         $token = $user->createToken($binggan, ['normal'])->plainTextToken;
         //用redis记录饼干申请ip。限定7天内只能申请1次。
         Redis::setex('reg_record_' . $request->ip(), 7 * 24 * 3600, 1);
+
+        //对新用户检查公告并拉取
+        $annoucement_ids_all = AnnoucementMessages::where('type', 1) //type = 1是全体公告
+            ->where('to_new_users', true)   //to_new_users==true则一定可以拉取
+            ->pluck('id');
+
+        $annoucement_ids_to_pull = $annoucement_ids_all; //对于新用户来说，必然拉取全部公告
+        //在UserMessages插入相应公告
+        if (!emptyArray($annoucement_ids_to_pull)) {
+            $user->new_msg = true;
+            $user->save();
+            //如果有存在需要新用户看的公告，则new_msg设为true
+            $annoucements = AnnoucementMessages::whereIn('id', $annoucement_ids_to_pull)->get();
+            foreach ($annoucements as $annoucement) {
+                UserMessages::insert(
+                    [
+                        'user_id' => $user->id,
+                        'annoucement_id' => $annoucement->id,
+                        'user_msg_group_id' => null,
+                        'title' => $annoucement->title,
+                        'sub_title' => $annoucement->sub_title,
+                        'is_read' => false,
+                        'is_deleted' => false,
+                        'created_at' => Carbon::now(),
+                    ]
+                );
+            }
+        }
 
         //记录申请饼干IP所在地
         ProcessUserCreatedLocation::dispatch(
@@ -619,7 +649,7 @@ class UserController extends Controller
             if (mb_strlen($request[$name]) + mb_strlen($my_emoji->emojis) > $user_lv[$name]) {
                 return response()->json([
                     'code' => ResponseCode::USER_ERROR,
-                    'message' => $error_msg . '长度为' . mb_strlen($request[$name]) + mb_strlen($my_emoji->emojis) . '。已超出了最大限制，可在个人中心升级限制。',
+                    'message' => $error_msg . '长度为' . (mb_strlen($request[$name]) + mb_strlen($my_emoji->emojis)) . '。已超出了最大限制，可在个人中心升级限制。',
                 ]);
             }
         }
@@ -865,6 +895,112 @@ class UserController extends Controller
             [
                 'code' => ResponseCode::SUCCESS,
                 'message' => '成功升级饼干！',
+            ]
+        );
+    }
+
+    //查询站内消息列表
+    public function show_messages_index(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'page' => 'integer|nullable',
+            'per_page' => 'integer|nullable|max:100|min:1',
+        ]);
+        $user = $request->user; //从sanctum的token获得饼干
+
+        //如果有消息标记，则检查公告并拉取
+        if ($user->new_msg == true) {
+            $annoucement_ids_pulled = UserMessages::where('user_id', $user->id)->whereNot('annoucement_id', null)->pluck('announcement_id');
+            $annoucement_ids_all = AnnoucementMessages::where('type', 1) //type = 1是全体公告
+                ->where('to_new_users', true)   //to_new_users==true则一定可以拉取
+                ->orWhere(function ($query) use ($user) { //又或者to_new_users==false，但created_at在user的created_at之后
+                    $query->where('to_new_users', false)
+                        ->where('created_at', '>', $user->created_at);
+                })
+                ->pluck('id');
+            $annoucement_ids_to_pull = array_diff_key($annoucement_ids_all, $annoucement_ids_pulled);
+
+            //在UserMessages插入相应公告
+            if (!emptyArray($annoucement_ids_to_pull)) {
+                $annoucements = AnnoucementMessages::whereIn('id', $annoucement_ids_to_pull)->get();
+                foreach ($annoucements as $annoucement) {
+                    UserMessages::insert(
+                        [
+                            'user_id' => $user->id,
+                            'annoucement_id' => $annoucement->id,
+                            'user_msg_group_id' => null,
+                            'title' => $annoucement->title,
+                            'sub_title' => $annoucement->sub_title,
+                            'is_read' => false,
+                            'is_deleted' => false,
+                            'created_at' => Carbon::now(),
+                        ]
+                    );
+                }
+            }
+        }
+
+        $per_page = $request->per_page == null ? 20 : $request->per_page; //默认20个每页
+        $messages_index = UserMessages::where('user_id', $user->id)->paginate($per_page);
+
+        $user->new_msg = false;
+        $user->save();
+
+        // UserMessages::where('user_id', $user->id)->where('is_read', false)->update(['is_read' => true]);//将
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '返回站内消息列表',
+                'data' => array(
+                    "user_messages" => $messages_index,
+                )
+            ]
+        );
+    }
+
+
+    public function show_messages_content(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'type' => 'required|stirng',
+            'announcement_id' => 'required_without:user_msg_group_id|integer',
+            'user_msg_group_id' => 'required_without:announcement_id|integer',
+        ]);
+        $user = $request->user;
+
+        switch ($request->type) {
+            case 'annoucement': {
+                    $result = AnnoucementMessages::find($request->annoucement_id);
+                    if (!$result) {
+                        return response()->json([
+                            'code' => ResponseCode::ANNOUCEMENT_NOT_FOUND,
+                            'message' => ResponseCode::$codeMap[ResponseCode::ANNOUCEMENT_NOT_FOUND],
+                        ]);
+                    }
+                    UserMessages::where('user_id', $user->id)
+                        ->where('annoucement_id', $request->annoucement_id)
+                        ->update(['is_read' => true]);
+                    break;
+                }
+            case 'user_msg_group': {
+                    //用户私信功能还没做
+                    break;
+                }
+            default: {
+                    return response()->json([
+                        'code' => 422,
+                        'message' => '请求参数有误',
+                    ]);
+                }
+        }
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '返回站内消息详细内容',
+                'data' => $result,
             ]
         );
     }
