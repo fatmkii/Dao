@@ -619,7 +619,7 @@ class UserController extends Controller
             if (mb_strlen($request[$name]) + mb_strlen($my_emoji->emojis) > $user_lv[$name]) {
                 return response()->json([
                     'code' => ResponseCode::USER_ERROR,
-                    'message' => $error_msg . '长度为' . mb_strlen($request[$name]) + mb_strlen($my_emoji->emojis) . '。已超出了最大限制，可在个人中心升级限制。',
+                    'message' => $error_msg . '长度为' . (mb_strlen($request[$name]) + mb_strlen($my_emoji->emojis)) . '。已超出了最大限制，可在个人中心升级限制。',
                 ]);
             }
         }
