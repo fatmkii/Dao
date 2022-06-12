@@ -1,6 +1,6 @@
 $themes: (
     hdao: (
-        //背景色、0= 整体背景色 1=主题色（浅） 2=主题色（深） 3=浅灰色（导航栏等）4=深灰色（小岛号码圆点等） 5=白色 6=通常为透明色 input=输入框颜色
+        //背景色、0= 整体背景色 1=主题色（浅） 2=主题色（深） 3=浅灰色（导航栏等）4=深灰色（小岛号码圆点等） 5=白色 6=通常为透明色 8=置顶标题栏  input=输入框颜色
         background_color0: #eefaee,
         background_color1: #eefaee,
         background_color2: #dff0d8,
@@ -9,6 +9,7 @@ $themes: (
         background_color5: #ffffff,
         background_color6: transparent,
         background_color7: #ffffff,
+        background_color8: #d7f2cc,
         background_color_hover: #dff0d8,
         //主要前景色、图标颜色等
         icon_color1: #5fb878,
@@ -36,7 +37,7 @@ $themes: (
         font_color_input: #444,
         //导航栏
         font_color_nav: #444,
-        background_color_nav: #eee,
+        background_color_nav: #dff0d8,
         //按钮系列
         // btn_color: #fff,
         // btn_background_color: #28a745,
@@ -44,10 +45,10 @@ $themes: (
         // btn_background_color_hover: #218838,
         // btn_border_color: #28a745,
         // btn_border_color_hover: #1e7e34,
-        // btn_box_shadow: rgb(72 180 97 / 50%),,,,,,,,,,
+        // btn_box_shadow: rgb(72 180 97 / 50%)
     ),
     night: (
-        //背景色、0= 整体背景色 1=主题色（浅） 2=主题色（深） 3=浅灰色（导航栏等）4=深灰色（小岛号码圆点等） 5=白色 6=通常为透明色 input=输入框颜色
+        //背景色、0= 整体背景色 1=主题色（浅） 2=主题色（深） 3=浅灰色（导航栏等）4=深灰色（小岛号码圆点等） 5=白色 6=通常为透明色 8=置顶标题栏  input=输入框颜色
         background_color0: #1d2939,
         background_color1: #ccc,
         background_color2: #424a54,
@@ -56,6 +57,7 @@ $themes: (
         background_color5: #1d2939,
         background_color6: transparent,
         background_color7: #424a54,
+        background_color8: #424a54,
         background_color_hover: #424a54,
         //主要前景色、图标颜色等
         icon_color1: #bdbbbb,
@@ -87,8 +89,8 @@ $themes: (
         background_color_nav: #424a54,
     ),
     gray: (
-        //背景色、0= 整体背景色 1=主题色（浅） 2=主题色（深） 3=浅灰色（导航栏等）4=深灰色（小岛号码圆点等） 5=白色 6=通常为透明色 input=输入框颜色
-        background_color0: #eff0f0,
+        //背景色、0= 整体背景色 1=主题色（浅） 2=主题色（深） 3=浅灰色（导航栏等）4=深灰色（小岛号码圆点等） 5=白色 6=通常为透明色 8=置顶标题栏  input=输入框颜色
+        background_color0: #f4f5f5,
         background_color1: #eff0f0,
         background_color2: #eff0f0,
         background_color3: #eee,
@@ -96,7 +98,8 @@ $themes: (
         background_color5: #ffffff,
         background_color6: transparent,
         background_color7: #eff0f0,
-        background_color_hover: #eee,
+        background_color8: #e5e5e5,
+        background_color_hover: #e5e5e5,
         //主要前景色、图标颜色等
         icon_color1: #aaaaaa,
         icon_color2: #777,
@@ -123,7 +126,7 @@ $themes: (
         font_color_input: #444,
         //导航栏
         font_color_nav: #444,
-        background_color_nav: #eee,
+        background_color_nav: #e5e5e5,
         //按钮系列
         // btn_color: #fff,
         // btn_background_color: #28a745,
@@ -131,6 +134,6 @@ $themes: (
         // btn_background_color_hover: #218838,
         // btn_border_color: #28a745,
         // btn_border_color_hover: #1e7e34,
-        // btn_box_shadow: rgb(72 180 97 / 50%),,,,,,,,,,
+        // btn_box_shadow: rgb(72 180 97 / 50%)
     ),
 );
