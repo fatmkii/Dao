@@ -54,9 +54,14 @@ body {
 //日清图
 .nissined_img {
     position: fixed;
-    top: 40%;
-    left: 50%;
-    margin-left: -250px;
+    @media all and (min-width: 625px) {
+        left: calc(50% - 250px);
+    }
+    @media not all and (min-width: 625px) {
+        left: 10%;
+    }
+    max-width: 80%;
+    width: 500px;
 }
 
 //侧边栏及其他

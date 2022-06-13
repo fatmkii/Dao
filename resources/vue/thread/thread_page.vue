@@ -422,13 +422,18 @@
     </div>
 
     <img
-      src="https://s4.ax1x.com/2022/02/05/HmSh60.png"
+      src="https://oss.cpttmm.com/xhg_other/notice_2.png"
       v-if="posts_load_status && thread_reject_code == 23410"
       class="nissined_img"
     />
     <img
-      src="https://s4.ax1x.com/2022/02/05/HmSEeU.png"
+      src="https://oss.cpttmm.com/xhg_other/notice_3.png"
       v-if="posts_load_status && thread_reject_code == 23401"
+      class="nissined_img"
+    />
+    <img
+      src="https://oss.cpttmm.com/xhg_other/notice_1.png"
+      v-if="posts_load_status && thread_reject_code == 234011"
       class="nissined_img"
     />
 
@@ -1100,8 +1105,12 @@ export default {
               this.load_focus_threads();
             });
           } else {
-            if (response.data.code == 23410 || response.data.code == 23401) {
+            if ([23410, 23401, 234011].includes(response.data.code)) {
               this.thread_reject_code = response.data.code;
+              //清空数据，避免显示上一个帖子的数据
+              this.$store.commit("PostsData_set", ""); 
+              this.$store.commit("CurrentThreadData_set", "");
+              this.$store.commit("CurrentForumData_set", "");
             } else {
               alert(response.data.message);
             }
@@ -1577,7 +1586,11 @@ export default {
     },
     browse_record_handle() {
       //写入本次阅读进度
-      if (this.browse_current.page <= this.page && this.posts_data.length > 1) {
+      if (
+        this.browse_current.page <= this.page &&
+        this.posts_data != null   &&
+        this.posts_data.length > 1
+      ) {
         this.browse_current.page = this.page;
         this.$store.commit("BrowseLogger_set", {
           suffix: this.thread_id.toString(),
