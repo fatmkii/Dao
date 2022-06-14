@@ -206,16 +206,6 @@
             </template>
           </PostItem>
         </div>
-        <div>
-          <PostItem
-            v-if="preview_show"
-            :post_data="preview_post_data"
-            :thread_anti_jingfen="0"
-            :admin_button_show="false"
-            :no_image_mode="no_image_mode"
-            :no_emoji_mode="no_emoji_mode"
-          ></PostItem>
-        </div>
       </div>
       <div class="row align-items-center">
         <div class="col-auto">
@@ -244,45 +234,16 @@
           ></ThreadPaginator>
         </div>
       </div>
-      <div class="my-2 row d-inline-flex" style="font-size: 0.875rem">
-        <div class="col-auto pr-0">昵称</div>
-        <div class="col-auto d-inline-flex">
-          <b-form-checkbox
-            class="mr-auto ml-2"
-            v-model="emoji_auto_hide"
-            switch
-          >
-            表情包自动收起
-          </b-form-checkbox>
-          <b-form-checkbox
-            class="mr-auto ml-2"
-            v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
-            v-model="post_with_admin"
-            v-b-popover.hover.left="'名字会显示红色'"
-            switch
-          >
-            管理员
-          </b-form-checkbox>
-        </div>
-      </div>
-      <b-form-input
-        id="nickname_input"
-        v-model="nickname_input"
-        class="nickname_input"
-      ></b-form-input>
-      <Emoji
-        :heads_id="random_heads_group"
-        :emoji_auto_hide="emoji_auto_hide"
-        @emoji_append="emoji_append"
-      ></Emoji>
-      <div class="my-2 row align-items-center" style="font-size: 0.875rem">
-        <div class="col-auto pr-0">内容</div>
-        <div class="col-auto d-inline-flex">
-          <b-form-checkbox class="ml-2" v-model="preview_show" switch>
-            实时预览
-          </b-form-checkbox>
-        </div>
-        <div class="col-auto ml-auto">
+      <PostInput
+        ref="post_input_com"
+        :input_disable="
+          !this.$store.state.User.LoginStatus ||
+          Boolean(locked_TTL) ||
+          new_post_handling
+        "
+        :new_post_handling="new_post_handling"
+        @content_commit="new_post_handle"
+        ><template v-slot:svg_icon>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="28"
@@ -297,90 +258,9 @@
             />
             <path
               d="M3.051 3.26a.5.5 0 0 1 .354-.613l1.932-.518a.5.5 0 0 1 .62.39c.655-.079 1.35-.117 2.043-.117.72 0 1.443.041 2.12.126a.5.5 0 0 1 .622-.399l1.932.518a.5.5 0 0 1 .306.729c.14.09.266.19.373.297.408.408.78 1.05 1.095 1.772.32.733.599 1.591.805 2.466.206.875.34 1.78.364 2.606.024.816-.059 1.602-.328 2.21a1.42 1.42 0 0 1-1.445.83c-.636-.067-1.115-.394-1.513-.773-.245-.232-.496-.526-.739-.808-.126-.148-.25-.292-.368-.423-.728-.804-1.597-1.527-3.224-1.527-1.627 0-2.496.723-3.224 1.527-.119.131-.242.275-.368.423-.243.282-.494.575-.739.808-.398.38-.877.706-1.513.773a1.42 1.42 0 0 1-1.445-.83c-.27-.608-.352-1.395-.329-2.21.024-.826.16-1.73.365-2.606.206-.875.486-1.733.805-2.466.315-.722.687-1.364 1.094-1.772a2.34 2.34 0 0 1 .433-.335.504.504 0 0 1-.028-.079zm2.036.412c-.877.185-1.469.443-1.733.708-.276.276-.587.783-.885 1.465a13.748 13.748 0 0 0-.748 2.295 12.351 12.351 0 0 0-.339 2.406c-.022.755.062 1.368.243 1.776a.42.42 0 0 0 .426.24c.327-.034.61-.199.929-.502.212-.202.4-.423.615-.674.133-.156.276-.323.44-.504C4.861 9.969 5.978 9.027 8 9.027s3.139.942 3.965 1.855c.164.181.307.348.44.504.214.251.403.472.615.674.318.303.601.468.929.503a.42.42 0 0 0 .426-.241c.18-.408.265-1.02.243-1.776a12.354 12.354 0 0 0-.339-2.406 13.753 13.753 0 0 0-.748-2.295c-.298-.682-.61-1.19-.885-1.465-.264-.265-.856-.523-1.733-.708-.85-.179-1.877-.27-2.913-.27-1.036 0-2.063.091-2.913.27z"
-            />
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="currentColor"
-            class="icon-drawer bi bi-pencil ml-3"
-            viewBox="0 0 16 16"
-            @click="modal_toggle('drawer_modal')"
-          >
-            <path
-              d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"
-            />
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="currentColor"
-            class="icon-revoke bi bi-reply-all ml-3"
-            viewBox="0 0 16 16"
-            v-b-popover.hover.left="'撤销'"
-            @click="content_input_revoke"
-          >
-            <path
-              d="M8.098 5.013a.144.144 0 0 1 .202.134V6.3a.5.5 0 0 0 .5.5c.667 0 2.013.005 3.3.822.984.624 1.99 1.76 2.595 3.876-1.02-.983-2.185-1.516-3.205-1.799a8.74 8.74 0 0 0-1.921-.306 7.404 7.404 0 0 0-.798.008h-.013l-.005.001h-.001L8.8 9.9l-.05-.498a.5.5 0 0 0-.45.498v1.153c0 .108-.11.176-.202.134L4.114 8.254a.502.502 0 0 0-.042-.028.147.147 0 0 1 0-.252.497.497 0 0 0 .042-.028l3.984-2.933zM9.3 10.386c.068 0 .143.003.223.006.434.02 1.034.086 1.7.271 1.326.368 2.896 1.202 3.94 3.08a.5.5 0 0 0 .933-.305c-.464-3.71-1.886-5.662-3.46-6.66-1.245-.79-2.527-.942-3.336-.971v-.66a1.144 1.144 0 0 0-1.767-.96l-3.994 2.94a1.147 1.147 0 0 0 0 1.946l3.994 2.94a1.144 1.144 0 0 0 1.767-.96v-.667z"
-            />
-            <path
-              d="M5.232 4.293a.5.5 0 0 0-.7-.106L.54 7.127a1.147 1.147 0 0 0 0 1.946l3.994 2.94a.5.5 0 1 0 .593-.805L1.114 8.254a.503.503 0 0 0-.042-.028.147.147 0 0 1 0-.252.5.5 0 0 0 .042-.028l4.012-2.954a.5.5 0 0 0 .106-.699z"
-            />
-          </svg>
-        </div>
-      </div>
-      <textarea
-        id="content_input"
-        class="content_input form-control"
-        @change="content_input_change"
-        v-model="content_input"
-        :rows="content_input_rows"
-        ref="content_input"
-        :disabled="
-          !this.$store.state.User.LoginStatus ||
-          Boolean(locked_TTL) ||
-          new_post_handling
-        "
-        @keyup.ctrl.enter="new_post_handle"
-        :style="post_content_css"
-      ></textarea>
-      <div class="d-flex align-items-center mt-2">
-        <div v-if="this.forum_id === 419">
-          <b-form-file
-            browse-text="上传图片"
-            size="sm"
-            placeholder="未选择"
-            accept="image/jpeg, image/png, image/gif"
-            style="max-width: 300px"
-            :disabled="!this.$store.state.User.LoginStatus"
-            @input="upload_img_handle($event, 'img')"
-          ></b-form-file>
-          <b-spinner
-            class="spinner img-uploading"
-            v-show="upload_img_handling"
-            label="上传中"
-          >
-          </b-spinner>
-        </div>
-        <Imgtu v-if="this.forum_id !== 419 && this.forum_id !== 0"></Imgtu>
-        <!-- <Imgtu></Imgtu> -->
-        <div class="ml-auto">
-          <b-button
-            variant="success"
-            class="ml-2 float-right"
-            :disabled="
-              !this.$store.state.User.LoginStatus ||
-              Boolean(locked_TTL) ||
-              new_post_handling
-            "
-            v-b-popover.hover.left="'可以Ctrl+Enter喔'"
-            @click="new_post_handle"
-            >{{ new_post_handling ? "提交中" : "回复" }}
-          </b-button>
-        </div>
-      </div>
+            /></svg
+        ></template>
+      </PostInput>
       <div class="row align-items-center mt-2">
         <div class="col-auto ml-auto" style="font-size: 0.875rem">
           <span v-if="!this.$store.state.User.LoginStatus">
@@ -666,51 +546,6 @@
           </b-button-group>
         </template>
       </b-modal>
-      <b-modal ref="battle_modal" id="battle_modal" class="battle_modal">
-        <template v-slot:modal-header>
-          <h5>表情包大乱斗！</h5>
-        </template>
-        <template v-slot:default>
-          <p>问苍茫大地 谁主沉浮</p>
-          <div class="my-1">
-            <b-input-group prepend="主题：" class="mt-1">
-              <b-form-select
-                v-model="battle_chara_group_id"
-                :options="battle_chara_group_options"
-              ></b-form-select>
-            </b-input-group>
-            <b-input-group prepend="角色：" class="mt-1">
-              <b-form-select
-                v-model="battle_chara_id"
-                :options="battle_chara_options"
-              ></b-form-select>
-            </b-input-group>
-            <div class="mt-1">
-              <b-input-group prepend="下注：">
-                <b-form-input
-                  v-model="battle_olo"
-                  autofocus
-                  @keyup.enter="battle_handle"
-                ></b-form-input>
-              </b-input-group>
-            </div>
-          </div>
-        </template>
-        <template v-slot:modal-footer="{ cancel }">
-          <span v-if="!thread_can_battle">本主题不能发起大乱斗</span>
-          <b-button-group>
-            <b-button
-              variant="success"
-              :disabled="roll_handling || !thread_can_battle"
-              @click="battle_handle"
-              >Fight！</b-button
-            >
-            <b-button variant="outline-secondary" @click="cancel()">
-              取消
-            </b-button>
-          </b-button-group>
-        </template>
-      </b-modal>
       <b-modal ref="captcha_modal" id="captcha_modal" class="captcha_modal">
         <template v-slot:modal-header>反脚本验证</template>
         <template v-slot:default>
@@ -744,42 +579,8 @@
           </b-button-group>
         </template>
       </b-modal>
-      <b-modal
-        ref="drawer_modal"
-        id="drawer_modal"
-        class="drawer_modal"
-        centered
-      >
-        <template v-slot:modal-header>
-          <span style="font-size: 1rem">涂鸦板</span>
-        </template>
-        <template v-slot:default>
-          <Drawer
-            @upload_emit="upload_img_handle"
-            @drawer_click="modal_toggle('drawer_modal')"
-            ref="drawer_component"
-          ></Drawer>
-        </template>
-        <template v-slot:modal-footer="{ cancel }">
-          <b-form-file
-            browse-text="插入"
-            size="sm"
-            placeholder=""
-            accept="image/jpeg, image/png, image/gif"
-            style="max-width: 45px"
-            class="mr-auto"
-            @input="drawer_insert"
-          ></b-form-file>
-          <b-button-group>
-            <b-button variant="success" size="sm" @click="upload_drawer_click"
-              >上传</b-button
-            >
-            <b-button variant="outline-secondary" size="sm" @click="cancel()">
-              取消
-            </b-button>
-          </b-button-group>
-        </template>
-      </b-modal>
+
+      <BattleModal ref="battle_modal"></BattleModal>
       <RewardModal ref="reward_modal"></RewardModal>
     </div>
   </div>
@@ -787,19 +588,22 @@
 
 <script>
 import { mapState } from "vuex";
-import PostItem from "./post_item.vue";
+import PostInput from "../component/post_input.vue";
+import PostItem from "../component/post_item.vue";
 import ThreadPaginator from "./thread_paginator.vue";
-import Emoji from "./emoji.vue";
+import Emoji from "../component/emoji.vue";
 import RewardModal from "./reward_modal.vue";
-import Drawer from "../drawer.vue";
+import Drawer from "../component/drawer.vue";
 import VoteComponent from "./vote.vue";
 import GambleComponent from "./gamble_component.vue";
 import Imgtu from "../imgtu.vue";
 import Battle from "./battle.vue";
+import BattleModal from "./battle_modal.vue";
 
 export default {
   components: {
     PostItem,
+    PostInput,
     ThreadPaginator,
     Emoji,
     RewardModal,
@@ -808,6 +612,7 @@ export default {
     GambleComponent,
     Imgtu,
     Battle,
+    BattleModal,
   },
   props: {
     thread_id: Number, //来自router，
@@ -824,9 +629,7 @@ export default {
         this.get_posts_data(false, true);
       }
     },
-    post_with_admin() {
-      this.nickname_input = this.post_with_admin ? "管理员" : "= =";
-    },
+
     emoji_auto_hide() {
       localStorage.setItem(
         "emoji_auto_hide",
@@ -848,16 +651,6 @@ export default {
     no_roll_mode() {
       localStorage.setItem("no_roll_mode", this.no_roll_mode ? "true" : "");
     },
-    battle_chara_group_id() {
-      if (
-        this.$store.state.User.CharaIndex[this.battle_chara_group_id] !=
-        undefined
-      ) {
-        this.battle_chara_options =
-          this.$store.state.User.CharaIndex[this.battle_chara_group_id];
-      }
-      this.battle_chara_id = this.battle_chara_options[0].value;
-    },
   },
   beforeRouteUpdate(to, from, next) {
     this.browse_record_handle(); //翻页时候记录浏览进度
@@ -867,31 +660,25 @@ export default {
     return {
       name: "thread_page",
       new_post_handling: false,
-      content_input_array: [""],
-      content_input: "",
+      content_temp: {}, //如果弹出验证码时，临时存储PostInput组件传过来的内容
       roll_name: "",
       roll_event: "",
       roll_num: 1,
       roll_range: 100,
       roll_handling: false,
       admin_button_show: false,
-      preview_show: false,
-      post_with_admin: false,
+
       jump_floor: "",
       jump_page: "",
       jump_page_show: false,
-      battle_olo: 100,
-      battle_chara_id: 8,
-      battle_chara_group_id: 0,
-      battle_chara_options: this.$store.state.User.CharaIndex[0],
+
       z_bar_show: false,
       no_image_mode: false,
       no_emoji_mode: false,
       no_head_mode: false,
       no_battle_mode: false,
       no_roll_mode: false,
-      emoji_auto_hide: true,
-      upload_img_handling: false,
+
       browse_current: {
         expire_time: Date.now() + 86400000,
         page: 1,
@@ -910,14 +697,6 @@ export default {
     };
   },
   computed: {
-    nickname_input: {
-      get() {
-        return this.$store.state.User.NickName;
-      },
-      set(value) {
-        this.$store.commit("NickName_set", value);
-      },
-    },
     nissin_TTL() {
       const seconds =
         (Date.parse(
@@ -943,50 +722,7 @@ export default {
         return null;
       }
     },
-    content_input_rows() {
-      const lines = (this.content_input.match(/\n/g) || "").length + 2;
-      if (lines < 5) {
-        return 5;
-      } else if (lines > 10) {
-        return 10;
-      } else {
-        return lines;
-      }
-    },
-    preview_post_data() {
-      return {
-        content: this.content_input,
-        created_at: "预览中……",
-        floor: 0,
-        is_deleted: 0,
-        is_your_post: false,
-        nickname: this.nickname_input,
-      };
-    },
-    post_content_css() {
-      return {
-        lineHeight: this.$store.state.MyCSS.PostsLineHeight + "px",
-        fontSize: this.$store.state.MyCSS.PostsFontSize + "px",
-      };
-    },
-    battle_chara_group_options() {
-      var group_options = [{ value: 0, text: "共通" }];
-      if (this.$store.state.Threads.CurrentThreadData) {
-        const random_heads_group =
-          this.$store.state.Threads.CurrentThreadData.random_heads_group;
-        if (
-          random_heads_group != 1 &&
-          this.$store.state.User.CharaGroupIndex[random_heads_group - 1] !=
-            undefined
-        ) {
-          this.battle_chara_group_id = random_heads_group - 1; //random_heads_group是从1开始数的
-          const chara_group =
-            this.$store.state.User.CharaGroupIndex[random_heads_group - 1];
-          group_options.push(chara_group);
-        }
-      }
-      return group_options;
-    },
+
     posts_data() {
       var filtered = this.$store.state.Posts.PostsData.data;
       //当屏蔽大乱斗点时，过滤不需要的数据
@@ -1020,7 +756,6 @@ export default {
         state.Forums.CurrentForumData.id ? state.Forums.CurrentForumData.id : 0,
       thread_title: (state) => state.Threads.CurrentThreadData.title,
       thread_sub_id: (state) => state.Threads.CurrentThreadData.sub_id,
-      thread_can_battle: (state) => state.Threads.CurrentThreadData.can_battle,
       thread_anti_jingfen: (state) =>
         state.Threads.CurrentThreadData.anti_jingfen,
       thread_posts_num: (state) => state.Threads.CurrentThreadData.posts_num,
@@ -1163,10 +898,10 @@ export default {
         .then((response) => {
           if (response.data.code == 200) {
             if (this.last_action == "new_post") {
-              this.new_post_handle();
+              this.new_post_handle(this.content_temp);
             }
             if (this.last_action == "new_battle") {
-              this.battle_handle();
+              this.$refs.battle_modal.battle_handle();
             }
             this.modal_toggle("captcha_modal");
           } else {
@@ -1289,7 +1024,7 @@ export default {
     back_to_forum() {
       this.$router.push({ name: "forum", params: { forum_id: this.forum_id } });
     },
-    new_post_handle() {
+    new_post_handle(content) {
       this.new_post_handling = true;
       this.last_action = "new_post";
       const config = {
@@ -1299,9 +1034,9 @@ export default {
           binggan: this.$store.state.User.Binggan,
           forum_id: this.forum_id,
           thread_id: this.thread_id,
-          content: this.content_input,
-          nickname: this.nickname_input,
-          post_with_admin: this.post_with_admin,
+          content: content.content_input,
+          nickname: content.nickname_input,
+          post_with_admin: content.post_with_admin,
           new_post_key: CryptoJS.MD5(
             this.thread_id + this.$store.state.User.Binggan
           ).toString(),
@@ -1318,11 +1053,12 @@ export default {
                 appendToast: true,
               });
             }
-            this.content_input = "";
+            this.$refs.post_input_com.content_input = "";
             this.new_post_handling = false;
             this.get_posts_data();
           } else if (response.data.code == 244291) {
             this.new_post_handling = false;
+            this.content_temp = content;
             this.show_captcha();
           } else {
             this.new_post_handling = false;
@@ -1334,63 +1070,7 @@ export default {
           alert(Object.values(error.response.data.errors)[0]);
         });
     },
-    content_input_change() {
-      this.content_input_array.unshift(this.content_input);
-      if (this.content_input_array.length > 20) {
-        this.content_input_array.pop();
-      }
-    },
-    content_input_revoke() {
-      if (this.content_input_array.length > 1) {
-        this.content_input_array.shift();
-        this.content_input = this.content_input_array[0];
-      }
-    },
-    upload_img_handle(file, mode) {
-      if (!file) return;
-      this.upload_img_handling = true;
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("mode", mode);
-      formData.append("binggan", this.$store.state.User.Binggan);
-      formData.append("thread_id", this.thread_id); //正常上传要提供thread_id，新主题要传入0
-      formData.append("forum_id", this.forum_id);
-      const config = {
-        method: "post",
-        url: "/api/img_upload",
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-        data: formData,
-      };
-      axios(config)
-        .then((response) => {
-          this.upload_img_handling = false;
-          this.content_input += "<img src='" + response.data.file_url + "' >";
-          this.content_input_change();
-        })
-        .catch((error) => {
-          this.upload_img_handling = false;
-          alert(error);
-        });
-    },
-    emoji_append(emoji_src) {
-      let textarea = document.getElementById("content_input");
-      this.content_input = this.insertAtCursor(
-        textarea,
-        "<img src='" + emoji_src + "' class='emoji_img'>"
-      );
-      this.content_input_change();
-      this.$refs.content_input.focus();
-    },
-    quote_click_handle(quote_content) {
-      this.content_input = quote_content;
-      this.content_input_change();
-      document
-        .querySelector("#content_input")
-        .scrollIntoView({ block: "start", behavior: "auto" });
-      this.$refs.content_input.focus();
-    },
+
     scroll_icon_click(position) {
       switch (position) {
         case "top":
@@ -1403,9 +1083,6 @@ export default {
     },
     modal_toggle(modal_name) {
       this.$refs[modal_name].toggle();
-    },
-    upload_drawer_click() {
-      this.$refs.drawer_component.upload();
     },
     roll_handle() {
       this.roll_handling = true;
@@ -1430,49 +1107,9 @@ export default {
               autoHideDelay: 1500,
               appendToast: true,
             });
-            this.content_input = "";
             this.roll_handling = false;
             this.$refs["roll_modal"].hide();
             this.get_posts_data();
-          } else {
-            this.roll_handling = false;
-            alert(response.data.message);
-          }
-        })
-        .catch((error) => {
-          this.roll_handling = false;
-          alert(Object.values(error.response.data.errors)[0]);
-        });
-    },
-    battle_handle() {
-      this.roll_handling = true;
-      this.last_action = "new_battle";
-      const config = {
-        method: "post",
-        url: "/api/battles",
-        data: {
-          binggan: this.$store.state.User.Binggan,
-          forum_id: this.forum_id,
-          thread_id: this.thread_id,
-          chara_group: this.battle_chara_group_id,
-          battle_olo: this.battle_olo,
-          chara_id: this.battle_chara_id,
-        },
-      };
-      axios(config)
-        .then((response) => {
-          if (response.data.code == 200) {
-            this.$bvToast.toast(response.data.message, {
-              title: "Done.",
-              autoHideDelay: 1500,
-              appendToast: true,
-            });
-            this.roll_handling = false;
-            this.$refs["battle_modal"].hide();
-            this.get_posts_data();
-          } else if (response.data.code == 244291) {
-            this.roll_handling = false;
-            this.show_captcha();
           } else {
             this.roll_handling = false;
             alert(response.data.message);
@@ -1505,6 +1142,9 @@ export default {
       }
       this.$router.push(link);
       this.$refs["jump_modal"].hide();
+    },
+    quote_click_handle(quote_content) {
+      this.$refs.post_input_com.quote_click_handle(quote_content);
     },
     thread_set_top() {
       if (this.thread_sub_id === 0) {
@@ -1591,41 +1231,7 @@ export default {
     emit_reward(payload) {
       this.$refs.reward_modal.reward_click(payload);
     },
-    drawer_insert(file) {
-      this.$refs.drawer_component.drawer_insert(file);
-    },
-    insertAtCursor(f, value) {
-      /* eslint-disable */
-      let field = f;
-      let newValue = "";
-      // IE support
-      if (document.selection) {
-        field.focus();
-        const sel = document.selection.createRange();
-        sel.text = newValue = value;
-        sel.select();
-      } else if (field.selectionStart || field.selectionStart === 0) {
-        const startPos = field.selectionStart;
-        const endPos = field.selectionEnd;
-        const restoreTop = field.scrollTop;
-        newValue =
-          field.value.substring(0, startPos) +
-          value +
-          field.value.substring(endPos, field.value.length);
-        if (restoreTop > 0) {
-          field.scrollTop = restoreTop;
-        }
-        field.focus();
-        setTimeout(() => {
-          field.selectionStart = startPos + value.length;
-          field.selectionEnd = startPos + value.length;
-        }, 0);
-      } else {
-        newValue = field.value + value;
-        field.focus();
-      }
-      return newValue;
-    },
+
     keyup_callee(event) {
       if (event.ctrlKey && event.key === "q") {
         this.get_posts_data(true, false);

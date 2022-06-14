@@ -587,8 +587,8 @@
 
 
 <script>
-import Emoji from "./emoji.vue";
-import PostItem from "./post_item.vue";
+import Emoji from "../component/emoji.vue";
+import PostItem from "../component/post_item.vue";
 import Imgtu from "../imgtu.vue";
 
 export default {
