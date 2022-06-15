@@ -730,28 +730,29 @@ export default {
         return null;
       }
     },
-
     posts_data() {
       var filtered = this.$store.state.Posts.PostsData.data;
-      //当屏蔽大乱斗点时，过滤不需要的数据
-      if (this.no_battle_mode == true) {
-        filtered = filtered.filter((post) => {
-          if (post.battle_id != null) {
-            return false;
-          } else {
-            return true;
-          }
-        });
-      }
-      //当屏蔽roll点时，过滤不需要的数据
-      if (this.no_roll_mode == true) {
-        filtered = filtered.filter((post) => {
-          if (post.created_by_admin == 2 && post.nickname == "Roll点系统") {
-            return false;
-          } else {
-            return true;
-          }
-        });
+      if (filtered !== undefined) {
+        //当屏蔽大乱斗点时，过滤不需要的数据
+        if (this.no_battle_mode == true) {
+          filtered = filtered.filter((post) => {
+            if (post.battle_id != null) {
+              return false;
+            } else {
+              return true;
+            }
+          });
+        }
+        //当屏蔽roll点时，过滤不需要的数据
+        if (this.no_roll_mode == true) {
+          filtered = filtered.filter((post) => {
+            if (post.created_by_admin == 2 && post.nickname == "Roll点系统") {
+              return false;
+            } else {
+              return true;
+            }
+          });
+        }
       }
       return filtered;
     },
@@ -846,7 +847,7 @@ export default {
             if ([23410, 23401, 234011].includes(response.data.code)) {
               this.thread_reject_code = response.data.code;
               //清空数据，避免显示上一个帖子的数据
-              this.$store.commit("PostsData_set", ""); 
+              this.$store.commit("PostsData_set", "");
               this.$store.commit("CurrentThreadData_set", "");
               this.$store.commit("CurrentForumData_set", "");
             } else {
@@ -1233,7 +1234,7 @@ export default {
       //写入本次阅读进度
       if (
         this.browse_current.page <= this.page &&
-        this.posts_data != null   &&
+        this.posts_data != null &&
         this.posts_data.length > 1
       ) {
         this.browse_current.page = this.page;
