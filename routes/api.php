@@ -98,6 +98,8 @@ Route::prefix('user')->group(function () {
     Route::post('/my_emoji_add', [UserController::class, 'my_emoji_add'])->middleware('CheckBinggan:create');     //追加表情包
     Route::post('/water_unlock', [UserController::class, 'water_unlock'])->middleware('CheckBinggan:create');     //解除灌水锁定
     Route::post('/user_lv_up', [UserController::class, 'user_lv_up'])->middleware('CheckBinggan:create');
+    Route::post('/show_messages_index', [UserController::class, 'show_messages_index'])->middleware('CheckBinggan:show'); //获得站内消息列表
+    Route::post('/show_messages_content', [UserController::class, 'show_messages_content'])->middleware('CheckBinggan:show'); //获得站内消息具体内容
 });
 
 
@@ -111,6 +113,9 @@ Route::middleware('CheckTokenCan:admin', 'auth:sanctum')->prefix('admin')->group
     Route::post('/user_lock', [AdminController::class, 'user_lock']); //封id（临时）
     Route::post('/thread_set_top', [AdminController::class, 'thread_set_top']); //设置置顶
     Route::post('/thread_cancel_top', [AdminController::class, 'thread_cancel_top']); //取消置顶
+    Route::post('/create_annoucement', [AdminController::class, 'create_annoucement']); //发布站内公告
+    Route::get('/annoucement', [AdminController::class, 'show_annoucements']); //查看站内公告
+    Route::delete('/annoucement/{annoucement_id}', [AdminController::class, 'del_annoucements']); //查看站内公告
     // Route::post('/check_jingfen', [AdminController::class, 'check_jingfen']); //查精分
 });
 

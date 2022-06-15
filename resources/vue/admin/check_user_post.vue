@@ -75,7 +75,7 @@
 
 
 <script>
-import PostItem from "../thread/post_item.vue";
+import PostItem from "../component/post_item.vue";
 
 export default {
   components: { PostItem },
