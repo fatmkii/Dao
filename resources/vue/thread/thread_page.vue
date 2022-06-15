@@ -242,6 +242,9 @@
           new_post_handling
         "
         :new_post_handling="new_post_handling"
+        :random_heads_group="random_heads_group"
+        :forum_id="forum_id"
+        :thread_id="thread_id"
         @content_commit="new_post_handle"
         ><template v-slot:svg_icon>
           <svg
@@ -1034,9 +1037,12 @@ export default {
           binggan: this.$store.state.User.Binggan,
           forum_id: this.forum_id,
           thread_id: this.thread_id,
+
+          //来自PostInput组件
           content: content.content_input,
           nickname: content.nickname_input,
           post_with_admin: content.post_with_admin,
+
           new_post_key: CryptoJS.MD5(
             this.thread_id + this.$store.state.User.Binggan
           ).toString(),
@@ -1070,7 +1076,6 @@ export default {
           alert(Object.values(error.response.data.errors)[0]);
         });
     },
-
     scroll_icon_click(position) {
       switch (position) {
         case "top":
@@ -1231,7 +1236,6 @@ export default {
     emit_reward(payload) {
       this.$refs.reward_modal.reward_click(payload);
     },
-
     keyup_callee(event) {
       if (event.ctrlKey && event.key === "q") {
         this.get_posts_data(true, false);
@@ -1322,7 +1326,6 @@ export default {
         "no_battle_mode",
         "no_roll_mode"
       );
-
       //遍历读取上述LocalStorage
       for (var i = 0; i < localStorage_array.length; i++) {
         if (localStorage.getItem(localStorage_array[i]) == null) {

@@ -1,6 +1,14 @@
 <template>
   <div>
     <div>
+      <div
+        class="post_title px-1 py-2 h6 d-block d-lg-none d-xl-none"
+        v-if="preview_show && has_title"
+      >
+        <span style="word-wrap: break-word; white-space: normal"
+          >标题：{{ title_input }}</span
+        >
+      </div>
       <div>
         <PostItem
           v-if="preview_show"
@@ -36,6 +44,14 @@
         id="nickname_input"
         v-model="nickname_input"
         class="nickname_input"
+      ></b-form-input>
+      <div v-if="has_title" class="my-2" style="font-size: 0.875rem">标题</div>
+      <b-form-input
+        id="title_input"
+        v-if="has_title"
+        class="title_input"
+        placeholder="标题，必填"
+        v-model="title_input"
       ></b-form-input>
       <Emoji
         :heads_id="random_heads_group"
@@ -94,8 +110,9 @@
         @keyup.ctrl.enter="commit"
         :style="post_content_css"
       ></textarea>
+      <Imgtu v-if="this.forum_id !== 419 && this.forum_id !== 0"></Imgtu>
       <div class="d-flex align-items-center mt-2">
-        <div v-if="this.forum_id === 419">
+        <div v-if="this.forum_id === 419" class="d-flex align-items-center">
           <b-form-file
             browse-text="上传图片"
             size="sm"
@@ -106,18 +123,23 @@
             @input="upload_img_handle($event, 'img')"
           ></b-form-file>
           <b-spinner
-            class="spinner img-uploading"
+            class="spinner img-uploading ml-2"
             v-show="upload_img_handling"
             label="上传中"
           >
           </b-spinner>
         </div>
-        <Imgtu v-if="this.forum_id !== 419 && this.forum_id !== 0"></Imgtu>
-        <!-- <Imgtu></Imgtu> -->
-        <div class="ml-auto">
+        <div class="ml-auto d-flex align-items-center">
+          <b-form-checkbox
+            v-if="has_delay"
+            v-model="is_delay"
+            v-b-popover.hover.bottom="'自动在第二天8点发出'"
+          >
+            延时发送
+          </b-form-checkbox>
           <b-button
             variant="success"
-            class="ml-2 float-right"
+            class="ml-2"
             :disabled="input_disable"
             v-b-popover.hover.left="'可以Ctrl+Enter喔'"
             @click="commit"
@@ -169,7 +191,6 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 import PostItem from "./post_item.vue";
 import Emoji from "./emoji.vue";
 import Drawer from "./drawer.vue";
@@ -183,9 +204,31 @@ export default {
     Imgtu,
   },
   props: {
-    preview_enable: Boolean, //来自父组件
-    input_disable: Boolean, //来自父组件
-    new_post_handling: Boolean, //来自父组件
+    input_disable: Boolean, //可否输入（正在处理提交时设false）
+    new_post_handling: Boolean, //正在提交的状态
+    thread_id: {
+      type: Number,
+      default: 0,
+    },
+    forum_id: {
+      type: Number,
+      default: 0,
+    },
+    random_heads_group: {
+      //随机头像组编号
+      type: Number,
+      default: 1,
+    },
+    has_title: {
+      //是否可以输入标题
+      type: Boolean,
+      default: false,
+    },
+    has_delay: {
+      //是否可以延迟发帖
+      type: Boolean,
+      default: false,
+    },
   },
   watch: {
     post_with_admin() {
@@ -200,6 +243,8 @@ export default {
       content_input: "",
       post_with_admin: false,
       upload_img_handling: false,
+      title_input: "",
+      is_delay: false,
     };
   },
   computed: {
@@ -237,16 +282,6 @@ export default {
         return lines;
       }
     },
-    ...mapState({
-      forum_id: (state) =>
-        state.Forums.CurrentForumData.id ? state.Forums.CurrentForumData.id : 0,
-      thread_id: (state) =>
-        state.Threads.CurrentThreadData.id
-          ? state.Threads.CurrentThreadData.id
-          : 0,
-      random_heads_group: (state) =>
-        state.Threads.CurrentThreadData.random_heads_group,
-    }),
   },
   methods: {
     commit() {
@@ -254,6 +289,8 @@ export default {
         content_input: this.content_input,
         nickname_input: this.nickname_input,
         post_with_admin: this.post_with_admin,
+        title_input: this.title_input,
+        is_delay: this.is_delay,
       });
     },
     emoji_append(emoji_src) {
