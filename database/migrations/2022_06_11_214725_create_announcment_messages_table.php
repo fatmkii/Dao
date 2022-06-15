@@ -14,7 +14,7 @@ class CreateAnnouncmentMessagesTable extends Migration
     public function up()
     {
         Schema::create('announcment_messages', function (Blueprint $table) {
-            $table->id();
+            $table->id()->startingValue(10001);
             $table->unsignedMediumInteger('sender_id')->index();
             $table->tinyInteger('type')->default(1); //1=全体公告，其他未定；
             $table->string('title');

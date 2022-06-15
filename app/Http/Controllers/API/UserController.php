@@ -136,6 +136,21 @@ class UserController extends Controller
             );
         }
 
+        //如果有未拉取消息标记，则检查公告并拉取
+        if ($user->new_msg_to_pull == true) {
+            $this->pull_annoucement($user);
+        }
+
+        //如果有未读消息标记，则查询最新一条并返回
+        if ($user->new_msg == true) {
+            $user_message = UserMessages::where('user_id', $user->id)
+                ->where('is_read', false)
+                ->orderBy('id', 'desc')
+                ->first();
+        } else {
+            $user_message = [];
+        }
+
         return response()->json(
             [
                 'code' => ResponseCode::SUCCESS,
@@ -145,6 +160,7 @@ class UserController extends Controller
                     'pingbici' => $user->pingbici,
                     'my_emoji' => $my_emoji_data,
                     'user_lv' => $user_lv_data,
+                    'user_message' => $user_message,
                 ],
             ],
         );
@@ -275,32 +291,8 @@ class UserController extends Controller
         Redis::setex('reg_record_' . $request->ip(), 7 * 24 * 3600, 1);
 
         //对新用户检查公告并拉取
-        $annoucement_ids_all = AnnoucementMessages::where('type', 1) //type = 1是全体公告
-            ->where('to_new_users', true)   //to_new_users==true则一定可以拉取
-            ->pluck('id');
+        $this->pull_annoucement($user);
 
-        $annoucement_ids_to_pull = $annoucement_ids_all; //对于新用户来说，必然拉取全部公告
-        //在UserMessages插入相应公告
-        if (!emptyArray($annoucement_ids_to_pull)) {
-            $user->new_msg = true;
-            $user->save();
-            //如果有存在需要新用户看的公告，则new_msg设为true
-            $annoucements = AnnoucementMessages::whereIn('id', $annoucement_ids_to_pull)->get();
-            foreach ($annoucements as $annoucement) {
-                UserMessages::insert(
-                    [
-                        'user_id' => $user->id,
-                        'annoucement_id' => $annoucement->id,
-                        'user_msg_group_id' => null,
-                        'title' => $annoucement->title,
-                        'sub_title' => $annoucement->sub_title,
-                        'is_read' => false,
-                        'is_deleted' => false,
-                        'created_at' => Carbon::now(),
-                    ]
-                );
-            }
-        }
 
         //记录申请饼干IP所在地
         ProcessUserCreatedLocation::dispatch(
@@ -905,49 +897,13 @@ class UserController extends Controller
         $request->validate([
             'binggan' => 'required|string',
             'page' => 'integer|nullable',
-            'per_page' => 'integer|nullable|max:100|min:1',
+            'per_page' => 'integer|nullable|max:100|min:10',
         ]);
-        $user = $request->user; //从sanctum的token获得饼干
-
-        //如果有消息标记，则检查公告并拉取
-        if ($user->new_msg == true) {
-            $annoucement_ids_pulled = UserMessages::where('user_id', $user->id)->whereNot('annoucement_id', null)->pluck('announcement_id');
-            $annoucement_ids_all = AnnoucementMessages::where('type', 1) //type = 1是全体公告
-                ->where('to_new_users', true)   //to_new_users==true则一定可以拉取
-                ->orWhere(function ($query) use ($user) { //又或者to_new_users==false，但created_at在user的created_at之后
-                    $query->where('to_new_users', false)
-                        ->where('created_at', '>', $user->created_at);
-                })
-                ->pluck('id');
-            $annoucement_ids_to_pull = array_diff_key($annoucement_ids_all, $annoucement_ids_pulled);
-
-            //在UserMessages插入相应公告
-            if (!emptyArray($annoucement_ids_to_pull)) {
-                $annoucements = AnnoucementMessages::whereIn('id', $annoucement_ids_to_pull)->get();
-                foreach ($annoucements as $annoucement) {
-                    UserMessages::insert(
-                        [
-                            'user_id' => $user->id,
-                            'annoucement_id' => $annoucement->id,
-                            'user_msg_group_id' => null,
-                            'title' => $annoucement->title,
-                            'sub_title' => $annoucement->sub_title,
-                            'is_read' => false,
-                            'is_deleted' => false,
-                            'created_at' => Carbon::now(),
-                        ]
-                    );
-                }
-            }
-        }
+        $user = $request->user;
 
         $per_page = $request->per_page == null ? 20 : $request->per_page; //默认20个每页
         $messages_index = UserMessages::where('user_id', $user->id)->paginate($per_page);
 
-        $user->new_msg = false;
-        $user->save();
-
-        // UserMessages::where('user_id', $user->id)->where('is_read', false)->update(['is_read' => true]);//将
         return response()->json(
             [
                 'code' => ResponseCode::SUCCESS,
@@ -959,7 +915,48 @@ class UserController extends Controller
         );
     }
 
+    //拉取公告消息的私有方法
+    private function pull_annoucement(User &$user)
+    {
+        $annoucement_ids_pulled = UserMessages::where('user_id', $user->id)->whereNot('annoucement_id', null)->pluck('announcement_id');
+        $annoucement_ids_all = AnnoucementMessages::where('type', 1) //type = 1是全体公告
+            ->where('to_new_users', true)   //to_new_users==true则一定可以拉取
+            ->orWhere(function ($query) use ($user) { //又或者to_new_users==false，但created_at在user的created_at之后
+                $query->where('to_new_users', false)
+                    ->where('created_at', '>', $user->created_at);
+            })
+            ->pluck('id');
+        $annoucement_ids_to_pull = array_diff_key($annoucement_ids_all, $annoucement_ids_pulled);
 
+        //在UserMessages插入相应公告
+        if (!emptyArray($annoucement_ids_to_pull)) {
+
+            $user->new_msg = true; //如果有存在需要新用户看的公告，则new_msg设为true
+
+            $annoucements = AnnoucementMessages::whereIn('id', $annoucement_ids_to_pull)->get();
+            foreach ($annoucements as $annoucement) {
+                UserMessages::insert(
+                    [
+                        'user_id' => $user->id,
+                        'index_type' => 1,
+                        'user_msg_grp_id' => null,
+                        'annoucement_id' => $annoucement->id,
+                        'user_msg_grp_type' => null,
+                        'title' => $annoucement->title,
+                        'sub_title' => $annoucement->sub_title,
+                        'is_read' => false,
+                        'is_deleted' => false,
+                        'created_at' => Carbon::now(),
+                    ]
+                );
+            }
+        }
+
+        $user->new_msg_to_pull = false;
+        $user->save();
+    }
+
+    //查看公告具体内容
     public function show_messages_content(Request $request)
     {
         $request->validate([
@@ -979,9 +976,17 @@ class UserController extends Controller
                             'message' => ResponseCode::$codeMap[ResponseCode::ANNOUCEMENT_NOT_FOUND],
                         ]);
                     }
-                    UserMessages::where('user_id', $user->id)
+
+                    if (
+                        UserMessages::where('user_id', $user->id)
                         ->where('annoucement_id', $request->annoucement_id)
-                        ->update(['is_read' => true]);
+                        ->first()->value('is_read') == false
+                    ) {
+                        AnnoucementMessages::where('id', $request->annoucement_id)->increment('read_num'); //给公告的已读数+1
+                        UserMessages::where('user_id', $user->id)
+                            ->where('annoucement_id', $request->annoucement_id)
+                            ->update(['is_read' => true]);
+                    }
                     break;
                 }
             case 'user_msg_group': {

@@ -29,6 +29,7 @@ class CreateUsersTable extends Migration
             $table->string('created_location')->nullable();
             $table->boolean('use_pingbici')->default(0); 
             $table->boolean('new_msg')->default(0); 
+            $table->boolean('new_msg_to_pull')->default(0); 
             $table->tinyInteger('user_lv')->default(0);
             $table->timestamps();
         });

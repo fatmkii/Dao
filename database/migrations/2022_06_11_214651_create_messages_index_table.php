@@ -14,7 +14,7 @@ class CreateMessagesIndexTable extends Migration
     public function up()
     {
         Schema::create('messages_index', function (Blueprint $table) {
-            $table->id();
+            $table->id()->startingValue(10001);
             $table->unsignedMediumInteger('user_id')->index();
             $table->unsignedMediumInteger('annoucement_id')->nullable(); //公告id
             $table->unsignedMediumInteger('user_msg_group_id')->nullable(); //用户之间对话聚合成一个窗口，暂时没做
