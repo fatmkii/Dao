@@ -1,5 +1,6 @@
 <template>
   <div>
+    
     <div>
       <div
         class="post_title px-1 py-2 h6 d-block d-lg-none d-xl-none"
@@ -19,6 +20,7 @@
           :no_emoji_mode="false"
         ></PostItem>
       </div>
+      <slot name="after_preview"></slot>
       <div class="my-2 row d-inline-flex" style="font-size: 0.875rem">
         <div class="col-auto pr-0">昵称</div>
         <div class="col-auto d-inline-flex">
