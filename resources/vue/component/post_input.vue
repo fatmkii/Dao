@@ -234,6 +234,12 @@ export default {
     post_with_admin() {
       this.nickname_input = this.post_with_admin ? "管理员" : "= =";
     },
+    emoji_auto_hide() {
+      localStorage.setItem(
+        "emoji_auto_hide",
+        this.emoji_auto_hide ? "true" : ""
+      );
+    },
   },
   data: function () {
     return {
@@ -391,6 +397,22 @@ export default {
     drawer_insert(file) {
       this.$refs.drawer_component.drawer_insert(file);
     },
+    load_LocalStorage() {
+      var localStorage_array = new Array("emoji_auto_hide");
+      //遍历读取上述LocalStorage
+      for (var i = 0; i < localStorage_array.length; i++) {
+        if (localStorage.getItem(localStorage_array[i]) == null) {
+          localStorage[localStorage_array[i]] = "";
+        } else {
+          this[localStorage_array[i]] = Boolean(
+            localStorage[localStorage_array[i]]
+          );
+        }
+      }
+    },
+  },
+  created() {
+    this.load_LocalStorage();
   },
 };
 </script>

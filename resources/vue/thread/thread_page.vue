@@ -637,13 +637,6 @@ export default {
         this.get_posts_data(false, true);
       }
     },
-
-    emoji_auto_hide() {
-      localStorage.setItem(
-        "emoji_auto_hide",
-        this.emoji_auto_hide ? "true" : ""
-      );
-    },
     no_image_mode() {
       localStorage.setItem("no_image_mode", this.no_image_mode ? "true" : "");
     },
@@ -1333,7 +1326,6 @@ export default {
     },
     load_LocalStorage() {
       var localStorage_array = new Array(
-        "emoji_auto_hide",
         "no_image_mode",
         "no_emoji_mode",
         "no_head_mode",

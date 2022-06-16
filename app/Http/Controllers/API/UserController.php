@@ -275,32 +275,32 @@ class UserController extends Controller
         Redis::setex('reg_record_' . $request->ip(), 7 * 24 * 3600, 1);
 
         //对新用户检查公告并拉取
-        $annoucement_ids_all = AnnoucementMessages::where('type', 1) //type = 1是全体公告
-            ->where('to_new_users', true)   //to_new_users==true则一定可以拉取
-            ->pluck('id');
+        // $annoucement_ids_all = AnnoucementMessages::where('type', 1) //type = 1是全体公告
+        //     ->where('to_new_users', true)   //to_new_users==true则一定可以拉取
+        //     ->pluck('id');
 
-        $annoucement_ids_to_pull = $annoucement_ids_all; //对于新用户来说，必然拉取全部公告
+        // $annoucement_ids_to_pull = $annoucement_ids_all; //对于新用户来说，必然拉取全部公告
         //在UserMessages插入相应公告
-        if (!emptyArray($annoucement_ids_to_pull)) {
-            $user->new_msg = true;
-            $user->save();
-            //如果有存在需要新用户看的公告，则new_msg设为true
-            $annoucements = AnnoucementMessages::whereIn('id', $annoucement_ids_to_pull)->get();
-            foreach ($annoucements as $annoucement) {
-                UserMessages::insert(
-                    [
-                        'user_id' => $user->id,
-                        'annoucement_id' => $annoucement->id,
-                        'user_msg_group_id' => null,
-                        'title' => $annoucement->title,
-                        'sub_title' => $annoucement->sub_title,
-                        'is_read' => false,
-                        'is_deleted' => false,
-                        'created_at' => Carbon::now(),
-                    ]
-                );
-            }
-        }
+        // if (!emptyArray($annoucement_ids_to_pull)) {
+        //     $user->new_msg = true;
+        //     $user->save();
+        //     //如果有存在需要新用户看的公告，则new_msg设为true
+        //     $annoucements = AnnoucementMessages::whereIn('id', $annoucement_ids_to_pull)->get();
+        //     foreach ($annoucements as $annoucement) {
+        //         UserMessages::insert(
+        //             [
+        //                 'user_id' => $user->id,
+        //                 'annoucement_id' => $annoucement->id,
+        //                 'user_msg_group_id' => null,
+        //                 'title' => $annoucement->title,
+        //                 'sub_title' => $annoucement->sub_title,
+        //                 'is_read' => false,
+        //                 'is_deleted' => false,
+        //                 'created_at' => Carbon::now(),
+        //             ]
+        //         );
+        //     }
+        // }
 
         //记录申请饼干IP所在地
         ProcessUserCreatedLocation::dispatch(
