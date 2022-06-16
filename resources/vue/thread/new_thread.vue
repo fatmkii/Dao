@@ -100,13 +100,13 @@
       <b-tab title="收费">
         <div class="row align-items-center mt-3">
           <div class="col-4">
-            <span class="h6 my-2">给标题换个颜色吗？（500奥利奥）</span>
+            <span class="h6 my-2">标题换色(500 olo)</span>
           </div>
           <div class="col-4">
-            <span class="h6 my-2">设定看帖权限（500奥利奥）</span>
+            <span class="h6 my-2">设定看帖权限(500 olo)</span>
           </div>
           <div class="col-4">
-            <span class="h6 my-2">设为私密主题（500奥利奥）</span>
+            <span class="h6 my-2">设为私密主题(500 olo)</span>
           </div>
         </div>
         <div class="row align-items-center mt-3">
@@ -129,6 +129,11 @@
               v-model="is_private_selected"
               :options="is_private_options"
             ></b-form-select>
+          </div>
+        </div>
+        <div class="row align-items-center mt-3">
+          <div class="col-4">
+            <ColorPicker v-model="title_color_input"></ColorPicker>
           </div>
         </div>
       </b-tab>
@@ -469,9 +474,10 @@ import Emoji from "../component/emoji.vue";
 import PostItem from "../component/post_item.vue";
 import PostInput from "../component/post_input.vue";
 import Imgtu from "../imgtu.vue";
+import ColorPicker from "../component/color_picker.vue";
 
 export default {
-  components: { Emoji, PostItem, PostInput, Imgtu },
+  components: { Emoji, PostItem, PostInput, Imgtu, ColorPicker },
   props: {
     forum_id: Number, //来自router
   },

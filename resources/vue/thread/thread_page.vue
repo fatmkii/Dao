@@ -159,7 +159,7 @@
             size="sm"
             variant="warning"
             v-if="is_your_thread"
-            @click="change_thread_color"
+            @click="modal_toggle('color_modal')"
           >
             标题改色
           </b-button>
@@ -505,6 +505,36 @@
           </b-button-group>
         </template>
       </b-modal>
+      <b-modal ref="color_modal" id="color_modal" class="color_modal">
+        <template v-slot:modal-header>标题改色</template>
+        <template v-slot:default>
+          <p>要更换标题颜色吗？每次收费500个olo喔</p>
+          <div class="my-1">
+            <div class="my-1">
+              <b-input-group prepend="颜色：">
+                <b-form-input
+                  autofocus
+                  maxlength="7"
+                  placeholder="#212529"
+                  v-model="thread_color"
+                  @keyup.enter="change_thread_color"
+                ></b-form-input>
+              </b-input-group>
+              <ColorPicker v-model="thread_color" class="mt-2"></ColorPicker>
+            </div>
+          </div>
+        </template>
+        <template v-slot:modal-footer="{ cancel }">
+          <b-button-group>
+            <b-button variant="success" @click="change_thread_color"
+              >提交</b-button
+            >
+            <b-button variant="outline-secondary" @click="cancel()">
+              取消
+            </b-button>
+          </b-button-group>
+        </template>
+      </b-modal>
 
       <BattleModal ref="battle_modal"></BattleModal>
       <RewardModal ref="reward_modal"></RewardModal>
@@ -526,6 +556,7 @@ import Imgtu from "../imgtu.vue";
 import Battle from "./battle.vue";
 import BattleModal from "./battle_modal.vue";
 import ZBar from "../component/z_bar.vue";
+import ColorPicker from "../component/color_picker.vue";
 
 export default {
   components: {
@@ -541,6 +572,7 @@ export default {
     Battle,
     BattleModal,
     ZBar,
+    ColorPicker,
   },
   props: {
     thread_id: Number, //来自router，
@@ -604,6 +636,8 @@ export default {
         page: 1,
         height: 0,
       },
+
+      thread_color: "",
       drawer_insert_img: undefined,
       captcha_img: "",
       captcha_code_input: "",
@@ -890,17 +924,13 @@ export default {
       }
     },
     change_thread_color() {
-      var color = prompt(
-        "要更换标题颜色吗？每次收费500个olo喔",
-        "请输入颜色代码，例如：#212529"
-      );
-      if (color != null) {
+      if (this.thread_color != "") {
         const config = {
           method: "post",
           url: "/api/threads/change_color/",
           data: {
             thread_id: this.thread_id,
-            color: color,
+            color: this.thread_color,
             binggan: this.$store.state.User.Binggan,
           },
         };
@@ -908,12 +938,14 @@ export default {
           .then((response) => {
             if (response.data.code == 200) {
               alert(response.data.message);
-              this.get_posts_data();
+              this.modal_toggle("color_modal");
             } else {
               alert(response.data.message);
             }
           })
           .catch((error) => alert(error));
+      } else {
+        alert("未输入颜色");
       }
     },
     check_jingfen_admin() {

@@ -150,8 +150,9 @@ class ThreadController extends Controller
             DB::beginTransaction();
             //发主题帖（Thread）
             $thread = new Thread;
-            if ($request->title_color) {
+            if ($request->title_color != "" && $request->title_color != "#212529") {
                 // $user->coin -= 500; //设置标题颜色减500奥利奥 
+                // #212529是默认颜色，不收费
                 $user->coinChange(
                     'normal', //记录类型
                     [
