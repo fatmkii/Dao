@@ -142,7 +142,7 @@ class User extends Authenticatable
 
                             list($avg, $variance) = $this->get_avg_var($user_posts_millis);
 
-                            if ($variance < 1000) {
+                            if ($avg != 0 && $variance < 1000) {
                                 ProcessUserActive::dispatch(
                                     [
                                         'binggan' => $this->binggan,
