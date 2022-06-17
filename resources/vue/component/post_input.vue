@@ -1,9 +1,16 @@
 <template>
   <div>
-    
     <div>
       <div
         class="post_title px-1 py-2 h6 d-block d-lg-none d-xl-none"
+        v-if="preview_show && has_title"
+      >
+        <span style="word-wrap: break-word; white-space: normal"
+          >标题：{{ title_input }}</span
+        >
+      </div>
+      <div
+        class="post_title px-1 py-2 h5 d-none d-lg-block d-xl-block"
         v-if="preview_show && has_title"
       >
         <span style="word-wrap: break-word; white-space: normal"
