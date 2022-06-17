@@ -152,7 +152,7 @@
             :disabled="input_disable"
             v-b-popover.hover.left="'可以Ctrl+Enter喔'"
             @click="commit"
-            >{{ new_post_handling ? "提交中" : "回复" }}
+            >{{ new_post_handling ? "提交中" : "提交" }}
           </b-button>
         </div>
       </div>
