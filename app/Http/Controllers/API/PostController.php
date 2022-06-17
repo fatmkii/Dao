@@ -144,7 +144,7 @@ class PostController extends Controller
             $post->created_by_admin = $request->post_with_admin  ? 1 : 0;
             $post->created_ip = $request->ip();
             $post->random_head = random_int(0, 39);
-            $post->millisecond = intval(substr($request->timestamp, -3, 3));
+            // $post->millisecond = intval(substr($request->timestamp, -3, 3));
 
             $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
             $post->floor = $thread->posts_num;

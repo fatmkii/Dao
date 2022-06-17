@@ -135,24 +135,24 @@ class User extends Authenticatable
                         );
 
                         //第2.2类检查：弹出验证码时，回顾该用户前10个帖子的毫秒值看是否相似
-                        if ($thread_id != null) {
-                            $user_posts_millis = Post::suffix(intval($thread_id / 10000))
-                                ->where('created_binggan', $this->binggan)
-                                ->orderBy('id', 'desc')->limit(10)->pluck('millisecond')->toArray();
+                        // if ($thread_id != null) {
+                        //     $user_posts_millis = Post::suffix(intval($thread_id / 10000))
+                        //         ->where('created_binggan', $this->binggan)
+                        //         ->orderBy('id', 'desc')->limit(10)->pluck('millisecond')->toArray();
 
-                            list($avg, $variance) = $this->get_avg_var($user_posts_millis);
+                        //     list($avg, $variance) = $this->get_avg_var($user_posts_millis);
 
-                            if ($avg != 0 && $variance < 1000) {
-                                ProcessUserActive::dispatch(
-                                    [
-                                        'binggan' => $this->binggan,
-                                        'user_id' => $this->id,
-                                        'active' => '怀疑用户用脚本刷帖(毫秒值相似)',
-                                        'content' => 'ip:' . $ip . ' avg:' . $avg . ' var:' . $variance,
-                                    ]
-                                );
-                            }
-                        }
+                        //     if ($avg != 0 && $variance < 1000) {
+                        //         ProcessUserActive::dispatch(
+                        //             [
+                        //                 'binggan' => $this->binggan,
+                        //                 'user_id' => $this->id,
+                        //                 'active' => '怀疑用户用脚本刷帖(毫秒值相似)',
+                        //                 'content' => 'ip:' . $ip . ' avg:' . $avg . ' var:' . $variance,
+                        //             ]
+                        //         );
+                        //     }
+                        // }
                         return response()->json([
                             'code' => ResponseCode::POST_TOO_MANY_MAYBE_ROBOT,
                             'message' => ResponseCode::$codeMap[ResponseCode::POST_TOO_MANY_MAYBE_ROBOT],
