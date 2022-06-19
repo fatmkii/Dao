@@ -113,9 +113,9 @@ Route::middleware('CheckTokenCan:admin', 'auth:sanctum')->prefix('admin')->group
     Route::post('/user_lock', [AdminController::class, 'user_lock']); //封id（临时）
     Route::post('/thread_set_top', [AdminController::class, 'thread_set_top']); //设置置顶
     Route::post('/thread_cancel_top', [AdminController::class, 'thread_cancel_top']); //取消置顶
-    Route::post('/create_annoucement', [AdminController::class, 'create_annoucement']); //发布站内公告
-    Route::get('/annoucement', [AdminController::class, 'show_annoucements']); //查看站内公告
-    Route::delete('/annoucement/{annoucement_id}', [AdminController::class, 'del_annoucements']); //查看站内公告
+    Route::post('/create_announcement', [AdminController::class, 'create_announcement']); //发布站内公告
+    Route::get('/announcements', [AdminController::class, 'show_announcements']); //查看站内公告
+    Route::delete('/announcement/{announcement_id}', [AdminController::class, 'del_announcements']); //查看站内公告
     // Route::post('/check_jingfen', [AdminController::class, 'check_jingfen']); //查精分
 });
 

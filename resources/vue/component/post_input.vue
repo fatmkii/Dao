@@ -19,16 +19,13 @@
           :no_emoji_mode="false"
         ></PostItem>
       </div>
-      <div class="my-2 row d-inline-flex" style="font-size: 0.875rem">
+      <div
+        v-if="has_nickname"
+        class="my-2 row d-inline-flex"
+        style="font-size: 0.875rem"
+      >
         <div class="col-auto pr-0">昵称</div>
         <div class="col-auto d-inline-flex">
-          <b-form-checkbox
-            class="mr-auto ml-2"
-            v-model="emoji_auto_hide"
-            switch
-          >
-            表情包自动收起
-          </b-form-checkbox>
           <b-form-checkbox
             class="mr-auto ml-2"
             v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
@@ -42,6 +39,7 @@
       </div>
       <b-form-input
         id="nickname_input"
+        v-if="has_nickname"
         v-model="nickname_input"
         class="nickname_input"
       ></b-form-input>
@@ -63,6 +61,13 @@
         <div class="col-auto d-inline-flex">
           <b-form-checkbox class="ml-2" v-model="preview_show" switch>
             实时预览
+          </b-form-checkbox>
+          <b-form-checkbox
+            class="mr-auto ml-2"
+            v-model="emoji_auto_hide"
+            switch
+          >
+            表情包自动收起
           </b-form-checkbox>
         </div>
         <div class="col-auto ml-auto">
@@ -143,7 +148,7 @@
             :disabled="input_disable"
             v-b-popover.hover.left="'可以Ctrl+Enter喔'"
             @click="commit"
-            >{{ new_post_handling ? "提交中" : "回复" }}
+            >{{ new_post_handling ? "提交中" : "提交" }}
           </b-button>
         </div>
       </div>
@@ -228,6 +233,11 @@ export default {
       //是否可以延迟发帖
       type: Boolean,
       default: false,
+    },
+    has_nickname: {
+      //是否有昵称
+      type: Boolean,
+      default: true,
     },
   },
   watch: {

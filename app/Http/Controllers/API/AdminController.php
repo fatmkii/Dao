@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Common\ResponseCode;
 use App\Jobs\ProcessUserActive;
-use App\Models\AnnoucementMessages;
+use App\Models\AnnouncementMessages;
 use App\Models\Post;
 use App\Models\Thread;
 use App\Models\User;
@@ -543,7 +543,7 @@ class AdminController extends Controller
         ]);
     }
 
-    public function create_annoucement(Request $request)
+    public function create_announcement(Request $request)
     {
         $request->validate([
             'binggan' => 'required|string',
@@ -560,19 +560,19 @@ class AdminController extends Controller
         //执行追加新回复流程
         try {
             DB::beginTransaction();
-            $annoucement_message = new AnnoucementMessages();
-            $annoucement_message->sender_id = $user->id;
-            $annoucement_message->type = $request->type;
-            $annoucement_message->title = $request->title;
-            $annoucement_message->sub_title = $request->sub_title;
-            $annoucement_message->content = $request->content;
-            $annoucement_message->to_new_users = $request->to_new_users;
-            $annoucement_message->created_at = Carbon::now();
-            $annoucement_message->save();
+            $announcement_message = new AnnouncementMessages();
+            $announcement_message->sender_id = $user->id;
+            $announcement_message->type = $request->type;
+            $announcement_message->title = $request->title;
+            $announcement_message->sub_title = $request->sub_title;
+            $announcement_message->content = $request->content;
+            $announcement_message->to_new_users = $request->to_new_users;
+            $announcement_message->created_at = Carbon::now();
+            $announcement_message->save();
 
             if ($request->type = 1) {
-                //如果是全体公告，则所有用户的new_msg设为true，以拉取消息
-                User::all()->update(['new_msg', true]);
+                //如果是全体公告，则所有用户的new_msg_to_pull设为true，以拉取消息
+                User::query()->update(['new_msg_to_pull' => true]);
             }
 
             DB::commit();
@@ -600,7 +600,7 @@ class AdminController extends Controller
         ]);
     }
 
-    public function show_annoucements(Request $request)
+    public function show_announcements(Request $request)
     {
         $request->validate([
             'binggan' => 'required|string',
@@ -608,32 +608,32 @@ class AdminController extends Controller
             'per_page' => 'integer|nullable|max:100|min:1',
         ]);
 
-        $annoucements = AnnoucementMessages::paginate($request->per_page);
+        $announcements = AnnouncementMessages::paginate($request->per_page);
 
         return response()->json([
             'code' => ResponseCode::SUCCESS,
             'message' => '已返回公告清单',
-            'data' => $annoucements,
+            'data' => $announcements,
         ]);
     }
 
-    public function del_annoucements(Request $request, $annoucement_id)
+    public function del_announcements(Request $request, $announcement_id)
     {
         $request->validate([
             'binggan' => 'required|string',
-            'annoucement_id' => 'required|integer',
+            'announcement_id' => 'required|integer',
         ]);
 
-        $annoucement = AnnoucementMessages::find($annoucement_id);
-        if (!$annoucement) {
+        $announcement = AnnouncementMessages::find($announcement_id);
+        if (!$announcement) {
             return response()->json([
-                'code' => ResponseCode::ANNOUCEMENT_NOT_FOUND,
-                'message' => ResponseCode::$codeMap[ResponseCode::ANNOUCEMENT_NOT_FOUND],
+                'code' => ResponseCode::ANNOUNCEMENT_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::ANNOUNCEMENT_NOT_FOUND],
             ]);
         }
 
-        $annoucement->is_deleted = true;
-        $annoucement->save();
+        $announcement->is_deleted = true;
+        $announcement->save();
 
         return response()->json([
             'code' => ResponseCode::SUCCESS,

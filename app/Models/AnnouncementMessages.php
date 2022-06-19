@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\UserMessages;
 
-class AnnoucementMessages extends Model
+class AnnouncementMessages extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -19,6 +19,8 @@ class AnnoucementMessages extends Model
      */
     protected $table = 'announcment_messages';
 
+    public $timestamps = false;
+
 
     protected $hidden = [
         'sender_id',
@@ -28,6 +30,6 @@ class AnnoucementMessages extends Model
 
     public function UserMessages()
     {
-        return $this->belongsTo(UserMessages::class);
+        return $this->belongsTo(UserMessages::class,  "announcement_id", "id");
     }
 }

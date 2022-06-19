@@ -19,7 +19,7 @@ class ResponseCode
     const USER_NEW_CLOSED = 21406;
     const CANNOTLOGIN = 21401;
 
-    const ADMIN_UNAUTHORIZED = 22401;
+
 
     const FORUM_NOT_FOUND = 22404;
     const FORUM_UNAUTHORIZED = 22401;
@@ -59,7 +59,9 @@ class ResponseCode
     const CAPTCHA_NOT_FOUND = 28404;
     const CAPTCHA_WRONG = 24401;
 
-    const ANNOUCEMENT_NOT_FOUND = 28404;
+    const ANNOUNCEMENT_NOT_FOUND = 28404;
+
+    const ADMIN_UNAUTHORIZED = 29401;
 
     const LOGIN_FAILED = 20001;
 
@@ -113,7 +115,7 @@ class ResponseCode
         self::BATTLE_CANNOT_CREATED => '本主题不能发起大乱斗',
         self::CAPTCHA_NOT_FOUND => '验证码不存在或已过期',
         self::CAPTCHA_WRONG => '验证码错误',
-        self::ANNOUCEMENT_NOT_FOUND => '公告不存在',
+        self::ANNOUNCEMENT_NOT_FOUND => '公告不存在',
     ];
 }
 
