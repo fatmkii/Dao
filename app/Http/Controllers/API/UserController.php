@@ -27,7 +27,7 @@ class UserController extends Controller
 {
     //UserLV相关
     const MYEMOJI_MIN = 5000;  //我的表情包初始长度
-    const MYEMOJI_MAX = 20000;  //我的表情包最大长度
+    const MYEMOJI_MAX = 30000;  //我的表情包最大长度
     const MYEMOJI_INTERVAL = 1000;  //我的表情包每次升级增加长度
     const MYEMOJI_OLO = -20000;  //我的表情包每次升级消费olo
 
