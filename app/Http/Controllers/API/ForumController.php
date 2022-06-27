@@ -78,6 +78,17 @@ class ForumController extends Controller
         $threads_per_page = $request->threads_per_page ? $request->threads_per_page : 50; //默认值是50个主题每页
         $subtitles_excluded = json_decode($request->subtitles_excluded, true);
 
+        //隐藏不可见岛
+        if ($CurrentForum->status == 0) {
+            return response()->json([
+                'code' => ResponseCode::SUCCESS,
+                'message' => '这里什么都没有',
+                'forum_data' => $CurrentForum->makeVisible('banners'),
+                'threads_data' => "",
+                'subtitles_exclude' => "",
+            ]);
+        }
+
         //判断是否可无饼干访问的板块
         if (!$CurrentForum->is_anonymous && !$user) {
             return response()->json([
