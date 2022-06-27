@@ -22,6 +22,7 @@ use App\Models\IncomeStatement;
 use App\Models\UserLV;
 use App\Models\UserMessages;
 use Exception;
+use Faker\Core\Number;
 
 class UserController extends Controller
 {
@@ -45,6 +46,26 @@ class UserController extends Controller
     const FJF_PINGBICI_MAX = 4000;  //反精分屏蔽词最大长度
     const FJF_PINGBICI_INTERVAL = 200;  //反精分屏蔽词每次升级增加长度
     const FJF_PINGBICI_OLO = -4000;  //我的表情包每次升级消费olo
+
+    /**
+     * 生成随机字符串、排除容易混淆的
+     */
+    private function random_str(int $num)
+    {
+        $str = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnprstuvwxyz1234567890"; //用于生成随机字符的，排除掉容易混淆的
+
+        $output = '';
+        $length = strlen($str);
+
+        for ($i = 0; $i < $num; $i++) {
+            // get random char
+            $char = $str[rand(0, $length - 1)];
+            $output .= $char;
+        }
+
+        return $output;
+    }
+
 
     /**
      * Display a listing of the resource.
@@ -240,7 +261,7 @@ class UserController extends Controller
             $user = new User;
             $binggan = '';
             do {
-                $binggan = Str::random(9);
+                $binggan = $this->random_str(9);
             } while (User::where('binggan', $binggan)->exists());
             $user->binggan = $binggan;
             $user->created_ip = $request->ip();
