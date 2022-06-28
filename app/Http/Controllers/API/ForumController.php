@@ -23,7 +23,9 @@ class ForumController extends Controller
     public function index()
     {
         $forums = Cache::remember('forums_cache',  24 * 3600, function () {
-            return Forum::where('status', '<>', 0)->get(); //把status为0的隐藏掉
+            return Forum::where('status', '<>', 0) //把status为0的隐藏掉
+                ->orderBy('sub_id', 'asc') //把个人岛放到后面
+                ->get();
         });
         return response()->json([
             'code' => ResponseCode::SUCCESS,
