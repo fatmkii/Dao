@@ -81,7 +81,7 @@ class ResponseCode
         self::USER_PASSWORD_ERROR => '密码输入错误',
         self::ADMIN_UNAUTHORIZED => '管理员权限不足',
         self::CANNOTLOGIN => '用户无法登录',
-        self::FORUM_NOT_FOUND => '该小岛不存在',
+        self::FORUM_NOT_FOUND => '此小岛不存在',
         self::FORUM_UNAUTHORIZED => '无法访问该小岛',
         self::THREAD_NOT_FOUND => '主题贴不存在',
         self::THREAD_WAS_NISSINED => '主题已被日清',

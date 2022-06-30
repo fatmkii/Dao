@@ -80,12 +80,12 @@ class ForumController extends Controller
         $threads_per_page = $request->threads_per_page ? $request->threads_per_page : 50; //默认值是50个主题每页
         $subtitles_excluded = json_decode($request->subtitles_excluded, true);
 
-        //隐藏不可见岛
-        if ($CurrentForum->status == 0) {
+        //隐藏不可见岛和判断岛是否存在
+        if (!$CurrentForum || $CurrentForum->status == 0) {
             return response()->json([
-                'code' => ResponseCode::SUCCESS,
-                'message' => '这里什么都没有',
-                'forum_data' => $CurrentForum->makeVisible('banners'),
+                'code' => ResponseCode::FORUM_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::FORUM_NOT_FOUND],
+                'forum_data' => "",
                 'threads_data' => "",
                 'subtitles_exclude' => "",
             ]);

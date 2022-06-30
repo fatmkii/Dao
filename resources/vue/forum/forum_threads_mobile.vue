@@ -4,7 +4,7 @@
     <div class="threads_table_header my-2 py-1 text-center">
       <span style="font-size: 1.25rem">主题</span>
     </div>
-    <div v-show="threads_load_status">
+    <div v-show="threads_load_status == 2">
       <div
         class="threads_container"
         v-for="thread in threads_data"
@@ -37,7 +37,10 @@
           >
           <router-link
             :to="
-              '/thread/' + thread.id + '/' + Math.ceil((thread.posts_num + 1) / 200)
+              '/thread/' +
+              thread.id +
+              '/' +
+              Math.ceil((thread.posts_num + 1) / 200)
             "
             :target="router_target"
             v-if="thread.posts_num > 200"
@@ -63,7 +66,7 @@
     </div>
     <b-spinner
       class="spinner document-loading"
-      v-show="!threads_load_status"
+      v-show="threads_load_status == 1"
       label="读取中"
     >
     </b-spinner>
@@ -91,7 +94,7 @@ export default {
       return this.new_window_to_post ? "_blank" : "false";
     },
     threads_data() {
-      if (this.threads_load_status) {
+      if (this.threads_load_status == 2) {
         if (this.$store.state.User.UsePingbici) {
           const title_pingbici = JSON.parse(
             this.$store.state.User.TitlePingbici

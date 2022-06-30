@@ -7,7 +7,7 @@
       :interval="10000"
       img-width="825"
       img-height="224"
-      v-if="forum_banners && threads_load_status"
+      v-if="forum_banners && threads_load_status == 2"
       v-show="!banner_hiden"
     >
       <b-carousel-slide
@@ -263,6 +263,7 @@ export default {
       subtitles_excluded = this.subtitles_excluded,
       search_title = undefined
     ) {
+      this.$store.commit("ThreadsLoadStatus_set", 1);
       var config = {
         method: "get",
         url: "/api/forums/" + this.forum_id,
@@ -284,7 +285,7 @@ export default {
               "CurrentForumData_set",
               response.data.forum_data
             );
-            this.$store.commit("ThreadsLoadStatus_set", 1);
+            this.$store.commit("ThreadsLoadStatus_set", 2);
             document.title = this.forum_name;
             if (remind) {
               this.$bvToast.toast("已刷新帖子", {
@@ -295,10 +296,12 @@ export default {
             }
             this.show_delay = false;
           } else {
+            this.$store.commit("ThreadsLoadStatus_set", 0);
             alert(response.data.message);
           }
         })
         .catch((error) => {
+          this.$store.commit("ThreadsLoadStatus_set", 0);
           alert(Object.values(error.response.data.errors)[0]);
         });
     },
@@ -319,14 +322,16 @@ export default {
               "CurrentForumData_set",
               response.data.forum_data
             );
-            this.$store.commit("ThreadsLoadStatus_set", 1);
+            this.$store.commit("ThreadsLoadStatus_set", 2);
             document.title = this.forum_name;
             this.show_delay = true;
           } else {
+            this.$store.commit("ThreadsLoadStatus_set", 0);
             alert(response.data.message);
           }
         })
         .catch((error) => {
+          this.$store.commit("ThreadsLoadStatus_set", 0);
           alert(Object.values(error.response.data.errors)[0]);
         });
     },

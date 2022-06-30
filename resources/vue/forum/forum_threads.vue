@@ -1,7 +1,7 @@
 
 <template>
   <div class="d-none d-lg-block d-xl-block">
-    <table v-show="threads_load_status" class="threads_table">
+    <table v-show="threads_load_status == 2" class="threads_table">
       <thead>
         <tr class="text-center">
           <th width="40%">标题</th>
@@ -43,7 +43,10 @@
             >
             <router-link
               :to="
-                '/thread/' + thread.id + '/' + Math.ceil((thread.posts_num + 1) / 200)
+                '/thread/' +
+                thread.id +
+                '/' +
+                Math.ceil((thread.posts_num + 1) / 200)
               "
               :target="router_target"
               v-if="thread.posts_num > 200"
@@ -69,7 +72,7 @@
     </table>
     <b-spinner
       class="spinner document-loading"
-      v-show="!threads_load_status"
+      v-show="threads_load_status == 1"
       label="读取中"
     >
     </b-spinner>
@@ -97,7 +100,7 @@ export default {
       return this.new_window_to_post == true ? "_blank" : "false";
     },
     threads_data() {
-      if (this.threads_load_status) {
+      if (this.threads_load_status == 2) {
         if (this.$store.state.User.UsePingbici) {
           //处理屏蔽词
           const title_pingbici = JSON.parse(
