@@ -153,49 +153,53 @@ class BattleController extends Controller
             'chara_id' => 'required|integer',
         ]);
 
-        $battle = DB::table('battles')->where('id', $request->battle_id)->lockForUpdate()->first(); //改用悲观锁
-        if (!$battle) {
-            return response()->json([
-                'code' => ResponseCode::BATTLE_NOT_FOUND,
-                'message' => ResponseCode::$codeMap[ResponseCode::BATTLE_NOT_FOUND],
-            ]);
-        }
-        //确认大乱斗是否已经有挑战者参加了
-        if ($battle->progress == 1) {
-            return response()->json([
-                'code' => ResponseCode::BATTLE_HAS_BEEN_ROLL_C,
-                'message' => ResponseCode::$codeMap[ResponseCode::BATTLE_HAS_BEEN_ROLL_C],
-            ]);
-        }
-        //确认大乱斗是否已经正常结束了
-        if ($battle->progress == 2) {
-            return response()->json([
-                'code' => ResponseCode::BATTLE_HAVE_BEEN_BET,
-                'message' => ResponseCode::$codeMap[ResponseCode::BATTLE_HAVE_BEEN_BET],
-            ]);
-        }
-        //确认大乱斗是否已经过期结束了
-        if ($battle->progress  == 3) {
-            return response()->json([
-                'code' => ResponseCode::BATTLE_WAS_OUTDATE,
-                'message' => ResponseCode::$codeMap[ResponseCode::BATTLE_WAS_OUTDATE],
-            ]);
-        }
-
-        $initiator_user = User::find($battle->initiator_user_id);
-        $challenger_user = $request->user;
-
-        $initiator_chara = $battle->initiator_chara;
-        $challenger_chara = $request->chara_id;
-
-        $initiator_rand_num = BattleChara::CharaRandNum($initiator_chara);
-        $challenger_rand_num = BattleChara::CharaRandNum($challenger_chara);
-
-        $difference = intval($initiator_rand_num - $challenger_rand_num);
-
-
         try {
             DB::beginTransaction();
+
+            $battle = DB::table('battles')->where('id', $request->battle_id)->lockForUpdate()->first(); //改用悲观锁
+            if (!$battle) {
+                DB::rollback();
+                return response()->json([
+                    'code' => ResponseCode::BATTLE_NOT_FOUND,
+                    'message' => ResponseCode::$codeMap[ResponseCode::BATTLE_NOT_FOUND],
+                ]);
+            }
+            //确认大乱斗是否已经有挑战者参加了
+            if ($battle->progress == 1) {
+                DB::rollback();
+                return response()->json([
+                    'code' => ResponseCode::BATTLE_HAS_BEEN_ROLL_C,
+                    'message' => ResponseCode::$codeMap[ResponseCode::BATTLE_HAS_BEEN_ROLL_C],
+                ]);
+            }
+            //确认大乱斗是否已经正常结束了
+            if ($battle->progress == 2) {
+                DB::rollback();
+                return response()->json([
+                    'code' => ResponseCode::BATTLE_HAVE_BEEN_BET,
+                    'message' => ResponseCode::$codeMap[ResponseCode::BATTLE_HAVE_BEEN_BET],
+                ]);
+            }
+            //确认大乱斗是否已经过期结束了
+            if ($battle->progress  == 3) {
+                DB::rollback();
+                return response()->json([
+                    'code' => ResponseCode::BATTLE_WAS_OUTDATE,
+                    'message' => ResponseCode::$codeMap[ResponseCode::BATTLE_WAS_OUTDATE],
+                ]);
+            }
+
+            $initiator_user = User::find($battle->initiator_user_id);
+            $challenger_user = $request->user;
+
+            $initiator_chara = $battle->initiator_chara;
+            $challenger_chara = $request->chara_id;
+
+            $initiator_rand_num = BattleChara::CharaRandNum($initiator_chara);
+            $challenger_rand_num = BattleChara::CharaRandNum($challenger_chara);
+
+            $difference = intval($initiator_rand_num - $challenger_rand_num);
+
 
             $challenger_user->coinConsume($battle->battle_olo);
 
