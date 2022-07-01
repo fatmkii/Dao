@@ -1,7 +1,10 @@
 
 <template>
   <div>
-    <div class="thread_body" v-show="posts_load_status && !thread_reject_code">
+    <div
+      class="thread_body"
+      v-show="posts_load_status == 2 && !thread_reject_code"
+    >
       <div class="row align-items-center mt-3">
         <div class="col-auto h5 d-none d-lg-block d-xl-block">
           <b-badge variant="secondary" pill class="float-left">
@@ -151,7 +154,7 @@
           </b-button>
         </div>
         <div
-          v-if="is_your_thread && posts_load_status"
+          v-if="is_your_thread && posts_load_status == 2"
           class="d-flex flex-wrap align-items-center mt-1"
         >
           <b-button
@@ -165,11 +168,11 @@
           </b-button>
         </div>
         <VoteComponent
-          v-if="vote_question_id && posts_load_status"
+          v-if="vote_question_id && posts_load_status == 2"
           :vote_question_id="vote_question_id"
         ></VoteComponent>
         <GambleComponent
-          v-if="gamble_question_id && posts_load_status"
+          v-if="gamble_question_id && posts_load_status == 2"
           :gamble_question_id="gamble_question_id"
           :admin_button_show="admin_button_show"
         ></GambleComponent>
@@ -194,7 +197,7 @@
               v-slot:battle
               v-if="
                 post_data.battle_id &&
-                posts_load_status &&
+                posts_load_status == 2 &&
                 no_battle_mode == false
               "
             >
@@ -307,24 +310,24 @@
 
     <img
       src="https://oss.cpttmm.com/xhg_other/notice_2.png"
-      v-if="posts_load_status && thread_reject_code == 23410"
+      v-if="posts_load_status == 2 && thread_reject_code == 23410"
       class="nissined_img"
     />
     <img
       src="https://oss.cpttmm.com/xhg_other/notice_3.png"
-      v-if="posts_load_status && thread_reject_code == 23401"
+      v-if="posts_load_status == 2 && thread_reject_code == 23401"
       class="nissined_img"
     />
     <img
       src="https://oss.cpttmm.com/xhg_other/notice_1.png"
-      v-if="posts_load_status && thread_reject_code == 234011"
+      v-if="posts_load_status == 2 && thread_reject_code == 234011"
       class="nissined_img"
     />
 
     <div>
       <b-spinner
         class="spinner document-loading"
-        v-show="!posts_load_status"
+        v-show="posts_load_status == 1"
         label="读取中"
       >
       </b-spinner>
@@ -582,7 +585,7 @@ export default {
     // 如果路由有变化，再次获得数据
     $route(to) {
       this.get_browse_current();
-      this.$store.commit("PostsLoadStatus_set", 0);
+      this.$store.commit("PostsLoadStatus_set", 1);
       if (this.search_input) {
         this.get_posts_data(false, false, this.search_input);
       } else {
@@ -735,7 +738,7 @@ export default {
       search_content = null
     ) {
       if (search_content) {
-        this.$store.commit("PostsLoadStatus_set", 0);
+        this.$store.commit("PostsLoadStatus_set", 1);
       }
       var config = {
         method: "get",
@@ -800,10 +803,10 @@ export default {
               alert(response.data.message);
             }
           }
-          this.$store.commit("PostsLoadStatus_set", 1);
+          this.$store.commit("PostsLoadStatus_set", 2);
         })
         .catch((error) => {
-          this.$store.commit("PostsLoadStatus_set", 1);
+          this.$store.commit("PostsLoadStatus_set", 2);
           alert(Object.values(error.response.data.errors)[0]);
         });
     },
@@ -1287,8 +1290,8 @@ export default {
   },
   created() {
     this.get_posts_data(false, true);
+    this.$store.commit("PostsLoadStatus_set", 1); //避免显示上个ThreadsData
     this.load_LocalStorage();
-    this.$store.commit("PostsLoadStatus_set", 0); //避免显示上个ThreadsData
   },
   mounted() {
     this.get_browse_current();

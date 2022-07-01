@@ -190,6 +190,7 @@ export default {
   watch: {
     // 如果路由有变化，再次获得数据
     $route(to) {
+      this.$store.commit("ThreadsLoadStatus_set", 1);
       if (this.search_input) {
         this.get_threads_data(
           false,
@@ -200,7 +201,6 @@ export default {
       } else {
         this.get_threads_data();
       }
-      this.$store.commit("ThreadsLoadStatus_set", 0);
     },
     new_window_to_post: function () {
       localStorage.setItem(
@@ -263,7 +263,6 @@ export default {
       subtitles_excluded = this.subtitles_excluded,
       search_title = undefined
     ) {
-      this.$store.commit("ThreadsLoadStatus_set", 1);
       var config = {
         method: "get",
         url: "/api/forums/" + this.forum_id,
@@ -373,7 +372,7 @@ export default {
   created() {
     this.load_subtitles_selected(); //一定要先load_subtitle再get_threads，不然subttitles不生效
     this.get_threads_data();
-    this.$store.commit("ThreadsLoadStatus_set", 0);
+    this.$store.commit("ThreadsLoadStatus_set", 1);
     if (localStorage.getItem("new_window_to_post") == null) {
       localStorage.new_window_to_post = "";
     } else {
