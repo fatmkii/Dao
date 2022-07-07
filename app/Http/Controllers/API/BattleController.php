@@ -18,6 +18,7 @@ use App\Jobs\ProcessUserActive;
 use App\Jobs\ProcessIncomeStatement;
 use App\Models\Thread;
 use Illuminate\Support\Carbon;
+use App\Events\NewPostBroadcast;
 
 class BattleController extends Controller
 {
@@ -127,6 +128,9 @@ class BattleController extends Controller
         }
 
         $user->waterRecord('new_post', $request->ip()); //用redis记录发帖频率。
+
+        //广播发帖动作
+        broadcast(new NewPostBroadcast($request->thread_id, $post->id, $post->floor))->toOthers();
 
         ProcessUserActive::dispatch(
             [

@@ -209,6 +209,40 @@
             </template>
           </PostItem>
         </div>
+        <div class="d-flex flex-row align-items-center my-2">
+          <b-button
+            variant="success"
+            size="sm"
+            id="listen_button"
+            @click="listen_channel"
+            :disabled="!enable_listening || show_listen_next_page"
+            >{{
+              !is_listening || show_listen_next_page ? "自动涮锅" : "正在涮锅"
+            }}
+          </b-button>
+
+          <div>
+            <b-spinner
+              class="spinner img-uploading ml-2"
+              v-show="is_listening"
+              label="涮锅中"
+            >
+            </b-spinner>
+            <router-link
+              :to="'/thread/' + thread_id + '/' + (page + 1)"
+              v-if="show_listen_next_page"
+              class="thread_page ml-1"
+              style="font-size: 0.875rem"
+              >回帖已经翻页、点击前往
+            </router-link>
+            <span
+              class="ml-1"
+              style="font-size: 0.875rem"
+              v-if="this.page != this.posts_last_page"
+              >在最后一页才能自动涮锅</span
+            >
+          </div>
+        </div>
       </div>
       <PostInput
         ref="post_input_com"
@@ -591,6 +625,37 @@ export default {
       } else {
         this.get_posts_data(false, true);
       }
+      this.show_listen_next_page = false;
+      this.is_listening = false;
+    },
+    is_listening() {
+      if (this.is_listening === true) {
+        this.$echo
+          .channel("thread_" + this.thread_id)
+          .listen("NewPost", (response) => {
+            if (response.post_floor >= this.page * 200) {
+              //如果新回复通知中，楼层号大于本页的，则关闭监听并显示翻页选项
+              this.is_listening = false;
+              this.show_listen_next_page = true;
+            } else {
+              //否则，请求新回复数据
+              var post_exist = this.$store.state.Posts.PostsData.data.find(
+                (post) => {
+                  return post.id == response.post_id;
+                }
+              );
+              if (!post_exist) {
+                //如果post_id不存在，才去获取新数据
+                this.get_post_data_and_push(
+                  response.thread_id,
+                  response.post_id
+                );
+              }
+            }
+          });
+      } else {
+        this.$echo.leaveChannel("thread_" + this.thread_id);
+      }
     },
     no_image_mode() {
       localStorage.setItem("no_image_mode", this.no_image_mode ? "true" : "");
@@ -651,6 +716,8 @@ export default {
       last_action: "",
       selected_img: undefined,
       is_focus: false,
+      is_listening: false,
+      show_listen_next_page: false,
     };
   },
   computed: {
@@ -704,6 +771,13 @@ export default {
         }
       }
       return filtered;
+    },
+    enable_listening() {
+      if (this.page == this.posts_last_page) {
+        return true;
+      } else {
+        return false;
+      }
     },
     ...mapState({
       forum_name: (state) =>
@@ -809,6 +883,29 @@ export default {
           this.$store.commit("PostsLoadStatus_set", 2);
           alert(Object.values(error.response.data.errors)[0]);
         });
+    },
+    get_post_data_and_push(thread_id, post_id) {
+      var scroll_top_now =
+        document.body.clientHeight - document.documentElement.scrollTop; //用于使窗口位置保持不变
+      var config = {
+        method: "get",
+        url: "/api/posts/" + post_id,
+        params: {
+          thread_id: thread_id,
+          binggan: this.$store.state.User.Binggan,
+        },
+      };
+      axios(config).then((response) => {
+        if (response.data.code == 200) {
+          this.$store.commit("PostsData_push", response.data.post_data);
+          this.$nextTick(() => {
+            document.documentElement.scrollTop =
+              document.body.clientHeight - scroll_top_now; //使窗口位置保持不变
+          });
+        } else {
+          console.log(response.data.message);
+        }
+      });
     },
     get_captcha() {
       const config = {
@@ -990,6 +1087,9 @@ export default {
       const config = {
         method: "post",
         url: "/api/posts/create",
+        // headers: {
+        //   "X-Socket-Id": this.$echo.socketId(),
+        // },
         data: {
           binggan: this.$store.state.User.Binggan,
           forum_id: this.forum_id,
@@ -1287,6 +1387,14 @@ export default {
         }
       }
     },
+    listen_channel() {
+      if (this.is_listening === false) {
+        this.get_posts_data();
+        this.is_listening = true;
+      } else {
+        this.is_listening = false;
+      }
+    },
   },
   created() {
     this.get_posts_data(false, true);
@@ -1304,6 +1412,7 @@ export default {
     // window.removeEventListener("beforeunload", this.browse_record_handle);
     window.removeEventListener("scroll", this.scroll_watch);
     window.removeEventListener("keyup", this.keyup_callee);
+    this.$echo.leaveChannel("thread_" + this.thread_id);
   },
 };
 </script> 
