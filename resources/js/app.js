@@ -47,9 +47,9 @@ axios.interceptors.response.use(
     }
 );
 // window.axios.defaults.headers.common['X-Socket-Id'] = echo_instance.socketId();
-echo_instance.connector.socket.on('connect', function () {
-    window.axios.defaults.headers.common['X-Socket-Id'] = echo_instance.socketId();
-});
+// echo_instance.connector.socket.on('connect', function () {
+//     window.axios.defaults.headers.common['X-Socket-Id'] = echo_instance.socketId();
+// });
 
 //全局通用导航栏
 Vue.component('navigation', require('../vue/navigation.vue').default);
