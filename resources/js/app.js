@@ -11,13 +11,13 @@ import store from './store/store'
 import router from './routes.js'
 import Echo from "laravel-echo"
 
-var echo_instance = new Echo({
-    broadcaster: 'socket.io',
-    host: window.location.hostname + ':6001',
-    namespace: '', //命名空间设置为''，使前端echo监听直接监听纯事件名
-    authEndpoint: '/broadcasting/auth'
-});
-Vue.prototype.$echo = echo_instance
+// var echo_instance = new Echo({
+//     broadcaster: 'socket.io',
+//     host: window.location.hostname + ':6001',
+//     namespace: '', //命名空间设置为''，使前端echo监听直接监听纯事件名
+//     authEndpoint: '/broadcasting/auth'
+// });
+// Vue.prototype.$echo = echo_instance
 
 window.sha256 = require('js-sha256')
 window.axios = require('axios')
