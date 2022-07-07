@@ -209,7 +209,7 @@
             </template>
           </PostItem>
         </div>
-        <!-- <div class="d-flex flex-row align-items-center my-2">
+        <div class="d-flex flex-row align-items-center my-2">
           <b-button
             variant="success"
             size="sm"
@@ -242,7 +242,7 @@
               >在最后一页才能自动涮锅</span
             >
           </div>
-        </div> -->
+        </div>
       </div>
       <PostInput
         ref="post_input_com"
