@@ -51,6 +51,7 @@ Route::prefix('threads')->group(function () {
 
 //Post系列
 Route::prefix('posts')->group(function () {
+    Route::get('/{id}', [PostController::class, 'show'])->middleware('CheckBinggan:show'); //获得单个帖子数据
     Route::post('/create', [PostController::class, 'create'])->middleware('CheckBinggan:create'); //新帖子
     Route::delete('/{id}', [PostController::class, 'destroy'])->middleware('CheckBinggan:create'); //删除帖子
     Route::post('/create_roll', [PostController::class, 'create_roll'])->middleware('CheckBinggan:create'); //新roll点
@@ -81,11 +82,11 @@ Route::prefix('battles')->group(function () {
 });
 
 //Crowd系列
-Route::prefix('crowds')->group(function () {
-    Route::get('/{crowd_id}', [CrowdController::class, 'show']); //显示众筹结果
-    Route::post('', [CrowdController::class, 'create'])->middleware('CheckBinggan:create');  //用户参加众筹
-    Route::post('/repeal', [CrowdController::class, 'repeal'])->middleware('auth:sanctum');  //中止众筹（只能由管理员操作）
-});
+// Route::prefix('crowds')->group(function () {
+//     Route::get('/{crowd_id}', [CrowdController::class, 'show']); //显示众筹结果
+//     Route::post('', [CrowdController::class, 'create'])->middleware('CheckBinggan:create');  //用户参加众筹
+//     Route::post('/repeal', [CrowdController::class, 'repeal'])->middleware('auth:sanctum');  //中止众筹（只能由管理员操作）
+// });
 
 //User系列
 Route::prefix('user')->group(function () {

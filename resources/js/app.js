@@ -9,6 +9,15 @@ Vue.use(VueRouter)
 Vue.use(Vuex)
 import store from './store/store'
 import router from './routes.js'
+import Echo from "laravel-echo"
+
+var echo_instance = new Echo({
+    broadcaster: 'socket.io',
+    host: window.location.hostname + ':6001',
+    namespace: '', //命名空间设置为''，使前端echo监听直接监听纯事件名
+    authEndpoint: '/broadcasting/auth'
+});
+Vue.prototype.$echo = echo_instance
 
 window.sha256 = require('js-sha256')
 window.axios = require('axios')
@@ -37,6 +46,10 @@ axios.interceptors.response.use(
         }
     }
 );
+// window.axios.defaults.headers.common['X-Socket-Id'] = echo_instance.socketId();
+echo_instance.connector.socket.on('connect', function () {
+    window.axios.defaults.headers.common['X-Socket-Id'] = echo_instance.socketId();
+});
 
 //全局通用导航栏
 Vue.component('navigation', require('../vue/navigation.vue').default);

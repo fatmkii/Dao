@@ -22,7 +22,7 @@ use App\Models\IncomeStatement;
 use App\Models\UserLV;
 use App\Models\UserMessages;
 use Exception;
-use Faker\Core\Number;
+use App\Events\NewPostBroadcast;
 
 class UserController extends Controller
 {
@@ -458,6 +458,9 @@ class UserController extends Controller
                 ],
             );
         }
+
+        //广播发帖动作
+        broadcast(new NewPostBroadcast($request->thread_id, $post->id, $post->floor))->toOthers();
 
         ProcessUserActive::dispatch(
             [

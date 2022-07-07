@@ -173,12 +173,19 @@ const module_threads = {
 
 const module_posts = {
     state: () => ({
-        PostsData: '',
+        PostsData: {
+            currentPage: 1,
+            lastPage: 1,
+            data: [],
+        },
         PostsLoadStatus: 0,
     }),
     mutations: {
         PostsData_set(state, payload) {
             state.PostsData = payload
+        },
+        PostsData_push(state, payload) {
+            state.PostsData.data.push(payload)
         },
         PostsLoadStatus_set(state, payload) {
             state.PostsLoadStatus = payload
