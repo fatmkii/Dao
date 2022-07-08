@@ -14,7 +14,8 @@ import Echo from "laravel-echo"
 var echo_instance = new Echo({
     broadcaster: 'socket.io',
     // host: window.location.hostname + ':6001',
-    host:process.env.SOCKET_IO_HOST,//从环境变量获取socket服务端
+    host: 'https://v2.cpttmm.com:6001',
+    // host:process.env.SOCKET_IO_HOST,//从环境变量获取socket服务端
     namespace: '', //命名空间设置为''，使前端echo监听直接监听纯事件名
     authEndpoint: '/broadcasting/auth'
 });
