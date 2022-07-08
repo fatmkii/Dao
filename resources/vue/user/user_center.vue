@@ -124,7 +124,7 @@
           <span class="ml-1 mb-2">个</span>
         </div>
         <hr />
-        <b-button variant="success" @click="set_MyCSS">保存</b-button>
+        <b-button :variant="button_theme" @click="set_MyCSS">保存</b-button>
         <b-button variant="outline-dark" @click="default_MyCSS"
           >恢复默认</b-button
         >
@@ -165,7 +165,7 @@
           </div>
           <div class="d-flex align-items-center mt-2">
             <b-button
-              variant="success"
+              :variant="button_theme"
               :disabled="pingbici_set_handling"
               @click="pingbici_set_handle"
               >提交
@@ -219,7 +219,7 @@
           </div>
           <div class="d-flex align-items-center mt-2">
             <b-button
-              variant="success"
+              :variant="button_theme"
               :disabled="my_emoji_set_handling"
               @click="my_emoji_set_handle"
               >提交
@@ -265,7 +265,7 @@
           </b-input-group>
           <b-button
             class="ml-2"
-            variant="success"
+            :variant="button_theme"
             size="sm"
             :disabled="pingbici_set_handling"
             @click="get_income_data(1)"
@@ -567,6 +567,9 @@ export default {
         total += income.olo;
       });
       return total;
+    },
+    button_theme() {
+      return this.$store.getters.ButtonTheme;
     },
     ...mapState({
       login_status: (state) => state.User.LoginStatus,

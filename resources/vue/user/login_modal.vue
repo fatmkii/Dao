@@ -20,7 +20,7 @@
           >
         </b-input-group>
         <b-button
-          variant="success"
+          :variant="button_theme"
           class="mt-4"
           :disabled="reg_record_TTL > 0"
           @click="register_handle"
@@ -52,6 +52,11 @@ export default {
       binggan_input: "",
       reg_record_TTL: 1, //如果记录不存在，TTL返回-2
     };
+  },
+  computed: {
+    button_theme() {
+      return this.$store.getters.ButtonTheme;
+    },
   },
   mounted() {
     this.$refs["login-modal"].show();

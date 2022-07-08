@@ -83,7 +83,7 @@
         <b-button
           size="sm"
           class="my-1 ml-1 my-sm-0 d-lg-none"
-          variant="success"
+          :variant="button_theme"
           :disabled="!this.$store.state.User.LoginStatus"
           @click="new_thread_botton"
           >发表主题</b-button
@@ -91,7 +91,7 @@
         <b-button
           size="md"
           class="my-1 ml-1 my-sm-0 d-none d-lg-block"
-          variant="success"
+          :variant="button_theme"
           :disabled="!this.$store.state.User.LoginStatus"
           @click="new_thread_botton"
           >发表主题</b-button
@@ -110,7 +110,7 @@
         size="sm"
         class="ml-1"
         style="min-width: 46px"
-        variant="success"
+        :variant="button_theme"
         @click="
           get_threads_data(
             true,
@@ -244,6 +244,9 @@ export default {
         }
       }
       return result;
+    },
+    button_theme() {
+      return this.$store.getters.ButtonTheme;
     },
     ...mapState({
       forum_name: (state) =>

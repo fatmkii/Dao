@@ -115,6 +115,7 @@ const module_user = {
     getters: {}
 }
 
+
 const module_forums = {
     state: () => ({
         ForumsData: '',
@@ -243,6 +244,33 @@ const module_css = {
     },
 }
 
+const module_theme = {
+    state: () => ({
+        Theme: 'hdao',
+        //不同主题下，对应BootsrapVue的按钮的variant属性
+        ThemeButtonMatrix: {
+            hdao: "success",
+            night: "secondary",
+            gray: "secondary",
+        }
+    }),
+    mutations: {
+        Theme_set(state, payload) {
+            state.Theme = payload
+            window.document.documentElement.setAttribute(
+                "data-theme",
+                payload
+            )
+            localStorage.theme = payload;
+        },
+    },
+    getters: {
+        ButtonTheme: (state) => {
+            return state.ThemeButtonMatrix[state.Theme]
+        }
+    },
+}
+
 
 export default new Vuex.Store({
     modules: {
@@ -251,5 +279,6 @@ export default new Vuex.Store({
         Threads: module_threads,
         Posts: module_posts,
         MyCSS: module_css,
+        Theme: module_theme,
     }
 })

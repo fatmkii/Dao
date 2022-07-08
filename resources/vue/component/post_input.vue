@@ -147,7 +147,7 @@
             延时发送
           </b-form-checkbox>
           <b-button
-            variant="success"
+            :variant="button_theme"
             class="ml-2"
             :disabled="input_disable"
             v-b-popover.hover.left="'可以Ctrl+Enter喔'"
@@ -186,7 +186,10 @@
             @input="drawer_insert"
           ></b-form-file>
           <b-button-group>
-            <b-button variant="success" size="sm" @click="upload_drawer_click"
+            <b-button
+              :variant="button_theme"
+              size="sm"
+              @click="upload_drawer_click"
               >上传</b-button
             >
             <b-button variant="outline-secondary" size="sm" @click="cancel()">
@@ -296,6 +299,9 @@ export default {
       } else {
         return lines;
       }
+    },
+    button_theme() {
+      return this.$store.getters.ButtonTheme;
     },
   },
   methods: {

@@ -69,16 +69,9 @@ export default {
       }
       //读取localStorage的皮肤主题
       if (localStorage.getItem("theme") == null) {
-        localStorage.theme = "hdao";
-        window.document.documentElement.setAttribute(
-          "data-theme",
-          localStorage.theme
-        );
+        this.$store.commit("Theme_set", "hdao");
       } else {
-        window.document.documentElement.setAttribute(
-          "data-theme",
-          localStorage.theme
-        );
+        this.$store.commit("Theme_set", localStorage.theme);
       }
       //读取localStorage的侧边栏位置记录
       if (localStorage.getItem("z_bar_left") != null) {

@@ -25,7 +25,7 @@
     <template v-slot:modal-footer="{ cancel }">
       <b-button-group>
         <b-button
-          variant="success"
+          :variant="button_theme"
           :disabled="reward_handling"
           @click="reward_handle"
           >打赏！</b-button
@@ -55,7 +55,11 @@ export default {
       post_floor_message: String,
     };
   },
-  computed: {},
+  computed: {
+    button_theme() {
+      return this.$store.getters.ButtonTheme;
+    },
+  },
   created() {},
   methods: {
     reward_click(payload) {

@@ -126,8 +126,7 @@ export default {
   }),
   methods: {
     theme_set(theme_name) {
-      window.document.documentElement.setAttribute("data-theme", theme_name);
-      localStorage.theme = theme_name;
+      this.$store.commit("Theme_set", theme_name);
     },
   },
 };

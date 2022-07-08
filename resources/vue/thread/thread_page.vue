@@ -65,7 +65,7 @@
           size="sm"
           class="ml-1"
           style="min-width: 46px"
-          variant="success"
+          :variant="button_theme"
           @click="search_handle"
           >搜索</b-button
         >
@@ -211,7 +211,7 @@
         </div>
         <div class="d-flex flex-row align-items-center my-2">
           <b-button
-            variant="success"
+            :variant="button_theme"
             size="sm"
             id="listen_button"
             @click="listen_channel"
@@ -228,7 +228,7 @@
               label="涮锅中"
             >
             </b-spinner> -->
-            <img v-show="is_listening" id="listening_img" class="ml-2"/>
+            <img v-show="is_listening" id="listening_img" class="ml-2" />
             <router-link
               :to="'/thread/' + thread_id + '/' + (page + 1)"
               v-if="show_listen_next_page"
@@ -336,7 +336,7 @@
       </div>
       <div class="row align-items-center mt-2">
         <div class="col-auto mr-auto">
-          <b-button variant="success" size="sm" @click="back_to_forum"
+          <b-button :variant="button_theme" size="sm" @click="back_to_forum"
             >返回小岛
           </b-button>
         </div>
@@ -463,7 +463,7 @@
         <template v-slot:modal-footer="{ cancel }">
           <b-button-group>
             <b-button
-              variant="success"
+              :variant="button_theme"
               :disabled="roll_handling"
               @click="roll_handle"
               >Roll it！</b-button
@@ -503,7 +503,7 @@
         <template v-slot:modal-footer="{ cancel }">
           <span style="fontsize: 0.6rem">*两者都输入时，优先跳页</span>
           <b-button-group>
-            <b-button variant="success" @click="jump_handle">Jump！</b-button>
+            <b-button :variant="button_theme" @click="jump_handle">Jump！</b-button>
             <b-button variant="outline-secondary" @click="cancel()">
               取消
             </b-button>
@@ -536,7 +536,7 @@
         </template>
         <template v-slot:modal-footer="{ cancel }">
           <b-button-group>
-            <b-button variant="success" @click="commit_captcha">提交</b-button>
+            <b-button :variant="button_theme" @click="commit_captcha">提交</b-button>
             <b-button variant="outline-secondary" @click="cancel()">
               取消
             </b-button>
@@ -564,7 +564,7 @@
         </template>
         <template v-slot:modal-footer="{ cancel }">
           <b-button-group>
-            <b-button variant="success" @click="change_thread_color"
+            <b-button :variant="button_theme" @click="change_thread_color"
               >提交</b-button
             >
             <b-button variant="outline-secondary" @click="cancel()">
@@ -780,6 +780,9 @@ export default {
         return false;
       }
     },
+    button_theme() {
+      return this.$store.getters.ButtonTheme;
+    },
     ...mapState({
       forum_name: (state) =>
         state.Forums.CurrentForumData.name
@@ -900,7 +903,10 @@ export default {
         if (response.data.code == 200) {
           this.$store.commit("PostsData_push", response.data.post_data);
           this.$nextTick(() => {
-            if (document.activeElement === this.$refs.post_input_com.$refs.content_input) {
+            if (
+              document.activeElement ===
+              this.$refs.post_input_com.$refs.content_input
+            ) {
               document.documentElement.scrollTop =
                 document.body.clientHeight - scroll_top_now;
             } //如果正在输入，则使窗口位置保持不变

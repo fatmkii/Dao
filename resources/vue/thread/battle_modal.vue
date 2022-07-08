@@ -33,7 +33,7 @@
       <span v-if="!thread_can_battle">本主题不能发起大乱斗</span>
       <b-button-group>
         <b-button
-          variant="success"
+          :variant="button_theme"
           :disabled="battle_handing || !thread_can_battle"
           @click="battle_handle"
           >Fight！</b-button
@@ -91,6 +91,9 @@ export default {
         }
       }
       return group_options;
+    },
+    button_theme() {
+      return this.$store.getters.ButtonTheme;
     },
     ...mapState({
       forum_id: (state) =>
