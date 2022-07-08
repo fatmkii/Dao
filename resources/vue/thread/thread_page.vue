@@ -222,12 +222,13 @@
           </b-button>
 
           <div>
-            <b-spinner
+            <!-- <b-spinner
               class="spinner img-uploading ml-2"
               v-show="is_listening"
               label="涮锅中"
             >
-            </b-spinner>
+            </b-spinner> -->
+            <img v-show="is_listening" id="listening_img" class="ml-2"/>
             <router-link
               :to="'/thread/' + thread_id + '/' + (page + 1)"
               v-if="show_listen_next_page"
@@ -899,8 +900,10 @@ export default {
         if (response.data.code == 200) {
           this.$store.commit("PostsData_push", response.data.post_data);
           this.$nextTick(() => {
-            document.documentElement.scrollTop =
-              document.body.clientHeight - scroll_top_now; //使窗口位置保持不变
+            if (document.activeElement === this.$refs.post_input_com.$refs.content_input) {
+              document.documentElement.scrollTop =
+                document.body.clientHeight - scroll_top_now;
+            } //如果正在输入，则使窗口位置保持不变
           });
         } else {
           console.log(response.data.message);

@@ -440,6 +440,12 @@ label.custom-file-label::after {
     padding-bottom: ($spacer * 0.25);
 }
 
+//监听中的图
+#listening_img {
+    @include img_src("listening_img");
+    max-height: 16px;
+}
+
 [v-cloak] {
     display: none;
 }

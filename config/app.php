@@ -14,6 +14,9 @@ return [
     'oss_key' => env('OSS_KEY', ''),
     'oss_secret' => env('OSS_SECRET', ''),
 
+    //socket.io服务器
+    'socket_io_host' => env('SOCKET_IO_HOST','http://localhost'),
+
 
     /*
     |--------------------------------------------------------------------------
