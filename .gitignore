@@ -64,3 +64,4 @@ public/vendor/telescope/mix-manifest.json
 public/json/chara_index.js
 public/json/json.js
 laravel-echo-server.lock
+laravel-echo-server.json
