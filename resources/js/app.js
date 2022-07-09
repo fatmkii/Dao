@@ -52,6 +52,11 @@ axios.interceptors.response.use(
 echo_instance.connector.socket.on('connect', function () {
     window.axios.defaults.headers.common['X-Socket-Id'] = echo_instance.socketId();
 });
+//窗口关闭时，断开socket连接
+window.addEventListener("beforeunload", () => {
+    echo_instance.connector.socket.disconnect(true);
+})
+
 
 //全局通用导航栏
 Vue.component('navigation', require('../vue/navigation.vue').default);
