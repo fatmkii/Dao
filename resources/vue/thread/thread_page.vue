@@ -24,10 +24,13 @@
         </div>
         <b-dropdown
           id="shield-dropdown"
-          text="屏蔽图"
+          text="屏蔽"
           variant="outline-dark"
           size="sm"
         >
+          <b-form-checkbox v-model="no_video_mode" switch class="ml-2 my-2">
+            无视频
+          </b-form-checkbox>
           <b-form-checkbox v-model="no_image_mode" switch class="ml-2 my-2">
             无图
           </b-form-checkbox>
@@ -503,7 +506,9 @@
         <template v-slot:modal-footer="{ cancel }">
           <span style="fontsize: 0.6rem">*两者都输入时，优先跳页</span>
           <b-button-group>
-            <b-button :variant="button_theme" @click="jump_handle">Jump！</b-button>
+            <b-button :variant="button_theme" @click="jump_handle"
+              >Jump！</b-button
+            >
             <b-button variant="outline-secondary" @click="cancel()">
               取消
             </b-button>
@@ -536,7 +541,9 @@
         </template>
         <template v-slot:modal-footer="{ cancel }">
           <b-button-group>
-            <b-button :variant="button_theme" @click="commit_captcha">提交</b-button>
+            <b-button :variant="button_theme" @click="commit_captcha"
+              >提交</b-button
+            >
             <b-button variant="outline-secondary" @click="cancel()">
               取消
             </b-button>
@@ -658,6 +665,9 @@ export default {
         this.$echo.leaveChannel("thread_" + this.thread_id);
       }
     },
+    no_video_mode() {
+      localStorage.setItem("no_video_mode", this.no_video_mode ? "true" : "");
+    },
     no_image_mode() {
       localStorage.setItem("no_image_mode", this.no_image_mode ? "true" : "");
     },
@@ -694,6 +704,7 @@ export default {
       jump_page: "",
       jump_page_show: false,
 
+      no_video_mode: false,
       no_image_mode: false,
       no_emoji_mode: false,
       no_head_mode: false,
@@ -768,6 +779,19 @@ export default {
             } else {
               return true;
             }
+          });
+        }
+        //当屏蔽视频点时，过滤不需要的数据
+        if (this.no_video_mode == true) {
+          const tag = ["<iframe", "<video", "<embed"];
+          filtered = filtered.filter((post) => {
+            for (var i = 0; i < tag.length; i++) {
+              var reg = new RegExp(tag[i], "g");
+              if (reg.test(post.content)) {
+                return false; //直接跳出循环
+              }
+            }
+            return true;
           });
         }
       }
@@ -1379,6 +1403,7 @@ export default {
     },
     load_LocalStorage() {
       var localStorage_array = new Array(
+        "no_video_mode",
         "no_image_mode",
         "no_emoji_mode",
         "no_head_mode",
