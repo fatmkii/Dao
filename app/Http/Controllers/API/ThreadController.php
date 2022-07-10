@@ -442,7 +442,7 @@ class ThreadController extends Controller
                     && $CurrentThread->nissin_date < Carbon::now()
                     && $CurrentThread->sub_id == 0
                 ) {
-                    if ($user != null && $user->admin != 1) {
+                    if ($user != null && $user->admin != 0) {
                         break;
                     } else {
                         return response()->json([
