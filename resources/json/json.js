@@ -305,6 +305,7 @@ var emoji_json = [
             "https://s1.ax1x.com/2022/03/06/brmwZD.gif",
             "https://www.z4a.net/images/2022/05/28/1fbd5dfec7022d19158253c1b13fd2d9.gif",
             "https://www.z4a.net/images/2022/05/28/A9F78D0E-991F-4477-B63D-BDE00A1E2C4F.gif",
+            "https://img.mjj.today/2022/07/11/15ff584eb4493ba1de3d77f32b0abf03.gif",
             "https://www.z4a.net/images/2022/05/28/bOMGp6.gif",
             "https://www.z4a.net/images/2022/05/28/OupSo9.jpg",
             "https://www.z4a.net/images/2022/05/28/qA24Te.gif",
