@@ -643,31 +643,38 @@ export default {
     },
     is_listening() {
       if (this.is_listening === true) {
-        this.$echo
-          .channel("thread_" + this.thread_id)
-          .listen("NewPost", (response) => {
-            if (response.post_floor >= this.page * 200) {
-              //如果新回复通知中，楼层号大于本页的，则关闭监听并显示翻页选项
-              this.is_listening = false;
-              this.show_listen_next_page = true;
-            } else {
-              //否则，请求新回复数据
-              var post_exist = this.$store.state.Posts.PostsData.data.find(
-                (post) => {
-                  return post.id == response.post_id;
-                }
-              );
-              if (!post_exist) {
-                //如果post_id不存在，才去获取新数据
-                this.get_post_data_and_push(
-                  response.thread_id,
-                  response.post_id
+        try {
+          this.$echo
+            .channel("thread_" + this.thread_id)
+            .listen("NewPost", (response) => {
+              if (response.post_floor >= this.page * 200) {
+                //如果新回复通知中，楼层号大于本页的，则关闭监听并显示翻页选项
+                this.is_listening = false;
+                this.show_listen_next_page = true;
+              } else {
+                //否则，请求新回复数据
+                var post_exist = this.$store.state.Posts.PostsData.data.find(
+                  (post) => {
+                    return post.id == response.post_id;
+                  }
                 );
+                if (!post_exist) {
+                  //如果post_id不存在，才去获取新数据
+                  this.get_post_data_and_push(
+                    response.thread_id,
+                    response.post_id
+                  );
+                }
               }
-            }
-          });
+            });
+        } catch (e) {
+          this.is_listening = false;
+          alert("服务器的自动涮锅好像出错了，暂时不能使用");
+        }
       } else {
+        try {
         this.$echo.leaveChannel("thread_" + this.thread_id);
+        } catch (e) {}
       }
     },
     no_video_mode() {
@@ -1427,6 +1434,7 @@ export default {
       }
     },
     listen_channel() {
+      //监听频道的启动在watch那里
       if (this.is_listening === false) {
         this.get_posts_data();
         this.is_listening = true;

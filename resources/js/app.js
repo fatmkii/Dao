@@ -11,15 +11,30 @@ import store from './store/store'
 import router from './routes.js'
 import Echo from "laravel-echo"
 
-var echo_instance = new Echo({
-    broadcaster: 'socket.io',
-    // host: window.location.hostname + ':6001',
-    // host: 'https://v2.cpttmm.com:6001',
-    host: process.env.MIX_SOCKET_IO_HOST,//从环境变量获取socket服务端
-    namespace: '', //命名空间设置为''，使前端echo监听直接监听纯事件名
-    authEndpoint: '/broadcasting/auth'
-});
-Vue.prototype.$echo = echo_instance
+//用js手动载入SocketIO.js，并且加载完再添加实例。好处是当SocketIO服务器端失效时，不影响整体网页。
+var body = document.getElementsByTagName('body')[0];
+var SocketJS = document.createElement('script');
+SocketJS.setAttribute('type', 'text/javascript');
+SocketJS.setAttribute('src', process.env.MIX_SOCKET_IO_HOST + "/socket.io/socket.io.js");
+body.appendChild(SocketJS);
+SocketJS.onload = () => {
+    var echo_instance = new Echo({
+        broadcaster: 'socket.io',
+        host: process.env.MIX_SOCKET_IO_HOST,//从环境变量获取socket服务端
+        namespace: '', //命名空间设置为''，使前端echo监听直接监听纯事件名
+        authEndpoint: '/broadcasting/auth'
+    });
+    Vue.prototype.$echo = echo_instance
+
+    echo_instance.connector.socket.on('connect', function () {
+        window.axios.defaults.headers.common['X-Socket-Id'] = echo_instance.socketId();
+    });
+
+    //窗口关闭时，断开socket连接
+    window.addEventListener("beforeunload", () => {
+        echo_instance.connector.socket.disconnect(true);
+    })
+}
 
 window.sha256 = require('js-sha256')
 window.axios = require('axios')
@@ -48,14 +63,6 @@ axios.interceptors.response.use(
         }
     }
 );
-// window.axios.defaults.headers.common['X-Socket-Id'] = echo_instance.socketId();
-echo_instance.connector.socket.on('connect', function () {
-    window.axios.defaults.headers.common['X-Socket-Id'] = echo_instance.socketId();
-});
-//窗口关闭时，断开socket连接
-window.addEventListener("beforeunload", () => {
-    echo_instance.connector.socket.disconnect(true);
-})
 
 
 //全局通用导航栏
