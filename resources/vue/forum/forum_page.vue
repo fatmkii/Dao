@@ -151,6 +151,12 @@
       >
     </div>
 
+    <img
+      src="https://oss.cpttmm.com/xhg_other/notice_404.png"
+      v-if="threads_load_status == 2 && thread_reject_code == 22404"
+      class="nissined_img"
+    />
+
     <ZBar @reload="get_threads_data(true)" reload>
       <template v-slot:top>
         <div
@@ -220,6 +226,7 @@ export default {
       search_show: false,
       search_input: "",
       show_delay: false,
+      thread_reject_code: 0,
       subtitles_selected: {
         "[公告]": true,
         "[闲聊]": true,
@@ -298,8 +305,16 @@ export default {
             }
             this.show_delay = false;
           } else {
-            this.$store.commit("ThreadsLoadStatus_set", 0);
-            alert(response.data.message);
+            if ([22404].includes(response.data.code)) {
+              this.thread_reject_code = response.data.code;
+              //清空数据，避免显示上一个帖子的数据
+              this.$store.commit("ThreadsData_set", "");
+              this.$store.commit("CurrentForumData_set", "");
+              this.$store.commit("ThreadsLoadStatus_set", 2);
+            } else {
+              this.$store.commit("ThreadsLoadStatus_set", 0);
+              alert(response.data.message);
+            }
           }
         })
         .catch((error) => {
