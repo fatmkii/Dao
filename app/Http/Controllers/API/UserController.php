@@ -651,8 +651,11 @@ class UserController extends Controller
 
         if ($user->MyEmoji) {
             $my_emoji = $user->MyEmoji;
+            $my_emoji_array = json_decode($my_emoji->emojis);
+            array_push($my_emoji_array, $request->my_emoji);
         } else {
             $my_emoji = new MyEmoji();
+            $my_emoji_array = [$request->my_emoji]; //得是个数组
         }
 
         //检查我的表情包长度是否符合饼干等级
@@ -678,13 +681,10 @@ class UserController extends Controller
             }
         }
 
-        $my_emoji_array = json_decode($my_emoji->emojis);
-        array_push($my_emoji_array, $request->my_emoji);
-
         try {
             DB::beginTransaction();
             $my_emoji->user_id = $user->id;
-            $my_emoji->emojis = $my_emoji_array;
+            $my_emoji->emojis = json_encode($my_emoji_array);
             $my_emoji->save();
             DB::commit();
         } catch (QueryException $e) {
@@ -709,7 +709,7 @@ class UserController extends Controller
                 'code' => ResponseCode::SUCCESS,
                 'message' => '已设定我的表情包',
                 'data' => [
-                    'my_emoji' => json_encode($my_emoji->emojis),
+                    'my_emoji' => json_encode($my_emoji_array),
                     'len' => mb_strlen($request['my_emoji']),
                 ]
             ],
