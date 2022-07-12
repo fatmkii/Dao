@@ -17,7 +17,6 @@
         <router-view></router-view>
         <footer_navi></footer_navi>
     </div>
-
 </body>
 
 {{-- <script src="{{ Config::get('app.socket_io_host') }}/socket.io/socket.io.js"></script> --}}
