@@ -1097,6 +1097,13 @@ var emoji_json = [
             "https://s1.ax1x.com/2022/05/28/Xurih4.png",
             "https://s1.ax1x.com/2022/05/28/Xurk9J.jpg",
             "https://s1.ax1x.com/2022/05/28/XurA39.png",
+            "https://img.mjj.today/2022/07/13/ea9cadd0aaa0d0539935889d1f09c471.gif",
+            "https://img.mjj.today/2022/07/13/8afbead0addc9d977a74321633475cd0.webp",
+            "https://img.mjj.today/2022/07/13/7750d05147eee2fcba31eae064d5bb4f.webp",
+            "https://img.mjj.today/2022/07/13/6af263a874aacc710726d5596e8edc64.gif",
+            "https://img.mjj.today/2022/07/13/e61b0a53f6f06959fba5b6754648a7a4.gif",
+            "https://img.mjj.today/2022/07/13/a151fe09a5a73664bd206539986dae06.jpg",
+            "https://img.mjj.today/2022/07/13/06e43d6606e242accaf0897633bbc1d4.jpg",
             "https://s1.ax1x.com/2022/05/28/XurEcR.png"
         ],
         "deleted_at": null
@@ -1278,6 +1285,7 @@ var emoji_json = [
             "https://z3.ax1x.com/2021/04/28/giOHz9.png",
             "https://z3.ax1x.com/2021/04/28/giO7RJ.jpg",
             "https://s4.ax1x.com/2022/01/13/7lA7gs.jpg",
+            "https://s1.ax1x.com/2022/07/13/jRmlb4.jpg",
             "https://www.z4a.net/images/2022/01/30/H9KFx0.png",
             "https://z3.ax1x.com/2021/04/28/giOOqx.jpg",
             "https://z3.ax1x.com/2021/05/11/gdi47n.jpg",
