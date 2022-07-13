@@ -2,7 +2,14 @@
   <div v-if="this_show">
     <p class="mt-2">管理员中心</p>
     <p>我的饼干是：{{ this.$store.state.User.Binggan }}</p>
-    <p>管理的板块：{{ this.$store.state.User.AdminForums }}</p>
+    <div>管理的板块：</div>
+    <div v-for="(forum, index) in admin_forums" :key="index">
+      <b-badge variant="secondary" pill>{{
+        forum.id
+      }}</b-badge>
+      <span class="ml-2"> {{ forum.name }}</span>
+    </div>
+
     <hr />
     <p class="mt-2">管理员操作面板</p>
     <b-tabs pills>
@@ -108,6 +115,20 @@ export default {
       }
       return array;
     },
+    admin_forums() {
+      var array = [];
+      if (this.forums_load_status === 2 && this.user_load_status === 2) {
+        this.forums_data.forEach((forum, index) => {
+          if (this.$store.state.User.AdminForums.includes(forum.id)) {
+            array.push({
+              id: forum.id,
+              name: forum.name,
+            });
+          }
+        });
+      }
+      return array;
+    },
     this_show() {
       if (this.$store.state.User.UserDataLoaded == 2) {
         if (this.$store.state.User.AdminStatus != 0) {
@@ -123,6 +144,7 @@ export default {
     ...mapState({
       forums_data: (state) => state.Forums.ForumsData,
       forums_load_status: (state) => state.Forums.ForumsLoadStatus,
+      user_load_status: (state) => state.User.UserDataLoaded,
     }),
   },
   mounted() {
