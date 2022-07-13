@@ -69,36 +69,27 @@ import { mapState } from "vuex";
 export default {
   components: {},
   props: {},
+  watch: {
+    forums_load_status() {
+      if (this.forums_load_status === 2) {
+        this.set_banner_input();
+      }
+    },
+    forum_selected() {
+      if (this.forums_load_status === 2) {
+        this.set_banner_input();
+      }
+    },
+  },
   data: function () {
     return {
       name: "admin_center",
       forum_selected: 0,
       banner_set_handling: false,
+      banner_input: "",
     };
   },
   computed: {
-    banner_input: {
-      get() {
-        var banners = this.forums_data[this.forum_selected].banners;
-        if (banners) {
-          banners = banners.replace(/,/g, ",\n"); //把,改成换行，方便看
-          banners = banners.replace(/\[/g, "[\n");
-          banners = banners.replace(/]/g, "\n]");
-        }
-        return banners;
-      },
-      set(value) {
-        var banners = value;
-        if (banners) {
-          banners = banners.replace(/\n/g, ""); //导入时候取消换行
-        }
-        var payload = {
-          forum_id: this.forum_selected,
-          banners: banners,
-        };
-        this.$store.commit("Banner_set", payload);
-      },
-    },
     button_theme() {
       return this.$store.getters.ButtonTheme;
     },
@@ -111,7 +102,7 @@ export default {
     },
     banners_array() {
       try {
-        var array = JSON.parse(this.forums_data[this.forum_selected].banners);
+        var array = JSON.parse(this.banner_input);
       } catch (e) {
         var array = [];
       }
@@ -131,6 +122,7 @@ export default {
     },
     ...mapState({
       forums_data: (state) => state.Forums.ForumsData,
+      forums_load_status: (state) => state.Forums.ForumsLoadStatus,
     }),
   },
   mounted() {
@@ -173,6 +165,15 @@ export default {
           this.banner_set_handling = false;
           alert(Object.values(error.response.data.errors)[0]);
         });
+    },
+    set_banner_input() {
+      var banners = this.forums_data[this.forum_selected].banners;
+      if (banners) {
+        banners = banners.replace(/,/g, ",\n"); //把,改成换行，方便看
+        banners = banners.replace(/\[/g, "[\n");
+        banners = banners.replace(/]/g, "\n]");
+      }
+      this.banner_input = banners;
     },
   },
   created() {},

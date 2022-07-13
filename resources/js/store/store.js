@@ -120,6 +120,7 @@ const module_forums = {
     state: () => ({
         ForumsData: [],
         CurrentForumData: {},
+        ForumsLoadStatus: 0,
     }),
     mutations: {
         ForumsData_set(state, payload) {
@@ -127,6 +128,9 @@ const module_forums = {
         },
         CurrentForumData_set(state, payload) {
             state.CurrentForumData = payload
+        },
+        ForumsLoadStatus_set(state, payload) {
+            state.ForumsLoadStatus = payload
         },
         Banner_set(state, payload) {
             state.ForumsData[payload.forum_id].banners = payload.banners

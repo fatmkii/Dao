@@ -11,6 +11,7 @@ export default {
   },
   methods: {
     get_forums_data() {
+      this.$store.commit("ForumsLoadStatus_set", 1);
       const config = {
         method: "get",
         url: "/api/forums/",
@@ -19,8 +20,12 @@ export default {
       axios(config)
         .then((response) => {
           this.$store.commit("ForumsData_set", response.data.data);
+          this.$store.commit("ForumsLoadStatus_set", 2);
         })
-        .catch((error) => alert(error)); // Todo:写异常返回代码;}
+        .catch((error) => {
+          this.$store.commit("ForumsLoadStatus_set", 0);
+          alert(error);
+        }); // Todo:写异常返回代码;}
     },
     get_user_data() {
       if (localStorage.Token != null && localStorage.Binggan != null) {
