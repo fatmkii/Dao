@@ -88,9 +88,13 @@ export default {
         return banners;
       },
       set(value) {
+        var banners = value;
+        if (banners) {
+          banners = banners.replace(/\n/g, ""); //导入时候取消换行
+        }
         var payload = {
           forum_id: this.forum_selected,
-          banners: value,
+          banners: banners,
         };
         this.$store.commit("Banner_set", payload);
       },
