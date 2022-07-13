@@ -112,6 +112,7 @@ Route::middleware('CheckTokenCan:admin', 'auth:sanctum')->prefix('admin')->group
     Route::post('/post_delete_all', [AdminController::class, 'post_delete_all']); //删主题内该作者全部回帖
     Route::post('/user_ban', [AdminController::class, 'user_ban']); //碎饼
     Route::post('/user_lock', [AdminController::class, 'user_lock']); //封id（临时）
+    Route::post('/set_banner', [AdminController::class, 'set_banner']); //封id（临时）
     Route::post('/thread_set_top', [AdminController::class, 'thread_set_top']); //设置置顶
     Route::post('/thread_cancel_top', [AdminController::class, 'thread_cancel_top']); //取消置顶
     Route::post('/create_annoucement', [AdminController::class, 'create_annoucement']); //发布站内公告

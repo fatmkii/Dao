@@ -19,7 +19,7 @@ class ResponseCode
     const USER_NEW_CLOSED = 21406;
     const CANNOTLOGIN = 21401;
 
-    const ADMIN_UNAUTHORIZED = 22401;
+    const ADMIN_UNAUTHORIZED = 29401;
 
     const FORUM_NOT_FOUND = 22404;
     const FORUM_UNAUTHORIZED = 22401;

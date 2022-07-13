@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Common\ResponseCode;
 use App\Jobs\ProcessUserActive;
 use App\Models\AnnoucementMessages;
+use App\Models\Forum;
 use App\Models\Post;
 use App\Models\Thread;
 use App\Models\User;
@@ -448,6 +449,67 @@ class AdminController extends Controller
         return response()->json([
             'code' => ResponseCode::SUCCESS,
             'message' => $msg,
+        ]);
+    }
+
+    public function set_banner(Request $request)
+    {
+        $request->validate([
+            'forum_id' => 'required|Integer',
+            'banners' => 'required|json|max:5000',
+        ]);
+
+        $user = $request->user();
+
+        $forum = Forum::find($request->forum_id);
+        if (!$forum) {
+            return response()->json([
+                'code' => ResponseCode::FORUM_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::FORUM_NOT_FOUND],
+            ]);
+        }
+
+        //确认是否拥有该版面的管理员权限
+        if (
+            !in_array($request->forum_id, json_decode($user->AdminPermissions->forums))
+        ) {
+            return response()->json(
+                [
+                    'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+                    'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+                ],
+            );
+        }
+
+        try {
+            DB::beginTransaction();
+            $forum->banners = $request->banners;
+            $forum->save();
+            DB::commit();
+        } catch (QueryException $e) {
+            DB::rollback();
+            return response()->json([
+                'code' => ResponseCode::DATABASE_FAILED,
+                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
+            ]);
+        }
+
+        //要清除板块的缓存
+        Cache::forget('forums_cache');
+
+        ProcessUserActive::dispatch(
+            [
+                'binggan' => $user->binggan,
+                'user_id' => $user->id,
+                'active' => '管理员更新了版头。板块：' . $request->forum_id,
+                'content' => $request->banners,
+            ]
+        );
+
+
+        return response()->json([
+            'code' => ResponseCode::SUCCESS,
+            'message' => '更新版头成功！',
         ]);
     }
 

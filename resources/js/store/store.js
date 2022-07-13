@@ -118,8 +118,8 @@ const module_user = {
 
 const module_forums = {
     state: () => ({
-        ForumsData: '',
-        CurrentForumData: '',
+        ForumsData: [],
+        CurrentForumData: {},
     }),
     mutations: {
         ForumsData_set(state, payload) {
@@ -127,7 +127,11 @@ const module_forums = {
         },
         CurrentForumData_set(state, payload) {
             state.CurrentForumData = payload
+        },
+        Banner_set(state, payload) {
+            state.ForumsData[payload.forum_id].banners = payload.banners
         }
+
     },
     getters: {
         ForumData: (state) => (forum_id) => {
