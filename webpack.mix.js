@@ -26,7 +26,7 @@ if (process.env.MIX_ENV == 'local')
 
 if (process.env.MIX_ENV == 'production')
     mix.alias({
-        vue$: path.join(__dirname, 'node_modules/vue/dist/vue.esm.js')
+        vue$: path.join(__dirname, 'node_modules/vue/dist/vue.min.js')
     });
 
 mix.options({ uglify: {} });
