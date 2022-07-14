@@ -502,7 +502,7 @@ class AdminController extends Controller
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
                 'active' => '管理员更新了版头。板块：' . $request->forum_id,
-                'content' => $request->banners,
+                'content' => '版头字符串长度：' . mb_strlen($request->banners),
             ]
         );
 
