@@ -27,9 +27,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->command('BattlePolling:run')->everyMinute();
         $schedule->command('DelayThreadHandle:run')->dailyAt('8:00');
-        $schedule->exec('supervisorctl restart Laravel-Echo-server:Laravel-Echo-server_00')
-            ->dailyAt('3:00')
-            ->sendOutputTo('/var/log/Laravel-schedule.log');
+        $schedule->exec('supervisorctl restart Laravel-Echo-server:Laravel-Echo-server_00')->dailyAt('3:00');
     }
 
     /**
