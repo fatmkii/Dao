@@ -56,7 +56,7 @@ return [
         'string' => 'The :attribute must be greater than or equal :value characters.',
         'array' => 'The :attribute must have :value items or more.',
     ],
-    'image' => 'The :attribute must be an image.',
+    'image' => ':attribute需要是图片',
     'in' => 'The selected :attribute is invalid.',
     'in_array' => 'The :attribute field does not exist in :other.',
     'integer' => ':attribute必须是整数',
@@ -164,6 +164,8 @@ return [
         'gamble_end_time' => '菠菜结束时间',
         'vote_end_time' => '投票结束时间',
         'my_emoji' => '表情包',
+        'locked_by_coin' => '看帖权限的olo',
+        'file' => '文件',
     ],
 
 ];

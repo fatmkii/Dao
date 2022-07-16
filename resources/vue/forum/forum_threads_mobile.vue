@@ -4,7 +4,7 @@
     <div class="threads_table_header my-2 py-1 text-center">
       <span style="font-size: 1.25rem">主题</span>
     </div>
-    <div v-show="threads_load_status">
+    <div v-show="threads_load_status == 2">
       <div
         class="threads_container"
         v-for="thread in threads_data"
@@ -13,6 +13,13 @@
       >
         <div class="text-left my-1 py-1" :style="{ color: thread.title_color }">
           <span class="thread_sub_title"> {{ thread.sub_title }}&nbsp; </span>
+          <span
+            v-if="
+              focus_threads.hasOwnProperty(thread.id) &&
+              focus_threads[thread.id] < thread.posts_num
+            "
+            >🟠</span
+          >
           <span v-if="thread.vote_question_id != null">🗳️</span>
           <span v-if="thread.gamble_question_id != null">🎲</span>
           <span v-if="thread.crowd_id != null">💰</span>
@@ -31,8 +38,12 @@
           >
           <router-link
             :to="
-              '/thread/' + thread.id + '/' + Math.ceil(thread.posts_num / 200)
+              '/thread/' +
+              thread.id +
+              '/' +
+              Math.ceil((thread.posts_num + 1) / 200)
             "
+            :target="router_target"
             v-if="thread.posts_num > 200"
             class="thread_page ml-1"
             >[{{ Math.ceil((thread.posts_num + 1) / 200) }}]</router-link
@@ -56,7 +67,7 @@
     </div>
     <b-spinner
       class="spinner document-loading"
-      v-show="!threads_load_status"
+      v-show="threads_load_status == 1"
       label="读取中"
     >
     </b-spinner>
@@ -84,7 +95,7 @@ export default {
       return this.new_window_to_post ? "_blank" : "false";
     },
     threads_data() {
-      if (this.threads_load_status) {
+      if (this.threads_load_status == 2) {
         if (this.$store.state.User.UsePingbici) {
           const title_pingbici = JSON.parse(
             this.$store.state.User.TitlePingbici
@@ -106,6 +117,7 @@ export default {
     ...mapState({
       threads_load_status: (state) => state.Threads.ThreadsLoadStatus,
       forum_is_nissin: (state) => state.Forums.CurrentForumData.is_nissin,
+      focus_threads: (state) => state.User.FocusThreads,
     }),
   },
   methods: {

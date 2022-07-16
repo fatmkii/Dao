@@ -11,6 +11,7 @@ export default {
   },
   methods: {
     get_forums_data() {
+      this.$store.commit("ForumsLoadStatus_set", 1);
       const config = {
         method: "get",
         url: "/api/forums/",
@@ -19,8 +20,12 @@ export default {
       axios(config)
         .then((response) => {
           this.$store.commit("ForumsData_set", response.data.data);
+          this.$store.commit("ForumsLoadStatus_set", 2);
         })
-        .catch((error) => alert(error)); // Todo:写异常返回代码;}
+        .catch((error) => {
+          this.$store.commit("ForumsLoadStatus_set", 0);
+          alert(error);
+        }); // Todo:写异常返回代码;}
     },
     get_user_data() {
       if (localStorage.Token != null && localStorage.Binggan != null) {
@@ -51,17 +56,7 @@ export default {
             }
           })
           .catch((error) => {
-            if (
-              error.response.status !== undefined &&
-              error.response.status === 401
-            ) {
-              localStorage.clear("Binggan"); //如果遇到401错误(用户未认证)，就清除Binggan和Token
-              localStorage.clear("Token");
-              delete axios.defaults.headers.Authorization;
-              alert("你的饼干好像有问题？请重新登录");
-            } else {
-              alert(Object.values(error.response.data.errors)[0]);
-            }
+            alert(Object.values(error.response.data.errors)[0]);
           });
       }
     },
@@ -79,16 +74,9 @@ export default {
       }
       //读取localStorage的皮肤主题
       if (localStorage.getItem("theme") == null) {
-        localStorage.theme = "hdao";
-        window.document.documentElement.setAttribute(
-          "data-theme",
-          localStorage.theme
-        );
+        this.$store.commit("Theme_set", "hdao");
       } else {
-        window.document.documentElement.setAttribute(
-          "data-theme",
-          localStorage.theme
-        );
+        this.$store.commit("Theme_set", localStorage.theme);
       }
       //读取localStorage的侧边栏位置记录
       if (localStorage.getItem("z_bar_left") != null) {
@@ -108,19 +96,40 @@ export default {
         );
       }
 
+      //读取是否减少toast提示
+      if (localStorage.getItem("less_toast") != null) {
+        this.$store.commit(
+          "LessToast_set",
+          localStorage.getItem("less_toast") === "true"
+        );
+      }
+
       //读取MyCss（自定义字体大小和行距等）
       if (localStorage.my_css != null) {
         this.$store.commit("MyCSS_set_all", JSON.parse(localStorage.my_css));
+
         if (this.$store.state.MyCSS.PostsMarginTop == null) {
           this.$store.commit("PostsMarginTop_set", 32); //临时的，给旧版本加默认值
-          const my_css = this.$store.state.MyCSS;
-          localStorage.my_css = JSON.stringify(my_css);
         }
         if (this.$store.state.MyCSS.PostsMaxLine == null) {
           this.$store.commit("PostsMaxLine_set", 16); //临时的，给旧版本加默认值
-          const my_css = this.$store.state.MyCSS;
-          localStorage.my_css = JSON.stringify(my_css);
         }
+        if (this.$store.state.MyCSS.QuoteMax == null) {
+          this.$store.commit("QuoteMax_set", 3); //临时的，给旧版本加默认值
+        }
+        if (this.$store.state.MyCSS.ThreadsPerPage == null) {
+          this.$store.commit("ThreadsPerPage_set", 50); //临时的，给旧版本加默认值
+        }
+        const my_css = this.$store.state.MyCSS;
+        localStorage.my_css = JSON.stringify(my_css);
+      }
+
+      //读取关注帖子的上次回帖数（用于新回复提醒）
+      if (localStorage.focus_threads != null) {
+        this.$store.commit(
+          "FocusThreads_set_all",
+          JSON.parse(localStorage.focus_threads)
+        );
       }
     },
     set_VueStore(response_data) {

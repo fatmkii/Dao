@@ -65,3 +65,10 @@
         border-color: themed($color) !important;
     }
 }
+
+//获取图片来源
+@mixin img_src($src) {
+    @include themeify {
+        content: themed($src);
+    }
+}

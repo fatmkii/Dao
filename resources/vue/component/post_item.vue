@@ -150,10 +150,8 @@
         class="post_span"
         style="
           word-wrap: break-word;
-          white-space: normal;
+          white-space: pre-wrap;
           overflow: hidden;
-          display: -webkit-box;
-          -webkit-box-orient: vertical;
           position: relative;
         "
         :style="post_span_css"
@@ -187,6 +185,7 @@
 
 
 <script>
+import { mapState } from "vuex";
 export default {
   props: {
     post_data: {
@@ -301,6 +300,9 @@ export default {
         top: this.post_top_offset + "px",
       };
     },
+    ...mapState({
+      quote_max: (state) => state.MyCSS.QuoteMax,
+    }),
   },
   created() {
     this.pingbici_check();
@@ -489,7 +491,7 @@ export default {
       }
     },
     quote_click() {
-      const max_quote = 3; //最大可引用的层数
+      const max_quote = this.quote_max; //最大可引用的层数
       var post_lines = this.$refs.post_centent.innerText.split("\n");
       var index_array = [];
       //搜索引用的层数
@@ -507,7 +509,7 @@ export default {
       }
       const quote_content =
         "<span class='quote_content'>" +
-        post_lines.join("\n").trim() +
+        post_lines.join("\n") +
         "\n" +
         this.$refs.post_author_info.innerText +
         "</span>" +

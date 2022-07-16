@@ -125,9 +125,6 @@ class GambleController extends Controller
             $gamble_user->betting_olo = $request->betting_olo;
             $gamble_user->save();
 
-            //扣除用户相应olo
-            $user->coinConsume($request->betting_olo);
-
             //执行新回复流程
             $thread_id = $gamble_question->Thread->id;
             $post_content = sprintf("我为“%s”下注了%u块奥利奥", $bet_option->option_text, $request->betting_olo); //TODO
@@ -144,6 +141,21 @@ class GambleController extends Controller
             $thread = $post->thread;
             $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
             $post->floor = $thread->posts_num;
+
+            //扣除用户相应olo
+            // $user->coinConsume($request->betting_olo);
+            $user->coinChange(
+                'normal', //记录类型
+                [
+                    'olo' => -$request->betting_olo,
+                    'content' => '菠菜投注',
+                    'thread_id' => $thread->id,
+                    'thread_title' => $thread->title,
+                    'post_id' => $post->id,
+                    'floor' => $post->floor,
+                ]
+            ); //扣除用户相应olo（通过统一接口、记录操作）
+
             $thread->save();
             $post->save();
             DB::commit();

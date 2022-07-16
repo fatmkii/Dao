@@ -11,10 +11,13 @@ use App\Models\Post;
 use App\Models\Thread;
 use Illuminate\Database\QueryException;
 use App\Common\ResponseCode;
+use App\Events\NewPostBroadcast;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use App\Jobs\ProcessUserActive;
+use App\Jobs\ProcessIncomeStatement;
+use Carbon\Carbon;
 
 class PostController extends Controller
 {
@@ -43,12 +46,13 @@ class PostController extends Controller
             'nickname' => '',
             'post_with_admin' => 'boolean',
             'new_post_key' => 'required|string',
+            'timestamp' => 'integer',
         ]);
 
         $user = $request->user;
 
         //灌水检查
-        $water_check = $user->waterCheck('new_post', $request->ip());
+        $water_check = $user->waterCheck('new_post', $request->ip(), $request->thread_id);
         if ($water_check != 'ok') return $water_check;
 
 
@@ -118,6 +122,16 @@ class PostController extends Controller
             }
         }
 
+        //判断是否私密主题 
+        if ($thread->is_private == true) {
+            if ($user->binggan != $thread->created_binggan && $user->admin == 0) {
+                return response()->json([
+                    'code' => ResponseCode::THREAD_IS_PRIVATE,
+                    'message' => '本贴是私密主题，只有发帖者可以查看喔',
+                ]);
+            }
+        }
+
         //执行追加新回复流程
         try {
             DB::beginTransaction();
@@ -131,6 +145,7 @@ class PostController extends Controller
             $post->created_by_admin = $request->post_with_admin  ? 1 : 0;
             $post->created_ip = $request->ip();
             $post->random_head = random_int(0, 39);
+            // $post->millisecond = intval(substr($request->timestamp, -3, 3));
 
             $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
             $post->floor = $thread->posts_num;
@@ -138,7 +153,14 @@ class PostController extends Controller
             $thread->save();
             $post->save();
 
-            $user->coin += 10; //回复+10奥利奥
+            // $user->coin += 10; //回复+10奥利奥
+            $user->coinChange(
+                'post', //记录类型
+                [
+                    'olo' => 10,
+                    'content' => '回帖',
+                ]
+            ); //回复+10奥利奥（通过统一接口、记录操作）
             $user->nickname = $request->nickname; //记录昵称
             $user->save();
             DB::commit();
@@ -159,6 +181,9 @@ class PostController extends Controller
 
         //用redis记录回频率。
         $user->waterRecord('new_post', $request->ip());
+
+        //广播发帖动作
+        broadcast(new NewPostBroadcast($request->thread_id, $post->id, $post->floor))->toOthers();
 
         return response()->json(
             [
@@ -190,9 +215,150 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+
+        $request->validate([
+            'binggan' => 'string|nullable',
+            'thread_id' => 'integer|required',
+        ]);
+
+        $CurrentThread = Thread::find($request->thread_id);
+        if (!$CurrentThread || $CurrentThread->is_delay == 1) {
+            return response()->json([
+                'code' => ResponseCode::THREAD_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::THREAD_NOT_FOUND],
+            ]);
+        }
+
+        $CurrentForum = $CurrentThread->forum;
+        $user = $request->user;
+
+        //判断是否可无饼干访问的板块
+        if (!$CurrentForum->is_anonymous && !$user) {
+            return response()->json([
+                'code' => ResponseCode::USER_NOT_FOUND,
+                'message' => '本小岛需要饼干才能查看喔',
+            ]);
+        }
+
+        //判断是否达到可以访问板块的最少奥利奥
+        if ($CurrentForum->accessible_coin > 0) {
+            if (!$user) {
+                return response()->json([
+                    'code' => ResponseCode::USER_NOT_FOUND,
+                    'message' => '本小岛需要饼干才能查看喔',
+                ]);
+            }
+            if ($user->coin < $CurrentForum->accessible_coin && $user->admin == 0) {
+                return response()->json([
+                    'code' => ResponseCode::THREAD_UNAUTHORIZED,
+                    'message' => sprintf("本小岛需要拥有大于%u奥利奥才能查看喔", $CurrentForum->accessible_coin),
+                ]);
+            }
+        }
+
+        //判断奥利奥锁定权限贴
+        if ($CurrentThread->locked_by_coin > 0) {
+            if (!$user) {
+                return response()->json([
+                    'code' => ResponseCode::USER_NOT_FOUND,
+                    'message' => '本贴需要饼干才能查看喔',
+                ]);
+            }
+            if ($user->coin < $CurrentThread->locked_by_coin && $user->admin == 0) {
+                return response()->json([
+                    'code' => ResponseCode::THREAD_UNAUTHORIZED,
+                    'message' => sprintf("本贴需要拥有大于%u奥利奥才能查看喔", $CurrentThread->locked_by_coin),
+                ]);
+            }
+        }
+
+        //判断是否私密主题 
+        if ($CurrentThread->is_private == true) {
+            if (!$user) {
+                return response()->json([
+                    'code' => ResponseCode::USER_NOT_FOUND,
+                    'message' => '本贴需要饼干才能查看喔',
+                ]);
+            }
+            if ($user->binggan != $CurrentThread->created_binggan && $user->admin == 0) {
+                return response()->json([
+                    'code' => ResponseCode::THREAD_IS_PRIVATE,
+                    'message' => '本贴是私密主题，只有发帖者可以查看喔',
+                ]);
+            }
+        }
+
+        //各种日清模式
+        switch ($CurrentForum->is_nissin) {
+            case 0:
+                break;
+            case 1: //按照8点日清模式
+                $hour_now = Carbon::now()->hour;
+                if ($hour_now >= 8) { //根据时间确定8点日清的节点
+                    $nissin_breakpoint = Carbon::today()->addHours(8);
+                } else {
+                    $nissin_breakpoint = Carbon::yesterday()->addHours(8);
+                }
+                if (
+                    $CurrentThread->created_at < $nissin_breakpoint
+                    && $CurrentThread->sub_id == 0
+                ) {
+                    if ($user != null && $user->admin == 99) {
+                        break;
+                    } else {
+                        return response()->json([
+                            'code' => ResponseCode::THREAD_WAS_NISSINED,
+                            'message' => ResponseCode::$codeMap[ResponseCode::THREAD_WAS_NISSINED],
+                        ]);
+                    }
+                }
+                break;
+            case 2: //按照可选日清时间模式
+                if (
+                    $CurrentForum->is_nissin
+                    && $CurrentThread->nissin_date < Carbon::now()
+                    && $CurrentThread->sub_id == 0
+                ) {
+                    if ($user != null && $user->admin == 99) {
+                        break;
+                    } else {
+                        return response()->json([
+                            'code' => ResponseCode::THREAD_WAS_NISSINED,
+                            'message' => ResponseCode::$codeMap[ResponseCode::THREAD_WAS_NISSINED],
+                        ]);
+                    }
+                }
+                break;
+        }
+
+        $post = Post::suffix(intval($request->thread_id / 10000))->find($id);
+
+        //如果有提供binggan，为每个post输入binggan，用来判断is_your_post（为前端提供是否是用户自己帖子的判据）
+        if ($request->query('binggan')) {
+            $post->setBinggan($request->query('binggan'));
+        }
+
+        //为反精分帖子加上created_binggan_hash
+        if ($CurrentThread->anti_jingfen) {
+            $post->append('created_binggan_hash');
+        }
+
+        //为超管加入发帖者饼干显示
+        if ($user && $user->admin == 99) {
+            $post->makeVisible('created_binggan');
+        }
+
+        //有正常看帖行为则清除redis灌水检查记录
+        if ($user) {
+            $user->waterClear('view_post', $request->ip());
+        }
+
+        return response()->json([
+            'code' => ResponseCode::SUCCESS,
+            'post_data' => $post,
+        ]);
     }
 
     /**
@@ -245,7 +411,20 @@ class PostController extends Controller
             DB::beginTransaction();
             //判断饼干是否足够
             $user = $request->user;
-            $user->coinConsume(300); //删除帖子扣除300奥利奥
+            // $user->coinConsume(300); //删除帖子扣除300奥利奥
+            $thread = $post->thread;
+            $user->coinChange(
+                'normal', //记录类型
+                [
+                    'olo' => -300,
+                    'content' => '删除帖子',
+                    'thread_id' => $thread->id,
+                    'thread_title' => $thread->title,
+                    'post_id' => $post->id,
+                    'floor' => $post->floor,
+                ]
+            ); //删除帖子扣除300奥利奥（通过统一接口、记录操作）
+
 
             $post->is_deleted = 1;
             $post->save();
@@ -328,7 +507,19 @@ class PostController extends Controller
             DB::beginTransaction();
             //判断饼干是否足够
             $user = $request->user;
-            $user->coinConsume(300); //恢复帖子扣除300奥利奥
+            // $user->coinConsume(300); //恢复帖子扣除300奥利奥
+            $thread = $post->thread;
+            $user->coinChange(
+                'normal', //记录类型
+                [
+                    'olo' => -300,
+                    'content' => '恢复帖子',
+                    'thread_id' => $thread->id,
+                    'thread_title' => $thread->title,
+                    'post_id' => $post->id,
+                    'floor' => $post->floor,
+                ]
+            ); //恢复帖子扣除300奥利奥（通过统一接口、记录操作）
 
             $post->is_deleted = 0;
             $post->save();
@@ -429,6 +620,9 @@ class PostController extends Controller
                 'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
             ]);
         }
+
+        //广播发帖动作
+        broadcast(new NewPostBroadcast($request->thread_id, $post->id, $post->floor))->toOthers();
 
         ProcessUserActive::dispatch(
             [

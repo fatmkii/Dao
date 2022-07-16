@@ -14,13 +14,59 @@ use App\Models\Pingbici;
 use App\Models\MyEmoji;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use App\Jobs\ProcessUserActive;
 use App\Jobs\ProcessUserCreatedLocation;
+use App\Models\AnnoucementMessages;
+use App\Models\IncomeStatement;
+use App\Models\UserLV;
+use App\Models\UserMessages;
+use Exception;
+use App\Events\NewPostBroadcast;
 
 class UserController extends Controller
 {
+    //UserLV相关
+    const MYEMOJI_MIN = 5000;  //我的表情包初始长度
+    const MYEMOJI_MAX = 30000;  //我的表情包最大长度
+    const MYEMOJI_INTERVAL = 1000;  //我的表情包每次升级增加长度
+    const MYEMOJI_OLO = -20000;  //我的表情包每次升级消费olo
+
+    const TITLE_PINGBICI_MIN = 1000;  //标题屏蔽词初始长度
+    const TITLE_PINGBICI_MAX = 4000;  //标题屏蔽词最大长度
+    const TITLE_PINGBICI_INTERVAL = 200;  //标题屏蔽词每次升级增加长度
+    const TITLE_PINGBICI_OLO = -4000;  //我的表情包每次升级消费olo
+
+    const CONTENT_PINGBICI_MIN = 1000;  //内容屏蔽词每次初始长度
+    const CONTENT_PINGBICI_MAX = 4000;  //内容屏蔽词每次最大长度
+    const CONTENT_PINGBICI_INTERVAL = 200; //内容屏蔽词每次升级增加长度
+    const CONTENT_PINGBICI_OLO = -4000;  //我的表情包每次升级消费olo
+
+    const FJF_PINGBICI_MIN = 1000;  //反精分屏蔽词初始长度
+    const FJF_PINGBICI_MAX = 4000;  //反精分屏蔽词最大长度
+    const FJF_PINGBICI_INTERVAL = 200;  //反精分屏蔽词每次升级增加长度
+    const FJF_PINGBICI_OLO = -4000;  //我的表情包每次升级消费olo
+
+    /**
+     * 生成随机字符串、排除容易混淆的
+     */
+    private function random_str(int $num)
+    {
+        $str = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnprstuvwxyz1234567890"; //用于生成随机字符的，排除掉容易混淆的
+
+        $output = '';
+        $length = strlen($str);
+
+        for ($i = 0; $i < $num; $i++) {
+            // get random char
+            $char = $str[rand(0, $length - 1)];
+            $output .= $char;
+        }
+
+        return $output;
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -94,10 +140,21 @@ class UserController extends Controller
         }
 
         //如果没有存emojis，则返回null（不然前端会报错）
-        if ($user->MyEmoji) {
-            $my_emoji_data = $user->MyEmoji->emojis;
+        $my_emoji = $user->MyEmoji;
+        if ($my_emoji) {
+            $my_emoji_data = $my_emoji->emojis;
         } else {
             $my_emoji_data = null;
+        }
+        //如果没有升级过饼干user_lv为空，则返回默认值
+        $user_lv_data = $user->UserLV;
+        if (!$user_lv_data) {
+            $user_lv_data = array(
+                'title_pingbici' => self::TITLE_PINGBICI_MIN,
+                'content_pingbici' => self::CONTENT_PINGBICI_MIN,
+                'fjf_pingbici' => self::FJF_PINGBICI_MIN,
+                'my_emoji' => self::MYEMOJI_MIN,
+            );
         }
 
         return response()->json(
@@ -108,6 +165,7 @@ class UserController extends Controller
                     'binggan' => $user,
                     'pingbici' => $user->pingbici,
                     'my_emoji' => $my_emoji_data,
+                    'user_lv' => $user_lv_data,
                 ],
             ],
         );
@@ -184,6 +242,7 @@ class UserController extends Controller
         if (DB::table('user_register')->where('created_UUID', $created_UUID_short)->value('is_banned')) {
             ProcessUserActive::dispatch(
                 [
+                    'user_id' => 'none',
                     'active' => '申请饼干但UUID过多而失败',
                     'content' => 'ip:' . $request->ip() . ' UUID:' . $created_UUID_short,
                 ]
@@ -200,9 +259,10 @@ class UserController extends Controller
         try {
             DB::beginTransaction();
             $user = new User;
+            $binggan = '';
             do {
-                $binggan = Str::random(9);
-            } while (!empty(User::where('binggan', $binggan)->first));
+                $binggan = $this->random_str(9);
+            } while (User::where('binggan', $binggan)->exists());
             $user->binggan = $binggan;
             $user->created_ip = $request->ip();
             $user->created_UUID = $created_UUID_short;
@@ -234,6 +294,34 @@ class UserController extends Controller
         $token = $user->createToken($binggan, ['normal'])->plainTextToken;
         //用redis记录饼干申请ip。限定7天内只能申请1次。
         Redis::setex('reg_record_' . $request->ip(), 7 * 24 * 3600, 1);
+
+        //对新用户检查公告并拉取
+        // $annoucement_ids_all = AnnoucementMessages::where('type', 1) //type = 1是全体公告
+        //     ->where('to_new_users', true)   //to_new_users==true则一定可以拉取
+        //     ->pluck('id');
+
+        // $annoucement_ids_to_pull = $annoucement_ids_all; //对于新用户来说，必然拉取全部公告
+        //在UserMessages插入相应公告
+        // if (!emptyArray($annoucement_ids_to_pull)) {
+        //     $user->new_msg = true;
+        //     $user->save();
+        //     //如果有存在需要新用户看的公告，则new_msg设为true
+        //     $annoucements = AnnoucementMessages::whereIn('id', $annoucement_ids_to_pull)->get();
+        //     foreach ($annoucements as $annoucement) {
+        //         UserMessages::insert(
+        //             [
+        //                 'user_id' => $user->id,
+        //                 'annoucement_id' => $annoucement->id,
+        //                 'user_msg_group_id' => null,
+        //                 'title' => $annoucement->title,
+        //                 'sub_title' => $annoucement->sub_title,
+        //                 'is_read' => false,
+        //                 'is_deleted' => false,
+        //                 'created_at' => Carbon::now(),
+        //             ]
+        //         );
+        //     }
+        // }
 
         //记录申请饼干IP所在地
         ProcessUserCreatedLocation::dispatch(
@@ -301,12 +389,6 @@ class UserController extends Controller
 
         try {
             DB::beginTransaction();
-            $tax = ceil($request->coin * 0.07); //税率0.07
-            $coin_pay = $request->coin + $tax;
-            $user->coinConsume($coin_pay);
-            $user_target->coin += $request->coin;
-            $user_target->save();
-
             $post = new Post;
             $post->setSuffix(intval($request->thread_id / 10000));
             $post->created_binggan = $request->binggan;
@@ -327,6 +409,39 @@ class UserController extends Controller
             $thread->save();
             $post->save();
 
+            $tax = ceil($request->coin * 0.07); //税率0.07
+            $coin_pay = $request->coin + $tax;
+            // $user->coinConsume($coin_pay);
+            $user->coinChange(
+                'normal', //记录类型
+                [
+                    'olo' => -$coin_pay,
+                    'content' => '打赏olo   ——留言：' . $request->content,
+                    'user_id_target' => $user_target->id,
+                    'binggan_target' => $user_target->binggan,
+                    'thread_id' => $thread->id,
+                    'thread_title' => $thread->title,
+                    'post_id' => $post->id,
+                    'floor' => $post->floor,
+                ]
+            ); //通过统一接口、记录操作  
+
+            // $user_target->coin += $request->coin;
+            // $user_target->save();
+            $user_target->coinChange(
+                'normal', //记录类型
+                [
+                    'olo' => $request->coin,
+                    'user_id_target' => $user->id,
+                    'binggan_target' => $user->binggan,
+                    'content' => '被打赏olo   ——留言：' . $request->content,
+                    'thread_id' => $thread->id,
+                    'thread_title' => $thread->title,
+                    'post_id' => $post->id,
+                    'floor' => $post->floor,
+                ]
+            ); //通过统一接口、记录操作  
+
             DB::commit();
         } catch (QueryException $e) {
             DB::rollback();
@@ -344,13 +459,16 @@ class UserController extends Controller
             );
         }
 
+        //广播发帖动作
+        broadcast(new NewPostBroadcast($request->thread_id, $post->id, $post->floor))->toOthers();
+
         ProcessUserActive::dispatch(
             [
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
                 'active' => '用户打赏了',
                 'binggan_target' => $user_target->binggan,
-                'content' => $request->coin . '个饼干',
+                'content' => $request->coin . '个饼干 ip:' . $request->ip(),
             ]
         );
 
@@ -367,24 +485,51 @@ class UserController extends Controller
         );
     }
 
+    //设定自定义屏蔽词
     public function pingbici_set(Request $request)
     {
         $request->validate([
             'binggan' => 'required|string',
             'use_pingbici' => 'required|boolean',
-            'title_pingbici' => 'json|max:1000',
-            'content_pingbici' => 'json|max:1000',
-            'fjf_pingbici' => 'json|max:1000',
+            'title_pingbici' => 'json',
+            'content_pingbici' => 'json',
+            'fjf_pingbici' => 'json',
         ]);
 
-        $user = User::where('binggan', $request->binggan)->first();
-        if (!$user) {
-            return response()->json(
-                [
-                    'code' => ResponseCode::USER_NOT_FOUND,
-                    'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
-                ],
+        $user = $request->user;
+        // $user = User::where('binggan', $request->binggan)->first();
+        // if (!$user) {
+        //     return response()->json(
+        //         [
+        //             'code' => ResponseCode::USER_NOT_FOUND,
+        //             'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
+        //         ],
+        //     );
+        // }
+
+        //检查屏蔽词长度是否符合饼干等级
+        $user_lv = $user->UserLV;
+        if (!$user_lv) {
+            //如果不存在，则输入默认值
+            $user_lv = array(
+                'title_pingbici' => self::TITLE_PINGBICI_MIN,
+                'content_pingbici' => self::CONTENT_PINGBICI_MIN,
+                'fjf_pingbici' => self::FJF_PINGBICI_MIN,
+                'my_emoji' => self::MYEMOJI_MIN,
             );
+        }
+        $user_lv_array = array(
+            'title_pingbici' => '标题屏蔽词',
+            'content_pingbici' => '内容屏蔽词',
+            'fjf_pingbici' => '反精分屏蔽词',
+        );
+        foreach ($user_lv_array as $name => $error_msg) {
+            if (mb_strlen($request[$name]) > $user_lv[$name]) {
+                return response()->json([
+                    'code' => ResponseCode::USER_ERROR,
+                    'message' => $error_msg . '长度为' . mb_strlen($request[$name]) . '。已超出了最大限制，可在个人中心升级限制。',
+                ]);
+            }
         }
 
         if ($user->pingbici) {
@@ -421,21 +566,37 @@ class UserController extends Controller
         );
     }
 
+    //设定我的表情包
     public function my_emoji_set(Request $request)
     {
         $request->validate([
             'binggan' => 'required|string',
-            'my_emoji' => 'json|max:5000',
+            'my_emoji' => 'json',
         ]);
 
-        $user = User::where('binggan', $request->binggan)->first();
-        if (!$user) {
-            return response()->json(
-                [
-                    'code' => ResponseCode::USER_NOT_FOUND,
-                    'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
-                ],
+        $user = $request->user;
+
+        //检查我的表情包长度是否符合饼干等级
+        $user_lv = $user->UserLV;
+        if (!$user_lv) {
+            //如果不存在，则输入默认值
+            $user_lv = array(
+                'title_pingbici' => self::TITLE_PINGBICI_MIN,
+                'content_pingbici' => self::CONTENT_PINGBICI_MIN,
+                'fjf_pingbici' => self::FJF_PINGBICI_MIN,
+                'my_emoji' => self::MYEMOJI_MIN,
             );
+        }
+        $user_lv_array = array(
+            'my_emoji' => '我的表情包',
+        );
+        foreach ($user_lv_array as $name => $error_msg) {
+            if (mb_strlen($request[$name]) > $user_lv[$name]) {
+                return response()->json([
+                    'code' => ResponseCode::USER_ERROR,
+                    'message' => $error_msg . '长度为' . mb_strlen($request[$name]) . '。已超出了最大限制，可在个人中心升级限制。',
+                ]);
+            }
         }
 
         if ($user->MyEmoji) {
@@ -457,12 +618,99 @@ class UserController extends Controller
             ]);
         }
 
+        ProcessUserActive::dispatch(
+            [
+                'binggan' => $user->binggan,
+                'user_id' => $user->id,
+                'active' => '用户更新了表情包(更新)',
+                'content' => '长度:' . mb_strlen($request->my_emoji),
+            ]
+        );
+
         return response()->json(
             [
                 'code' => ResponseCode::SUCCESS,
                 'message' => '已设定我的表情包',
                 'data' => [
-                    'my_emoji' => $my_emoji,
+                    'my_emoji' => $my_emoji->emojis,
+                    'len' => mb_strlen($request['my_emoji']),
+                ]
+            ],
+        );
+    }
+
+    //最爱我的表情包
+    public function my_emoji_add(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'my_emoji' => 'required|string',
+        ]);
+
+        $user = $request->user;
+
+        if ($user->MyEmoji) {
+            $my_emoji = $user->MyEmoji;
+            $my_emoji_array = json_decode($my_emoji->emojis);
+            array_push($my_emoji_array, $request->my_emoji);
+        } else {
+            $my_emoji = new MyEmoji();
+            $my_emoji_array = [$request->my_emoji]; //得是个数组
+        }
+
+        //检查我的表情包长度是否符合饼干等级
+        $user_lv = $user->UserLV;
+        if (!$user_lv) {
+            //如果不存在，则输入默认值
+            $user_lv = array(
+                'title_pingbici' => self::TITLE_PINGBICI_MIN,
+                'content_pingbici' => self::CONTENT_PINGBICI_MIN,
+                'fjf_pingbici' => self::FJF_PINGBICI_MIN,
+                'my_emoji' => self::MYEMOJI_MIN,
+            );
+        }
+        $user_lv_array = array(
+            'my_emoji' => '我的表情包',
+        );
+        foreach ($user_lv_array as $name => $error_msg) {
+            if (mb_strlen($request[$name]) + mb_strlen($my_emoji->emojis) > $user_lv[$name]) {
+                return response()->json([
+                    'code' => ResponseCode::USER_ERROR,
+                    'message' => $error_msg . '长度为' . (mb_strlen($request[$name]) + mb_strlen($my_emoji->emojis)) . '。已超出了最大限制，可在个人中心升级限制。',
+                ]);
+            }
+        }
+
+        try {
+            DB::beginTransaction();
+            $my_emoji->user_id = $user->id;
+            $my_emoji->emojis = json_encode($my_emoji_array);
+            $my_emoji->save();
+            DB::commit();
+        } catch (QueryException $e) {
+            DB::rollback();
+            return response()->json([
+                'code' => ResponseCode::DATABASE_FAILED,
+                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
+            ]);
+        }
+
+        ProcessUserActive::dispatch(
+            [
+                'binggan' => $user->binggan,
+                'user_id' => $user->id,
+                'active' => '用户更新了表情包(追加)',
+                'content' => '长度:' . mb_strlen($request->my_emoji),
+            ]
+        );
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '已设定我的表情包',
+                'data' => [
+                    'my_emoji' => json_encode($my_emoji_array),
+                    'len' => mb_strlen($request['my_emoji']),
                 ]
             ],
         );
@@ -505,5 +753,279 @@ class UserController extends Controller
                 'message' => ResponseCode::$codeMap[ResponseCode::CAPTCHA_NOT_FOUND],
             ]);
         }
+    }
+
+    //查询收益表
+    public function income_show(Request $request)
+    {
+        $request->validate([
+            'income_date' => 'required|date',
+            'mode' => 'string',
+        ]);
+
+        $user = $request->user;
+        $mode = $request->mode == null ? 'list_day' : $request->mode; //默认是day
+
+        switch ($mode) {
+            case 'list_day': {
+                    //获得查询当天的全部数据
+                    $income_data = IncomeStatement::incomeData($user->id, $request->income_date); //更好的分页sql语句
+                    return response()->json(
+                        [
+                            'code' => ResponseCode::SUCCESS,
+                            'message' => '返回收益表',
+                            'data' => array(
+                                "income_data" => $income_data,
+                            )
+                        ]
+                    );
+                }
+            case 'sum_month&year': {
+                    //获得查询当年和当月的合计
+                    $date = Carbon::parse($request->income_date);
+                    $sum_year = IncomeStatement::suffix($date->year)->where('user_id', $user->id)->sum('olo');
+
+                    $from_date = $date->copy()->firstOfMonth()->toDateString();
+                    $to_date = $date->copy()->addMonthNoOverflow()->firstOfMonth()->toDateString();
+
+                    $sum_month = IncomeStatement::suffix($date->year)->where('user_id', $user->id)->whereBetween('created_at', [$from_date, $to_date])->sum('olo');
+                    return response()->json(
+                        [
+                            'code' => ResponseCode::SUCCESS,
+                            'message' => '返回收益表',
+                            'data' => array(
+                                "sum_year" => $sum_year,
+                                "sum_month" => $sum_month,
+                            )
+                        ]
+                    );
+                }
+            default: {
+                    return response()->json(
+                        [
+                            'code' => ResponseCode::FILED_ERROR,
+                            'message' => '请求参数mode错误',
+                        ]
+                    );
+                }
+        }
+    }
+
+    //饼干升级
+    public function user_lv_up(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'mode' => 'required|string',
+        ]);
+
+        $user = $request->user;
+
+        try {
+            DB::beginTransaction();
+            if ($user->UserLV) {
+                $user_lv = $user->UserLV;
+            } else {
+                $user_lv = new UserLV();
+                $user_lv->user_id = $user->id;
+                $user_lv->title_pingbici = self::TITLE_PINGBICI_MIN;
+                $user_lv->content_pingbici = self::CONTENT_PINGBICI_MIN;
+                $user_lv->fjf_pingbici = self::FJF_PINGBICI_MIN;
+                $user_lv->my_emoji = self::MYEMOJI_MIN;
+            }
+            switch ($request->mode) {
+                case 'title_pingbici':
+                    $user_lv->title_pingbici += self::TITLE_PINGBICI_INTERVAL;
+                    if ($user_lv->title_pingbici > self::TITLE_PINGBICI_MAX) {
+                        throw new Exception('标题屏蔽词已升到满级了');
+                    }
+                    $user->coinChange(
+                        'normal', //记录类型
+                        [
+                            'olo' => self::TITLE_PINGBICI_OLO,
+                            'content' => '升级饼干（标题屏蔽词）',
+                        ]
+                    ); //扣除奥利奥（通过统一接口、记录操作）
+                    break;
+                case 'content_pingbici':
+                    $user_lv->content_pingbici += self::CONTENT_PINGBICI_INTERVAL;
+                    if ($user_lv->content_pingbici > self::CONTENT_PINGBICI_MAX) {
+                        throw new Exception('内容屏蔽词已升到满级了');
+                    }
+                    $user->coinChange(
+                        'normal', //记录类型
+                        [
+                            'olo' => self::CONTENT_PINGBICI_OLO,
+                            'content' => '升级饼干（内容屏蔽词）',
+                        ]
+                    ); //扣除奥利奥（通过统一接口、记录操作）
+                    break;
+                case 'fjf_pingbici':
+                    $user_lv->fjf_pingbici += self::FJF_PINGBICI_INTERVAL;
+                    if ($user_lv->fjf_pingbici > self::FJF_PINGBICI_MAX) {
+                        throw new Exception('内容屏蔽词已升到满级了');
+                    }
+                    $user->coinChange(
+                        'normal', //记录类型
+                        [
+                            'olo' => self::FJF_PINGBICI_OLO,
+                            'content' => '升级饼干（反精分屏蔽词）',
+                        ]
+                    ); //扣除奥利奥（通过统一接口、记录操作）
+                    break;
+                case 'my_emoji':
+                    $user_lv->my_emoji += self::MYEMOJI_INTERVAL;
+                    if ($user_lv->my_emoji > self::MYEMOJI_MAX) {
+                        throw new Exception('我的表情包已升到满级了');
+                    }
+                    $user->coinChange(
+                        'normal', //记录类型
+                        [
+                            'olo' => self::MYEMOJI_OLO,
+                            'content' => '升级饼干（我的表情包）',
+                        ]
+                    ); //扣除奥利奥（通过统一接口、记录操作）
+                    break;
+                default:
+                    throw new Exception('升级出错');
+            }
+            $user_lv->save();
+
+            $user->user_lv += 1;
+            $user->save();
+
+            DB::commit();
+        } catch (QueryException $e) {
+            DB::rollback();
+            return response()->json([
+                'code' => ResponseCode::DATABASE_FAILED,
+                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
+            ]);
+        } catch (CoinException $e) {
+            DB::rollback();
+            return response()->json([
+                'code' => ResponseCode::COIN_NOT_ENOUGH,
+                'message' => ResponseCode::$codeMap[ResponseCode::COIN_NOT_ENOUGH],
+            ],);
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'code' => ResponseCode::USER_CANNOT,
+                'message' => $e->getMessage(),
+            ]);
+        }
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '成功升级饼干！',
+            ]
+        );
+    }
+
+    //查询站内消息列表
+    public function show_messages_index(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'page' => 'integer|nullable',
+            'per_page' => 'integer|nullable|max:100|min:1',
+        ]);
+        $user = $request->user; //从sanctum的token获得饼干
+
+        //如果有消息标记，则检查公告并拉取
+        if ($user->new_msg == true) {
+            $annoucement_ids_pulled = UserMessages::where('user_id', $user->id)->whereNot('annoucement_id', null)->pluck('announcement_id');
+            $annoucement_ids_all = AnnoucementMessages::where('type', 1) //type = 1是全体公告
+                ->where('to_new_users', true)   //to_new_users==true则一定可以拉取
+                ->orWhere(function ($query) use ($user) { //又或者to_new_users==false，但created_at在user的created_at之后
+                    $query->where('to_new_users', false)
+                        ->where('created_at', '>', $user->created_at);
+                })
+                ->pluck('id');
+            $annoucement_ids_to_pull = array_diff_key($annoucement_ids_all, $annoucement_ids_pulled);
+
+            //在UserMessages插入相应公告
+            if (!emptyArray($annoucement_ids_to_pull)) {
+                $annoucements = AnnoucementMessages::whereIn('id', $annoucement_ids_to_pull)->get();
+                foreach ($annoucements as $annoucement) {
+                    UserMessages::insert(
+                        [
+                            'user_id' => $user->id,
+                            'annoucement_id' => $annoucement->id,
+                            'user_msg_group_id' => null,
+                            'title' => $annoucement->title,
+                            'sub_title' => $annoucement->sub_title,
+                            'is_read' => false,
+                            'is_deleted' => false,
+                            'created_at' => Carbon::now(),
+                        ]
+                    );
+                }
+            }
+        }
+
+        $per_page = $request->per_page == null ? 20 : $request->per_page; //默认20个每页
+        $messages_index = UserMessages::where('user_id', $user->id)->paginate($per_page);
+
+        $user->new_msg = false;
+        $user->save();
+
+        // UserMessages::where('user_id', $user->id)->where('is_read', false)->update(['is_read' => true]);//将
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '返回站内消息列表',
+                'data' => array(
+                    "user_messages" => $messages_index,
+                )
+            ]
+        );
+    }
+
+
+    public function show_messages_content(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'type' => 'required|stirng',
+            'announcement_id' => 'required_without:user_msg_group_id|integer',
+            'user_msg_group_id' => 'required_without:announcement_id|integer',
+        ]);
+        $user = $request->user;
+
+        switch ($request->type) {
+            case 'annoucement': {
+                    $result = AnnoucementMessages::find($request->annoucement_id);
+                    if (!$result) {
+                        return response()->json([
+                            'code' => ResponseCode::ANNOUCEMENT_NOT_FOUND,
+                            'message' => ResponseCode::$codeMap[ResponseCode::ANNOUCEMENT_NOT_FOUND],
+                        ]);
+                    }
+                    UserMessages::where('user_id', $user->id)
+                        ->where('annoucement_id', $request->annoucement_id)
+                        ->update(['is_read' => true]);
+                    break;
+                }
+            case 'user_msg_group': {
+                    //用户私信功能还没做
+                    break;
+                }
+            default: {
+                    return response()->json([
+                        'code' => 422,
+                        'message' => '请求参数有误',
+                    ]);
+                }
+        }
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '返回站内消息详细内容',
+                'data' => $result,
+            ]
+        );
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Thread;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\BattleMessage;
@@ -22,6 +23,7 @@ class Battle extends Model
     ];
 
     public $hidden = [
+        'thread_id',
         'post_id',
         'created_binggan',
         'challenger_binggan',
@@ -38,6 +40,11 @@ class Battle extends Model
     public function Post()
     {
         return $this->belongsTo(Post::class);
+    }
+
+    public function Thread()
+    {
+        return $this->belongsTo(Thread::class);
     }
 
     public function InitiatorUser()

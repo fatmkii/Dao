@@ -25,7 +25,7 @@
     <template v-slot:modal-footer="{ cancel }">
       <b-button-group>
         <b-button
-          variant="success"
+          :variant="button_theme"
           :disabled="reward_handling"
           @click="reward_handle"
           >打赏！</b-button
@@ -55,7 +55,11 @@ export default {
       post_floor_message: String,
     };
   },
-  computed: {},
+  computed: {
+    button_theme() {
+      return this.$store.getters.ButtonTheme;
+    },
+  },
   created() {},
   methods: {
     reward_click(payload) {
@@ -76,7 +80,7 @@ export default {
           thread_id: this.thread_id,
           post_id: this.post_id,
           content: this.content_reward_input,
-          coin: this.coin_reward_input,
+          coin: parseInt(this.coin_reward_input),
           post_floor_message: this.post_floor_message,
         },
       };
@@ -99,7 +103,7 @@ export default {
         .catch((error) => {
           this.reward_handling = false;
           alert(Object.values(error.response.data.errors)[0]);
-        }); 
+        });
     },
   },
 };

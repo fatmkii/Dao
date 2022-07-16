@@ -20,7 +20,9 @@
         {{ gamble_option.option_text }}
       </b-form-radio>
       <div class="d-flex">
-        <span style="min-width: 100px" class="pl-1">{{ gamble_option.olo_total }}</span
+        <span style="min-width: 100px" class="pl-1">{{
+          gamble_option.olo_total
+        }}</span
         ><b-progress
           class="w-75 ml-4"
           height="1.5rem"
@@ -37,7 +39,7 @@
           v-model="betting_olo"
         ></b-form-input>
         <b-button
-          variant="success"
+          :variant="button_theme"
           size="sm"
           @click="new_betting_handle"
           :disabled="
@@ -181,6 +183,9 @@ export default {
         }
       });
       return text;
+    },
+    button_theme() {
+      return this.$store.getters.ButtonTheme;
     },
   },
   methods: {

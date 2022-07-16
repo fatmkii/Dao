@@ -16,7 +16,6 @@ use App\Exceptions\CoinException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use App\Jobs\ProcessUserActive;
-use App\Models\Crowd;
 use App\Models\GambleQuestion;
 use App\Models\VoteQuestion;
 
@@ -107,9 +106,10 @@ class ThreadController extends Controller
             'nissin_time' => 'integer',
             'random_heads_group' => 'integer',
             'post_with_admin' => 'boolean',
-            'locked_by_coin' => 'integer|max:1000000|min:1',
+            'locked_by_coin' => 'integer|max:25000|min:1',
             'thread_type' => 'required|string',
             'is_delay' => 'boolean|required',
+            'is_private' => 'boolean|required',
             'can_battle' => 'boolean|required',
         ]);
 
@@ -150,13 +150,38 @@ class ThreadController extends Controller
             DB::beginTransaction();
             //发主题帖（Thread）
             $thread = new Thread;
-            if ($request->title_color) {
-                $user->coin -= 500; //设置标题颜色减500奥利奥   
+            if ($request->title_color != "" && $request->title_color != "#212529") {
+                // $user->coin -= 500; //设置标题颜色减500奥利奥 
+                // #212529是默认颜色，不收费
+                $user->coinChange(
+                    'normal', //记录类型
+                    [
+                        'olo' => -500,
+                        'content' => '发布主题设置标题颜色',
+                    ]
+                ); //通过统一接口、记录操作  
                 $thread->title_color = $request->title_color;
             }
             if ($request->locked_by_coin > 0) {
-                $user->coin -= 500; //设置奥利奥权限贴减500奥利奥  
+                // $user->coin -= 500; //设置奥利奥权限贴减500奥利奥  
+                $user->coinChange(
+                    'normal', //记录类型
+                    [
+                        'olo' => -500,
+                        'content' => '发布olo权限主题',
+                    ]
+                ); //通过统一接口、记录操作
                 $thread->locked_by_coin = $request->locked_by_coin;
+            }
+            if ($request->is_private == true) {
+                $user->coinChange(
+                    'normal', //记录类型
+                    [
+                        'olo' => -500,
+                        'content' => '发布私密主题',
+                    ]
+                ); //通过统一接口、记录操作
+                $thread->is_private = $request->is_private;
             }
             $thread->created_binggan = $request->binggan;
             $thread->forum_id = $request->forum_id;
@@ -200,7 +225,16 @@ class ThreadController extends Controller
 
             //追加投票贴
             if ($request->thread_type == "vote") {
-                $user->coin -= 1000; //发投票主题减1000奥利奥  
+                // $user->coin -= 1000; //发投票主题减1000奥利奥  
+                $user->coinChange(
+                    'normal', //记录类型
+                    [
+                        'olo' => -1000,
+                        'content' => '发布投票主题',
+                        'thread_id' => $thread->id,
+                        'thread_title' => $thread->title,
+                    ]
+                ); //通过统一接口、记录操作  
                 $vote_question = new VoteQuestion();
                 $thread->vote_question_id = $vote_question->create($request, $thread->id); //$vote_question->create会返回id
                 $thread->save();
@@ -208,16 +242,18 @@ class ThreadController extends Controller
 
             //追加菠菜贴
             if ($request->thread_type == "gamble") {
-                $user->coin -= 500; //发菠菜主题减500奥利奥  
+                // $user->coin -= 500; //发菠菜主题减500奥利奥  
+                $user->coinChange(
+                    'normal', //记录类型
+                    [
+                        'olo' => -500,
+                        'content' => '发布菠菜主题',
+                        'thread_id' => $thread->id,
+                        'thread_title' => $thread->title,
+                    ]
+                ); //通过统一接口、记录操作  
                 $gamble_question = new GambleQuestion();
                 $thread->gamble_question_id = $gamble_question->create($request, $thread->id); //$gamble_question->create会返回id
-                $thread->save();
-            }
-
-            //追加菠众筹贴
-            if ($request->thread_type == "crowd") {
-                $crowd = new Crowd();
-                $thread->crowd_id = $crowd->create($request, $thread->id); //$crowd->create会返回id
                 $thread->save();
             }
 
@@ -359,6 +395,22 @@ class ThreadController extends Controller
             }
         }
 
+        //判断是否私密主题 
+        if ($CurrentThread->is_private == true) {
+            if (!$user) {
+                return response()->json([
+                    'code' => ResponseCode::USER_NOT_FOUND,
+                    'message' => '本贴需要饼干才能查看喔',
+                ]);
+            }
+            if ($user->binggan != $CurrentThread->created_binggan && $user->admin == 0) {
+                return response()->json([
+                    'code' => ResponseCode::THREAD_IS_PRIVATE,
+                    'message' => '本贴是私密主题，只有发帖者可以查看喔',
+                ]);
+            }
+        }
+
         //各种日清模式
         switch ($CurrentForum->is_nissin) {
             case 0:
@@ -390,7 +442,7 @@ class ThreadController extends Controller
                     && $CurrentThread->nissin_date < Carbon::now()
                     && $CurrentThread->sub_id == 0
                 ) {
-                    if ($user != null && $user->admin == 99) {
+                    if ($user != null && $user->admin != 0) {
                         break;
                     } else {
                         return response()->json([
@@ -418,10 +470,13 @@ class ThreadController extends Controller
         // }
 
         //如果有提供binggan，为每个post输入binggan，用来判断is_your_post（为前端提供是否是用户自己帖子的判据）
+        //如果有提供binggan，为每个thread输入binggan，用来判断is_your_thread（为前端提供是否是用户自己帖子的判据）
         if ($request->query('binggan')) {
             foreach ($posts as $post) {
                 $post->setBinggan($request->query('binggan'));
             }
+            $CurrentThread->setBinggan($request->query('binggan'));
+            $CurrentThread->makeVisible('is_your_thread');
         }
 
         //为反精分帖子加上created_binggan_hash
@@ -541,6 +596,72 @@ class ThreadController extends Controller
         return response()->json([
             'code' => ResponseCode::SUCCESS,
             'thread_id' => $Thread_id,
+        ]);
+    }
+
+    //改变标题颜色
+    public function change_color(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'thread_id' => 'required|integer',
+            'color' => 'required|string',
+        ]);
+
+        //验证是否颜色代码
+        if (preg_match('/^#([0-9a-fA-F]{6})$/', $request->color) == false) {
+            return response()->json([
+                'code' => 422,
+                'message' => '颜色代码有误，请确认。',
+            ]);
+        }
+
+
+        $CurrentThread = Thread::find($request->thread_id);
+        if (!$CurrentThread) {
+            return response()->json([
+                'code' => ResponseCode::THREAD_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::THREAD_NOT_FOUND],
+            ]);
+        }
+
+        $user = $request->user;
+        //只有主题发起者才能改标题颜色
+        if ($CurrentThread->created_binggan != $user->binggan) {
+            return response()->json([
+                'code' => ResponseCode::USER_CANNOT,
+                'message' => ResponseCode::$codeMap[ResponseCode::USER_CANNOT],
+                'user' => $user,
+            ]);
+        }
+
+        try {
+            DB::beginTransaction();
+            $CurrentThread->title_color = $request->color;
+            $CurrentThread->save();
+            $user->coinChange(
+                'normal', //记录类型
+                [
+                    'olo' => -500,
+                    'content' => '标题改色',
+                    'thread_id' => $CurrentThread->id,
+                    'thread_title' => $CurrentThread->title,
+                ]
+            ); //扣除用户相应olo（通过统一接口、记录操作）
+            DB::commit();
+        } catch (QueryException $e) {
+            DB::rollback();
+            return response()->json([
+                'code' => ResponseCode::DATABASE_FAILED,
+                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
+            ]);
+        }
+
+        return response()->json([
+            'code' => ResponseCode::SUCCESS,
+            'message' => '已变更标题颜色为' . $request->color,
+            'thread_id' => $request->thread_id,
+            'color' => $request->color
         ]);
     }
 }

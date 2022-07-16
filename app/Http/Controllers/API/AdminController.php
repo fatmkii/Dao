@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Common\ResponseCode;
 use App\Jobs\ProcessUserActive;
+use App\Models\AnnoucementMessages;
+use App\Models\Forum;
 use App\Models\Post;
 use App\Models\Thread;
 use App\Models\User;
@@ -426,6 +428,14 @@ class AdminController extends Controller
         }
 
         $user_to_lock->locked_until = Carbon::now()->addDays(3);
+        $user_to_lock->locked_count += 1;
+        if ($user_to_lock->locked_count >= 4) {
+            //如果被锁定超过3次（≥4），则碎饼干
+            $user_to_lock->is_banned = true;
+            $msg = '该饼干已被累计封禁4次，已永久碎饼干。';
+        } else {
+            $msg = '该饼干已封禁3天。';
+        }
         $user_to_lock->save();
         ProcessUserActive::dispatch(
             [
@@ -438,7 +448,68 @@ class AdminController extends Controller
         );
         return response()->json([
             'code' => ResponseCode::SUCCESS,
-            'message' => '该饼干已封禁3天。',
+            'message' => $msg,
+        ]);
+    }
+
+    public function set_banner(Request $request)
+    {
+        $request->validate([
+            'forum_id' => 'required|Integer',
+            'banners' => 'required|json|max:5000',
+        ]);
+
+        $user = $request->user();
+
+        $forum = Forum::find($request->forum_id);
+        if (!$forum) {
+            return response()->json([
+                'code' => ResponseCode::FORUM_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::FORUM_NOT_FOUND],
+            ]);
+        }
+
+        //确认是否拥有该版面的管理员权限
+        if (
+            !in_array($request->forum_id, json_decode($user->AdminPermissions->forums))
+        ) {
+            return response()->json(
+                [
+                    'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+                    'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+                ],
+            );
+        }
+
+        try {
+            DB::beginTransaction();
+            $forum->banners = $request->banners;
+            $forum->save();
+            DB::commit();
+        } catch (QueryException $e) {
+            DB::rollback();
+            return response()->json([
+                'code' => ResponseCode::DATABASE_FAILED,
+                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
+            ]);
+        }
+
+        //要清除板块的缓存
+        Cache::forget('forums_cache');
+
+        ProcessUserActive::dispatch(
+            [
+                'binggan' => $user->binggan,
+                'user_id' => $user->id,
+                'active' => '管理员更新了版头。板块：' . $request->forum_id,
+                'content' => '版头字符串长度：' . mb_strlen($request->banners),
+            ]
+        );
+
+
+        return response()->json([
+            'code' => ResponseCode::SUCCESS,
+            'message' => '更新版头成功！',
         ]);
     }
 
@@ -531,6 +602,104 @@ class AdminController extends Controller
             'thread_data' => $CurrentThread,
             'posts_data' => $posts,
             // 'random_heads' => $random_heads,
+        ]);
+    }
+
+    public function create_annoucement(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'type' => 'required|integer',
+            'title' => 'required|string',
+            'sub_title' => 'required|string',
+            'content' => 'required|string|max:20000',
+            'to_new_users' => 'required|boolean',
+        ]);
+
+        $user = $request->user();
+
+
+        //执行追加新回复流程
+        try {
+            DB::beginTransaction();
+            $annoucement_message = new AnnoucementMessages();
+            $annoucement_message->sender_id = $user->id;
+            $annoucement_message->type = $request->type;
+            $annoucement_message->title = $request->title;
+            $annoucement_message->sub_title = $request->sub_title;
+            $annoucement_message->content = $request->content;
+            $annoucement_message->to_new_users = $request->to_new_users;
+            $annoucement_message->created_at = Carbon::now();
+            $annoucement_message->save();
+
+            if ($request->type = 1) {
+                //如果是全体公告，则所有用户的new_msg设为true，以拉取消息
+                User::all()->update(['new_msg', true]);
+            }
+
+            DB::commit();
+        } catch (QueryException $e) {
+            DB::rollback();
+            return response()->json([
+                'code' => ResponseCode::DATABASE_FAILED,
+                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
+            ]);
+        }
+
+
+        ProcessUserActive::dispatch(
+            [
+                'binggan' => $user->binggan,
+                'user_id' => $user->id,
+                'active' => '管理员发布了公告',
+                'content' => '标题：' . $request->title,
+            ]
+        );
+
+        return response()->json([
+            'code' => ResponseCode::SUCCESS,
+            'message' => '已发布消息公告',
+        ]);
+    }
+
+    public function show_annoucements(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'page' => 'integer|nullable',
+            'per_page' => 'integer|nullable|max:100|min:1',
+        ]);
+
+        $annoucements = AnnoucementMessages::paginate($request->per_page);
+
+        return response()->json([
+            'code' => ResponseCode::SUCCESS,
+            'message' => '已返回公告清单',
+            'data' => $annoucements,
+        ]);
+    }
+
+    public function del_annoucements(Request $request, $annoucement_id)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'annoucement_id' => 'required|integer',
+        ]);
+
+        $annoucement = AnnoucementMessages::find($annoucement_id);
+        if (!$annoucement) {
+            return response()->json([
+                'code' => ResponseCode::ANNOUCEMENT_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::ANNOUCEMENT_NOT_FOUND],
+            ]);
+        }
+
+        $annoucement->is_deleted = true;
+        $annoucement->save();
+
+        return response()->json([
+            'code' => ResponseCode::SUCCESS,
+            'message' => '已删除公告',
         ]);
     }
 }

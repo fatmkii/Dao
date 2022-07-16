@@ -23,7 +23,9 @@ class ForumController extends Controller
     public function index()
     {
         $forums = Cache::remember('forums_cache',  24 * 3600, function () {
-            return Forum::where('id', '<>', 0)->orderBy('sub_id', 'asc')->get(); //把0岛隐藏掉
+            return Forum::where('status', '<>', 0) //把status为0的隐藏掉
+                ->orderBy('sub_id', 'asc') //把个人岛放到后面
+                ->get();
         });
         return response()->json([
             'code' => ResponseCode::SUCCESS,
@@ -53,8 +55,9 @@ class ForumController extends Controller
         $request->validate([
             'binggan' => 'string|nullable',
             'page' => 'integer|nullable',
+            'threads_per_page' => 'integer|nullable|max:100|min:1',
+            'subtitles_excluded' => 'json|nullable', //要排除的副标题
             'search_title' => 'string|max:100', //搜索标题
-            'sub_title' => 'string|max:20', //用来搜索副标题，暂时没用
         ]);
 
         //用redis记录，全局每10秒搜索20次限制
@@ -74,6 +77,19 @@ class ForumController extends Controller
 
         $CurrentForum = Forum::find($forum_id);
         $user = $request->user;
+        $threads_per_page = $request->threads_per_page ? $request->threads_per_page : 50; //默认值是50个主题每页
+        $subtitles_excluded = json_decode($request->subtitles_excluded, true);
+
+        //隐藏不可见岛和判断岛是否存在
+        if (!$CurrentForum || $CurrentForum->status == 0) {
+            return response()->json([
+                'code' => ResponseCode::FORUM_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::FORUM_NOT_FOUND],
+                'forum_data' => "",
+                'threads_data' => "",
+                'subtitles_exclude' => "",
+            ]);
+        }
 
         //判断是否可无饼干访问的板块
         if (!$CurrentForum->is_anonymous && !$user) {
@@ -104,6 +120,11 @@ class ForumController extends Controller
         //搜索标题
         if ($request->has('search_title')) {
             $threads->where('title', 'like', '%' . $request->query('search_title') . '%');
+        }
+
+        //搜索副标题
+        if ($subtitles_excluded != [] || $subtitles_excluded != null) {
+            $threads->whereNotIn('sub_title', $subtitles_excluded);
         }
 
         //各种日清模式
@@ -156,7 +177,8 @@ class ForumController extends Controller
             'code' => ResponseCode::SUCCESS,
             'message' => ResponseCode::$codeMap[ResponseCode::SUCCESS],
             'forum_data' => $CurrentForum->makeVisible('banners'),
-            'threads_data' => $threads->paginate(30),
+            'threads_data' => $threads->paginate($threads_per_page),
+            'subtitles_exclude' => $subtitles_excluded,
         ]);
     }
 

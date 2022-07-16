@@ -54,9 +54,14 @@ body {
 //日清图
 .nissined_img {
     position: fixed;
-    top: 40%;
-    left: 50%;
-    margin-left: -250px;
+    @media all and (min-width: 625px) {
+        left: calc(50% - 250px);
+    }
+    @media not all and (min-width: 625px) {
+        left: 10%;
+    }
+    max-width: 80%;
+    width: 500px;
 }
 
 //侧边栏及其他
@@ -208,16 +213,35 @@ body {
     max-height: 250px;
     overflow-y: auto;
 }
-#placeholder___BV_tab_button__ {
-    display: none !important;
-}
 //1.0的emoji
 .emotion {
     max-width: 48px;
     max-height: 48px;
 }
+//新emoji面板用
+.nav-button {
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 8px;
+    padding-bottom: 7px;
+    line-height: 21px;
+    font-size: 14px;
+    box-sizing: border-box;
+    border-radius: 0.25rem;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+    cursor: pointer;
+    @include background_color("background_color6");
+    @include font_color("font_color2");
+}
+.nav-button.active {
+    @include background_color("icon_color2");
+    color: #fff;
+}
 
-//emoji的nav
+//个人中心里的的nav组件用
 .nav {
     @include background_color("background_color6");
     a {
@@ -270,17 +294,43 @@ body {
     }
 }
 
+
 //众筹列表
 .crowd_table {
     max-width: 500px;
 }
+=======
+//收支记录列表
+.income_table {
+    width: 100%;
+    margin-bottom: 1rem;
+    @include background_color("backgroud_color1");
+    thead {
+        @include background_color("background_color2");
+    }
+    th {
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        @include border_color("border_color0");
+        padding: 0.3rem;
+    }
+    td {
+        border-bottom: 1px solid;
+        @include border_color("border_color1");
+        padding: 0.3rem;
+    }
+    tr:hover {
+        @include background_color("background_color_hover");
+    }
+}
+
 //电脑版主题列表
 .threads_table {
     width: 100%;
     margin-bottom: 1rem;
     @include background_color("backgroud_color1");
     thead {
-        @include background_color("background_color3");
+        @include background_color("background_color8");
     }
     th {
         border-top: 1px solid;
@@ -308,7 +358,7 @@ body {
 }
 
 .threads_table_header {
-    @include background_color("background_color3");
+    @include background_color("background_color8");
     border-bottom: 1px solid;
     border-top: 1px solid;
     @include border_color("border_color0");
@@ -403,6 +453,12 @@ label.custom-file-label::after {
     padding-right: ($spacer * 0.5);
     padding-top: ($spacer * 0.25);
     padding-bottom: ($spacer * 0.25);
+}
+
+//监听中的图
+#listening_img {
+    @include img_src("listening_img");
+    max-height: 16px;
 }
 
 [v-cloak] {

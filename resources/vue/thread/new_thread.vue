@@ -12,144 +12,21 @@
         <span>发表新话题</span>
       </div>
     </div>
-    <div
-      class="post_title px-1 py-2 h5 d-none d-lg-block d-xl-block"
-      v-if="preview_show"
+    <PostInput
+      ref="post_input_com"
+      :input_disable="
+        !this.$store.state.User.LoginStatus ||
+        Boolean(locked_TTL) ||
+        new_thread_handling
+      "
+      :new_post_handling="new_thread_handling"
+      :random_heads_group="random_heads_group_selected"
+      :forum_id="forum_id"
+      @content_commit="new_thread_handle"
+      has_title
+      has_delay
     >
-      <span style="word-wrap: break-word; white-space: normal"
-        >标题：{{ title_input }}</span
-      >
-    </div>
-    <div
-      class="post_title px-1 py-2 h6 d-block d-lg-none d-xl-none"
-      v-if="preview_show"
-    >
-      <span style="word-wrap: break-word; white-space: normal"
-        >标题：{{ title_input }}</span
-      >
-    </div>
-    <div>
-      <PostItem
-        v-if="preview_show"
-        :post_data="preview_post_data"
-        :thread_anti_jingfen="0"
-        :admin_button_show="false"
-        :no_image_mode="false"
-        :no_emoji_mode="false"
-      ></PostItem>
-    </div>
-    <div class="my-2 row d-inline-flex" style="font-size: 0.875rem">
-      <div class="col-auto pr-0">昵称</div>
-      <div class="col-auto d-inline-flex">
-        <b-form-checkbox
-          class="mr-auto ml-2"
-          v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
-          v-model="emoji_auto_hide"
-          switch
-        >
-          表情包自动收起
-        </b-form-checkbox>
-        <b-form-checkbox
-          class="mr-auto ml-2"
-          v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
-          v-model="post_with_admin"
-          v-b-popover.hover.left="'名字会显示红色'"
-          switch
-        >
-          管理员
-        </b-form-checkbox>
-      </div>
-    </div>
-    <b-form-input
-      id="nickname_input"
-      v-model="nickname_input"
-      class="nickname_input"
-    ></b-form-input>
-    <div class="my-2" style="font-size: 0.875rem">标题</div>
-    <b-form-input
-      id="title_input"
-      class="title_input"
-      placeholder="标题，必填"
-      v-model="title_input"
-    ></b-form-input>
-    <Emoji
-      :heads_id="random_heads_group_selected"
-      :emoji_auto_hide="emoji_auto_hide"
-      @emoji_append="emoji_append"
-    ></Emoji>
-    <div class="my-2 row align-items-center" style="font-size: 0.875rem">
-      <div class="col-auto pr-0">内容</div>
-      <div class="col-auto d-inline-flex">
-        <b-form-checkbox class="mr-auto ml-2" v-model="preview_show" switch>
-          实时预览
-        </b-form-checkbox>
-      </div>
-      <div class="col-auto ml-auto">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          fill="currentColor"
-          class="icon-revoke bi bi-reply-all"
-          viewBox="0 0 16 16"
-          v-b-popover.hover.left="'撤销'"
-          @click="content_input_revoke"
-        >
-          <path
-            d="M8.098 5.013a.144.144 0 0 1 .202.134V6.3a.5.5 0 0 0 .5.5c.667 0 2.013.005 3.3.822.984.624 1.99 1.76 2.595 3.876-1.02-.983-2.185-1.516-3.205-1.799a8.74 8.74 0 0 0-1.921-.306 7.404 7.404 0 0 0-.798.008h-.013l-.005.001h-.001L8.8 9.9l-.05-.498a.5.5 0 0 0-.45.498v1.153c0 .108-.11.176-.202.134L4.114 8.254a.502.502 0 0 0-.042-.028.147.147 0 0 1 0-.252.497.497 0 0 0 .042-.028l3.984-2.933zM9.3 10.386c.068 0 .143.003.223.006.434.02 1.034.086 1.7.271 1.326.368 2.896 1.202 3.94 3.08a.5.5 0 0 0 .933-.305c-.464-3.71-1.886-5.662-3.46-6.66-1.245-.79-2.527-.942-3.336-.971v-.66a1.144 1.144 0 0 0-1.767-.96l-3.994 2.94a1.147 1.147 0 0 0 0 1.946l3.994 2.94a1.144 1.144 0 0 0 1.767-.96v-.667z"
-          />
-          <path
-            d="M5.232 4.293a.5.5 0 0 0-.7-.106L.54 7.127a1.147 1.147 0 0 0 0 1.946l3.994 2.94a.5.5 0 1 0 .593-.805L1.114 8.254a.503.503 0 0 0-.042-.028.147.147 0 0 1 0-.252.5.5 0 0 0 .042-.028l4.012-2.954a.5.5 0 0 0 .106-.699z"
-          />
-        </svg>
-      </div>
-    </div>
-    <textarea
-      id="content_input"
-      class="content_input form-control"
-      v-model="content_input"
-      @change="content_input_change"
-      :rows="content_input_rows"
-      ref="content_input"
-      :disabled="new_thread_handling || Boolean(locked_TTL)"
-      @keyup.ctrl.enter="new_thread_handle"
-      :style="post_content_css"
-    ></textarea>
-    <div class="d-flex align-items-center mt-2">
-      <!-- <div class="col-7">
-          原自费图床tietuku暂时关闭。
-        <b-form-file
-          browse-text="上传图片"
-          size="sm"
-          placeholder="未选择"
-          accept="image/jpeg, image/png, image/gif"
-          style="max-width: 300px"
-          :disabled="!this.$store.state.User.LoginStatus"
-          @input="upload_img_handle"
-        ></b-form-file>
-        <b-spinner
-          class="spinner img-uploading"
-          v-show="upload_img_handling"
-          label="上传中"
-        >
-        </b-spinner>
-      </div> -->
-      <Imgtu></Imgtu>
-      <b-form-checkbox
-        class="mx-2 ml-auto"
-        v-model="is_delay"
-        v-b-popover.hover.bottom="'自动在第二天8点发出'"
-      >
-        延时发送
-      </b-form-checkbox>
-      <b-button
-        variant="success"
-        class="float-right"
-        :disabled="new_thread_handling || Boolean(locked_TTL)"
-        @click="new_thread_handle"
-        >{{ new_thread_handling ? "提交中" : "发表" }}
-      </b-button>
-    </div>
+    </PostInput>
     <div class="row align-items-center mt-2">
       <div class="col-auto ml-auto" style="font-size: 0.875rem">
         <span v-if="locked_TTL">
@@ -178,6 +55,7 @@
               :options="subtitles_options"
               value-field="value"
               text-field="value"
+              :disabled="is_private_selected == true"
             ></b-form-select>
           </div>
           <div class="col-4">
@@ -222,10 +100,13 @@
       <b-tab title="收费">
         <div class="row align-items-center mt-3">
           <div class="col-4">
-            <span class="h6 my-2">给标题换个颜色吗？（500奥利奥）</span>
+            <span class="h6 my-2">标题换色(500 olo)</span>
           </div>
           <div class="col-4">
-            <span class="h6 my-2">设定看帖权限（500奥利奥）</span>
+            <span class="h6 my-2">设定看帖权限(500 olo)</span>
+          </div>
+          <div class="col-4">
+            <span class="h6 my-2">设为私密主题(500 olo)</span>
           </div>
         </div>
         <div class="row align-items-center mt-3">
@@ -242,6 +123,17 @@
               v-model="locked_by_coin_input"
               class="common_input"
             ></b-form-input>
+          </div>
+          <div class="col-4">
+            <b-form-select
+              v-model="is_private_selected"
+              :options="is_private_options"
+            ></b-form-select>
+          </div>
+        </div>
+        <div class="row align-items-center mt-3">
+          <div class="col-4">
+            <ColorPicker v-model="title_color_input"></ColorPicker>
           </div>
         </div>
       </b-tab>
@@ -578,12 +470,14 @@
 
 
 <script>
-import Emoji from "./emoji.vue";
-import PostItem from "./post_item.vue";
+import Emoji from "../component/emoji.vue";
+import PostItem from "../component/post_item.vue";
+import PostInput from "../component/post_input.vue";
 import Imgtu from "../imgtu.vue";
+import ColorPicker from "../component/color_picker.vue";
 
 export default {
-  components: { Emoji, PostItem, Imgtu },
+  components: { Emoji, PostItem, PostInput, Imgtu, ColorPicker },
   props: {
     forum_id: Number, //来自router
   },
@@ -597,9 +491,7 @@ export default {
     return {
       name: "new_thread",
       new_thread_handling: false,
-      content_input_array: [""],
-      content_input: "",
-      title_input: "",
+
       random_heads_group_selected: 1,
       subtitles_selected: "[闲聊]",
       admin_subtitles_options: [
@@ -616,6 +508,7 @@ export default {
         { value: 1, text: "24小时" },
         { value: 2, text: "48小时" },
         { value: 3, text: "72小时" },
+        { value: 7, text: "一周" },
         { value: 1095, text: "长期" },
       ],
       nissin_time_selected: 1,
@@ -624,13 +517,17 @@ export default {
         { value: 1, text: "开启" },
         { value: 0, text: "禁止" },
       ],
+      is_private_selected: false,
+      is_private_options: [
+        { value: false, text: "一般主题" },
+        { value: true, text: "私密主题" },
+      ],
       title_color_input: "",
       post_with_admin: false,
       locked_by_coin_input: undefined,
       upload_img_handling: false,
       preview_show: false,
       thread_type: "normal",
-      is_delay: false,
       vote_multiple: false,
       vote_title_input: "",
       vote_options: ["", "", ""],
@@ -657,6 +554,13 @@ export default {
       }
       if (this.subtitles_selected == "[闲聊]") {
         this.can_battle_selected = 1;
+      }
+    },
+    is_private_selected() {
+      if (this.is_private_selected == true) {
+        this.subtitles_selected = "[私密]";
+      } else {
+        this.subtitles_selected = "[闲聊]";
       }
     },
   },
@@ -738,7 +642,7 @@ export default {
     back_to_forum() {
       this.$router.push({ name: "forum", params: { forum_id: this.forum_id } });
     },
-    new_thread_handle() {
+    new_thread_handle(content) {
       this.new_thread_handling = true;
       var config = {
         method: "post",
@@ -746,19 +650,23 @@ export default {
         data: {
           binggan: this.$store.state.User.Binggan,
           forum_id: this.forum_id,
-          title: this.title_input,
-          content: this.content_input,
-          nickname: this.nickname_input,
+
+          //来自PostInput组件
+          title: content.title_input,
+          content: content.content_input,
+          nickname: content.nickname_input,
+          post_with_admin: content.post_with_admin,
+          is_delay: content.is_delay,
+
           subtitle: this.subtitles_selected,
           random_heads_group: this.random_heads_group_selected,
           nissin_time: this.nissin_time_selected,
           title_color: this.title_color_input,
           anti_jingfen: this.anti_jingfen_selected,
           admin_subtitle: this.admin_subtitles_selected,
-          post_with_admin: this.post_with_admin,
           locked_by_coin: this.locked_by_coin_input,
           thread_type: this.thread_type,
-          is_delay: this.is_delay,
+          is_private: this.is_private_selected,
           can_battle: this.can_battle_selected,
         },
       };
@@ -834,9 +742,48 @@ export default {
       }
     },
     emoji_append(emoji_src) {
-      this.content_input += "<img src='" + emoji_src + "' class='emoji_img'>";
+      // this.content_input += "<img src='" + emoji_src + "' class='emoji_img'>";
+      // this.content_input_change();
+      // this.$refs.content_input.focus();
+      let textarea = document.getElementById("content_input");
+      this.content_input = this.insertAtCursor(
+        textarea,
+        "<img src='" + emoji_src + "' class='emoji_img'>"
+      );
       this.content_input_change();
       this.$refs.content_input.focus();
+    },
+    insertAtCursor(f, value) {
+      /* eslint-disable */
+      let field = f;
+      let newValue = "";
+      // IE support
+      if (document.selection) {
+        field.focus();
+        const sel = document.selection.createRange();
+        sel.text = newValue = value;
+        sel.select();
+      } else if (field.selectionStart || field.selectionStart === 0) {
+        const startPos = field.selectionStart;
+        const endPos = field.selectionEnd;
+        const restoreTop = field.scrollTop;
+        newValue =
+          field.value.substring(0, startPos) +
+          value +
+          field.value.substring(endPos, field.value.length);
+        if (restoreTop > 0) {
+          field.scrollTop = restoreTop;
+        }
+        field.focus();
+        setTimeout(() => {
+          field.selectionStart = startPos + value.length;
+          field.selectionEnd = startPos + value.length;
+        }, 0);
+      } else {
+        newValue = field.value + value;
+        field.focus();
+      }
+      return newValue;
     },
     // get_subtitles() {
     //   const config = {
@@ -863,19 +810,18 @@ export default {
     // set_subtitles() {
     //   this.subtitles_options = subtitles[0].subtitles;
     // },
-    upload_img_handle(file) {
+    upload_img_handle(file, mode) {
       if (!file) return;
       this.upload_img_handling = true;
       const formData = new FormData();
       formData.append("file", file);
-      formData.append(
-        "Token",
-        "ofdns1jjalu6efhl4ahlgmqack2lm3ll:J7Io2WOTXnIUZ2G0ibCcNsJ1BsY=:eyJkZWFkbGluZSI6MTYyOTIxMjIyOSwiYWN0aW9uIjoiZ2V0IiwidWlkIjoxMDM2OCwiYWlkIjoiMTEwMDQiLCJmcm9tIjoiZmlsZSJ9"
-      );
-      delete axios.defaults.headers.Authorization; //正常用的transFormRequest会影响data，只能把Authorization删了再加回去
+      formData.append("mode", mode);
+      formData.append("binggan", this.$store.state.User.Binggan);
+      formData.append("thread_id", 0); //正常上传要提供thread_id，新主题要传入0
+      formData.append("forum_id", this.forum_id);
       const config = {
         method: "post",
-        url: "https://up.tietuku.cn/",
+        url: "/api/img_upload",
         headers: {
           "content-type": "multipart/form-data",
         },
@@ -884,16 +830,11 @@ export default {
       axios(config)
         .then((response) => {
           this.upload_img_handling = false;
-          this.content_input +=
-            "<img src='" +
-            response.data.linkurl.replace(/http/g, "https") +
-            "' >";
+          this.content_input += "<img src='" + response.data.file_url + "' >";
           this.content_input_change();
-          axios.defaults.headers.Authorization = "Bearer " + localStorage.Token;
         })
         .catch((error) => {
           this.upload_img_handling = false;
-          axios.defaults.headers.Authorization = "Bearer " + localStorage.Token;
           alert(error);
         });
     },

@@ -12,14 +12,14 @@ class ResponseCode
     const USER_REGISTER_FAIL = 21403;
     const USER_NOT_FOUND = 21404;
     const USER_LOCKED = 21443;
-
+    const USER_ERROR = 21422;
     const USER_BANNED = 21499;
     const COIN_NOT_ENOUGH = 21412;
     const USER_PASSWORD_ERROR = 21001;
     const USER_NEW_CLOSED = 21406;
     const CANNOTLOGIN = 21401;
 
-    const ADMIN_UNAUTHORIZED = 22401;
+    const ADMIN_UNAUTHORIZED = 29401;
 
     const FORUM_NOT_FOUND = 22404;
     const FORUM_UNAUTHORIZED = 22401;
@@ -28,6 +28,7 @@ class ResponseCode
     const THREAD_WAS_NISSINED = 23410;
     const THREAD_TOO_MANY = 23429;
     const THREAD_UNAUTHORIZED = 23401;
+    const THREAD_IS_PRIVATE = 234011;
     const SEARCH_TOO_MANY = 234291;
 
     const POST_NOT_FOUND = 24404;
@@ -63,6 +64,8 @@ class ResponseCode
     const CAPTCHA_NOT_FOUND = 28404;
     const CAPTCHA_WRONG = 24401;
 
+    const ANNOUCEMENT_NOT_FOUND = 28404;
+
     const LOGIN_FAILED = 20001;
 
     const DATABASE_FAILED = 5001;
@@ -83,11 +86,12 @@ class ResponseCode
         self::USER_PASSWORD_ERROR => '密码输入错误',
         self::ADMIN_UNAUTHORIZED => '管理员权限不足',
         self::CANNOTLOGIN => '用户无法登录',
-        self::FORUM_NOT_FOUND => '该小岛不存在',
+        self::FORUM_NOT_FOUND => '此小岛不存在',
         self::FORUM_UNAUTHORIZED => '无法访问该小岛',
         self::THREAD_NOT_FOUND => '主题贴不存在',
         self::THREAD_WAS_NISSINED => '主题已被日清',
         self::THREAD_TOO_MANY => '发新主题过于频繁',
+        self::THREAD_IS_PRIVATE => '本贴是私密主题，只有发帖者可以查看喔',
         self::SEARCH_TOO_MANY => '为保护服务器，设定了全局10秒只能搜索20次。',
         self::POST_NOT_FOUND => '未找到该帖子',
         self::POST_TOO_MANY => '回帖过于频繁',
@@ -117,6 +121,7 @@ class ResponseCode
         self::CROWD_HAS_BEEN_CLOSED => "众筹已结束",
         self::CAPTCHA_NOT_FOUND => '验证码不存在或已过期',
         self::CAPTCHA_WRONG => '验证码错误',
+        self::ANNOUCEMENT_NOT_FOUND => '公告不存在',
     ];
 }
 

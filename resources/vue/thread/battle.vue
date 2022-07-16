@@ -29,7 +29,10 @@
             v-model="battle_chara_id"
             :options="battle_chara_options"
           ></b-form-select
-          ><b-button variant="success" size="sm" @click="challenger_roll_handle"
+          ><b-button
+            :variant="button_theme"
+            size="sm"
+            @click="challenger_roll_handle"
             >挑战</b-button
           >
         </b-input-group>
@@ -45,7 +48,7 @@
         <span class="battle_message_system">挑战者已出现！</span
         ><b-button
           class="ml-1"
-          variant="success"
+          :variant="button_theme"
           size="sm"
           @click="initiator_roll_handle"
           >迎战</b-button
@@ -131,6 +134,9 @@ export default {
           this.$store.state.User.CharaIndex[group_id][0].value;
       }
       return chara_options;
+    },
+    button_theme() {
+      return this.$store.getters.ButtonTheme;
     },
   },
   methods: {

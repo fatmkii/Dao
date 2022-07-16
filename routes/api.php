@@ -45,11 +45,13 @@ Route::prefix('threads')->group(function () {
     Route::get('/{Thread_id}', [ThreadController::class, 'show'])->middleware('CheckBinggan:show'); //查看主题
     Route::post('/create', [ThreadController::class, 'create'])->middleware('CheckBinggan:create'); //发新主题
     Route::delete('/delay/{Thread_id}', [ThreadController::class, 'delay_thread_withdraw'])->middleware('CheckBinggan:create'); //撤回延时主题
+    Route::post('/change_color', [ThreadController::class, 'change_color'])->middleware('CheckBinggan:create'); //改标题颜色
 });
 // Route::apiResource('threads', ThreadController::class)->middleware('auth:sanctum');
 
 //Post系列
 Route::prefix('posts')->group(function () {
+    Route::get('/{id}', [PostController::class, 'show'])->middleware('CheckBinggan:show'); //获得单个帖子数据
     Route::post('/create', [PostController::class, 'create'])->middleware('CheckBinggan:create'); //新帖子
     Route::delete('/{id}', [PostController::class, 'destroy'])->middleware('CheckBinggan:create'); //删除帖子
     Route::post('/create_roll', [PostController::class, 'create_roll'])->middleware('CheckBinggan:create'); //新roll点
@@ -92,9 +94,13 @@ Route::prefix('user')->group(function () {
     Route::post('/register', [UserController::class, 'create']);   //新建饼干
     Route::post('/reward', [UserController::class, 'reward'])->middleware('CheckBinggan:create');     //打赏
     Route::get('/check_reg_record', [UserController::class, 'check_reg_record']); //返回注册记录TTL
-    Route::post('/pingbici_set', [UserController::class, 'pingbici_set']);     //设定屏蔽词
-    Route::post('/my_emoji_set', [UserController::class, 'my_emoji_set']);     //设定表情包
+    Route::post('/pingbici_set', [UserController::class, 'pingbici_set'])->middleware('CheckBinggan:create');     //设定屏蔽词
+    Route::post('/my_emoji_set', [UserController::class, 'my_emoji_set'])->middleware('CheckBinggan:create');     //设定表情包
+    Route::post('/my_emoji_add', [UserController::class, 'my_emoji_add'])->middleware('CheckBinggan:create');     //追加表情包
     Route::post('/water_unlock', [UserController::class, 'water_unlock'])->middleware('CheckBinggan:create');     //解除灌水锁定
+    Route::post('/user_lv_up', [UserController::class, 'user_lv_up'])->middleware('CheckBinggan:create');
+    Route::post('/show_messages_index', [UserController::class, 'show_messages_index'])->middleware('CheckBinggan:show'); //获得站内消息列表
+    Route::post('/show_messages_content', [UserController::class, 'show_messages_content'])->middleware('CheckBinggan:show'); //获得站内消息具体内容
 });
 
 
@@ -106,8 +112,12 @@ Route::middleware('CheckTokenCan:admin', 'auth:sanctum')->prefix('admin')->group
     Route::post('/post_delete_all', [AdminController::class, 'post_delete_all']); //删主题内该作者全部回帖
     Route::post('/user_ban', [AdminController::class, 'user_ban']); //碎饼
     Route::post('/user_lock', [AdminController::class, 'user_lock']); //封id（临时）
+    Route::post('/set_banner', [AdminController::class, 'set_banner']); //封id（临时）
     Route::post('/thread_set_top', [AdminController::class, 'thread_set_top']); //设置置顶
     Route::post('/thread_cancel_top', [AdminController::class, 'thread_cancel_top']); //取消置顶
+    Route::post('/create_annoucement', [AdminController::class, 'create_annoucement']); //发布站内公告
+    Route::get('/annoucement', [AdminController::class, 'show_annoucements']); //查看站内公告
+    Route::delete('/annoucement/{annoucement_id}', [AdminController::class, 'del_annoucements']); //查看站内公告
     // Route::post('/check_jingfen', [AdminController::class, 'check_jingfen']); //查精分
 });
 
@@ -116,9 +126,14 @@ Route::middleware('CheckTokenCan:super_admin', 'auth:sanctum')->prefix('admin')-
     Route::get('/check_user_post', [AdminController::class, 'check_user_post']); //查询用户发帖记录
 });
 
+//IncomeStatement系列
+Route::prefix('income')->group(function () {
+    Route::get('/show', [UserController::class, 'income_show'])->middleware('CheckBinggan:show'); //查看olo收益表
+});
 
 //杂项
 Route::get('/emoji', [CommonController::class, 'emoji_index']);
 Route::get('/subtitles', [CommonController::class, 'subtitles_index']);
 Route::get('/random_heads', [CommonController::class, 'random_heads_index']);
 Route::get('/captcha', [CommonController::class, 'get_captcha']);
+Route::post('/img_upload', [CommonController::class, 'img_upload'])->middleware('CheckBinggan:create');//上传图片
