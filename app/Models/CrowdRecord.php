@@ -17,6 +17,11 @@ class CrowdRecord extends Model
         'updated_at',
     ];
 
+    protected function serializeDate($date)
+    {
+        return $date->format('Y-m-d H:i');
+    }
+
     public function Crowd()
     {
         return $this->belongsTo(Crowd::class);

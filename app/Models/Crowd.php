@@ -31,7 +31,7 @@ class Crowd extends Model
 
     protected function serializeDate($date)
     {
-        return $date->format('Y-m-d H:i:s');
+        return $date->format('Y-m-d H:i');
     }
 
     public function CrowdUserRecord($user_id)
@@ -50,7 +50,7 @@ class Crowd extends Model
 
         $this->thread_id = $thread_id;
         $this->title = $request->crowd_title;
-        $this->end_date = Carbon::parse($request->vote_end_time);
+        $this->end_date = Carbon::parse($request->crowd_end_time);
         $this->olo_target = $request->crowd_olo_target;
         $this->save();
 

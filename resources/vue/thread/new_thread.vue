@@ -474,11 +474,11 @@
         <b-form-checkbox
           class="mr-3"
           v-model="thread_type"
-          :disabled="forum_id != 12"
+          :disabled="forum_id != 2"
           value="crowd"
           unchecked-value="normal"
         >
-          开启众筹（仅管理员可见） 目前只能在海滨乐园岛开菠菜（避免被日清）
+          开启众筹（仅管理员可见） 目前只能在小火锅调味区开众筹（避免被日清）
         </b-form-checkbox>
         <div class="row align-items-center" v-show="thread_type == 'crowd'">
           <div class="col-auto my-2">

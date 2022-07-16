@@ -58,6 +58,7 @@ class ResponseCode
     const CROWD_NOT_FOUND = 28404;
     const CROWD_WAS_OUTDATE = 28410;
     const CROWD_HAS_BEEN_CLOSED = 284101;
+    const CROWD_TOO_MANY = 28429; //超额众筹了
 
     const CAPTCHA_NOT_FOUND = 28404;
     const CAPTCHA_WRONG = 24401;

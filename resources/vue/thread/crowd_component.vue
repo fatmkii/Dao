@@ -16,7 +16,7 @@
       <b-progress
         class="w-75 ml-4 crowd"
         height="1.5rem"
-        animated="true"
+        animated
         :value="crowd_data.olo_total"
         :max="crowd_data.olo_target"
       ></b-progress>
@@ -26,7 +26,9 @@
         >目标金额：{{ crowd_data.olo_target }}</span
       >
       <span style="min-width: 100px" class="pl-2"
-        >已完成：{{ Math.floor(crowd_data.olo_total/crowd_data.olo_target) }}%</span
+        >已完成：{{
+          ((crowd_data.olo_total / crowd_data.olo_target) * 100).toFixed(1)
+        }}%</span
       >
     </div>
 
@@ -59,11 +61,20 @@
       >
         中止
       </b-button>
-      <span class="ml-2" style="font-size: 0.875rem" v-if="!crowd_end_flag"
+      <span
+        class="ml-2"
+        style="font-size: 0.875rem"
+        v-if="!crowd_end_flag && crowd_data.is_closed == 0"
         >此众筹将于 {{ crowd_TTL }} 后结束。</span
       >
     </div>
-    <div class="my-2" v-if="crowd_data.is_closed">
+    <div class="my-2">
+      <span
+        class="ml-2"
+        style="font-size: 0.875rem"
+        v-if="crowd_end_flag && crowd_data.is_closed == 0"
+        >此众筹已过期</span
+      >
       <span
         class="ml-2"
         style="font-size: 0.875rem"
@@ -80,13 +91,13 @@
     <table class="crowd_table">
       <thead>
         <tr class="text-center">
-          <th width="40%">我支持的olo</th>
-          <th width="60%">参与时间</th>
+          <th width="50%">我支持的olo</th>
+          <th width="50%">参与时间</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="record in user_crowd_records" :key="record.id">
-          <td class="text-center">{{ record.crowd_olo }}</td>
+          <td class="text-center">{{ record.olo }}</td>
           <td class="text-center">{{ record.created_at }}</td>
         </tr>
       </tbody>
@@ -199,12 +210,14 @@ export default {
             this.new_crowd_handling = false;
           } else {
             alert(response.data.message);
+            this.get_crowd_data();
+            this.$parent.get_posts_data();
             this.new_crowd_handling = false;
           }
         })
         .catch((error) => {
           alert(Object.values(error.response.data.errors)[0]);
-          this.new_betting_handling = false;
+          this.new_crowd_handling = false;
         });
     },
     crowd_repeal() {

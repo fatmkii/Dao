@@ -67,6 +67,11 @@ class Thread extends myModel
         return $this->hasOne(GambleQuestion::class);
     }
 
+    public function Crowd()
+    {
+        return $this->hasOne(Crowd::class);
+    }
+
     protected function serializeDate($date)
     {
         return $date->format('Y-m-d H:i');
