@@ -28,6 +28,7 @@
             >
             <span v-if="thread.vote_question_id != null">🗳️</span>
             <span v-if="thread.gamble_question_id != null">🎲</span>
+            <span v-if="thread.crowd_id != null">💰</span>
             <router-link
               :class="{ thread_title: !thread.is_delay }"
               style="word-wrap: break-word; white-space: normal"

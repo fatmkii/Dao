@@ -56,6 +56,11 @@ class ResponseCode
     const BATTLE_HAS_BEEN_CLOSED = 274101;
     const BATTLE_CANNOT_CREATED = 274112;
 
+    const CROWD_NOT_FOUND = 28404;
+    const CROWD_WAS_OUTDATE = 28410;
+    const CROWD_HAS_BEEN_CLOSED = 284101;
+    const CROWD_TOO_MANY = 28429; //超额众筹了
+
     const CAPTCHA_NOT_FOUND = 28404;
     const CAPTCHA_WRONG = 24401;
 
@@ -111,6 +116,9 @@ class ResponseCode
         self::BATTLE_HAS_BEEN_ROLL_C => '已经有挑战者参加了',
         self::BATTLE_HAS_BEEN_ROLL_I => '大乱斗还在等待挑战者',
         self::BATTLE_CANNOT_CREATED => '本主题不能发起大乱斗',
+        self::CROWD_NOT_FOUND => "众筹不存在",
+        self::CROWD_WAS_OUTDATE => "众筹已过期",
+        self::CROWD_HAS_BEEN_CLOSED => "众筹已结束",
         self::CAPTCHA_NOT_FOUND => '验证码不存在或已过期',
         self::CAPTCHA_WRONG => '验证码错误',
         self::ANNOUCEMENT_NOT_FOUND => '公告不存在',

@@ -82,11 +82,11 @@ Route::prefix('battles')->group(function () {
 });
 
 //Crowd系列
-// Route::prefix('crowds')->group(function () {
-//     Route::get('/{crowd_id}', [CrowdController::class, 'show']); //显示众筹结果
-//     Route::post('', [CrowdController::class, 'create'])->middleware('CheckBinggan:create');  //用户参加众筹
-//     Route::post('/repeal', [CrowdController::class, 'repeal'])->middleware('auth:sanctum');  //中止众筹（只能由管理员操作）
-// });
+Route::prefix('crowds')->group(function () {
+    Route::get('/{crowd_id}', [CrowdController::class, 'show']); //显示众筹结果
+    Route::post('', [CrowdController::class, 'store'])->middleware('CheckBinggan:create');  //用户参加众筹
+    Route::post('/repeal', [CrowdController::class, 'repeal'])->middleware('auth:sanctum');  //中止众筹（只能由管理员操作）
+});
 
 //User系列
 Route::prefix('user')->group(function () {
