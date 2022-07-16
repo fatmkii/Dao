@@ -680,7 +680,7 @@ export default {
         }
       } else {
         try {
-        this.$echo.leaveChannel("thread_" + this.thread_id);
+          this.$echo.leaveChannel("thread_" + this.thread_id);
         } catch (e) {}
       }
     },
@@ -1467,7 +1467,9 @@ export default {
     // window.removeEventListener("beforeunload", this.browse_record_handle);
     window.removeEventListener("scroll", this.scroll_watch);
     window.removeEventListener("keyup", this.keyup_callee);
-    this.$echo.leaveChannel("thread_" + this.thread_id);
+    try {//不想经常弹出错误
+      this.$echo.leaveChannel("thread_" + this.thread_id);
+    } catch (e) {}
   },
 };
 </script> 
