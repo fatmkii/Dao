@@ -77,7 +77,8 @@ class User extends Authenticatable
     const NEW_POST_NUMBER = 10; //饼干回帖次数（也就是60秒10次）
     const NEW_POST_INTERVAL = 60; //饼干回帖频率（含大乱斗）
     const NEW_POST_NUMBER_IP = 100; //IP回帖次数（也就是1小时100次）
-    const NEW_POST_NUMBER_IP2 = 5; //IP回帖不看帖次数
+    const NEW_POST_NUMBER_IP2 = 5; //IP回帖不看帖次数（第3类）
+    const NEW_POST_NUMBER_IP3 = 70; //IP回帖底隐藏式检查（第4类）
     const NEW_POST_INTERVAL_IP = 3600; //IP回帖频率（含大乱斗）
 
     protected static function booted()
@@ -134,7 +135,7 @@ class User extends Authenticatable
                             ]
                         );
 
-                        //第2.2类检查：弹出验证码时，回顾该用户前10个帖子的毫秒值看是否相似
+                        // 第2.2类检查：弹出验证码时，回顾该用户前10个帖子的毫秒值看是否相似
                         // if ($thread_id != null) {
                         //     $user_posts_millis = Post::suffix(intval($thread_id / 10000))
                         //         ->where('created_binggan', $this->binggan)
@@ -152,7 +153,7 @@ class User extends Authenticatable
                         //             ]
                         //         );
                         //     }
-                        // }
+                        // // }
                         return response()->json([
                             'code' => ResponseCode::POST_TOO_MANY_MAYBE_ROBOT,
                             'message' => ResponseCode::$codeMap[ResponseCode::POST_TOO_MANY_MAYBE_ROBOT],
@@ -170,6 +171,31 @@ class User extends Authenticatable
                                 'content' => 'ip:' . $ip . ' record:' . $new_post_record_IP2,
                             ]
                         );
+                    }
+
+                    //第4类检查：IP记录，回顾该用户前10个帖子的毫秒值看是否相似
+                    if ($new_post_record_IP == self::NEW_POST_NUMBER_IP3 && $this->admin == 0) {
+                        $posts_time = Post::suffix(intval($thread_id / 10000))
+                            ->where('created_binggan', $this->binggan)
+                            ->orderBy('id', 'desc')->limit(21)->pluck('created_at')->toArray();
+
+                        $posts_time_d = []; //发帖时间之差
+                        for ($i = 0; $i < count($posts_time) - 1; ++$i) {
+                            array_push($posts_time_d, $posts_time[$i]->timestamp - $posts_time[$i + 1]->timestamp);
+                        }
+
+                        list($avg, $variance) = $this->get_avg_var($posts_time_d); //平均值和方差
+
+                        if ($variance < 5) {
+                            ProcessUserActive::dispatch(
+                                [
+                                    'binggan' => $this->binggan,
+                                    'user_id' => $this->id,
+                                    'active' => '怀疑用户用脚本刷帖(方差一致)',
+                                    'content' => sprintf("ip:%s avg:%.1f  var:%.1f", $ip, $avg, $variance)
+                                ]
+                            );
+                        }
                     }
                     break;
                 }
