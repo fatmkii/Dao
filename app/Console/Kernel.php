@@ -2,8 +2,11 @@
 
 namespace App\Console;
 
+use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 
 class Kernel extends ConsoleKernel
 {
@@ -30,6 +33,13 @@ class Kernel extends ConsoleKernel
         $schedule->exec('supervisorctl restart Laravel-Echo-server:Laravel-Echo-server_00')
             ->dailyAt('3:00')
             ->sendOutputTo('/var/log/Laravel-schedule.log');
+        $schedule->call(function () {
+            if (Redis::TTL('search_record_global') == -2) {
+                Log::warning('search_record_global expired failed', ['timestamp' => Carbon::now()]);
+            } else {
+                Log::info('search_record_global OK', ['timestamp' => Carbon::now()]);
+            }
+        })->everyMinute();
     }
 
     /**
