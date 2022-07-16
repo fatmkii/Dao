@@ -27,7 +27,7 @@ class CrowdController extends Controller
                 'message' => ResponseCode::$codeMap[ResponseCode::CROWD_NOT_FOUND],
             ]);
         }
-        
+
         $user = User::where('binggan', $request->query('binggan'))->first();
 
         if ($user) {
@@ -102,9 +102,6 @@ class CrowdController extends Controller
             $crowd_record->olo = $olo_to_crowd;
             $crowd_record->save();
 
-            //扣除用户相应olo
-            $user->coinConsume($olo_to_crowd);
-
             //执行新回复流程
             $thread_id = $crowd->thread_id;
             $post_content = sprintf("我众筹了%u块奥利奥", $olo_to_crowd);
@@ -123,6 +120,20 @@ class CrowdController extends Controller
             $post->floor = $thread->posts_num;
             $thread->save();
             $post->save();
+
+            //扣除用户相应olo
+            // $user->coinConsume($olo_to_crowd);
+            $user->coinChange(
+                'normal', //记录类型
+                [
+                    'olo' => -$olo_to_crowd,
+                    'content' => '参与众筹',
+                    'thread_id' => $thread->id,
+                    'thread_title' => $thread->title,
+                    'post_id' => $post->id,
+                    'floor' => $post->floor,
+                ]
+            ); //扣除用户相应olo（通过统一接口、记录操作）
             DB::commit();
         } catch (QueryException $e) {
             DB::rollback();

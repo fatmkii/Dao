@@ -16,6 +16,7 @@ use App\Exceptions\CoinException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use App\Jobs\ProcessUserActive;
+use App\Models\Crowd;
 use App\Models\GambleQuestion;
 use App\Models\VoteQuestion;
 
@@ -256,6 +257,14 @@ class ThreadController extends Controller
                 $thread->gamble_question_id = $gamble_question->create($request, $thread->id); //$gamble_question->create会返回id
                 $thread->save();
             }
+
+            //追加菠众筹贴
+            if ($request->thread_type == "crowd") {
+                $crowd = new Crowd();
+                $thread->crowd_id = $crowd->create($request, $thread->id); //$crowd->create会返回id
+                $thread->save();
+            }
+
 
             //统一判断奥利奥是否足够
             if ($user->coin < 0) {
