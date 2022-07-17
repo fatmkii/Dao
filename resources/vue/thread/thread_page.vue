@@ -615,6 +615,7 @@ import ZBar from "../component/z_bar.vue";
 import ColorPicker from "../component/color_picker.vue";
 
 export default {
+  name: "thread_page",
   components: {
     PostItem,
     PostInput,
@@ -1467,7 +1468,8 @@ export default {
     // window.removeEventListener("beforeunload", this.browse_record_handle);
     window.removeEventListener("scroll", this.scroll_watch);
     window.removeEventListener("keyup", this.keyup_callee);
-    try {//不想经常弹出错误
+    try {
+      //不想经常弹出错误
       this.$echo.leaveChannel("thread_" + this.thread_id);
     } catch (e) {}
   },

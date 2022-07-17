@@ -14,7 +14,9 @@
     <div id='app' class='container'>
         <app></app>
         <navigation></navigation>
-        <router-view></router-view>
+        <keep-alive :include="['thread_page','new_thread']">
+            <router-view></router-view>
+        </keep-alive>
         <footer_navi></footer_navi>
     </div>
 </body>
@@ -24,5 +26,5 @@
 <script src="{{ mix('js/manifest.js') }}"></script>
 <script src="{{ mix('js/vendor.js') }}"></script>
 <script src="{{ mix('js/app.js') }}"></script>
-
+<script async src="https://imgtu.com/sdk/pup.js" data-url="https://imgtu.com/upload" data-auto-insert="html-embed-medium"></script>
 </html>

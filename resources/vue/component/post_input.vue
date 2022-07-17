@@ -120,7 +120,15 @@
         :style="post_content_css"
       ></textarea>
       <div class="d-flex align-items-center mt-2">
-        <Imgtu v-if="this.forum_id !== 419 && this.forum_id !== 0"></Imgtu>
+        <b-button
+          v-show="this.forum_id !== 419 && this.forum_id !== 0"
+          variant="outline-dark"
+          size="sm"
+          data-chevereto-pup-trigger
+          data-target="#content_input"
+          id="upload_button"
+          >上传图片</b-button
+        >
         <div v-if="this.forum_id === 419" class="d-flex align-items-center">
           <b-form-file
             browse-text="上传图片"
@@ -209,6 +217,7 @@ import Drawer from "./drawer.vue";
 import Imgtu from "./imgtu.vue";
 
 export default {
+  name: "post_input",
   components: {
     PostItem,
     Emoji,

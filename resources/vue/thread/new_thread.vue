@@ -477,6 +477,7 @@ import Imgtu from "../component/imgtu.vue";
 import ColorPicker from "../component/color_picker.vue";
 
 export default {
+  name: "new_thread",
   components: { Emoji, PostItem, PostInput, Imgtu, ColorPicker },
   props: {
     forum_id: Number, //来自router
