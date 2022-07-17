@@ -26,5 +26,4 @@
 <script src="{{ mix('js/manifest.js') }}"></script>
 <script src="{{ mix('js/vendor.js') }}"></script>
 <script src="{{ mix('js/app.js') }}"></script>
-<script async src="https://mjj.today/sdk/pup.js" data-url="https://mjj.today/upload" data-auto-insert="html-embed"></script>
 </html>
