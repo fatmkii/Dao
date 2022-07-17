@@ -139,12 +139,6 @@
           </b-spinner>
         </div>
         <div id="space_to_imgupload"></div>
-        <!-- <b-button
-          data-chevereto-pup-trigger
-          data-target="#content_input"
-          id="upload_button"
-          >上传图片</b-button
-        > -->
         <div class="mr-auto"></div>
         <b-form-checkbox
           v-if="has_delay"
