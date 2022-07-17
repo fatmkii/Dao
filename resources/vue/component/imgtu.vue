@@ -13,6 +13,7 @@ export default {
         src: "https://imgtu.com/sdk/pup.js",
         "data-url": "https://imgtu.com/upload",
         "data-auto-insert": "html-embed-medium",
+        "data-sibling": "#space_to_imgupload",
       },
     });
   },

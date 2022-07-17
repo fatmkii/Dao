@@ -473,7 +473,7 @@
 import Emoji from "../component/emoji.vue";
 import PostItem from "../component/post_item.vue";
 import PostInput from "../component/post_input.vue";
-import Imgtu from "../imgtu.vue";
+import Imgtu from "../component/imgtu.vue";
 import ColorPicker from "../component/color_picker.vue";
 
 export default {

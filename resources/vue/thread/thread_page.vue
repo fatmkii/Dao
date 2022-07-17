@@ -608,7 +608,7 @@ import Drawer from "../component/drawer.vue";
 import VoteComponent from "./vote.vue";
 import GambleComponent from "./gamble_component.vue";
 import CrowdComponent from "./crowd_component.vue";
-import Imgtu from "../imgtu.vue";
+import Imgtu from "../component/imgtu.vue";
 import Battle from "./battle.vue";
 import BattleModal from "./battle_modal.vue";
 import ZBar from "../component/z_bar.vue";

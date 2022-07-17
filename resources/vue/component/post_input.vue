@@ -119,8 +119,8 @@
         @keyup.ctrl.enter="commit"
         :style="post_content_css"
       ></textarea>
-      <Imgtu v-if="this.forum_id !== 419 && this.forum_id !== 0"></Imgtu>
       <div class="d-flex align-items-center mt-2">
+        <Imgtu v-if="this.forum_id !== 419 && this.forum_id !== 0"></Imgtu>
         <div v-if="this.forum_id === 419" class="d-flex align-items-center">
           <b-form-file
             browse-text="上传图片"
@@ -138,23 +138,29 @@
           >
           </b-spinner>
         </div>
-        <div class="ml-auto d-flex align-items-center">
-          <b-form-checkbox
-            v-if="has_delay"
-            v-model="is_delay"
-            v-b-popover.hover.bottom="'自动在第二天8点发出'"
-          >
-            延时发送
-          </b-form-checkbox>
-          <b-button
-            :variant="button_theme"
-            class="ml-2"
-            :disabled="input_disable"
-            v-b-popover.hover.left="'可以Ctrl+Enter喔'"
-            @click="commit"
-            >{{ new_post_handling ? "提交中" : "提交" }}
-          </b-button>
-        </div>
+        <div id="space_to_imgupload"></div>
+        <!-- <b-button
+          data-chevereto-pup-trigger
+          data-target="#content_input"
+          id="upload_button"
+          >上传图片</b-button
+        > -->
+        <div class="mr-auto"></div>
+        <b-form-checkbox
+          v-if="has_delay"
+          v-model="is_delay"
+          v-b-popover.hover.bottom="'自动在第二天8点发出'"
+        >
+          延时发送
+        </b-form-checkbox>
+        <b-button
+          :variant="button_theme"
+          class="ml-2"
+          :disabled="input_disable"
+          v-b-popover.hover.left="'可以Ctrl+Enter喔'"
+          @click="commit"
+          >{{ new_post_handling ? "提交中" : "提交" }}
+        </b-button>
       </div>
     </div>
 
@@ -206,7 +212,7 @@
 import PostItem from "./post_item.vue";
 import Emoji from "./emoji.vue";
 import Drawer from "./drawer.vue";
-import Imgtu from "../imgtu.vue";
+import Imgtu from "./imgtu.vue";
 
 export default {
   components: {

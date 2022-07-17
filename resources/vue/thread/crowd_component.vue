@@ -40,7 +40,7 @@
           v-model="crowd_olo"
         ></b-form-input>
         <b-button
-          variant="success"
+          :variant="button_theme"
           size="sm"
           @click="new_crowd_handle"
           :disabled="
@@ -129,6 +129,9 @@ export default {
     };
   },
   computed: {
+    button_theme() {
+      return this.$store.getters.ButtonTheme;
+    },
     crowd_TTL() {
       if (this.crowd_data.end_date === undefined) {
         return "";
