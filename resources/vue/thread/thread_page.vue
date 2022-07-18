@@ -608,7 +608,6 @@ import Drawer from "../component/drawer.vue";
 import VoteComponent from "./vote.vue";
 import GambleComponent from "./gamble_component.vue";
 import CrowdComponent from "./crowd_component.vue";
-import Imgtu from "../component/imgtu.vue";
 import Battle from "./battle.vue";
 import BattleModal from "./battle_modal.vue";
 import ZBar from "../component/z_bar.vue";
@@ -626,7 +625,6 @@ export default {
     VoteComponent,
     GambleComponent,
     CrowdComponent,
-    Imgtu,
     Battle,
     BattleModal,
     ZBar,
@@ -639,15 +637,18 @@ export default {
   watch: {
     // 如果路由有变化，再次获得数据
     $route(to) {
-      this.get_browse_current();
-      this.$store.commit("PostsLoadStatus_set", 1);
-      if (this.search_input) {
-        this.get_posts_data(false, false, this.search_input);
-      } else {
-        this.get_posts_data(false, true);
+      if (to.name == "thread") {
+        //因为这个页面做了keep-alive，所以每次点进来都会算作$route变动
+        this.get_browse_current();
+        this.$store.commit("PostsLoadStatus_set", 1);
+        if (this.search_input) {
+          this.get_posts_data(false, false, this.search_input);
+        } else {
+          this.get_posts_data(false, true);
+        }
+        this.show_listen_next_page = false;
+        this.is_listening = false;
       }
-      this.show_listen_next_page = false;
-      this.is_listening = false;
     },
     is_listening() {
       if (this.is_listening === true) {
@@ -1453,17 +1454,36 @@ export default {
     },
   },
   created() {
-    this.get_posts_data(false, true);
+    this.get_posts_data(false, true); //还是要在created时候获得数据，不然直接进入页面会没数据
     this.$store.commit("PostsLoadStatus_set", 1); //避免显示上个ThreadsData
     this.load_LocalStorage();
   },
   mounted() {
-    this.get_browse_current();
+    // this.get_browse_current();在watch $route那里
+    // window.addEventListener("beforeunload", this.browse_record_handle);
+    // window.addEventListener("scroll", this.scroll_watch);
+    // window.addEventListener("keyup", this.keyup_callee);
+  },
+  beforeDestroy() {
+    // this.browse_record_handle();
+    // // window.removeEventListener("beforeunload", this.browse_record_handle);
+    // window.removeEventListener("scroll", this.scroll_watch);
+    // window.removeEventListener("keyup", this.keyup_callee);
+    // try {
+    //   //不想经常弹出错误
+    //   this.$echo.leaveChannel("thread_" + this.thread_id);
+    // } catch (e) {}
+  },
+  activated() {
+    this.load_LocalStorage();
+    // this.get_browse_current();在watch $route那里
+    // this.get_posts_data(false, true); //activated的获得数据靠watch:$route
     window.addEventListener("beforeunload", this.browse_record_handle);
     window.addEventListener("scroll", this.scroll_watch);
     window.addEventListener("keyup", this.keyup_callee);
   },
-  beforeDestroy() {
+  deactivated() {
+    this.search_input = ""; //不然每次进入页面都带有search
     this.browse_record_handle();
     // window.removeEventListener("beforeunload", this.browse_record_handle);
     window.removeEventListener("scroll", this.scroll_watch);
