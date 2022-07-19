@@ -20,6 +20,7 @@ use App\Jobs\ProcessUserActive;
 use App\Models\IncomeStatement;
 use App\Jobs\ProcessIncomeStatement;
 use App\Models\UserMessages;
+use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable
 {
@@ -173,7 +174,7 @@ class User extends Authenticatable
                         );
                     }
 
-                    //第4类检查：IP记录，回顾该用户前10个帖子的毫秒值看是否相似
+                    //第4类检查：IP记录，回顾该用户前20个帖子的毫秒值看是否相似
                     if ($new_post_record_IP == self::NEW_POST_NUMBER_IP3 && $this->admin == 0) {
                         $posts_time = Post::suffix(intval($thread_id / 10000))
                             ->where('created_binggan', $this->binggan)
@@ -182,6 +183,10 @@ class User extends Authenticatable
                         $posts_time_d = []; //发帖时间之差
                         for ($i = 0; $i < count($posts_time) - 1; ++$i) {
                             array_push($posts_time_d, $posts_time[$i]->timestamp - $posts_time[$i + 1]->timestamp);
+                        }
+                        if (count($posts_time_d) == 0) {
+                            Log::warning('search_record_global expired failed', ['array' => $posts_time_d]);
+                            break;
                         }
 
                         list($avg, $variance) = $this->get_avg_var($posts_time_d); //平均值和方差
