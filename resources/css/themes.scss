@@ -40,6 +40,9 @@ $themes: (
         background_color_nav: #dff0d8,
         //监听中的图标
         listening_img: url(https://oss.cpttmm.com/xhg_other/listening_hdao.gif),
+        //滚动条颜色
+        scroller_color:#5fb878,
+        scroller_color_hover:#28a745,
         //按钮系列
         // btn_color: #fff,
         // btn_background_color: #28a745,
@@ -91,6 +94,9 @@ $themes: (
         background_color_nav: #424a54,
         //监听中的图标
         listening_img: url(https://oss.cpttmm.com/xhg_other/listening_night.gif),
+        //滚动条颜色
+        scroller_color:#424a54,
+        scroller_color_hover:#5a6268,
     ),
     gray: (
         //背景色、0= 整体背景色 1=主题色（浅） 2=主题色（深） 3=浅灰色（导航栏等）4=深灰色（小岛号码圆点等） 5=白色 6=通常为透明色 8=置顶标题栏  input=输入框颜色
@@ -133,6 +139,9 @@ $themes: (
         background_color_nav: #e5e5e5,
         //监听中的图标
         listening_img: url(https://oss.cpttmm.com/xhg_other/listening_gray.gif),
+        //滚动条颜色
+        scroller_color:#aaaaaa,
+        scroller_color_hover:#6c757d,
         //按钮系列
         // btn_color: #fff,
         // btn_background_color: #28a745,

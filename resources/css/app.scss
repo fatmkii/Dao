@@ -460,6 +460,27 @@ label.custom-file-label::after {
     max-height: 16px;
 }
 
+//滚动条颜色
+::-webkit-scrollbar {
+    width: 24px;
+}
+::-webkit-scrollbar-thumb {
+    // background-color: #c1e3c6;
+    @include background_color("scroller_color");
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+::-webkit-scrollbar-thumb:hover {
+    // background-color: #9bcc95;
+    @include background_color("scroller_color_hover");
+}
+
+
 [v-cloak] {
     display: none;
 }
