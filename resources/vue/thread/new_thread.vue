@@ -716,6 +716,7 @@ export default {
               autoHideDelay: 1500,
               appendToast: true,
             });
+            this.new_thread_handling = false;
             setTimeout(() => {
               this.back_to_forum();
             }, 1500);

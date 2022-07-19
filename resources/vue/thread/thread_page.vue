@@ -3,7 +3,7 @@
   <div>
     <div
       class="thread_body"
-      v-show="posts_load_status == 2 && !thread_reject_code"
+      v-show="posts_load_status == 2 && !thread_response_code"
     >
       <div class="row align-items-center mt-3">
         <div class="col-auto h5 d-none d-lg-block d-xl-block">
@@ -353,22 +353,22 @@
 
     <img
       src="https://oss.cpttmm.com/xhg_other/notice_2.png"
-      v-if="posts_load_status == 2 && thread_reject_code == 23410"
+      v-if="posts_load_status == 2 && thread_response_code == 23410"
       class="nissined_img"
     />
     <img
       src="https://oss.cpttmm.com/xhg_other/notice_3.png"
-      v-if="posts_load_status == 2 && thread_reject_code == 23401"
+      v-if="posts_load_status == 2 && thread_response_code == 23401"
       class="nissined_img"
     />
     <img
       src="https://oss.cpttmm.com/xhg_other/notice_1.png"
-      v-if="posts_load_status == 2 && thread_reject_code == 234011"
+      v-if="posts_load_status == 2 && thread_response_code == 234011"
       class="nissined_img"
     />
     <img
       src="https://oss.cpttmm.com/xhg_other/notice_404.png"
-      v-if="posts_load_status == 2 && thread_reject_code == 23404"
+      v-if="posts_load_status == 2 && thread_response_code == 23404"
       class="nissined_img"
     />
 
@@ -743,7 +743,7 @@ export default {
       captcha_img: "",
       captcha_code_input: "",
       captcha_key: "",
-      thread_reject_code: 0,
+      thread_response_code: 0,
       search_show: false,
       search_input: "",
       last_action: "",
@@ -878,6 +878,7 @@ export default {
       axios(config)
         .then((response) => {
           if (response.data.code == 200) {
+            this.thread_response_code = response.data.code;
             this.$store.commit("PostsData_set", response.data.posts_data);
             this.$store.commit(
               "CurrentThreadData_set",
@@ -918,18 +919,20 @@ export default {
             });
           } else {
             if ([23410, 23401, 234011, 23404].includes(response.data.code)) {
-              this.thread_reject_code = response.data.code;
+              this.thread_response_code = response.data.code;
               //清空数据，避免显示上一个帖子的数据
               this.$store.commit("PostsData_set", "");
               this.$store.commit("CurrentThreadData_set", "");
               this.$store.commit("CurrentForumData_set", "");
             } else {
+              this.thread_response_code = 0;
               alert(response.data.message);
             }
           }
           this.$store.commit("PostsLoadStatus_set", 2);
         })
         .catch((error) => {
+          this.thread_response_code = 0;
           this.$store.commit("PostsLoadStatus_set", 2);
           alert(Object.values(error.response.data.errors)[0]);
         });
@@ -1474,24 +1477,24 @@ export default {
     //   this.$echo.leaveChannel("thread_" + this.thread_id);
     // } catch (e) {}
   },
-  activated() {
-    this.load_LocalStorage();
-    // this.get_browse_current();在watch $route那里
-    // this.get_posts_data(false, true); //activated的获得数据靠watch:$route
-    window.addEventListener("beforeunload", this.browse_record_handle);
-    window.addEventListener("scroll", this.scroll_watch);
-    window.addEventListener("keyup", this.keyup_callee);
-  },
-  deactivated() {
-    this.search_input = ""; //不然每次进入页面都带有search
-    this.browse_record_handle();
-    // window.removeEventListener("beforeunload", this.browse_record_handle);
-    window.removeEventListener("scroll", this.scroll_watch);
-    window.removeEventListener("keyup", this.keyup_callee);
-    try {
-      //不想经常弹出错误
-      this.$echo.leaveChannel("thread_" + this.thread_id);
-    } catch (e) {}
-  },
+  // activated() {
+  //   this.load_LocalStorage();
+  //   // this.get_browse_current();在watch $route那里
+  //   // this.get_posts_data(false, true); //activated的获得数据靠watch:$route
+  //   window.addEventListener("beforeunload", this.browse_record_handle);
+  //   window.addEventListener("scroll", this.scroll_watch);
+  //   window.addEventListener("keyup", this.keyup_callee);
+  // },
+  // deactivated() {
+  //   this.search_input = ""; //不然每次进入页面都带有search
+  //   this.browse_record_handle();
+  //   // window.removeEventListener("beforeunload", this.browse_record_handle);
+  //   window.removeEventListener("scroll", this.scroll_watch);
+  //   window.removeEventListener("keyup", this.keyup_callee);
+  //   try {
+  //     //不想经常弹出错误
+  //     this.$echo.leaveChannel("thread_" + this.thread_id);
+  //   } catch (e) {}
+  // },
 };
 </script> 
