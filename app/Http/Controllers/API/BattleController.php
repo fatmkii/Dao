@@ -57,7 +57,7 @@ class BattleController extends Controller
 
         $user = $request->user;
 
-        $water_check = $user->waterCheck('new_post', $request->ip());
+        $water_check = $user->waterCheck('new_post', $request->ip(), $request->thread_id);
         if ($water_check != 'ok') return $water_check;
 
 

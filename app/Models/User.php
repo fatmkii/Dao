@@ -185,7 +185,7 @@ class User extends Authenticatable
                             array_push($posts_time_d, $posts_time[$i]->timestamp - $posts_time[$i + 1]->timestamp);
                         }
                         if (count($posts_time_d) == 0) {
-                            Log::warning('search_record_global expired failed', ['array' => $posts_time_d]);
+                            Log::warning('new_post check failed', ['array' => $posts_time_d, 'binggan' => $this->binggan]);
                             break;
                         }
 
