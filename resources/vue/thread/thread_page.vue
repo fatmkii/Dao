@@ -1477,24 +1477,24 @@ export default {
     //   this.$echo.leaveChannel("thread_" + this.thread_id);
     // } catch (e) {}
   },
-  // activated() {
-  //   this.load_LocalStorage();
-  //   // this.get_browse_current();在watch $route那里
-  //   // this.get_posts_data(false, true); //activated的获得数据靠watch:$route
-  //   window.addEventListener("beforeunload", this.browse_record_handle);
-  //   window.addEventListener("scroll", this.scroll_watch);
-  //   window.addEventListener("keyup", this.keyup_callee);
-  // },
-  // deactivated() {
-  //   this.search_input = ""; //不然每次进入页面都带有search
-  //   this.browse_record_handle();
-  //   // window.removeEventListener("beforeunload", this.browse_record_handle);
-  //   window.removeEventListener("scroll", this.scroll_watch);
-  //   window.removeEventListener("keyup", this.keyup_callee);
-  //   try {
-  //     //不想经常弹出错误
-  //     this.$echo.leaveChannel("thread_" + this.thread_id);
-  //   } catch (e) {}
-  // },
+  activated() {
+    this.load_LocalStorage();
+    // this.get_browse_current();在watch $route那里
+    // this.get_posts_data(false, true); //activated的获得数据靠watch:$route
+    window.addEventListener("beforeunload", this.browse_record_handle);
+    window.addEventListener("scroll", this.scroll_watch);
+    window.addEventListener("keyup", this.keyup_callee);
+  },
+  deactivated() {
+    this.search_input = ""; //不然每次进入页面都带有search
+    this.browse_record_handle();
+    // window.removeEventListener("beforeunload", this.browse_record_handle);
+    window.removeEventListener("scroll", this.scroll_watch);
+    window.removeEventListener("keyup", this.keyup_callee);
+    try {
+      //不想经常弹出错误
+      this.$echo.leaveChannel("thread_" + this.thread_id);
+    } catch (e) {}
+  },
 };
 </script> 
