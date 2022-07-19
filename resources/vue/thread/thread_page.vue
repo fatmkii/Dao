@@ -1458,24 +1458,9 @@ export default {
   },
   created() {
     this.get_posts_data(false, true); //还是要在created时候获得数据，不然直接进入页面会没数据
+    this.get_browse_current(); //还是要在created时候读取浏览进度，不然直接进入页面不会滚动
     this.$store.commit("PostsLoadStatus_set", 1); //避免显示上个ThreadsData
     this.load_LocalStorage();
-  },
-  mounted() {
-    // this.get_browse_current();在watch $route那里
-    // window.addEventListener("beforeunload", this.browse_record_handle);
-    // window.addEventListener("scroll", this.scroll_watch);
-    // window.addEventListener("keyup", this.keyup_callee);
-  },
-  beforeDestroy() {
-    // this.browse_record_handle();
-    // // window.removeEventListener("beforeunload", this.browse_record_handle);
-    // window.removeEventListener("scroll", this.scroll_watch);
-    // window.removeEventListener("keyup", this.keyup_callee);
-    // try {
-    //   //不想经常弹出错误
-    //   this.$echo.leaveChannel("thread_" + this.thread_id);
-    // } catch (e) {}
   },
   activated() {
     this.load_LocalStorage();
@@ -1488,7 +1473,7 @@ export default {
   deactivated() {
     this.search_input = ""; //不然每次进入页面都带有search
     this.browse_record_handle();
-    // window.removeEventListener("beforeunload", this.browse_record_handle);
+    window.removeEventListener("beforeunload", this.browse_record_handle);
     window.removeEventListener("scroll", this.scroll_watch);
     window.removeEventListener("keyup", this.keyup_callee);
     try {
