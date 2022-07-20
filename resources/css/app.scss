@@ -31,26 +31,6 @@ body {
     cursor: pointer;
 }
 
-//按钮
-// .btn-success {
-//     @include font_color("btn_color");
-//     @include background_color_i("btn_background_color");
-//     @include border_color("btn_border_color");
-//     :hover {
-//         @include background_color_i("btn_background_color_hover");
-//         @include border_color("btn_border_color_hover");
-//     }
-//     :disabled {
-//         @include background_color_i("btn_background_color_disable");
-//         @include border_color("btn_border_color");
-//     }
-//     :focus {
-//         @include background_color_i("btn_background_color_hover");
-//         @include border_color("btn_border_color_hover");
-//         @include box_shadow_color("btn_box_shadow");
-//     }
-// }
-
 //日清图
 .nissined_img {
     position: fixed;
@@ -462,13 +442,13 @@ label.custom-file-label::after {
 
 //滚动条颜色
 ::-webkit-scrollbar {
-    width: 20px;
+    width: 16px;
 }
 ::-webkit-scrollbar-thumb {
     // background-color: #c1e3c6;
     @include background_color("scroller_color");
-    border-radius: 20px;
-    border: 6px solid transparent;
+    border-radius: 16px;
+    border: 2px solid transparent;
     background-clip: content-box;
 }
 
