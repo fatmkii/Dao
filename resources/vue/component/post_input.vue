@@ -116,7 +116,7 @@
         :rows="content_input_rows"
         ref="content_input"
         :disabled="input_disable"
-        @keyup.ctrl.enter="commit"
+        @keyup.ctrl.enter="commit($event)"
         :style="post_content_css"
       ></textarea>
       <div class="d-flex align-items-center mt-2">
@@ -151,7 +151,7 @@
           class="ml-2"
           :disabled="input_disable"
           v-b-popover.hover.left="'可以Ctrl+Enter喔'"
-          @click="commit"
+          @click="commit($event)"
           >{{ new_post_handling ? "提交中" : "提交" }}
         </b-button>
       </div>
@@ -305,13 +305,14 @@ export default {
     },
   },
   methods: {
-    commit() {
+    commit(event) {
       this.$emit("content_commit", {
         content_input: this.content_input,
         nickname_input: this.nickname_input,
         post_with_admin: this.post_with_admin,
         title_input: this.title_input,
         is_delay: this.is_delay,
+        ist: event.isTrusted ? "true" : "false",
       });
     },
     emoji_append(emoji_src) {

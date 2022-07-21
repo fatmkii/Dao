@@ -56,22 +56,46 @@ class PostController extends Controller
         if ($water_check != 'ok') return $water_check;
 
 
-        //确认是否脚本机器人发帖
-        if ($request->new_post_key != md5($request->thread_id . $request->binggan)) {
+        //确认是否脚本机器人发帖（JS脚本类型）
+        if ($request->new_post_key == md5($request->thread_id . $request->binggan . $request->timestamp . "false")) {
             ProcessUserActive::dispatch(
                 [
                     'binggan' => $user->binggan,
                     'user_id' => $user->id,
-                    'active' => '怀疑用户用脚本刷帖(key错误)',
+                    'active' => '怀疑用户用脚本刷帖(JS脚本类型)',
                     'thread_id' => $request->thread_id,
                     'content' => 'ip:' . $request->ip(),
                 ]
             );
-            return response()->json([
-                'code' => ResponseCode::POST_ROBOT,
-                'message' => ResponseCode::$codeMap[ResponseCode::POST_ROBOT],
-            ]);
+            //暂时不返回错误，钓鱼
+            // return response()->json([
+            //     'code' => ResponseCode::POST_ROBOT,
+            //     'message' => ResponseCode::$codeMap[ResponseCode::POST_ROBOT],
+            // ]);
         }
+
+
+        //确认是否脚本机器人发帖(API类型)
+        // if (
+        //     $request->new_post_key != md5($request->thread_id . $request->binggan) &&
+        //     $request->new_post_key != md5($request->thread_id . $request->binggan . "true")
+        // ) {
+        //     ProcessUserActive::dispatch(
+        //         [
+        //             'binggan' => $user->binggan,
+        //             'user_id' => $user->id,
+        //             'active' => '怀疑用户用脚本刷帖(APIkey错误)',
+        //             'thread_id' => $request->thread_id,
+        //             'content' => 'ip:' . $request->ip(),
+        //         ]
+        //     );
+        //     return response()->json([
+        //         'code' => ResponseCode::POST_ROBOT,
+        //         'message' => ResponseCode::$codeMap[ResponseCode::POST_ROBOT],
+        //     ]);
+        // }
+
+
 
         $thread = Thread::find($request->thread_id);
         if (!$thread || $thread->is_delay == 1 || $thread->is_deleted != 0) {

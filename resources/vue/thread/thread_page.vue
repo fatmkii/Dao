@@ -1142,6 +1142,7 @@ export default {
     new_post_handle(content) {
       this.new_post_handling = true;
       this.last_action = "new_post";
+      const timestamp = new Date().getTime();
       const config = {
         method: "post",
         url: "/api/posts/create",
@@ -1159,9 +1160,12 @@ export default {
           post_with_admin: content.post_with_admin,
 
           new_post_key: CryptoJS.MD5(
-            this.thread_id + this.$store.state.User.Binggan
+            this.thread_id +
+              this.$store.state.User.Binggan +
+              timestamp +
+              content.ist
           ).toString(),
-          timestamp: new Date().getTime(),
+          timestamp: timestamp,
         },
       };
       axios(config)
