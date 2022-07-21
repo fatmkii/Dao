@@ -919,7 +919,7 @@ export default {
             });
           } else {
             if ([23410, 23401, 234011, 23404].includes(response.data.code)) {
-              this.thread_response_code = 0;
+              this.thread_response_code = response.data.code;
               //清空数据，避免显示上一个帖子的数据
               this.$store.commit("PostsData_set", "");
               this.$store.commit("CurrentThreadData_set", "");
