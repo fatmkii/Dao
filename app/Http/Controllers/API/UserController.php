@@ -409,8 +409,11 @@ class UserController extends Controller
             $thread->save();
             $post->save();
 
-            $tax = ceil($request->coin * 0.07); //税率0.07
-            $coin_pay = $request->coin + $tax;
+            //这个和前端*1.07对不上
+            // $tax = ceil($request->coin * 0.07); //税率0.07
+            // $coin_pay = $request->coin + $tax;
+            
+            $coin_pay = ceil($request->coin * 1.07);
             // $user->coinConsume($coin_pay);
             $user->coinChange(
                 'normal', //记录类型
