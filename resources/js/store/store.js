@@ -52,13 +52,13 @@ const module_user = {
             state.UsePingbici = payload
         },
         TitlePingbici_set(state, payload) {
-            state.TitlePingbici = payload
+            state.TitlePingbici = JSON.parse(payload) //因为数据库传送过来的是纯文本json，要手动转换为数组
         },
         ContentPingbici_set(state, payload) {
-            state.ContentPingbici = payload
+            state.ContentPingbici = JSON.parse(payload) //因为数据库传送过来的是纯文本json，要手动转换为数组
         },
         FjfPingbici_set(state, payload) {
-            state.FjfPingbici = payload
+            state.FjfPingbici = JSON.parse(payload) //因为数据库传送过来的是纯文本json，要手动转换为数组
         },
         FoldPingbici_set(state, payload) {
             state.FoldPingbici = payload
@@ -68,6 +68,9 @@ const module_user = {
         },
         MyEmoji_set(state, payload) {
             state.MyEmoji.emojis = JSON.parse(payload) //因为数据库传送过来的是纯文本json，要手动转换为数组
+        },
+        MyEmoji_set_from_arr(state, payload) {
+            state.MyEmoji.emojis = payload //直接导入arr的mutation
         },
         Emojis_set(state, payload) {
             state.Emojis = payload

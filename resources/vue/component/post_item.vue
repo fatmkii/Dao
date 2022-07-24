@@ -304,7 +304,7 @@ export default {
       quote_max: (state) => state.MyCSS.QuoteMax,
     }),
   },
-  created() {
+  activated() {
     this.pingbici_check();
   },
   mounted() {
@@ -519,9 +519,7 @@ export default {
     pingbici_check() {
       if (this.$store.state.User.UsePingbici) {
         //处理内容屏蔽词
-        const content_pingbici = JSON.parse(
-          this.$store.state.User.ContentPingbici
-        );
+        const content_pingbici = this.$store.state.User.ContentPingbici;
         for (var i = 0; i < content_pingbici.length; i++) {
           var reg = new RegExp(content_pingbici[i], "g");
           if (reg.test(this.post_data.content)) {
@@ -531,7 +529,7 @@ export default {
         }
         //处理fjf屏蔽词
         if (this.thread_anti_jingfen) {
-          const fjf_pingbici = JSON.parse(this.$store.state.User.FjfPingbici);
+          const fjf_pingbici = this.$store.state.User.FjfPingbici;
           for (var i = 0; i < fjf_pingbici.length; i++) {
             var reg = new RegExp(fjf_pingbici[i], "g");
             if (reg.test(this.post_data.created_binggan_hash.slice(0, 5))) {

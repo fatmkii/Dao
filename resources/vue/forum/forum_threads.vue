@@ -104,9 +104,7 @@ export default {
       if (this.threads_load_status == 2) {
         if (this.$store.state.User.UsePingbici) {
           //处理屏蔽词
-          const title_pingbici = JSON.parse(
-            this.$store.state.User.TitlePingbici
-          );
+          const title_pingbici = this.$store.state.User.TitlePingbici;
           return this.$store.state.Threads.ThreadsData.data.filter((thread) => {
             for (var i = 0; i < title_pingbici.length; i++) {
               var reg = new RegExp(title_pingbici[i], "g");

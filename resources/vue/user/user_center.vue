@@ -131,18 +131,14 @@
       </b-tab>
       <b-tab title="屏蔽词">
         <div class="mx-2 my-2">
-          <p class="my-2">
-            标题屏蔽词：（请参考下述JSON格式。前后有[]，最后一个不要有,逗号）
-          </p>
+          <p class="my-2">标题屏蔽词：（用英文逗号分隔）</p>
           <b-form-textarea
             id="title_pingbici_input"
             v-model="title_pingbici_input"
             rows="3"
             max-rows="20"
           ></b-form-textarea>
-          <p class="my-2">
-            内容屏蔽词：（请参考下述JSON格式。前后有[]，最后一个不要有,逗号）
-          </p>
+          <p class="my-2">内容屏蔽词：（用英文逗号分隔）</p>
           <b-form-textarea
             id="content_pingbici_input"
             v-model="content_pingbici_input"
@@ -192,7 +188,7 @@
       </b-tab>
       <b-tab title="我的表情包">
         <div class="mx-2 my-2">
-          <p class="my-2">我的表情包：（新饼干要提交一次，才能使用喔）</p>
+          <p class="my-2">我的表情包：（用英文的逗号分隔）</p>
           <b-form-textarea
             id="my_emoji_input"
             v-model.lazy="my_emoji_input"
@@ -202,7 +198,7 @@
           ></b-form-textarea>
           <div
             class="emoji_box m-1 d-inline-flex"
-            v-for="(emoji_src, index) in my_emoji"
+            v-for="(emoji_src, index) in my_emoji_input_arr"
             :key="index"
           >
             <b-img
@@ -450,14 +446,14 @@ export default {
         { name: "fjf_pingbici", chinese: "FJF黑名单", price: 4000 },
         { name: "my_emoji", chinese: "我的表情包", price: 20000 },
       ],
-      title_pingbici_input: '["屏蔽词1","屏蔽词2"]',
-      content_pingbici_input: '["屏蔽词1","屏蔽词2"]',
-      fjf_pingbici_input: '["小尾巴1","小尾巴2"]',
+      title_pingbici_input: "屏蔽词1,屏蔽词2",
+      content_pingbici_input: "屏蔽词1,屏蔽词2",
+      fjf_pingbici_input: "小尾巴1,小尾巴2",
       use_pingbici_input: false,
       pingbici_set_handling: false,
       user_lv_up_handling: false,
       my_emoji_input:
-        '[\n"https://z3.ax1x.com/2021/08/01/Wznvbq.jpg",\n"https://z3.ax1x.com/2021/08/01/Wznjrn.jpg"\n]',
+        "https://z3.ax1x.com/2021/08/01/Wznvbq.jpg,\nhttps://z3.ax1x.com/2021/08/01/Wznjrn.jpg",
       my_emoji_set_handling: false,
       z_bar_left: false,
       less_toast: false,
@@ -571,6 +567,54 @@ export default {
     button_theme() {
       return this.$store.getters.ButtonTheme;
     },
+    my_emoji_input_arr() {
+      try {
+        var arr = this.my_emoji_input.replace(/(\n|\r|\s)/g, "").split(",");
+        return arr.filter(function (el) {
+          //去掉空元素
+          return el;
+        });
+      } catch (e) {
+        return [];
+      } //没什么用，就是不想在输入过程中报错
+    },
+    content_pingbici_input_arr() {
+      try {
+        var arr = this.content_pingbici_input
+          .replace(/(\n|\r|\s)/g, "")
+          .split(",");
+        return arr.filter(function (el) {
+          //去掉空元素
+          return el;
+        });
+      } catch (e) {
+        return [];
+      } //没什么用，就是不想在输入过程中报错
+    },
+    title_pingbici_input_arr() {
+      try {
+        var arr = this.title_pingbici_input
+          .replace(/(\n|\r|\s)/g, "")
+          .split(",");
+        return arr.filter(function (el) {
+          //去掉空元素
+          return el;
+        });
+      } catch (e) {
+        return [];
+      } //没什么用，就是不想在输入过程中报错
+    },
+    fjf_pingbici_input_arr() {
+      try {
+        var arr = this.fjf_pingbici_input.replace(/(\n|\r|\s)/g, "").split(",");
+        return arr.filter(function (el) {
+          //去掉空元素
+          return el;
+        });
+      } catch (e) {
+        return [];
+      } //没什么用，就是不想在输入过程中报错
+    },
     ...mapState({
       login_status: (state) => state.User.LoginStatus,
       binggan: (state) => state.User.Binggan,
@@ -623,27 +667,41 @@ export default {
             this.use_pingbici_input = Boolean(
               response.data.data.binggan.use_pingbici
             );
+            this.$store.commit(
+              "UsePingbici_set",
+              response.data.data.binggan.use_pingbici
+            );
             if (response.data.data.pingbici) {
               if (response.data.data.pingbici.title_pingbici) {
+                this.$store.commit(
+                  "TitlePingbici_set",
+                  response.data.data.pingbici.title_pingbici
+                );
                 this.title_pingbici_input =
-                  response.data.data.pingbici.title_pingbici;
+                  this.$store.state.User.TitlePingbici.join(",\n");
               }
               if (response.data.data.pingbici.content_pingbici) {
+                this.$store.commit(
+                  "ContentPingbici_set",
+                  response.data.data.pingbici.content_pingbici
+                );
                 this.content_pingbici_input =
-                  response.data.data.pingbici.content_pingbici;
+                  this.$store.state.User.ContentPingbici.join(",\n");
               }
               if (response.data.data.pingbici.fjf_pingbici) {
+                this.$store.commit(
+                  "FjfPingbici_set",
+                  response.data.data.pingbici.fjf_pingbici
+                );
                 this.fjf_pingbici_input =
-                  response.data.data.pingbici.fjf_pingbici;
+                  this.$store.state.User.FjfPingbici.join(",\n");
               }
             }
+
             //设定表情包相关状态
             if (response.data.data.my_emoji) {
               this.$store.commit("MyEmoji_set", response.data.data.my_emoji);
-              this.my_emoji_input = response.data.data.my_emoji;
-              this.my_emoji_input = this.my_emoji_input.replace(/,/g, ",\n"); //把,改成换行，方便看
-              this.my_emoji_input = this.my_emoji_input.replace(/\[/g, "[\n");
-              this.my_emoji_input = this.my_emoji_input.replace(/]/g, "\n]");
+              this.my_emoji_input = this.my_emoji.join(",\n");
             }
           })
           .catch((error) => {
@@ -657,25 +715,12 @@ export default {
       }
     },
     pingbici_set_handle() {
-      try {
-        //转换并确认用户输入是否满足JSON格式
-        var title_pingbici = JSON.stringify(
-          JSON.parse(this.title_pingbici_input)
-        );
-        var content_pingbici = JSON.stringify(
-          JSON.parse(this.content_pingbici_input)
-        );
-        var fjf_pingbici = JSON.stringify(JSON.parse(this.fjf_pingbici_input));
-      } catch (e) {
-        alert("屏蔽词格式输入有误，请检查");
-        return;
-      }
       if (
-        JSON.parse(this.title_pingbici_input).includes("") ||
-        JSON.parse(this.content_pingbici_input).includes("") ||
-        JSON.parse(this.fjf_pingbici_input).includes("")
+        this.content_pingbici_input_arr.length == 0 ||
+        this.title_pingbici_input_arr.length == 0 ||
+        this.fjf_pingbici_input_arr.length == 0
       ) {
-        alert('屏蔽词请勿包含空字符""，否则会屏蔽所有主题和回帖');
+        alert("屏蔽词格式输入有误、或者是空的，请检查");
         return;
       }
       this.pingbici_set_handling = true;
@@ -684,15 +729,16 @@ export default {
         url: "/api/user/pingbici_set",
         data: {
           binggan: this.$store.state.User.Binggan,
-          title_pingbici: title_pingbici,
-          content_pingbici: content_pingbici,
-          fjf_pingbici: fjf_pingbici,
+          title_pingbici: JSON.stringify(this.title_pingbici_input_arr),
+          content_pingbici: JSON.stringify(this.content_pingbici_input_arr),
+          fjf_pingbici: JSON.stringify(this.fjf_pingbici_input_arr),
           use_pingbici: this.use_pingbici_input,
         },
       };
       axios(config)
         .then((response) => {
           if (response.data.code == 200) {
+            this.get_user_data();
             this.$bvToast.toast(response.data.message, {
               title: "Done.",
               autoHideDelay: 1500,
@@ -714,18 +760,27 @@ export default {
         //去重函数
         return Array.from(new Set(arr));
       }
-      try {
-        //转换并确认用户输入是否满足JSON格式
-        var title_pingbici = JSON.parse(this.title_pingbici_input);
-        var content_pingbici = JSON.parse(this.content_pingbici_input);
-        var fjf_pingbici = JSON.parse(this.fjf_pingbici_input);
-      } catch (e) {
-        alert("屏蔽词格式输入有误，请检查");
+      if (
+        this.content_pingbici_input_arr.length == 0 ||
+        this.title_pingbici_input_arr.length == 0 ||
+        this.fjf_pingbici_input_arr.length == 0
+      ) {
+        alert("屏蔽词格式输入有误、或者是空的，请检查");
         return;
       }
-      this.title_pingbici_input = JSON.stringify(unique(title_pingbici));
-      this.content_pingbici_input = JSON.stringify(unique(content_pingbici));
-      this.fjf_pingbici_input = JSON.stringify(unique(fjf_pingbici));
+      var arr_unique = [];
+      arr_unique = unique(this.title_pingbici_input_arr);
+      this.title_pingbici_input = arr_unique.join(",\n");
+
+      arr_unique = unique(this.content_pingbici_input_arr);
+      this.content_pingbici_input = arr_unique.join(",\n");
+
+      arr_unique = unique(this.fjf_pingbici_input_arr);
+      this.fjf_pingbici_input = arr_unique.join(",\n");
+
+      // this.title_pingbici_input = JSON.stringify(unique(title_pingbici));
+      // this.content_pingbici_input = JSON.stringify(unique(content_pingbici));
+      // this.fjf_pingbici_input = JSON.stringify(unique(fjf_pingbici));
       this.$bvToast.toast("已去除重复的屏蔽词", {
         title: "Done.",
         autoHideDelay: 1500,
@@ -733,11 +788,8 @@ export default {
       });
     },
     my_emoji_set_handle() {
-      try {
-        //转换并确认用户输入是否满足JSON格式
-        var my_emoji = JSON.stringify(JSON.parse(this.my_emoji_input));
-      } catch (e) {
-        alert("表情包格式输入有误，请检查");
+      if (this.my_emoji_input_arr.length == 0) {
+        alert("屏蔽词格式输入有误、或者是空的，请检查");
         return;
       }
       this.my_emoji_set_handling = true;
@@ -746,7 +798,7 @@ export default {
         url: "/api/user/my_emoji_set",
         data: {
           binggan: this.$store.state.User.Binggan,
-          my_emoji: my_emoji,
+          my_emoji: JSON.stringify(this.my_emoji_input_arr),
         },
       };
       axios(config)
@@ -773,18 +825,13 @@ export default {
         //去重函数
         return Array.from(new Set(arr));
       }
-      try {
-        //转换并确认用户输入是否满足JSON格式
-        var my_emoji = JSON.parse(this.my_emoji_input);
-      } catch (e) {
-        alert("屏蔽词格式输入有误，请检查");
+      if (this.my_emoji_input_arr.length == 0) {
+        alert("表情包格式输入有误、或者是空的，请检查");
         return;
       }
-      this.my_emoji_input = JSON.stringify(unique(my_emoji));
-      this.$store.commit("MyEmoji_set", this.my_emoji_input);
-      this.my_emoji_input = this.my_emoji_input.replace(/,/g, ",\n"); //把,改成换行，方便看
-      this.my_emoji_input = this.my_emoji_input.replace(/\[/g, "[\n");
-      this.my_emoji_input = this.my_emoji_input.replace(/]/g, "\n]");
+      var arr_unique = unique(this.my_emoji_input_arr);
+      this.$store.commit("MyEmoji_set_from_arr", arr_unique);
+      this.my_emoji_input = this.my_emoji.join(",\n");
       this.$bvToast.toast("已去除重复的表情包", {
         title: "Done.",
         autoHideDelay: 1500,
@@ -853,15 +900,12 @@ export default {
     emoji_delete(index) {
       if (this.emoji_delete_mode) {
         this.$store.state.User.MyEmoji.emojis.splice(index, 1);
-        this.my_emoji_input = JSON.stringify(this.my_emoji);
-        this.my_emoji_input = this.my_emoji_input.replace(/,/g, ",\n"); //把,改成换行，方便看
-        this.my_emoji_input = this.my_emoji_input.replace(/\[/g, "[\n");
-        this.my_emoji_input = this.my_emoji_input.replace(/]/g, "\n]");
+        this.my_emoji_input = this.my_emoji.join(",\n");
       }
     },
     my_emoji_input_change(value) {
       try {
-        this.$store.commit("MyEmoji_set", value);
+        this.$store.commit("MyEmoji_set_from_arr", this.my_emoji_input_arr);
       } catch (e) {} //没什么用，就是不想在输入过程中报错
     },
     set_income_date_default() {
