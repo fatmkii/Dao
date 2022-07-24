@@ -308,6 +308,7 @@ export default {
     this.pingbici_check();
   },
   activated() {
+    console.log()
     this.pingbici_check();
   },
   mounted() {
@@ -520,6 +521,7 @@ export default {
       return this.$emit("quote_click", quote_content);
     },
     pingbici_check() {
+      this.post_content_show = true;
       if (this.$store.state.User.UsePingbici) {
         //处理内容屏蔽词
         const content_pingbici = this.$store.state.User.ContentPingbici;
