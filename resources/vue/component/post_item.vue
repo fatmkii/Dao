@@ -304,6 +304,9 @@ export default {
       quote_max: (state) => state.MyCSS.QuoteMax,
     }),
   },
+  created() {
+    this.pingbici_check();
+  },
   activated() {
     this.pingbici_check();
   },
