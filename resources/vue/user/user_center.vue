@@ -569,7 +569,10 @@ export default {
     },
     my_emoji_input_arr() {
       try {
-        var arr = this.my_emoji_input.replace(/(\n|\r|\s)/g, "").split(",");
+        var arr = this.my_emoji_input
+          .replace(/(\n|\r|\s)/g, "")
+          .replace(/(，)/g, ",")
+          .split(",");
         return arr.filter(function (el) {
           //去掉空元素
           return el;
@@ -582,6 +585,7 @@ export default {
       try {
         var arr = this.content_pingbici_input
           .replace(/(\n|\r|\s)/g, "")
+          .replace(/(，)/g, ",")
           .split(",");
         return arr.filter(function (el) {
           //去掉空元素
@@ -595,6 +599,7 @@ export default {
       try {
         var arr = this.title_pingbici_input
           .replace(/(\n|\r|\s)/g, "")
+          .replace(/(，)/g, ",")
           .split(",");
         return arr.filter(function (el) {
           //去掉空元素
@@ -606,7 +611,10 @@ export default {
     },
     fjf_pingbici_input_arr() {
       try {
-        var arr = this.fjf_pingbici_input.replace(/(\n|\r|\s)/g, "").split(",");
+        var arr = this.fjf_pingbici_input
+          .replace(/(\n|\r|\s)/g, "")
+          .replace(/(，)/g, ",")
+          .split(",");
         return arr.filter(function (el) {
           //去掉空元素
           return el;
@@ -678,7 +686,7 @@ export default {
                   response.data.data.pingbici.title_pingbici
                 );
                 this.title_pingbici_input =
-                  this.$store.state.User.TitlePingbici.join(",\n");
+                  this.$store.state.User.TitlePingbici.join(", ");
               }
               if (response.data.data.pingbici.content_pingbici) {
                 this.$store.commit(
@@ -686,7 +694,7 @@ export default {
                   response.data.data.pingbici.content_pingbici
                 );
                 this.content_pingbici_input =
-                  this.$store.state.User.ContentPingbici.join(",\n");
+                  this.$store.state.User.ContentPingbici.join(", ");
               }
               if (response.data.data.pingbici.fjf_pingbici) {
                 this.$store.commit(
@@ -694,7 +702,7 @@ export default {
                   response.data.data.pingbici.fjf_pingbici
                 );
                 this.fjf_pingbici_input =
-                  this.$store.state.User.FjfPingbici.join(",\n");
+                  this.$store.state.User.FjfPingbici.join(", ");
               }
             }
 
@@ -770,17 +778,14 @@ export default {
       }
       var arr_unique = [];
       arr_unique = unique(this.title_pingbici_input_arr);
-      this.title_pingbici_input = arr_unique.join(",\n");
+      this.title_pingbici_input = arr_unique.join(", ");
 
       arr_unique = unique(this.content_pingbici_input_arr);
-      this.content_pingbici_input = arr_unique.join(",\n");
+      this.content_pingbici_input = arr_unique.join(", ");
 
       arr_unique = unique(this.fjf_pingbici_input_arr);
-      this.fjf_pingbici_input = arr_unique.join(",\n");
+      this.fjf_pingbici_input = arr_unique.join(", ");
 
-      // this.title_pingbici_input = JSON.stringify(unique(title_pingbici));
-      // this.content_pingbici_input = JSON.stringify(unique(content_pingbici));
-      // this.fjf_pingbici_input = JSON.stringify(unique(fjf_pingbici));
       this.$bvToast.toast("已去除重复的屏蔽词", {
         title: "Done.",
         autoHideDelay: 1500,
