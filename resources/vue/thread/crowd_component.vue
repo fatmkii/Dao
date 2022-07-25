@@ -261,5 +261,8 @@ export default {
   created() {
     this.get_crowd_data();
   },
+  activated() {
+    this.get_crowd_data();
+  },
 };
 </script>

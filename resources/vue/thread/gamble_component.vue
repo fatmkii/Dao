@@ -344,5 +344,8 @@ export default {
   created() {
     this.get_gamble_data();
   },
+  activated() {
+    this.get_gamble_data();
+  },
 };
 </script>

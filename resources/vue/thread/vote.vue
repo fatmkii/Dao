@@ -171,5 +171,8 @@ export default {
   created() {
     this.get_vote_data();
   },
+  activated() {
+    this.get_vote_data();
+  },
 };
 </script>
