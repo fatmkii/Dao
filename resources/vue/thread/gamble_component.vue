@@ -128,6 +128,11 @@ export default {
       default: false,
     },
   },
+  watch: {
+    gamble_question_id() {
+      this.get_gamble_data();
+    },
+  },
   data: function () {
     return {
       name: "gamble_component",
@@ -190,6 +195,7 @@ export default {
   },
   methods: {
     get_gamble_data() {
+      this.get_gamble_data_handling = true;
       const config = {
         method: "get",
         url: "/api/gambles/" + this.gamble_question_id,
@@ -342,9 +348,6 @@ export default {
     },
   },
   created() {
-    this.get_gamble_data();
-  },
-  activated() {
     this.get_gamble_data();
   },
 };

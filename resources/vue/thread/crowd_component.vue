@@ -118,6 +118,11 @@ export default {
       default: false,
     },
   },
+  watch: {
+    crowd_id() {
+      this.get_crowd_data();
+    },
+  },
   data: function () {
     return {
       name: "crowd_component",
@@ -164,6 +169,7 @@ export default {
   },
   methods: {
     get_crowd_data() {
+      this.get_crowd_data_handling = true;
       const config = {
         method: "get",
         url: "/api/crowds/" + this.crowd_id,
@@ -259,9 +265,6 @@ export default {
     },
   },
   created() {
-    this.get_crowd_data();
-  },
-  activated() {
     this.get_crowd_data();
   },
 };

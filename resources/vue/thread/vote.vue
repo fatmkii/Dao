@@ -54,6 +54,11 @@ export default {
   props: {
     vote_question_id: Number,
   },
+  watch: {
+    vote_question_id() {
+      this.get_vote_data();
+    },
+  },
   data: function () {
     return {
       name: "vote",
@@ -103,6 +108,7 @@ export default {
   },
   methods: {
     get_vote_data() {
+      this.get_vote_data_handling = true;
       const config = {
         method: "get",
         url: "/api/votes/" + this.vote_question_id,
@@ -169,9 +175,6 @@ export default {
     },
   },
   created() {
-    this.get_vote_data();
-  },
-  activated() {
     this.get_vote_data();
   },
 };
