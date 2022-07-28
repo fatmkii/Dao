@@ -14,6 +14,10 @@
       <b-card-body class="bulletin-card py-2">
         <b-card-text>
           <p class="my-2">这里是小火锅, 是个人论坛。欢迎来玩~</p>
+          <p class="my-2">QQ小火锅避难群：156840110</p>
+          <p class="my-2">
+            目前小火锅有5个网址：cpttmm.com、  www.cpttmm.com、  v2.cpttmm.com、  cpttmm.love、  www.cpttmm.love
+          </p>
         </b-card-text>
       </b-card-body>
     </b-card>
