@@ -238,6 +238,7 @@ body {
 //forum_page相关
 .forum_name {
     cursor: pointer;
+    @include font_color("font_color2");
 }
 .badge {
     @include background_color("background_color4");

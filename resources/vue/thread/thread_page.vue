@@ -10,17 +10,17 @@
           <b-badge variant="secondary" pill class="float-left">
             {{ forum_id }}
           </b-badge>
-          <span class="forum_name" @click="back_to_forum">{{
+          <router-link class="forum_name" :to="'/forum/' + forum_id">{{
             forum_name
-          }}</span>
+          }}</router-link>
         </div>
         <div class="col-auto h6 d-block d-lg-none d-xl-none">
           <b-badge variant="secondary" pill class="float-left">
             {{ forum_id }}
           </b-badge>
-          <span class="forum_name" @click="back_to_forum">{{
+          <router-link class="forum_name" :to="'/forum/' + forum_id">{{
             forum_name
-          }}</span>
+          }}</router-link>
         </div>
         <b-dropdown
           id="shield-dropdown"
@@ -293,7 +293,8 @@
                 class="icon-back bi bi-arrow-left-square"
                 viewBox="0 0 16 16"
                 v-b-popover.hover.right="'返回小岛'"
-                @click="back_to_forum"
+                @click="back_to_forum(false)"
+                @click.middle="back_to_forum(true)"
               >
                 <path
                   fill-rule="evenodd"
@@ -344,7 +345,11 @@
       </div>
       <div class="row align-items-center mt-2">
         <div class="col-auto mr-auto">
-          <b-button :variant="button_theme" size="sm" @click="back_to_forum"
+          <b-button
+            :variant="button_theme"
+            size="sm"
+            @click="back_to_forum(false)"
+            @click.middle="back_to_forum(true)"
             >返回小岛
           </b-button>
         </div>
@@ -1136,8 +1141,19 @@ export default {
         })
         .catch((error) => alert(error)); // Todo:写异常返回代码;
     },
-    back_to_forum() {
-      this.$router.push({ name: "forum", params: { forum_id: this.forum_id } });
+    back_to_forum(new_tab) {
+      if (new_tab) {
+        let routeData = this.$router.resolve({
+          name: "forum",
+          params: { forum_id: this.forum_id },
+        });
+        window.open(routeData.href, "_blank");
+      } else {
+        this.$router.push({
+          name: "forum",
+          params: { forum_id: this.forum_id },
+        });
+      }
     },
     new_post_handle(content) {
       this.new_post_handling = true;
