@@ -136,7 +136,7 @@
       >*点击展开*</span
     >
     <span v-if="!post_content_show" @click="post_content_show = true"
-      >*此回帖已屏蔽{{ hide_reason }}*</span
+      >*此回帖已屏蔽{{ hide_reason }}，点击展开*</span
     >
     <div
       class="post_content mb-2"
@@ -213,6 +213,10 @@ export default {
       default: false,
     },
     no_head_mode: {
+      type: Boolean,
+      default: false,
+    },
+    no_video_mode: {
       type: Boolean,
       default: false,
     },
@@ -308,7 +312,7 @@ export default {
     this.pingbici_check();
   },
   activated() {
-    console.log()
+    console.log();
     this.pingbici_check();
   },
   mounted() {
@@ -542,6 +546,15 @@ export default {
               this.hide_reason = "（小尾巴黑名单）";
             }
           }
+        }
+      }
+      //处理无视频音频模式
+      if (this.no_video_mode) {
+        console.log(this.post_data.content);
+        var reg = new RegExp(/<video|<embed|<iframe/, "g");
+        if (reg.test(this.post_data.content)) {
+          this.post_content_show = false; //回帖是否显示的开关
+          this.hide_reason = "（音视频）";
         }
       }
     },

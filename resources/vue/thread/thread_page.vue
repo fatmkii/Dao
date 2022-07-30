@@ -197,6 +197,7 @@
             :no_image_mode="no_image_mode"
             :no_emoji_mode="no_emoji_mode"
             :no_head_mode="no_head_mode"
+            :no_video_mode="no_video_mode"
             @quote_click="quote_click_handle"
             @get_posts_data="get_posts_data"
             @emit_reward="emit_reward"
@@ -805,19 +806,6 @@ export default {
             } else {
               return true;
             }
-          });
-        }
-        //当屏蔽视频点时，过滤不需要的数据
-        if (this.no_video_mode == true) {
-          const tag = ["<video", "<embed"];
-          filtered = filtered.filter((post) => {
-            for (var i = 0; i < tag.length; i++) {
-              var reg = new RegExp(tag[i], "g");
-              if (reg.test(post.content)) {
-                return false; //直接跳出循环
-              }
-            }
-            return true;
           });
         }
       }
