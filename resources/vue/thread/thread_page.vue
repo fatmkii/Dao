@@ -29,7 +29,7 @@
           size="sm"
         >
           <b-form-checkbox v-model="no_video_mode" switch class="ml-2 my-2">
-            无视频
+            无视频音频
           </b-form-checkbox>
           <b-form-checkbox v-model="no_image_mode" switch class="ml-2 my-2">
             无图
