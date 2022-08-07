@@ -880,5 +880,10 @@ export default {
     }
     this.end_date_selected = year + "-" + month + "-" + strDate;
   },
+  activated(){
+    //清空输入框，避免显示上一次的内容
+    this.$refs.post_input_com.content_input = "";
+    this.$refs.post_input_com.title_input = "";
+  }
 };
 </script>

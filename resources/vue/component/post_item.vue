@@ -312,7 +312,6 @@ export default {
     this.pingbici_check();
   },
   activated() {
-    console.log();
     this.pingbici_check();
   },
   mounted() {
@@ -550,7 +549,6 @@ export default {
       }
       //处理无视频音频模式
       if (this.no_video_mode) {
-        console.log(this.post_data.content);
         var reg = new RegExp(/<video|<embed|<iframe/, "g");
         if (reg.test(this.post_data.content)) {
           this.post_content_show = false; //回帖是否显示的开关

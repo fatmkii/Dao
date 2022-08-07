@@ -243,13 +243,20 @@ body {
 .badge {
     @include background_color("background_color4");
 }
-.svg-icon,
-.icon-back,
+
 .icon-revoke,
+.icon-clear,
 .icon-drawer,
+.icon-hide,
 .icon-battle {
     cursor: pointer;
+    margin-right: 1rem;
 }
+.svg-icon,
+.icon-back {
+    cursor: pointer;
+}
+
 //菠菜下注列表
 .gamble_table,
 .crowd_table {
@@ -460,7 +467,6 @@ label.custom-file-label::after {
     // background-color: #9bcc95;
     @include background_color("scroller_color_hover");
 }
-
 
 [v-cloak] {
     display: none;

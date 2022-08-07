@@ -272,7 +272,7 @@
             width="28"
             height="28"
             fill="currentColor"
-            class="icon-battle bi bi-controller ml-3"
+            class="icon-battle bi bi-controller"
             viewBox="0 0 16 16"
             @click="modal_toggle('battle_modal')"
           >
