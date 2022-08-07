@@ -564,6 +564,11 @@ class BattleChara
                 return random_int(1, 101);          
             default:
                 return random_int(1, 100);
+            case 4: //小白猫最小掷出80点
+                return random_int(80, 100);    
+            default:
+                return random_int(1, 100);    
+
         }
     }
 }
