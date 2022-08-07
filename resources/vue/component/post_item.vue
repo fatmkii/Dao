@@ -499,7 +499,15 @@ export default {
     },
     quote_click() {
       const max_quote = this.quote_max; //最大可引用的层数
-      var post_lines = this.$refs.post_centent.innerText.split("\n");
+      var post_centent_dom = this.$refs.post_centent
+
+      //隐藏details标签的折叠内容
+      var elements_details = post_centent_dom.getElementsByTagName('details')
+       for (let item of elements_details) {
+          item.remove()
+      }
+
+      var post_lines = post_centent_dom.innerText.split("\n");
       var index_array = [];
       //搜索引用的层数
       post_lines.forEach((post_line, index) => {
