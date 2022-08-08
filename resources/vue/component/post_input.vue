@@ -73,7 +73,7 @@
           实时预览
         </b-form-checkbox>
       </div>
-      <div class="my-2 d-flex align-items-center" style="font-size: 0.875rem">
+      <div class="my-2 d-flex align-items-center justify-content-end" style="font-size: 0.875rem">
         <slot name="svg_icon"></slot>
         <svg
           xmlns="http://www.w3.org/2000/svg"

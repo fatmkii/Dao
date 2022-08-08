@@ -132,12 +132,23 @@
     <span
       v-show="fold_content && post_content_show"
       @click="unfold_content"
-      style="position: relative"
+      style="position: relative; cursor: pointer"
       >*点击展开*</span
     >
-    <span v-if="!post_content_show" @click="post_content_show = true"
-      >*此回帖已屏蔽{{ hide_reason }}，点击展开*</span
-    >
+    <div v-if="post_content_should_hiden">
+      <span
+        style="cursor: pointer"
+        v-if="post_content_show"
+        @click="post_content_show = !post_content_show"
+        >*手贱了，收回去*</span
+      >
+      <span
+        style="cursor: pointer"
+        v-else
+        @click="post_content_show = !post_content_show"
+        >*此回帖已屏蔽{{ hide_reason }}，点击展开*</span
+      >
+    </div>
     <div
       class="post_content mb-2"
       style="overflow: hidden"
@@ -228,6 +239,7 @@ export default {
       coin_reward_input: "",
       reward_handling: false,
       post_content_show: true,
+      post_content_should_hiden: false,
       post_max_height: "",
       post_top_offset: "",
       fold_content: false,
@@ -499,12 +511,12 @@ export default {
     },
     quote_click() {
       const max_quote = this.quote_max; //最大可引用的层数
-      var post_centent_dom = this.$refs.post_centent
+      var post_centent_dom = this.$refs.post_centent;
 
       //隐藏details标签的折叠内容
-      var elements_details = post_centent_dom.getElementsByTagName('details')
-       for (let item of elements_details) {
-          item.remove()
+      var elements_details = post_centent_dom.getElementsByTagName("details");
+      for (let item of elements_details) {
+        item.remove();
       }
 
       var post_lines = post_centent_dom.innerText.split("\n");
@@ -533,6 +545,7 @@ export default {
     },
     pingbici_check() {
       this.post_content_show = true;
+      this.post_content_should_hiden = false;
       if (this.$store.state.User.UsePingbici) {
         //处理内容屏蔽词
         const content_pingbici = this.$store.state.User.ContentPingbici;
@@ -540,6 +553,7 @@ export default {
           var reg = new RegExp(content_pingbici[i], "g");
           if (reg.test(this.post_data.content)) {
             this.post_content_show = false; //回帖是否显示的开关
+            this.post_content_should_hiden = true;
             this.hide_reason = "（屏蔽词）";
           }
         }
@@ -550,6 +564,7 @@ export default {
             var reg = new RegExp(fjf_pingbici[i], "g");
             if (reg.test(this.post_data.created_binggan_hash.slice(0, 5))) {
               this.post_content_show = false; //回帖是否显示的开关
+              this.post_content_should_hiden = true;
               this.hide_reason = "（小尾巴黑名单）";
             }
           }
@@ -560,6 +575,7 @@ export default {
         var reg = new RegExp(/<video|<embed|<iframe/, "g");
         if (reg.test(this.post_data.content)) {
           this.post_content_show = false; //回帖是否显示的开关
+          this.post_content_should_hiden = true;
           this.hide_reason = "（音视频）";
         }
       }
