@@ -153,7 +153,7 @@
       class="post_content mb-2"
       style="overflow: hidden"
       :style="post_content_css"
-      ref="post_centent"
+      ref="post_content"
     >
       <span
         v-html="post_content"
@@ -511,15 +511,15 @@ export default {
     },
     quote_click() {
       const max_quote = this.quote_max; //最大可引用的层数
-      var post_centent_dom = this.$refs.post_centent;
+      var post_content_dom = this.$refs.post_content;
 
       //隐藏details标签的折叠内容
-      var elements_details = post_centent_dom.getElementsByTagName("details");
+      var elements_details = post_content_dom.getElementsByTagName("details");
       for (let item of elements_details) {
         item.remove();
       }
 
-      var post_lines = post_centent_dom.innerText.split("\n");
+      var post_lines = post_content_dom.innerText.split("\n");
       var index_array = [];
       //搜索引用的层数
       post_lines.forEach((post_line, index) => {
@@ -587,7 +587,7 @@ export default {
     },
     set_post_max_height() {
       //确认post总行数，如果超过特定行数，则折叠（包括图片等高度）
-      const post_content_dom = this.$refs.post_centent;
+      const post_content_dom = this.$refs.post_content;
       const styles = window.getComputedStyle(post_content_dom);
       const line_height = parseInt(styles.lineHeight, 10);
       const height = parseInt(styles.height, 10);
@@ -600,7 +600,7 @@ export default {
     },
     set_quote_styles() {
       // 给回帖内容的引用部分单独加style
-      var quote_dom = this.$refs.post_centent.querySelector(".quote_content");
+      var quote_dom = this.$refs.post_content.querySelector(".quote_content");
       if (quote_dom) {
         quote_dom.style.fontSize = this.$store.state.MyCSS.QuoteFontSize + "px";
       }
