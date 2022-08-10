@@ -599,6 +599,7 @@ export default {
       for (let dom of img_doms) {
         dom.addEventListener("click", (event) => {
           const src_old = event.target.getAttribute("src");
+          event.target.setAttribute("src", "");
           event.target.setAttribute(
             "src",
             event.target.getAttribute("data-src")
