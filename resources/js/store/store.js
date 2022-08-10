@@ -211,7 +211,7 @@ const module_css = {
         PostsLineHeight: 28,
         PostsFontSize: 16,
         QuoteFontSize: 16,
-        SysInfoFontSize: 12,
+        SysInfoFontSize: 14,
         PostsMarginTop: 32,
         PostsMaxLine: 16,
         QuoteMax: 3,
