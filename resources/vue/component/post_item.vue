@@ -281,11 +281,11 @@ export default {
         } else {
           if (vm.no_image_mode) {
             //no_image_mode:无图模式
-            return "";
-          } else {
             return match
               .replace(/src/, "data-src")
               .replace("<img ", '<img src="/img_svg.svg" class="img_svg"');
+          } else {
+            return match;
           }
         }
       }
