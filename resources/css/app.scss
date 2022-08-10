@@ -10,16 +10,17 @@ body {
 }
 
 //手机版面优化
-@media(max-width: 1080px){
-    .post_buttons{
+@media (max-width: 1200px) {
+    .post_buttons {
         margin-right: 1.5rem;
     }
-    .post_content {
+    [z-bar-left="false"] .post_content {
         margin-right: 1rem;
     }
-    
+    [z-bar-left="true"] .post_content {
+        margin-left: 1rem;
+    }
 }
-
 
 //平滑滚动
 // html,
@@ -112,7 +113,7 @@ body {
     }
     @media not all and (min-width: 1200px) {
         // left: 15px;
-        right: -0.7vw;
+        left: 0.7vw;
     }
 }
 
