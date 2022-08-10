@@ -519,14 +519,13 @@ export default {
     },
     quote_click() {
       const max_quote = this.quote_max; //最大可引用的层数
-      var post_content_dom = this.$refs.post_content.cloneNode(true);
-
-      //隐藏details标签的折叠内容
+      var post_content_dom = this.$refs.post_content;
+      // 删除details标签的折叠内容;
       var elements_details = post_content_dom.getElementsByTagName("details");
       for (let item of elements_details) {
         item.remove();
       }
-
+      
       var post_lines = post_content_dom.innerText.split("\n");
       var index_array = [];
       //搜索引用的层数
