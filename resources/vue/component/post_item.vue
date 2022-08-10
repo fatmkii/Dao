@@ -5,7 +5,7 @@
     v-if="!(!this.post_content_show && this.fold_pingbici)"
   >
     <slot name="header"></slot>
-    <div class="float-right mr-4" v-if="this.$store.state.User.LoginStatus">
+    <div class="float-right post_buttons" v-if="this.$store.state.User.LoginStatus">
       <b-button
         size="sm"
         variant="warning"

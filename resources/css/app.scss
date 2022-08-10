@@ -9,6 +9,18 @@ body {
     @include font_color("font_color2");
 }
 
+//手机版面优化
+@media(max-width: 1080px){
+    .post_buttons{
+        margin-right: 1.5rem;
+    }
+    .post_content {
+        margin-right: 1rem;
+    }
+    
+}
+
+
 //平滑滚动
 // html,
 // body {
@@ -394,9 +406,6 @@ body {
 }
 .post_content img {
     max-width: 100%;
-}
-.post_content {
-    margin-right: 1rem;
 }
 
 label.custom-file-label {
