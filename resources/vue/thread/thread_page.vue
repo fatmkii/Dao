@@ -1365,8 +1365,11 @@ export default {
         img_dom[i].onmousedown = function (e) {
           if (e.button == 0) {
             var clicked_dom = document.elementFromPoint(e.clientX, e.clientY);
-            vm.selected_img = clicked_dom;
-            vm.$bvToast.show("save_emoji_toast");
+            if (clicked_dom.getAttribute("src") != "/img_svg.svg") {
+              //不处理特定的图片
+              vm.selected_img = clicked_dom;
+              vm.$bvToast.show("save_emoji_toast");
+            }
           }
         };
       }

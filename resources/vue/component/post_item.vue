@@ -5,7 +5,10 @@
     v-if="!(!this.post_content_show && this.fold_pingbici)"
   >
     <slot name="header"></slot>
-    <div class="float-right post_buttons" v-if="this.$store.state.User.LoginStatus">
+    <div
+      class="float-right post_buttons"
+      v-if="this.$store.state.User.LoginStatus"
+    >
       <b-button
         size="sm"
         variant="warning"
@@ -244,7 +247,6 @@ export default {
       post_top_offset: "",
       fold_content: false,
       hide_reason: "", //屏蔽词原因
-      // show_img: false,
     };
   },
   watch: {
@@ -277,14 +279,13 @@ export default {
             return match;
           }
         } else {
-          // if (vm.no_image_mode && !vm.show_img) {
-          //   //no_image_mode:无图模式
-          //   return img_svg;
           if (vm.no_image_mode) {
             //no_image_mode:无图模式
             return "";
           } else {
-            return match;
+            return match
+              .replace(/src/, "data-src")
+              .replace("<img ", '<img src="/img_svg.svg" class="img_svg"');
           }
         }
       }
@@ -333,13 +334,7 @@ export default {
     this.pingbici_check();
   },
   mounted() {
-    // const img_doms = this.$refs.post_content.getElementsByClassName("img_svg");
-    // let vm = this;
-    // for (let dom of img_doms) {
-    //   dom.addEventListener("click", () => {
-    //     vm.show_img = !vm.show_img;
-    //   });
-    // }
+    this.fold_img();
     this.$nextTick(() => {
       this.set_quote_styles(); // 给回帖内容的引用部分单独加style
       if (this.post_data.floor != 0) {
@@ -597,6 +592,20 @@ export default {
       this.fold_content = false;
       this.post_top_offset = 0;
       this.post_max_height = 0;
+    },
+    fold_img() {
+      const img_doms =
+        this.$refs.post_content.getElementsByClassName("img_svg");
+      for (let dom of img_doms) {
+        dom.addEventListener("click", (event) => {
+          const src_old = event.target.getAttribute("src");
+          event.target.setAttribute(
+            "src",
+            event.target.getAttribute("data-src")
+          );
+          event.target.setAttribute("data-src", src_old);
+        });
+      }
     },
     set_post_max_height() {
       //确认post总行数，如果超过特定行数，则折叠（包括图片等高度）
