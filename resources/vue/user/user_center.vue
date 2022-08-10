@@ -893,7 +893,7 @@ export default {
         PostsLineHeight: 28,
         PostsFontSize: 16,
         QuoteFontSize: 16,
-        SysInfoFontSize: 14,
+        SysInfoFontSize: 12,
         PostsMarginTop: 32,
         PostsMaxLine: 16,
         QuoteMax: 3,

@@ -87,7 +87,8 @@ body {
         right: calc(50% - 600px);
     }
     @media not all and (min-width: 1200px) {
-        right: 15px;
+        // right: 15px;
+        right: -0.7vw;
     }
 }
 
@@ -98,7 +99,8 @@ body {
         left: calc(50% - 600px);
     }
     @media not all and (min-width: 1200px) {
-        left: 15px;
+        // left: 15px;
+        right: -0.7vw;
     }
 }
 
@@ -253,6 +255,7 @@ body {
     margin-right: 1rem;
 }
 .svg-icon,
+// .img_svg,
 .icon-back {
     cursor: pointer;
 }
@@ -391,6 +394,9 @@ body {
 }
 .post_content img {
     max-width: 100%;
+}
+.post_content {
+    margin-right: 1rem;
 }
 
 label.custom-file-label {

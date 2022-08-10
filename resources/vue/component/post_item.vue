@@ -5,7 +5,7 @@
     v-if="!(!this.post_content_show && this.fold_pingbici)"
   >
     <slot name="header"></slot>
-    <div class="float-right" v-if="this.$store.state.User.LoginStatus">
+    <div class="float-right mr-4" v-if="this.$store.state.User.LoginStatus">
       <b-button
         size="sm"
         variant="warning"
@@ -244,6 +244,7 @@ export default {
       post_top_offset: "",
       fold_content: false,
       hide_reason: "", //屏蔽词原因
+      // show_img: false,
     };
   },
   watch: {
@@ -262,6 +263,8 @@ export default {
       return this.$store.state.Forums.CurrentForumData.id;
     },
     post_content() {
+      // const img_svg =
+      //   '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-image img_svg" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/><path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/></svg>';
       let vm = this; //为了回调函数可以使用vue的data
       function img_replacer(match) {
         //用于屏蔽表情包或者其他图片的回调函数
@@ -274,8 +277,11 @@ export default {
             return match;
           }
         } else {
+          // if (vm.no_image_mode && !vm.show_img) {
+          //   //no_image_mode:无图模式
+          //   return img_svg;
           if (vm.no_image_mode) {
-            //no_img_mode:无图模式
+            //no_image_mode:无图模式
             return "";
           } else {
             return match;
@@ -327,6 +333,13 @@ export default {
     this.pingbici_check();
   },
   mounted() {
+    // const img_doms = this.$refs.post_content.getElementsByClassName("img_svg");
+    // let vm = this;
+    // for (let dom of img_doms) {
+    //   dom.addEventListener("click", () => {
+    //     vm.show_img = !vm.show_img;
+    //   });
+    // }
     this.$nextTick(() => {
       this.set_quote_styles(); // 给回帖内容的引用部分单独加style
       if (this.post_data.floor != 0) {
@@ -511,7 +524,7 @@ export default {
     },
     quote_click() {
       const max_quote = this.quote_max; //最大可引用的层数
-      var post_content_dom = this.$refs.post_content;
+      var post_content_dom = this.$refs.post_content.cloneNode(true);
 
       //隐藏details标签的折叠内容
       var elements_details = post_content_dom.getElementsByTagName("details");
