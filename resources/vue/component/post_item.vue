@@ -520,12 +520,12 @@ export default {
     quote_click() {
       const max_quote = this.quote_max; //最大可引用的层数
       var post_content_dom = this.$refs.post_content;
-      // 删除details标签的折叠内容;
+      // 折叠details标签的内容避免被引用;
       var elements_details = post_content_dom.getElementsByTagName("details");
-      for (let item of elements_details) {
-        item.remove();
+      for (let dom of elements_details) {
+        dom.open = false; 
       }
-      
+
       var post_lines = post_content_dom.innerText.split("\n");
       var index_array = [];
       //搜索引用的层数
