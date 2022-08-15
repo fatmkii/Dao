@@ -412,7 +412,7 @@ class ThreadController extends Controller
                     'message' => '本贴需要饼干才能查看喔',
                 ]);
             }
-            if ($user->binggan != $CurrentThread->created_binggan && $user->admin == 0) {
+            if ($user->binggan != $CurrentThread->created_binggan && $user->admin != 99) {
                 return response()->json([
                     'code' => ResponseCode::THREAD_IS_PRIVATE,
                     'message' => '本贴是私密主题，只有发帖者可以查看喔',
@@ -451,7 +451,7 @@ class ThreadController extends Controller
                     && $CurrentThread->nissin_date < Carbon::now()
                     && $CurrentThread->sub_id == 0
                 ) {
-                    if ($user != null && $user->admin != 0) {
+                    if ($user != null && $user->admin == 99) {
                         break;
                     } else {
                         return response()->json([
