@@ -55,7 +55,7 @@ class HongbaoPost extends Model
     public function getHongbaoUserAttribute()
     {
         if ($this->user_id != 0) {
-            $hongbao_post_user = HongbaoPostUser::withTrashed()->where('user_id', $this->user_id)->where('hongbao_post_id', $this->id)->first();
+            $hongbao_post_user = HongbaoPostUser::where('user_id', $this->user_id)->where('hongbao_post_id', $this->id)->first();
 
             if ($hongbao_post_user) {
                 return $hongbao_post_user;
