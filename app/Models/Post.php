@@ -33,6 +33,7 @@ class Post extends myModel
         'created_binggan',
         'updated_at',
         'forum_id',
+        'thread_id',
     ];
 
     protected $appends = [
