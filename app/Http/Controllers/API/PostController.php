@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use App\Jobs\ProcessUserActive;
 use App\Jobs\ProcessIncomeStatement;
+use App\Models\HongbaoPost;
 use Carbon\Carbon;
 
 class PostController extends Controller
@@ -156,6 +157,10 @@ class PostController extends Controller
 
         if ($thread->hongbao_id != null) {
             HongbaoController::store($request, $thread, $post); //抢红包流程（是否符合条件的判断也在里面）
+        }
+
+        if (HongbaoPost::where('thread_id', $thread->id)->exists()) {
+            HongbaoPostController::store($request, $thread, $post); //抢红包流程（是否符合条件的判断也在里面）
         }
 
         //用redis记录回频率。
@@ -317,6 +322,11 @@ class PostController extends Controller
         //如果有提供binggan，为每个post输入binggan，用来判断is_your_post（为前端提供是否是用户自己帖子的判据）
         if ($request->query('binggan')) {
             $post->setBinggan($request->query('binggan'));
+        }
+
+        //如果有提供$user，为每个post输入user_id，用来判断is_your_post（为前端提供是否是用户自己帖子的判据）
+        if ($user) {
+            $post->setUserID($user->id);
         }
 
         //为反精分帖子加上created_binggan_hash

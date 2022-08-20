@@ -112,7 +112,7 @@
             <b-form-input v-model="hongbao_olo" placeholder="olo总数"></b-form-input>
           </b-input-group>
 
-          <b-input-group prepend="关键词" class="mt-2">
+          <b-input-group prepend="红包口令" class="mt-2">
             <b-form-input v-model="hongbao_key_word" placeholder="必填"></b-form-input>
           </b-input-group>
           <p>
@@ -350,7 +350,7 @@ export default {
       vote_title_input: "",
       vote_options: ["", "", ""],
       crowd_olo_input: undefined,
-      hongbao_olo: undefined,
+      hongbao_olo: "",
       hongbao_num: undefined,
       hongbao_key_word: undefined,
       end_time_selected: "00:00:00",
@@ -728,7 +728,7 @@ export default {
     this.vote_title_input = ""
     this.vote_options = ["", "", ""]
     this.crowd_olo_input = undefined
-    this.hongbao_olo = undefined
+    this.hongbao_olo = ""
     this.hongbao_num = undefined
     this.hongbao_key_word = undefined
     this.end_time_selected = "00:00:00"

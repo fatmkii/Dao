@@ -168,7 +168,7 @@ return [
         'file' => '文件',
         'hongbao_num' => '红包个数',
         'hongbao_olo' => '红包的olo总数',
-        'key_word' => '关键词',
+        'key_word' => '关键词（口令）',
     ],
 
 ];

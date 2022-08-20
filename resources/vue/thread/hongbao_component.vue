@@ -2,7 +2,7 @@
   <div class="hongbao-content align-items-center" v-if="!get_hongbao_data_handling">
 
     <div>
-      <span @click="quote_click">红包关键词：“{{ hongbao_data.key_word }}”</span>
+      <span @click="quote_click">红包口令：“{{ hongbao_data.key_word }}”</span>
     </div>
 
     <div>

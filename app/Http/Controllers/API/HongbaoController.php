@@ -104,7 +104,7 @@ class HongbaoController extends Controller
                 $post->forum_id = $request->forum_id;
                 $post->thread_id = $request->thread_id;
                 $post->content = $message;
-                $post->nickname = '红包系统';
+                $post->nickname = '红包结果';
                 $post->created_by_admin = 2; //0=一般用户 1=管理员发布，2=系统发布
                 $post->created_ip = $request->ip();
                 $post->random_head = random_int(0, 39);

@@ -14,6 +14,7 @@ use App\Http\Controllers\API\VoteController;
 use App\Http\Controllers\API\GambleController;
 use App\Http\Controllers\API\CrowdController;
 use App\Http\Controllers\API\HongbaoController;
+use App\Http\Controllers\API\HongbaoPostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,6 +93,11 @@ Route::prefix('crowds')->group(function () {
 //Hongbao系列
 Route::prefix('hongbao')->group(function () {
     Route::get('/{hongbao_id}', [HongbaoController::class, 'show'])->middleware('CheckBinggan:show'); //显示红包数据
+});
+
+//HongbaoPost系列
+Route::prefix('hongbao_post')->group(function () {
+    Route::post('', [HongbaoPostController::class, 'create'])->middleware('CheckBinggan:create'); //显示红包数据
 });
 
 //User系列

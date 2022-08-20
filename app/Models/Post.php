@@ -15,6 +15,7 @@ class Post extends myModel
     use HasFactory;
 
     protected $binggan = '';
+    protected $user_id = 0;
 
     protected $fillable = [
         'forum_id',
@@ -37,6 +38,7 @@ class Post extends myModel
     protected $appends = [
         'is_your_post',
         'battle_data',
+        'hongbao_data'
     ];
 
     protected $casts = [];
@@ -135,6 +137,11 @@ class Post extends myModel
         $this->binggan = $binggan;
     }
 
+    public function setUserID($user_id)
+    {
+        $this->user_id = $user_id;
+    }
+
     public static function Binggan($binggan)
     {
         $instance = new static;
@@ -177,6 +184,20 @@ class Post extends myModel
                 'battle' => $battle,
                 'battle_messages' => $battle_messages,
             ];
+        } else {
+            return null;
+        }
+    }
+
+    public function getHongbaoDataAttribute()
+    {
+        $hongbao = HongbaoPost::where('thread_id', $this->thread_id)->where('post_id', $this->id)->first();
+        if ($hongbao) {
+            //如果有提供user_id，为HongbaoPost输入user_id，用来判断hongbao结果
+            if ($this->user_id) {
+                $hongbao->setUserID($this->user_id);
+            }
+            return $hongbao;
         } else {
             return null;
         }

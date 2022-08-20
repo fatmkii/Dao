@@ -491,6 +491,7 @@ class ThreadController extends Controller
         if ($request->query('binggan')) {
             foreach ($posts as $post) {
                 $post->setBinggan($request->query('binggan'));
+                $post->setUserID($user->id);
             }
             $CurrentThread->setBinggan($request->query('binggan'));
             $CurrentThread->makeVisible('is_your_thread');

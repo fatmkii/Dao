@@ -4,34 +4,37 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\HongbaoPostUser;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
-class Hongbao extends Model
+class HongbaoPost extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
+    protected $table = "hongbao_post";
 
     protected $user_id = 0; //用于查询是否已经领取过红包的数据
 
-    protected $table = 'hongbao';
-
     public $hidden = [
         'thread_id',
+        'post_id',
         'user_id',
         'olo_remains',
         'created_binggan',
         'created_at',
         'updated_at',
+        'deleted_at',
     ];
 
-    protected $appends = [
+    public $appends = [
         'hongbao_user',
     ];
 
-
-    public function HongbaoUser()
+    public function HongbaoPostUser()
     {
-        return $this->hasMany(HongbaoUser::class);
+        return $this->hasMany(HongbaoPostUser::class);
     }
 
     public function Thread()
@@ -46,16 +49,18 @@ class Hongbao extends Model
 
     public function setUserID($user_id)
     {
+        // Log::debug($this->user_id);
         $this->user_id = $user_id;
     }
 
     public function getHongbaoUserAttribute()
     {
+        Log::debug($this->user_id);
         if ($this->user_id != 0) {
-            $hongbao_user = HongbaoUser::where('user_id', $this->user_id)->where('hongbao_id', $this->id)->first();
+            $hongbao_post_user = HongbaoPostUser::where('user_id', $this->user_id)->where('hongbao_post_id', $this->id)->first();
 
-            if ($hongbao_user) {
-                return $hongbao_user;
+            if ($hongbao_post_user) {
+                return $hongbao_post_user;
             } else {
                 return null;
             }
@@ -64,11 +69,12 @@ class Hongbao extends Model
         }
     }
 
-    public function create(Request $request, $thread_id)
+
+    public function create(Request $request, $thread_id, $post_id, $floor)
     {
         $request->validate([
-            'hongbao_olo' => 'required|integer|min:1000|max:1000000',
-            'hongbao_num' => 'required|integer|min:1|max:600',
+            'hongbao_olo' => 'required|integer|min:3000|max:1000000',
+            'hongbao_num' => 'required|integer|min:1|max:50',
             'type' => 'required|integer',
             'hongbao_key_word' => 'required|string|max:255',
         ]);
@@ -80,13 +86,16 @@ class Hongbao extends Model
             'normal', //记录类型
             [
                 'olo' => -$coin_pay,
-                'content' => '发起红包主题',
+                'content' => '发起口令红包',
                 'thread_id' => $thread_id,
+                'post_id' => $post_id,
+                'floor' => $floor,
                 'thread_title' => $request->title,
             ]
         ); //扣除用户相应olo（通过统一接口、记录操作）
 
         $this->thread_id = $thread_id;
+        $this->post_id = $post_id;
         $this->olo_total = $request->hongbao_olo;
         $this->num_total = $request->hongbao_num;
         $this->olo_remains = $request->hongbao_olo;

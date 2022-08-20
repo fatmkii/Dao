@@ -1,14 +1,17 @@
 
 <template>
   <div>
-    <div class="thread_body" v-show="posts_load_status == 2 && !thread_response_code">
+    <div
+      class="thread_body"
+      v-show="posts_load_status == 2 && !thread_response_code"
+    >
       <div class="row align-items-center mt-3">
         <div class="col-auto h5 d-none d-lg-block d-xl-block">
           <b-badge variant="secondary" pill class="float-left">
             {{ forum_id }}
           </b-badge>
           <router-link class="forum_name" :to="'/forum/' + forum_id">{{
-              forum_name
+            forum_name
           }}</router-link>
         </div>
         <div class="col-auto h6 d-block d-lg-none d-xl-none">
@@ -16,10 +19,15 @@
             {{ forum_id }}
           </b-badge>
           <router-link class="forum_name" :to="'/forum/' + forum_id">{{
-              forum_name
+            forum_name
           }}</router-link>
         </div>
-        <b-dropdown id="shield-dropdown" text="屏蔽" variant="outline-dark" size="sm">
+        <b-dropdown
+          id="shield-dropdown"
+          text="屏蔽"
+          variant="outline-dark"
+          size="sm"
+        >
           <b-form-checkbox v-model="no_video_mode" switch class="ml-2 my-2">
             无视频音频
           </b-form-checkbox>
@@ -38,96 +46,209 @@
           <b-form-checkbox v-model="no_roll_mode" switch class="ml-2 my-2">
             无roll点
           </b-form-checkbox>
+          <b-form-checkbox v-model="no_hongbao_mode" switch class="ml-2 my-2">
+            无红包结果
+          </b-form-checkbox>
         </b-dropdown>
-        <b-button size="sm" class="my-1 ml-1 my-sm-0" variant="outline-dark"
-          :disabled="!this.$store.state.User.LoginStatus" @click="search_show = !search_show">搜索</b-button>
+        <b-button
+          size="sm"
+          class="my-1 ml-1 my-sm-0"
+          variant="outline-dark"
+          :disabled="!this.$store.state.User.LoginStatus"
+          @click="search_show = !search_show"
+          >搜索</b-button
+        >
       </div>
       <div class="d-flex flex-row my-2" v-if="search_show">
-        <b-form-input id="search_input" class="search_input" style="max-width: 400px" placeholder="搜索本楼内容"
-          v-model="search_input"></b-form-input>
-        <b-button size="sm" class="ml-1" style="min-width: 46px" :variant="button_theme" @click="search_handle">搜索
+        <b-form-input
+          id="search_input"
+          class="search_input"
+          style="max-width: 400px"
+          placeholder="搜索本楼内容"
+          v-model="search_input"
+        ></b-form-input>
+        <b-button
+          size="sm"
+          class="ml-1"
+          style="min-width: 46px"
+          :variant="button_theme"
+          @click="search_handle"
+          >搜索
         </b-button>
-        <b-button size="sm" class="ml-1" style="min-width: 46px" variant="outline-dark" @click="search_clear">清空
+        <b-button
+          size="sm"
+          class="ml-1"
+          style="min-width: 46px"
+          variant="outline-dark"
+          @click="search_clear"
+          >清空
         </b-button>
       </div>
-      <ThreadPaginator :thread_id="thread_id" :last_page="posts_last_page" :current_page="page" align="right">
+      <ThreadPaginator
+        :thread_id="thread_id"
+        :last_page="posts_last_page"
+        :current_page="page"
+        align="right"
+      >
       </ThreadPaginator>
       <div class="post_container">
-        <div class="jump_page alert alert-success px-1 py-1" v-if="jump_page_show">
-          <span style="font-size: 0.875rem">你上次已阅读到第{{ browse_current.page }}页，<router-link
-              :to="'/thread/' + thread_id + '/' + browse_current.page">点击这里跳转</router-link>喔~</span>
+        <div
+          class="jump_page alert alert-success px-1 py-1"
+          v-if="jump_page_show"
+        >
+          <span style="font-size: 0.875rem"
+            >你上次已阅读到第{{ browse_current.page }}页，<router-link
+              :to="'/thread/' + thread_id + '/' + browse_current.page"
+              >点击这里跳转</router-link
+            >喔~</span
+          >
         </div>
         <div class="post_title px-1 py-2 h5 d-none d-lg-block d-xl-block">
-          <span style="word-wrap: break-word; white-space: normal">标题：{{ thread_title }}</span><span> [{{
-              thread_posts_num
-          }}]</span>
+          <span style="word-wrap: break-word; white-space: normal"
+            >标题：{{ thread_title }}</span
+          ><span> [{{ thread_posts_num }}]</span>
         </div>
         <div class="post_title px-1 py-2 h6 d-block d-lg-none d-xl-none">
-          <span style="word-wrap: break-word; white-space: normal">标题：{{ thread_title }}</span><span> [{{
-              thread_posts_num
-          }}]</span>
+          <span style="word-wrap: break-word; white-space: normal"
+            >标题：{{ thread_title }}</span
+          ><span> [{{ thread_posts_num }}]</span>
         </div>
-        <div v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
-          class="d-flex flex-wrap align-items-center">
+        <div
+          v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
+          class="d-flex flex-wrap align-items-center"
+        >
           <b-form-checkbox class="mr-auto" v-model="admin_button_show" switch>
             显示管理员按钮
           </b-form-checkbox>
-          <b-button class="ml-1" size="sm" variant="warning"
-            v-if="this.$store.state.User.AdminForums.includes(this.forum_id)" v-show="admin_button_show"
-            @click="set_focus_threads">
+          <b-button
+            class="ml-1"
+            size="sm"
+            variant="warning"
+            v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
+            v-show="admin_button_show"
+            @click="set_focus_threads"
+          >
             {{ is_focus ? "取消关注" : "关注主题" }}
           </b-button>
-          <b-button class="ml-1" size="sm" variant="warning"
-            v-if="this.$store.state.User.AdminForums.includes(this.forum_id)" v-show="admin_button_show"
-            @click="thread_set_top">
+          <b-button
+            class="ml-1"
+            size="sm"
+            variant="warning"
+            v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
+            v-show="admin_button_show"
+            @click="thread_set_top"
+          >
             {{ thread_sub_id === 0 ? "置顶" : "取消置顶" }}
           </b-button>
-          <b-button class="ml-1" size="sm" variant="warning"
-            v-if="this.$store.state.User.AdminForums.includes(this.forum_id)" v-show="admin_button_show"
-            @click="check_jingfen_admin">
+          <b-button
+            class="ml-1"
+            size="sm"
+            variant="warning"
+            v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
+            v-show="admin_button_show"
+            @click="check_jingfen_admin"
+          >
             反精分
           </b-button>
-          <b-button class="ml-1" size="sm" variant="warning"
-            v-if="this.$store.state.User.AdminForums.includes(this.forum_id)" @click="thread_delete_click_admin">
+          <b-button
+            class="ml-1"
+            size="sm"
+            variant="warning"
+            v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
+            @click="thread_delete_click_admin"
+          >
             删主题
           </b-button>
         </div>
-        <div v-if="is_your_thread && posts_load_status == 2" class="d-flex flex-wrap align-items-center mt-1">
-          <b-button class="ml-auto" size="sm" variant="warning" v-if="is_your_thread"
-            @click="modal_toggle('color_modal')">
+        <div
+          v-if="is_your_thread && posts_load_status == 2"
+          class="d-flex flex-wrap align-items-center mt-1"
+        >
+          <b-button
+            class="ml-auto"
+            size="sm"
+            variant="warning"
+            v-if="is_your_thread"
+            @click="modal_toggle('color_modal')"
+          >
             标题改色
           </b-button>
         </div>
-        <VoteComponent v-if="vote_question_id && posts_load_status == 2" :vote_question_id="vote_question_id">
+        <VoteComponent
+          v-if="vote_question_id && posts_load_status == 2"
+          :vote_question_id="vote_question_id"
+        >
         </VoteComponent>
-        <GambleComponent v-if="gamble_question_id && posts_load_status == 2" :gamble_question_id="gamble_question_id"
-          :admin_button_show="admin_button_show"></GambleComponent>
-        <CrowdComponent v-if="crowd_id && posts_load_status" :crowd_id="crowd_id"
-          :admin_button_show="admin_button_show"></CrowdComponent>
-        <HongbaoComponent v-if="hongbao_id && posts_load_status" :hongbao_id="hongbao_id" @quote_click="quote_click_handle"
-          :admin_button_show="admin_button_show"></HongbaoComponent>
+        <GambleComponent
+          v-if="gamble_question_id && posts_load_status == 2"
+          :gamble_question_id="gamble_question_id"
+          :admin_button_show="admin_button_show"
+        ></GambleComponent>
+        <CrowdComponent
+          v-if="crowd_id && posts_load_status"
+          :crowd_id="crowd_id"
+          :admin_button_show="admin_button_show"
+        ></CrowdComponent>
+        <HongbaoComponent
+          v-if="hongbao_id && posts_load_status"
+          :hongbao_id="hongbao_id"
+          @quote_click="quote_click_handle"
+          :admin_button_show="admin_button_show"
+        ></HongbaoComponent>
         <div v-for="post_data in posts_data" :key="post_data.id">
-          <PostItem :post_data="post_data" :thread_anti_jingfen="thread_anti_jingfen" :random_head_add="
-            random_heads_data[random_heads_group - 1].random_heads[
-            post_data.random_head
-            ]
-          " :admin_button_show="admin_button_show" :no_image_mode="no_image_mode" :no_emoji_mode="no_emoji_mode"
-            :no_head_mode="no_head_mode" :no_video_mode="no_video_mode" @quote_click="quote_click_handle"
-            @get_posts_data="get_posts_data" @emit_reward="emit_reward">
-            <template v-slot:battle v-if="
-              post_data.battle_id &&
-              posts_load_status == 2 &&
-              no_battle_mode == false
-            ">
-              <Battle ref="battle_component" :battle_data="post_data.battle_data.battle"
-                :battle_messages="post_data.battle_data.battle_messages"></Battle>
+          <PostItem
+            :post_data="post_data"
+            :thread_anti_jingfen="thread_anti_jingfen"
+            :random_head_add="
+              random_heads_data[random_heads_group - 1].random_heads[
+                post_data.random_head
+              ]
+            "
+            :admin_button_show="admin_button_show"
+            :no_image_mode="no_image_mode"
+            :no_emoji_mode="no_emoji_mode"
+            :no_head_mode="no_head_mode"
+            :no_video_mode="no_video_mode"
+            @quote_click="quote_click_handle"
+            @get_posts_data="get_posts_data"
+            @emit_reward="emit_reward"
+          >
+            <template
+              v-slot:battle
+              v-if="
+                post_data.battle_id &&
+                posts_load_status == 2 &&
+                no_battle_mode == false
+              "
+            >
+              <Battle
+                ref="battle_component"
+                :battle_data="post_data.battle_data.battle"
+                :battle_messages="post_data.battle_data.battle_messages"
+              ></Battle>
+            </template>
+            <template
+              v-slot:hongbao
+              v-if="post_data.hongbao_data && posts_load_status == 2"
+            >
+              <HongbaoPostComponent
+                ref="hongbao_post_component"
+                :hongbao_data="post_data.hongbao_data"
+                @quote_click="quote_click_handle"
+              >
+              </HongbaoPostComponent>
             </template>
           </PostItem>
         </div>
         <div class="d-flex flex-row align-items-center my-2">
-          <b-button :variant="button_theme" size="sm" id="listen_button" @click="listen_channel"
-            :disabled="!enable_listening || show_listen_next_page">{{
-                !is_listening || show_listen_next_page ? "自动涮锅" : "正在涮锅"
+          <b-button
+            :variant="button_theme"
+            size="sm"
+            id="listen_button"
+            @click="listen_channel"
+            :disabled="!enable_listening || show_listen_next_page"
+            >{{
+              !is_listening || show_listen_next_page ? "自动涮锅" : "正在涮锅"
             }}
           </b-button>
 
@@ -139,38 +260,119 @@
             >
             </b-spinner> -->
             <img v-show="is_listening" id="listening_img" class="ml-2" />
-            <router-link :to="'/thread/' + thread_id + '/' + (page + 1)" v-if="show_listen_next_page"
-              class="thread_page ml-1" style="font-size: 0.875rem">回帖已经翻页、点击前往
+            <router-link
+              :to="'/thread/' + thread_id + '/' + (page + 1)"
+              v-if="show_listen_next_page"
+              class="thread_page ml-1"
+              style="font-size: 0.875rem"
+              >回帖已经翻页、点击前往
             </router-link>
-            <span class="ml-1" style="font-size: 0.875rem" v-if="this.page != this.posts_last_page">在最后一页才能自动涮锅</span>
+            <span
+              class="ml-1"
+              style="font-size: 0.875rem"
+              v-if="this.page != this.posts_last_page"
+              >在最后一页才能自动涮锅</span
+            >
           </div>
         </div>
       </div>
-      <PostInput ref="post_input_com" :input_disable="
-        !this.$store.state.User.LoginStatus ||
-        Boolean(locked_TTL) ||
-        new_post_handling
-      " :new_post_handling="new_post_handling" :random_heads_group="random_heads_group" :forum_id="forum_id"
-        :thread_id="thread_id" @content_commit="new_post_handle"><template v-slot:svg_icon>
-          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
-            class="icon-battle bi bi-controller" viewBox="0 0 16 16" @click="modal_toggle('battle_modal')">
+      <PostInput
+        ref="post_input_com"
+        :input_disable="
+          !this.$store.state.User.LoginStatus ||
+          Boolean(locked_TTL) ||
+          new_post_handling
+        "
+        :new_post_handling="new_post_handling"
+        :random_heads_group="random_heads_group"
+        :forum_id="forum_id"
+        :thread_id="thread_id"
+        @content_commit="new_post_handle"
+        ><template v-slot:svg_icon>
+          <svg
+            width="28"
+            height="28"
+            viewBox="0.00 0.00 100.00 100.00"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            @click="modal_toggle('hongbao_modal')"
+            class="icon-battle"
+          >
+            <g
+              stroke-linecap="round"
+              transform="translate(1.00, 0.00)"
+              id="图层_2"
+            >
+              <path
+                d="M21.88,5.62 Q48.00,5.62 74.12,5.62 Q84.12,5.62 84.12,15.62 Q84.12,48.75 84.12,81.88 Q84.12,91.88 74.12,91.88 Q48.00,91.88 21.88,91.88 Q11.88,91.88 11.88,81.88 Q11.88,48.75 11.88,15.62 Q11.88,5.62 21.88,5.62 Z"
+                fill="none"
+                stroke="rgb(68, 68, 68)"
+                stroke-width="5.00"
+                stroke-opacity="1.00"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M13.00,32.90 L47.84,46.00 L83.38,32.90"
+                fill="none"
+                stroke="rgb(68, 68, 68)"
+                stroke-width="5.00"
+                stroke-opacity="1.00"
+                stroke-linejoin="miter"
+              />
+              <path
+                d="M47.86,45.38 Q47.86,45.38 47.86,45.38 Q53.95,45.38 53.95,45.98 Q53.95,45.98 53.95,45.98 Q53.95,46.57 47.86,46.57 Q47.86,46.57 47.86,46.57 Q41.77,46.57 41.77,45.98 Q41.77,45.98 41.77,45.98 Q41.77,45.38 47.86,45.38 Z"
+                fill="none"
+                stroke="rgb(68, 68, 68)"
+                stroke-width="5.00"
+                stroke-opacity="1.00"
+                stroke-linejoin="round"
+              />
+            </g>
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="28"
+            fill="currentColor"
+            class="icon-battle bi bi-controller"
+            viewBox="0 0 16 16"
+            @click="modal_toggle('battle_modal')"
+          >
             <path
-              d="M11.5 6.027a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-1.5 1.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm2.5-.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-1.5 1.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm-6.5-3h1v1h1v1h-1v1h-1v-1h-1v-1h1v-1z" />
+              d="M11.5 6.027a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-1.5 1.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm2.5-.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-1.5 1.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm-6.5-3h1v1h1v1h-1v1h-1v-1h-1v-1h1v-1z"
+            />
             <path
-              d="M3.051 3.26a.5.5 0 0 1 .354-.613l1.932-.518a.5.5 0 0 1 .62.39c.655-.079 1.35-.117 2.043-.117.72 0 1.443.041 2.12.126a.5.5 0 0 1 .622-.399l1.932.518a.5.5 0 0 1 .306.729c.14.09.266.19.373.297.408.408.78 1.05 1.095 1.772.32.733.599 1.591.805 2.466.206.875.34 1.78.364 2.606.024.816-.059 1.602-.328 2.21a1.42 1.42 0 0 1-1.445.83c-.636-.067-1.115-.394-1.513-.773-.245-.232-.496-.526-.739-.808-.126-.148-.25-.292-.368-.423-.728-.804-1.597-1.527-3.224-1.527-1.627 0-2.496.723-3.224 1.527-.119.131-.242.275-.368.423-.243.282-.494.575-.739.808-.398.38-.877.706-1.513.773a1.42 1.42 0 0 1-1.445-.83c-.27-.608-.352-1.395-.329-2.21.024-.826.16-1.73.365-2.606.206-.875.486-1.733.805-2.466.315-.722.687-1.364 1.094-1.772a2.34 2.34 0 0 1 .433-.335.504.504 0 0 1-.028-.079zm2.036.412c-.877.185-1.469.443-1.733.708-.276.276-.587.783-.885 1.465a13.748 13.748 0 0 0-.748 2.295 12.351 12.351 0 0 0-.339 2.406c-.022.755.062 1.368.243 1.776a.42.42 0 0 0 .426.24c.327-.034.61-.199.929-.502.212-.202.4-.423.615-.674.133-.156.276-.323.44-.504C4.861 9.969 5.978 9.027 8 9.027s3.139.942 3.965 1.855c.164.181.307.348.44.504.214.251.403.472.615.674.318.303.601.468.929.503a.42.42 0 0 0 .426-.241c.18-.408.265-1.02.243-1.776a12.354 12.354 0 0 0-.339-2.406 13.753 13.753 0 0 0-.748-2.295c-.298-.682-.61-1.19-.885-1.465-.264-.265-.856-.523-1.733-.708-.85-.179-1.877-.27-2.913-.27-1.036 0-2.063.091-2.913.27z" />
-          </svg></template>
+              d="M3.051 3.26a.5.5 0 0 1 .354-.613l1.932-.518a.5.5 0 0 1 .62.39c.655-.079 1.35-.117 2.043-.117.72 0 1.443.041 2.12.126a.5.5 0 0 1 .622-.399l1.932.518a.5.5 0 0 1 .306.729c.14.09.266.19.373.297.408.408.78 1.05 1.095 1.772.32.733.599 1.591.805 2.466.206.875.34 1.78.364 2.606.024.816-.059 1.602-.328 2.21a1.42 1.42 0 0 1-1.445.83c-.636-.067-1.115-.394-1.513-.773-.245-.232-.496-.526-.739-.808-.126-.148-.25-.292-.368-.423-.728-.804-1.597-1.527-3.224-1.527-1.627 0-2.496.723-3.224 1.527-.119.131-.242.275-.368.423-.243.282-.494.575-.739.808-.398.38-.877.706-1.513.773a1.42 1.42 0 0 1-1.445-.83c-.27-.608-.352-1.395-.329-2.21.024-.826.16-1.73.365-2.606.206-.875.486-1.733.805-2.466.315-.722.687-1.364 1.094-1.772a2.34 2.34 0 0 1 .433-.335.504.504 0 0 1-.028-.079zm2.036.412c-.877.185-1.469.443-1.733.708-.276.276-.587.783-.885 1.465a13.748 13.748 0 0 0-.748 2.295 12.351 12.351 0 0 0-.339 2.406c-.022.755.062 1.368.243 1.776a.42.42 0 0 0 .426.24c.327-.034.61-.199.929-.502.212-.202.4-.423.615-.674.133-.156.276-.323.44-.504C4.861 9.969 5.978 9.027 8 9.027s3.139.942 3.965 1.855c.164.181.307.348.44.504.214.251.403.472.615.674.318.303.601.468.929.503a.42.42 0 0 0 .426-.241c.18-.408.265-1.02.243-1.776a12.354 12.354 0 0 0-.339-2.406 13.753 13.753 0 0 0-.748-2.295c-.298-.682-.61-1.19-.885-1.465-.264-.265-.856-.523-1.733-.708-.85-.179-1.877-.27-2.913-.27-1.036 0-2.063.091-2.913.27z"
+            />
+          </svg>
+        </template>
         <template v-slot:after_preview>
           <div class="row align-items-center">
             <div class="col-auto">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                class="icon-back bi bi-arrow-left-square" viewBox="0 0 16 16" v-b-popover.hover.right="'返回小岛'"
-                @click="back_to_forum(false)" @click.middle="back_to_forum(true)">
-                <path fill-rule="evenodd"
-                  d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="currentColor"
+                class="icon-back bi bi-arrow-left-square"
+                viewBox="0 0 16 16"
+                v-b-popover.hover.right="'返回小岛'"
+                @click="back_to_forum(false)"
+                @click.middle="back_to_forum(true)"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"
+                />
               </svg>
             </div>
             <div class="col-auto">
-              <ThreadPaginator :thread_id="thread_id" :last_page="posts_last_page" :current_page="page" align="left">
+              <ThreadPaginator
+                :thread_id="thread_id"
+                :last_page="posts_last_page"
+                :current_page="page"
+                align="left"
+              >
               </ThreadPaginator>
             </div>
           </div>
@@ -179,24 +381,29 @@
       <div class="row align-items-center mt-2">
         <div class="col-auto ml-auto" style="font-size: 0.875rem">
           <span v-if="!this.$store.state.User.LoginStatus">
-            请在先<router-link to="/login">导入或领取饼干</router-link>后才能发言喔
+            请在先<router-link to="/login">导入或领取饼干</router-link
+            >后才能发言喔
           </span>
           <span v-if="locked_TTL">
             你的饼干封禁中，将于{{
-                Math.floor(locked_TTL / 3600) + 1
+              Math.floor(locked_TTL / 3600) + 1
             }}小时后解封。
           </span>
-          <span v-if="
-            this.$store.state.Forums.CurrentForumData.is_nissin == 2 &&
-            this.$store.state.Threads.CurrentThreadData.sub_id == 0
-          ">本贴将于
+          <span
+            v-if="
+              this.$store.state.Forums.CurrentForumData.is_nissin == 2 &&
+              this.$store.state.Threads.CurrentThreadData.sub_id == 0
+            "
+            >本贴将于
             <span style="color: #dd0000">{{ nissin_TTL }}</span>
             后日清，请及时更换帖子喔
           </span>
-          <span v-if="
-            this.$store.state.Forums.CurrentForumData.is_nissin == 1 &&
-            this.$store.state.Threads.CurrentThreadData.sub_id == 0
-          ">本小岛定期
+          <span
+            v-if="
+              this.$store.state.Forums.CurrentForumData.is_nissin == 1 &&
+              this.$store.state.Threads.CurrentThreadData.sub_id == 0
+            "
+            >本小岛定期
             <span style="color: #dd0000">每日早上8点</span>
             日清，请及时更换帖子喔
           </span>
@@ -204,51 +411,99 @@
       </div>
       <div class="row align-items-center mt-2">
         <div class="col-auto mr-auto">
-          <b-button :variant="button_theme" size="sm" @click="back_to_forum(false)" @click.middle="back_to_forum(true)">
+          <b-button
+            :variant="button_theme"
+            size="sm"
+            @click="back_to_forum(false)"
+            @click.middle="back_to_forum(true)"
+          >
             返回小岛
           </b-button>
         </div>
       </div>
     </div>
 
-    <img src="https://oss.cpttmm.com/xhg_other/notice_2.png"
-      v-if="posts_load_status == 2 && thread_response_code == 23410" class="nissined_img" />
-    <img src="https://oss.cpttmm.com/xhg_other/notice_3.png"
-      v-if="posts_load_status == 2 && thread_response_code == 23401" class="nissined_img" />
-    <img src="https://oss.cpttmm.com/xhg_other/notice_1.png"
-      v-if="posts_load_status == 2 && thread_response_code == 234011" class="nissined_img" />
-    <img src="https://oss.cpttmm.com/xhg_other/notice_404.png"
-      v-if="posts_load_status == 2 && thread_response_code == 23404" class="nissined_img" />
+    <img
+      src="https://oss.cpttmm.com/xhg_other/notice_2.png"
+      v-if="posts_load_status == 2 && thread_response_code == 23410"
+      class="nissined_img"
+    />
+    <img
+      src="https://oss.cpttmm.com/xhg_other/notice_3.png"
+      v-if="posts_load_status == 2 && thread_response_code == 23401"
+      class="nissined_img"
+    />
+    <img
+      src="https://oss.cpttmm.com/xhg_other/notice_1.png"
+      v-if="posts_load_status == 2 && thread_response_code == 234011"
+      class="nissined_img"
+    />
+    <img
+      src="https://oss.cpttmm.com/xhg_other/notice_404.png"
+      v-if="posts_load_status == 2 && thread_response_code == 23404"
+      class="nissined_img"
+    />
 
     <div>
-      <b-spinner class="spinner document-loading" v-show="posts_load_status == 1" label="读取中">
+      <b-spinner
+        class="spinner document-loading"
+        v-show="posts_load_status == 1"
+        label="读取中"
+      >
       </b-spinner>
 
       <ZBar @reload="get_posts_data(true, false)" reload>
         <template v-slot:top>
-          <div class="icon-roll" @click="modal_toggle('roll_modal')" key="icon-roll">
-            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="dice"
-              class="svg-inline--fa fa-dice fa-w-20" role="img" xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 640 512">
-              <path fill="currentColor"
-                d="M592 192H473.26c12.69 29.59 7.12 65.2-17 89.32L320 417.58V464c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48V240c0-26.51-21.49-48-48-48zM480 376c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm-46.37-186.7L258.7 14.37c-19.16-19.16-50.23-19.16-69.39 0L14.37 189.3c-19.16 19.16-19.16 50.23 0 69.39L189.3 433.63c19.16 19.16 50.23 19.16 69.39 0L433.63 258.7c19.16-19.17 19.16-50.24 0-69.4zM96 248c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm128 128c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm0-128c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm0-128c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm128 128c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24z">
-              </path>
+          <div
+            class="icon-roll"
+            @click="modal_toggle('roll_modal')"
+            key="icon-roll"
+          >
+            <svg
+              aria-hidden="true"
+              focusable="false"
+              data-prefix="fas"
+              data-icon="dice"
+              class="svg-inline--fa fa-dice fa-w-20"
+              role="img"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 640 512"
+            >
+              <path
+                fill="currentColor"
+                d="M592 192H473.26c12.69 29.59 7.12 65.2-17 89.32L320 417.58V464c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48V240c0-26.51-21.49-48-48-48zM480 376c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm-46.37-186.7L258.7 14.37c-19.16-19.16-50.23-19.16-69.39 0L14.37 189.3c-19.16 19.16-19.16 50.23 0 69.39L189.3 433.63c19.16 19.16 50.23 19.16 69.39 0L433.63 258.7c19.16-19.17 19.16-50.24 0-69.4zM96 248c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm128 128c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm0-128c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm0-128c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm128 128c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24z"
+              ></path>
             </svg>
           </div>
         </template>
         <template v-slot:bottom>
-          <div class="icon-jump" @click="modal_toggle('jump_modal')" key="icon-jump">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-skip-forward-fill"
-              viewBox="0 0 16 16">
+          <div
+            class="icon-jump"
+            @click="modal_toggle('jump_modal')"
+            key="icon-jump"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              class="bi bi-skip-forward-fill"
+              viewBox="0 0 16 16"
+            >
               <path
-                d="M15.5 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V8.753l-6.267 3.636c-.54.313-1.233-.066-1.233-.697v-2.94l-6.267 3.636C.693 12.703 0 12.324 0 11.693V4.308c0-.63.693-1.01 1.233-.696L7.5 7.248v-2.94c0-.63.693-1.01 1.233-.696L15 7.248V4a.5.5 0 0 1 .5-.5z" />
+                d="M15.5 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V8.753l-6.267 3.636c-.54.313-1.233-.066-1.233-.697v-2.94l-6.267 3.636C.693 12.703 0 12.324 0 11.693V4.308c0-.63.693-1.01 1.233-.696L7.5 7.248v-2.94c0-.63.693-1.01 1.233-.696L15 7.248V4a.5.5 0 0 1 .5-.5z"
+              />
             </svg>
           </div>
         </template>
       </ZBar>
 
-      <b-toast id="save_emoji_toast" title="保存为我的表情包？" autoHideDelay="1500">
-        <a href="javascript:;" class="save_emoji" @click="add_emoji_handle">确定</a>
+      <b-toast
+        id="save_emoji_toast"
+        title="保存为我的表情包？"
+        autoHideDelay="1500"
+      >
+        <a href="javascript:;" class="save_emoji" @click="add_emoji_handle"
+          >确定</a
+        >
       </b-toast>
 
       <b-modal ref="roll_modal" id="roll_modal" class="roll_modal">
@@ -265,24 +520,41 @@
           </p>
           <div class="my-1">
             <b-input-group prepend="Roll点昵称">
-              <b-form-input v-model="roll_name" placeholder="可留空"></b-form-input>
+              <b-form-input
+                v-model="roll_name"
+                placeholder="可留空"
+              ></b-form-input>
             </b-input-group>
             <b-input-group prepend="Roll点事件">
-              <b-form-input v-model="roll_event" placeholder="可留空"></b-form-input>
+              <b-form-input
+                v-model="roll_event"
+                placeholder="可留空"
+              ></b-form-input>
             </b-input-group>
           </div>
           <div class="mt-3">
             <b-input-group prepend="骰子数量">
-              <b-form-input v-model="roll_num" placeholder="max:1000"></b-form-input>
+              <b-form-input
+                v-model="roll_num"
+                placeholder="max:1000"
+              ></b-form-input>
             </b-input-group>
             <b-input-group prepend="骰子大小">
-              <b-form-input v-model="roll_range" placeholder="max:100000000"></b-form-input>
+              <b-form-input
+                v-model="roll_range"
+                placeholder="max:100000000"
+              ></b-form-input>
             </b-input-group>
           </div>
         </template>
         <template v-slot:modal-footer="{ cancel }">
           <b-button-group>
-            <b-button :variant="button_theme" :disabled="roll_handling" @click="roll_handle">Roll it！</b-button>
+            <b-button
+              :variant="button_theme"
+              :disabled="roll_handling"
+              @click="roll_handle"
+              >Roll it！</b-button
+            >
             <b-button variant="outline-secondary" @click="cancel()">
               取消
             </b-button>
@@ -297,19 +569,30 @@
           <p>最大高度：{{ posts_last_page }}页，{{ thread_posts_num }}楼</p>
           <div class="my-1">
             <b-input-group prepend="跳页：">
-              <b-form-input type="number" v-model="jump_page" autofocus @keyup.enter="jump_handle"></b-form-input>
+              <b-form-input
+                type="number"
+                v-model="jump_page"
+                autofocus
+                @keyup.enter="jump_handle"
+              ></b-form-input>
             </b-input-group>
           </div>
           <div class="my-1">
             <b-input-group prepend="跳楼：">
-              <b-form-input type="number" v-model="jump_floor" @keyup.enter="jump_handle"></b-form-input>
+              <b-form-input
+                type="number"
+                v-model="jump_floor"
+                @keyup.enter="jump_handle"
+              ></b-form-input>
             </b-input-group>
           </div>
         </template>
         <template v-slot:modal-footer="{ cancel }">
           <span style="fontsize: 0.6rem">*两者都输入时，优先跳页</span>
           <b-button-group>
-            <b-button :variant="button_theme" @click="jump_handle">Jump！</b-button>
+            <b-button :variant="button_theme" @click="jump_handle"
+              >Jump！</b-button
+            >
             <b-button variant="outline-secondary" @click="cancel()">
               取消
             </b-button>
@@ -323,17 +606,28 @@
           <div class="my-1">
             <div class="my-1">
               <b-input-group prepend="输入：">
-                <b-form-input autofocus maxlength="4" placeholder="输入验证码解锁" v-model="captcha_code_input"
-                  @keyup.enter="commit_captcha"></b-form-input>
+                <b-form-input
+                  autofocus
+                  maxlength="4"
+                  placeholder="输入验证码解锁"
+                  v-model="captcha_code_input"
+                  @keyup.enter="commit_captcha"
+                ></b-form-input>
               </b-input-group>
-              <img v-if="captcha_img" :src="'data:image/png;base64,' + captcha_img" @click="get_captcha" />
+              <img
+                v-if="captcha_img"
+                :src="'data:image/png;base64,' + captcha_img"
+                @click="get_captcha"
+              />
               <p>点击更换验证码。不区分大小写。</p>
             </div>
           </div>
         </template>
         <template v-slot:modal-footer="{ cancel }">
           <b-button-group>
-            <b-button :variant="button_theme" @click="commit_captcha">提交</b-button>
+            <b-button :variant="button_theme" @click="commit_captcha"
+              >提交</b-button
+            >
             <b-button variant="outline-secondary" @click="cancel()">
               取消
             </b-button>
@@ -347,8 +641,13 @@
           <div class="my-1">
             <div class="my-1">
               <b-input-group prepend="颜色：">
-                <b-form-input autofocus maxlength="7" placeholder="#212529" v-model="thread_color"
-                  @keyup.enter="change_thread_color"></b-form-input>
+                <b-form-input
+                  autofocus
+                  maxlength="7"
+                  placeholder="#212529"
+                  v-model="thread_color"
+                  @keyup.enter="change_thread_color"
+                ></b-form-input>
               </b-input-group>
               <ColorPicker v-model="thread_color" class="mt-2"></ColorPicker>
             </div>
@@ -356,7 +655,9 @@
         </template>
         <template v-slot:modal-footer="{ cancel }">
           <b-button-group>
-            <b-button :variant="button_theme" @click="change_thread_color">提交</b-button>
+            <b-button :variant="button_theme" @click="change_thread_color"
+              >提交</b-button
+            >
             <b-button variant="outline-secondary" @click="cancel()">
               取消
             </b-button>
@@ -366,6 +667,7 @@
 
       <BattleModal ref="battle_modal"></BattleModal>
       <RewardModal ref="reward_modal"></RewardModal>
+      <HongbaoModal ref="hongbao_modal"></HongbaoModal>
     </div>
   </div>
 </template>
@@ -382,6 +684,8 @@ import VoteComponent from "./vote.vue";
 import GambleComponent from "./gamble_component.vue";
 import CrowdComponent from "./crowd_component.vue";
 import HongbaoComponent from "./hongbao_component.vue";
+import HongbaoPostComponent from "./hongbao_post_component.vue";
+import HongbaoModal from "./hongbao_modal.vue";
 import Battle from "./battle.vue";
 import BattleModal from "./battle_modal.vue";
 import ZBar from "../component/z_bar.vue";
@@ -400,6 +704,8 @@ export default {
     GambleComponent,
     CrowdComponent,
     HongbaoComponent,
+    HongbaoPostComponent,
+    HongbaoModal,
     Battle,
     BattleModal,
     ZBar,
@@ -458,7 +764,7 @@ export default {
       } else {
         try {
           this.$echo.leaveChannel("thread_" + this.thread_id);
-        } catch (e) { }
+        } catch (e) {}
       }
     },
     no_video_mode() {
@@ -478,6 +784,12 @@ export default {
     },
     no_roll_mode() {
       localStorage.setItem("no_roll_mode", this.no_roll_mode ? "true" : "");
+    },
+    no_hongbao_mode() {
+      localStorage.setItem(
+        "no_hongbao_mode",
+        this.no_hongbao_mode ? "true" : ""
+      );
     },
   },
   beforeRouteUpdate(to, from, next) {
@@ -506,6 +818,7 @@ export default {
       no_head_mode: false,
       no_battle_mode: false,
       no_roll_mode: false,
+      no_hongbao_mode: false,
 
       browse_current: {
         expire_time: Date.now() + 86400000,
@@ -571,6 +884,20 @@ export default {
         if (this.no_roll_mode == true) {
           filtered = filtered.filter((post) => {
             if (post.created_by_admin == 2 && post.nickname == "Roll点系统") {
+              return false;
+            } else {
+              return true;
+            }
+          });
+        }
+        //当屏蔽红包结果时，过滤不需要的数据
+        if (this.no_hongbao_mode == true) {
+          filtered = filtered.filter((post) => {
+            if (
+              post.created_by_admin == 2 &&
+              post.nickname == "红包结果" &&
+              !post.is_your_post
+            ) {
               return false;
             } else {
               return true;
@@ -665,7 +992,7 @@ export default {
               if (
                 this.browse_current.page == this.page &&
                 typeof this.$store.state.User.BrowseLogger[
-                this.thread_id.toString()
+                  this.thread_id.toString()
                 ] != "undefined" &&
                 scroll_enable
               ) {
@@ -811,7 +1138,7 @@ export default {
       if (
         this.browse_current.page > this.page &&
         typeof this.$store.state.User.BrowseLogger[this.thread_id.toString()] !=
-        "undefined"
+          "undefined"
       ) {
         this.jump_page_show = true; //显示阅读进度页面跳转提示
       } else {
@@ -935,9 +1262,9 @@ export default {
 
           new_post_key: CryptoJS.MD5(
             this.thread_id +
-            this.$store.state.User.Binggan +
-            timestamp +
-            content.ist
+              this.$store.state.User.Binggan +
+              timestamp +
+              content.ist
           ).toString(),
           timestamp: timestamp,
         },
@@ -1214,7 +1541,8 @@ export default {
         "no_emoji_mode",
         "no_head_mode",
         "no_battle_mode",
-        "no_roll_mode"
+        "no_roll_mode",
+        "no_hongbao_mode"
       );
       //遍历读取上述LocalStorage
       for (var i = 0; i < localStorage_array.length; i++) {
@@ -1260,7 +1588,7 @@ export default {
     try {
       //不想经常弹出错误
       this.$echo.leaveChannel("thread_" + this.thread_id);
-    } catch (e) { }
+    } catch (e) {}
   },
 };
 </script> 
