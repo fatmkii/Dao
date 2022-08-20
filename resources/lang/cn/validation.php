@@ -166,6 +166,9 @@ return [
         'my_emoji' => '表情包',
         'locked_by_coin' => '看帖权限的olo',
         'file' => '文件',
+        'hongbao_num' => '红包个数',
+        'hongbao_olo' => '红包的olo总数',
+        'key_word' => '关键词',
     ],
 
 ];

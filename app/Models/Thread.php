@@ -72,6 +72,11 @@ class Thread extends myModel
         return $this->hasOne(Crowd::class);
     }
 
+    public function Hongbao()
+    {
+        return $this->hasOne(Hongbao::class);
+    }
+
     protected function serializeDate($date)
     {
         return $date->format('Y-m-d H:i');

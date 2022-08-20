@@ -61,10 +61,13 @@ class ResponseCode
     const CROWD_HAS_BEEN_CLOSED = 284101;
     const CROWD_TOO_MANY = 28429; //超额众筹了
 
+    const HONGBAO_NOT_FOUND = 29404;
+    const HONGBAO_HAS_BEEN_CLOSED = 294101;
+
     const CAPTCHA_NOT_FOUND = 28404;
     const CAPTCHA_WRONG = 24401;
 
-    const ANNOUCEMENT_NOT_FOUND = 28404;
+    const ANNOUCEMENT_NOT_FOUND = 210404;
 
     const LOGIN_FAILED = 20001;
 
@@ -119,6 +122,9 @@ class ResponseCode
         self::CROWD_NOT_FOUND => "众筹不存在",
         self::CROWD_WAS_OUTDATE => "众筹已过期",
         self::CROWD_HAS_BEEN_CLOSED => "众筹已结束",
+        self::CROWD_NOT_FOUND => "众筹不存在",
+        self::HONGBAO_NOT_FOUND => "红包不存在",
+        self::HONGBAO_HAS_BEEN_CLOSED => "红包已经派完了",
         self::CAPTCHA_NOT_FOUND => '验证码不存在或已过期',
         self::CAPTCHA_WRONG => '验证码错误',
         self::ANNOUCEMENT_NOT_FOUND => '公告不存在',

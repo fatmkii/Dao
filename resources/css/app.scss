@@ -484,6 +484,14 @@ label.custom-file-label::after {
     @include background_color("scroller_color_hover");
 }
 
+.hongbao_input{
+    .input-group-prepend,
+    .input-group-text{
+        min-width: 100px;
+    }
+}
+
+
 [v-cloak] {
     display: none;
 }

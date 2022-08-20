@@ -154,12 +154,9 @@ class PostController extends Controller
             ]);
         }
 
-        // if (
-        //     $request->thread_id == 21574
-        //     && $request->content == "新春快乐"
-        // ) {
-        //     CommonController::post_hongbao($request, $thread, $post); //执行送红包流程
-        // }
+        if ($thread->hongbao_id != null) {
+            HongbaoController::store($request, $thread, $post); //抢红包流程（是否符合条件的判断也在里面）
+        }
 
         //用redis记录回频率。
         $user->waterRecord('new_post', $request->ip());

@@ -13,6 +13,7 @@ use App\Http\Controllers\API\BattleController;
 use App\Http\Controllers\API\VoteController;
 use App\Http\Controllers\API\GambleController;
 use App\Http\Controllers\API\CrowdController;
+use App\Http\Controllers\API\HongbaoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,6 +87,11 @@ Route::prefix('crowds')->group(function () {
     Route::get('/{crowd_id}', [CrowdController::class, 'show']); //显示众筹结果
     Route::post('', [CrowdController::class, 'store'])->middleware('CheckBinggan:create');  //用户参加众筹
     Route::post('/repeal', [CrowdController::class, 'repeal'])->middleware('auth:sanctum');  //中止众筹（只能由管理员操作）
+});
+
+//Hongbao系列
+Route::prefix('hongbao')->group(function () {
+    Route::get('/{hongbao_id}', [HongbaoController::class, 'show'])->middleware('CheckBinggan:show'); //显示红包数据
 });
 
 //User系列

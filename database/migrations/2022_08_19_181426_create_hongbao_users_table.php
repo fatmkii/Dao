@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHongbaoTable extends Migration
+class CreateHongbaoUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreateHongbaoTable extends Migration
      */
     public function up()
     {
-        Schema::create('hongbao_record', function (Blueprint $table) {
+        Schema::create('hongbao_users', function (Blueprint $table) {
             $table->id();
-            $table->integer('thread_id');
-            $table->integer('post_id');
-            $table->integer('user_id');
-            $table->string('created_binggan');
-            $table->integer('rand_num');
-            $table->integer('olo');
+            $table->foreignId('hongbao_id')->constrained('hongbao');
+            $table->foreignId('user_id')->constrained('users');
+            $table->unsignedInteger('olo');
             $table->timestamp('created_at');
         });
     }
@@ -32,6 +29,6 @@ class CreateHongbaoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hongbao');
+        Schema::dropIfExists('hongbao_users');
     }
 }

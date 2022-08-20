@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Redis;
 use App\Jobs\ProcessUserActive;
 use App\Models\Crowd;
 use App\Models\GambleQuestion;
+use App\Models\Hongbao;
 use App\Models\VoteQuestion;
 
 class ThreadController extends Controller
@@ -262,6 +263,13 @@ class ThreadController extends Controller
             if ($request->thread_type == "crowd") {
                 $crowd = new Crowd();
                 $thread->crowd_id = $crowd->create($request, $thread->id); //$crowd->create会返回id
+                $thread->save();
+            }
+
+            //追加红包贴
+            if ($request->thread_type == "hongbao") {
+                $hongbao = new Hongbao();
+                $thread->hongbao_id = $hongbao->create($request, $thread->id); //$hongbao->create会返回id
                 $thread->save();
             }
 
