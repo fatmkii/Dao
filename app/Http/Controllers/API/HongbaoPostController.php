@@ -145,8 +145,6 @@ class HongbaoPostController extends Controller
                     return;
                 }
 
-                Log::debug($hongbao_item);
-
                 //执行追加新回复流程
                 try {
                     DB::beginTransaction();
