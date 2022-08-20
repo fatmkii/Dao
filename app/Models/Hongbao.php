@@ -71,7 +71,7 @@ class Hongbao extends Model
 
         $user = $request->user;
 
-        $coin_pay = ceil($request->olo_total * 1.07);
+        $coin_pay = ceil($request->hongbao_olo * 1.07);
         $user->coinChange(
             'normal', //记录类型
             [
