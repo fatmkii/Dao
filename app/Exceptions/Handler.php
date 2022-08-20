@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use App\Exceptions\CoinException;
+use App\Common\ResponseCode;
 
 class Handler extends ExceptionHandler
 {
@@ -36,6 +38,13 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             //
+        });
+
+        $this->renderable(function (CoinException $e, $request) {
+            return response()->json([
+                'code' => ResponseCode::COIN_NOT_ENOUGH,
+                'message' => ResponseCode::$codeMap[ResponseCode::COIN_NOT_ENOUGH] . '，请确认',
+            ]);
         });
     }
 }
