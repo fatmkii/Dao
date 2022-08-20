@@ -5,7 +5,7 @@
       </span>
     </div>
     <div>
-      <span>红包关键词：“{{ hongbao_data.key_word }}”</span>
+      <span @click="quote_click">红包关键词：“{{ hongbao_data.key_word }}”</span>
     </div>
 
     <div>
@@ -82,6 +82,9 @@ export default {
         .catch((error) => {
           alert(Object.values(error.response.data.errors)[0]);
         });
+    },
+    quote_click() {
+      return this.$emit("quote_click", this.hongbao_data.key_word);
     },
   },
   created() {

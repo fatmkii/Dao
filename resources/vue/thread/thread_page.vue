@@ -104,7 +104,7 @@
           :admin_button_show="admin_button_show"></GambleComponent>
         <CrowdComponent v-if="crowd_id && posts_load_status" :crowd_id="crowd_id"
           :admin_button_show="admin_button_show"></CrowdComponent>
-        <HongbaoComponent v-if="hongbao_id && posts_load_status" :hongbao_id="hongbao_id"
+        <HongbaoComponent v-if="hongbao_id && posts_load_status" :hongbao_id="hongbao_id" @quote_click="quote_click_handle"
           :admin_button_show="admin_button_show"></HongbaoComponent>
         <div v-for="post_data in posts_data" :key="post_data.id">
           <PostItem :post_data="post_data" :thread_anti_jingfen="thread_anti_jingfen" :random_head_add="
