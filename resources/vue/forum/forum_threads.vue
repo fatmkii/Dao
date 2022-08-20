@@ -12,54 +12,34 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="thread in threads_data"
-          :key="thread.id"
-          v-show="subtitles_selected[thread.sub_title]"
-        >
+        <tr v-for="thread in threads_data" :key="thread.id" v-show="subtitles_selected[thread.sub_title]">
           <td class="text-left" :style="{ color: thread.title_color }">
             <span class="thread_sub_title"> {{ thread.sub_title }}&nbsp; </span>
-            <span
-              v-if="
-                focus_threads.hasOwnProperty(thread.id) &&
-                focus_threads[thread.id] < thread.posts_num
-              "
-              >🟠</span
-            >
+            <span v-if="
+              focus_threads.hasOwnProperty(thread.id) &&
+              focus_threads[thread.id] < thread.posts_num
+            ">🟠</span>
             <span v-if="thread.vote_question_id != null">🗳️</span>
             <span v-if="thread.gamble_question_id != null">🎲</span>
             <span v-if="thread.crowd_id != null">💰</span>
-            <router-link
-              :class="{ thread_title: !thread.is_delay }"
-              style="word-wrap: break-word; white-space: normal"
-              :is="thread.is_delay ? 'span' : 'router-link'"
-              :to="'/thread/' + thread.id + '/1'"
-              :style="{ color: thread.title_color }"
-              :target="router_target"
-            >
+            <span v-if="thread.hongbao_id != null">🧧</span>
+            <router-link :class="{ thread_title: !thread.is_delay }" style="word-wrap: break-word; white-space: normal"
+              :is="thread.is_delay ? 'span' : 'router-link'" :to="'/thread/' + thread.id + '/1'"
+              :style="{ color: thread.title_color }" :target="router_target">
               {{ thread.title }}
             </router-link>
-            <span v-if="thread.locked_by_coin > 0"
-              >🔒{{ thread.locked_by_coin }}</span
-            >
-            <router-link
-              :to="
-                '/thread/' +
-                thread.id +
-                '/' +
-                Math.ceil((thread.posts_num + 1) / 200)
-              "
-              :target="router_target"
-              v-if="thread.posts_num > 200"
-              class="thread_page ml-1"
-              >[{{ Math.ceil((thread.posts_num + 1) / 200) }}]
+            <span v-if="thread.locked_by_coin > 0">🔒{{ thread.locked_by_coin }}</span>
+            <router-link :to="
+              '/thread/' +
+              thread.id +
+              '/' +
+              Math.ceil((thread.posts_num + 1) / 200)
+            " :target="router_target" v-if="thread.posts_num > 200" class="thread_page ml-1">[{{
+    Math.ceil((thread.posts_num + 1) / 200)
+}}]
             </router-link>
-            <router-link
-              class="thread_title"
-              v-if="thread.is_your_thread"
-              @click.native="delay_thread_withdraw_handle(thread.id)"
-              to=""
-            >
+            <router-link class="thread_title" v-if="thread.is_your_thread"
+              @click.native="delay_thread_withdraw_handle(thread.id)" to="">
               [撤回]
             </router-link>
             <span v-if="thread.posts_num >= 1200">🔥</span>
@@ -71,11 +51,7 @@
         </tr>
       </tbody>
     </table>
-    <b-spinner
-      class="spinner document-loading"
-      v-show="threads_load_status == 1"
-      label="读取中"
-    >
+    <b-spinner class="spinner document-loading" v-show="threads_load_status == 1" label="读取中">
     </b-spinner>
   </div>
 </template>
