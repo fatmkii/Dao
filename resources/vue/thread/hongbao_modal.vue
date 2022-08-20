@@ -9,22 +9,43 @@
           友情提示：在红包olo总数以外，会追加扣除7%手续费。
           <br />
           总共扣除：
-          <span style="color: red">{{ Math.ceil(hongbao_olo * 1.07) }} </span>块奥利奥。
+          <span style="color: red">{{ Math.ceil(hongbao_olo * 1.07) }} </span
+          >块奥利奥。
         </p>
         <b-input-group prepend="红包个数" class="mt-2">
-          <b-form-input v-model="hongbao_num" placeholder="红包个数"></b-form-input>
+          <b-form-input
+            v-model="hongbao_num"
+            placeholder="红包个数"
+          ></b-form-input>
         </b-input-group>
         <b-input-group prepend="olo总数" class="mt-2">
-          <b-form-input v-model="hongbao_olo" placeholder="olo总数"></b-form-input>
+          <b-form-input
+            v-model="hongbao_olo"
+            placeholder="olo总数"
+          ></b-form-input>
         </b-input-group>
         <b-input-group prepend="红包口令" class="mt-2">
-          <b-form-input v-model="hongbao_key_word" placeholder="必填"></b-form-input>
+          <b-form-input
+            v-model="hongbao_key_word"
+            placeholder="必填"
+          ></b-form-input>
+        </b-input-group>
+        <b-input-group prepend="回复留言" class="mt-2">
+          <b-form-input
+            v-model="hongbao_message"
+            placeholder="可选"
+          ></b-form-input>
         </b-input-group>
       </div>
     </template>
     <template v-slot:modal-footer="{ cancel }">
       <b-button-group>
-        <b-button :variant="button_theme" :disabled="hongbao_handling" @click="hongbao_handle">提交</b-button>
+        <b-button
+          :variant="button_theme"
+          :disabled="hongbao_handling"
+          @click="hongbao_handle"
+          >提交</b-button
+        >
         <b-button variant="outline-secondary" @click="cancel()">
           取消
         </b-button>
@@ -37,7 +58,7 @@
 <script>
 import { mapState } from "vuex";
 export default {
-  name: 'hongbao_modal',
+  name: "hongbao_modal",
   components: {},
   props: {},
   data: function () {
@@ -45,6 +66,7 @@ export default {
       hongbao_olo: "",
       hongbao_num: undefined,
       hongbao_key_word: undefined,
+      hongbao_message: "",
       hongbao_handling: false,
     };
   },
@@ -61,7 +83,7 @@ export default {
           : 0,
     }),
   },
-  created() { },
+  created() {},
   methods: {
     hongbao_handle() {
       this.hongbao_handling = true;
@@ -76,6 +98,7 @@ export default {
           hongbao_num: this.hongbao_num,
           type: 1,
           hongbao_key_word: this.hongbao_key_word,
+          hongbao_message: this.hongbao_message,
         },
       };
       axios(config)

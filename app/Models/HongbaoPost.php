@@ -77,6 +77,7 @@ class HongbaoPost extends Model
             'hongbao_num' => 'required|integer|min:1|max:50',
             'type' => 'required|integer',
             'hongbao_key_word' => 'required|string|max:255',
+            'hongbao_message' => 'nullable|string|max:255',
         ]);
 
         $user = $request->user;
@@ -102,6 +103,7 @@ class HongbaoPost extends Model
         $this->num_remains = $request->hongbao_num;
         $this->type = $request->type;
         $this->key_word = $request->hongbao_key_word;
+        $this->message = $request->hongbao_message;
         $this->save();
 
         return $this->id;

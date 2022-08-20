@@ -93,6 +93,9 @@ class HongbaoController extends Controller
                     $message = sprintf("你抢到了%d个奥利奥！", $coin);
                 }
                 $message = "To №" . $post_original->floor . "：" . $message;
+                if ($hongbao->message) {
+                    $message = $message . '<br>——' . $hongbao->message;
+                }
 
                 $hongbao->olo_remains -= $coin;
                 $hongbao->num_remains -= 1;

@@ -22,6 +22,7 @@ class CreateHongbaoTable extends Migration
             $table->unsignedInteger('olo_remains');
             $table->unsignedTinyInteger('type')->default(1); //1=口令红包
             $table->string('key_word');
+            $table->string('message')->nullable();
             $table->timestamps();
         });
     }
