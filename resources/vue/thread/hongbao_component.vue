@@ -1,9 +1,6 @@
 <template>
   <div class="hongbao-content align-items-center" v-if="!get_hongbao_data_handling">
-    <div class="hongbao-title my-2" ref="hongbao-title">
-      <span style="word-wrap: break-word; white-space: normal">抢红包啦！
-      </span>
-    </div>
+
     <div>
       <span @click="quote_click">红包关键词：“{{ hongbao_data.key_word }}”</span>
     </div>
@@ -13,6 +10,10 @@
     </div>
     <div>
       <span>剩余红包：（{{ hongbao_data.num_remains }} / {{ hongbao_data.num_total }}）</span>
+    </div>
+    <div v-if="hongbao_data.hongbao_user">
+      <span>你抢到了{{ hongbao_data.hongbao_user.olo }}个olo！
+      </span>
     </div>
     <div class="d-flex flex-wrap">
       <img src="/hongbao.svg" class="mt-1" v-for="i in num_remains_array" :key="i.key">

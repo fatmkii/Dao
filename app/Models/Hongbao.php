@@ -23,6 +23,11 @@ class Hongbao extends Model
         'created_at',
     ];
 
+    protected $appends = [
+        'hongbao_user',
+    ];
+
+
     public function HongbaoUser()
     {
         return $this->hasMany(HongbaoUser::class);
@@ -49,9 +54,7 @@ class Hongbao extends Model
             $hongbao_user = HongbaoUser::where('user_id', $this->user_id)->where('hongbao_id', $this->id)->first();
 
             if ($hongbao_user) {
-                return [
-                    'hong_user' => $hongbao_user,
-                ];
+                return $hongbao_user;
             } else {
                 return null;
             }
