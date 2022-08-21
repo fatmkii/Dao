@@ -24,6 +24,7 @@ use App\Models\UserMessages;
 use Exception;
 use App\Events\NewPostBroadcast;
 
+
 class UserController extends Controller
 {
     //UserLV相关
@@ -134,7 +135,7 @@ class UserController extends Controller
         }
 
         //如果持有管理员token，使admin属性暴露，追加admin_forums属性
-        if ($user->tokenCan('admin')) {
+        if ($user->tokenCan('forum_admin')) {
             $user->makeVisible('admin');
             $user->append('admin_forums');
         }

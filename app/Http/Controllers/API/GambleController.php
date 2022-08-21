@@ -299,6 +299,15 @@ class GambleController extends Controller
             ]);
         }
 
+        //检查管理员权限
+        if (!in_array($user->admin, [99, 10])) {
+            return response()->json(
+                [
+                    'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+                    'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+                ],
+            );
+        }
 
         try {
             DB::beginTransaction();
@@ -388,6 +397,17 @@ class GambleController extends Controller
                 'message' => ResponseCode::$codeMap[ResponseCode::GAMBLE_HAS_BEEN_CLOSED],
             ]);
         }
+
+        //检查管理员权限
+        if (!in_array($user->admin, [99, 10])) {
+            return response()->json(
+                [
+                    'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+                    'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+                ],
+            );
+        }
+
         try {
             DB::beginTransaction();
             if (Carbon::parse($gamble_question->end_date) > Carbon::now()) {

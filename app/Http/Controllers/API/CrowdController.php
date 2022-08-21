@@ -201,6 +201,16 @@ class CrowdController extends Controller
             ]);
         }
 
+        //检查管理员权限
+        if (!in_array($user->admin, [99, 10])) {
+            return response()->json(
+                [
+                    'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+                    'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+                ],
+            );
+        }
+
         //检查菠菜是否已关闭
         if ($crowd->is_closed != 0) {
             return response()->json([

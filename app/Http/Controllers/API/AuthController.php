@@ -84,7 +84,7 @@ class AuthController extends Controller
         $binggan  = $request->get('binggan');
 
 
-        $user = request()->user();
+        $user = $request->user();
 
         if (isset($user)) {
             if ($binggan !== $user->binggan) {
@@ -99,7 +99,7 @@ class AuthController extends Controller
                     401,
                 );
             } else {
-                $request->user()->currentAccessToken()->delete();
+                $user->currentAccessToken()->delete();
                 return response()->json(
                     [
                         'code' => ResponseCode::SUCCESS,
@@ -165,14 +165,17 @@ class AuthController extends Controller
 
         //为管理员颁发token
         switch ($user->admin) {
-            case 0:
+            case 0: //非管理员
                 $token = $user->createToken($binggan, ['normal'])->plainTextToken;
                 break;
-            case 1:
-                $token = $user->createToken($binggan, ['admin'])->plainTextToken;
+            case 1: //专岛管理员
+                $token = $user->createToken($binggan, ['forum_admin'])->plainTextToken;
                 break;
-            case 99:
-                $token = $user->createToken($binggan, ['super_admin', 'admin'])->plainTextToken;
+            case 10: //一般管理员
+                $token = $user->createToken($binggan, ['forum_admin,', 'admin'])->plainTextToken;
+                break;
+            case 99: //超级管理员
+                $token = $user->createToken($binggan, ['forum_admin,', 'admin', 'super_admin'])->plainTextToken;
                 break;
             default:
                 $token = $user->createToken($binggan, ['normal'])->plainTextToken;

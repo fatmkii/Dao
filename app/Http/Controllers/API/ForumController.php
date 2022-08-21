@@ -108,7 +108,7 @@ class ForumController extends Controller
                     'message' => '本小岛需要饼干才能查看喔',
                 ]);
             }
-            if ($user->coin < $CurrentForum->accessible_coin && $user->admin == 0) {
+            if ($user->coin < $CurrentForum->accessible_coin && !(in_array($user->admin, [99, 10]))) {
                 return response()->json([
                     'code' => ResponseCode::THREAD_UNAUTHORIZED,
                     'message' => sprintf("本小岛需要拥有大于%u奥利奥才能查看喔", $CurrentForum->accessible_coin),
@@ -211,7 +211,7 @@ class ForumController extends Controller
                     'message' => '本小岛需要饼干才能查看喔',
                 ]);
             }
-            if ($user->coin < $CurrentForum->accessible_coin && $user->admin == 0) {
+            if ($user->coin < $CurrentForum->accessible_coin && !(in_array($user->admin, [99, 10]))) {
                 return response()->json([
                     'code' => ResponseCode::THREAD_UNAUTHORIZED,
                     'message' => sprintf("本小岛需要拥有大于%u奥利奥才能查看喔", $CurrentForum->accessible_coin),

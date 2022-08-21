@@ -140,7 +140,7 @@
           >
             {{ thread_sub_id === 0 ? "置顶" : "取消置顶" }}
           </b-button>
-          <b-button
+          <!-- <b-button
             class="ml-1"
             size="sm"
             variant="warning"
@@ -149,7 +149,7 @@
             @click="check_jingfen_admin"
           >
             反精分
-          </b-button>
+          </b-button> -->
           <b-button
             class="ml-1"
             size="sm"

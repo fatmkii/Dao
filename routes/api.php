@@ -117,7 +117,7 @@ Route::prefix('user')->group(function () {
 
 
 //Admin系列
-Route::middleware('CheckTokenCan:admin', 'auth:sanctum')->prefix('admin')->group(function () {
+Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::post('/thread_delete', [AdminController::class, 'thread_delete']); //删主题
     Route::delete('/post_delete/{post_id}', [AdminController::class, 'post_delete']); //删帖
     Route::put('/post_recover/{post_id}', [AdminController::class, 'post_recover']); //恢复帖子
