@@ -1,6 +1,5 @@
 <template>
   <div class="hongbao-content align-items-center">
-
     <div>
       <span @click="quote_click">红包口令：“{{ hongbao_data.key_word }}”</span>
     </div>
@@ -9,11 +8,13 @@
       <span>红包总olo：{{ hongbao_data.olo_total }}个</span>
     </div>
     <div>
-      <span>剩余红包：（{{ hongbao_data.num_remains }} / {{ hongbao_data.num_total }}）</span>
+      <span
+        >剩余红包：（{{ hongbao_data.num_remains }} /
+        {{ hongbao_data.num_total }}）</span
+      >
     </div>
     <div v-if="hongbao_data.hongbao_user">
-      <span>你抢到了{{ hongbao_data.hongbao_user.olo }}个olo！
-      </span>
+      <span>你抢到了{{ hongbao_data.hongbao_user.olo }}个olo！ </span>
     </div>
   </div>
 </template>
@@ -29,9 +30,7 @@ export default {
     },
   },
   data: function () {
-    return {
-
-    };
+    return {};
   },
   computed: {
     button_theme() {
@@ -40,7 +39,11 @@ export default {
   },
   methods: {
     quote_click() {
-      return this.$emit("quote_click", this.hongbao_data.key_word);
+      const keyword_prefix = "--红包口令: "; //为了方便前端识别并屏蔽，增加前缀
+      return this.$emit(
+        "quote_click",
+        keyword_prefix + this.hongbao_data.key_word
+      );
     },
   },
 };

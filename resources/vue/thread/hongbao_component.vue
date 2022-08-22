@@ -1,6 +1,8 @@
 <template>
-  <div class="hongbao-content align-items-center" v-if="!get_hongbao_data_handling">
-
+  <div
+    class="hongbao-content align-items-center"
+    v-if="!get_hongbao_data_handling"
+  >
     <div>
       <span @click="quote_click">红包口令：“{{ hongbao_data.key_word }}”</span>
     </div>
@@ -9,15 +11,27 @@
       <span>红包总olo：{{ hongbao_data.olo_total }}个</span>
     </div>
     <div>
-      <span>剩余红包：（{{ hongbao_data.num_remains }} / {{ hongbao_data.num_total }}）</span>
+      <span
+        >剩余红包：（{{ hongbao_data.num_remains }} /
+        {{ hongbao_data.num_total }}）</span
+      >
     </div>
     <div v-if="hongbao_data.hongbao_user">
-      <span>你抢到了{{ hongbao_data.hongbao_user.olo }}个olo！
-      </span>
+      <span>你抢到了{{ hongbao_data.hongbao_user.olo }}个olo！ </span>
     </div>
     <div class="d-flex flex-wrap">
-      <img src="/hongbao.svg" class="mt-1" v-for="i in num_remains_array" :key="i.key">
-      <img src="/hongbao_disable.svg" class="mt-1" v-for="i in num_consumed_array" :key="i.key">
+      <img
+        src="/hongbao.svg"
+        class="mt-1"
+        v-for="i in num_remains_array"
+        :key="i.key"
+      />
+      <img
+        src="/hongbao_disable.svg"
+        class="mt-1"
+        v-for="i in num_consumed_array"
+        :key="i.key"
+      />
     </div>
   </div>
 </template>
@@ -55,10 +69,13 @@ export default {
       return this.$store.state.Forums.CurrentForumData.id;
     },
     num_remains_array() {
-      return Array.from(Array(this.hongbao_data.num_remains), (v, k) => k)
+      return Array.from(Array(this.hongbao_data.num_remains), (v, k) => k);
     },
     num_consumed_array() {
-      return Array.from(Array(this.hongbao_data.num_total - this.hongbao_data.num_remains), (v, k) => k)
+      return Array.from(
+        Array(this.hongbao_data.num_total - this.hongbao_data.num_remains),
+        (v, k) => k
+      );
     },
   },
   methods: {
@@ -85,7 +102,11 @@ export default {
         });
     },
     quote_click() {
-      return this.$emit("quote_click", this.hongbao_data.key_word);
+      const keyword_prefix = "--红包口令: "; //为了方便前端识别并屏蔽，增加前缀
+      return this.$emit(
+        "quote_click",
+        keyword_prefix + this.hongbao_data.key_word
+      );
     },
   },
   created() {

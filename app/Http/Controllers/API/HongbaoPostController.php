@@ -104,7 +104,7 @@ class HongbaoPostController extends Controller
             //追加红包贴
             $hongbao = new HongbaoPost();
             $post->hongbao_id = $hongbao->create($request, $thread->id, $post->id, $post->floor);
-            $post->save();//前面要先save一次才有post_id
+            $post->save(); //前面要先save一次才有post_id
 
             DB::commit();
         } catch (QueryException $e) {
@@ -138,8 +138,8 @@ class HongbaoPostController extends Controller
 
         $hongbaos->each(function ($hongbao_item, $key) use ($post_original, $request, $thread, $user) {
 
-
-            if ($hongbao_item->type == 1 && $post_original->content == $hongbao_item->key_word) {
+            $keyword_prefix = '--红包口令: '; //为了方便前端识别并屏蔽，增加前缀
+            if ($hongbao_item->type == 1 && $post_original->content == $keyword_prefix . $hongbao_item->key_word) {
 
                 $hongbao_user_exists  = HongbaoPostUser::where('hongbao_post_id', $hongbao_item->id)->where('user_id', $user->id)->exists();
                 if ($hongbao_user_exists) {

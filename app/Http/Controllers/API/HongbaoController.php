@@ -50,7 +50,8 @@ class HongbaoController extends Controller
             return;
         }
 
-        if ($hongbao->type == 1 && $post_original->content == $hongbao->key_word) {
+        $keyword_prefix = '--红包口令: '; //为了方便前端识别并屏蔽，增加前缀
+        if ($hongbao->type == 1 && $post_original->content == $keyword_prefix . $hongbao->key_word) {
 
             $hongbao_user_exists  = HongbaoUser::where('hongbao_id', $thread->hongbao_id)->where('user_id', $user->id)->exists();
             if ($hongbao_user_exists) {
