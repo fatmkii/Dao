@@ -193,7 +193,7 @@ class Post extends myModel
     public function getHongbaoDataAttribute()
     {
         if ($this->hongbao_id) {
-            $hongbao = HongbaoPost::find($this->hongbao_id);
+            $hongbao = HongbaoPost::withTrashed()->find($this->hongbao_id);
             if ($hongbao) {
                 //如果有提供user_id，为HongbaoPost输入user_id，用来判断hongbao结果
                 if ($this->user_id) {
