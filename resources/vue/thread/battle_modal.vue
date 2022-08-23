@@ -121,28 +121,29 @@ export default {
           chara_id: this.battle_chara_id,
         },
       };
-      axios(config).then((response) => {
-        if (response.data.code == 200) {
-          this.$bvToast.toast(response.data.message, {
-            title: "Done.",
-            autoHideDelay: 1500,
-            appendToast: true,
-          });
+      axios(config)
+        .then((response) => {
+          if (response.data.code == 200) {
+            this.$bvToast.toast(response.data.message, {
+              title: "Done.",
+              autoHideDelay: 1500,
+              appendToast: true,
+            });
+            this.battle_handing = false;
+            this.$refs["battle_modal"].hide();
+            this.$parent.get_posts_data();
+          } else if (response.data.code == 244291) {
+            this.battle_handing = false;
+            this.$parent.show_captcha();
+          } else {
+            this.battle_handing = false;
+            alert(response.data.message);
+          }
+        })
+        .catch((error) => {
           this.battle_handing = false;
-          this.$refs["battle_modal"].hide();
-          this.$parent.get_posts_data();
-        } else if (response.data.code == 244291) {
-          this.battle_handing = false;
-          this.$parent.show_captcha();
-        } else {
-          this.battle_handing = false;
-          alert(response.data.message);
-        }
-      });
-      // .catch((error) => {
-      //   this.battle_handing = false;
-      //   alert(Object.values(error.response.data.errors)[0]);
-      // });
+          alert(Object.values(error.response.data.errors)[0]);
+        });
     },
     toggle() {
       this.$refs["battle_modal"].toggle();
