@@ -1584,6 +1584,9 @@ export default {
     window.addEventListener("beforeunload", this.browse_record_handle);
     window.addEventListener("scroll", this.scroll_watch);
     window.addEventListener("keyup", this.keyup_callee);
+
+    this.roll_handling = false;
+    this.my_emoji_set_handling = false;
   },
   deactivated() {
     this.search_input = ""; //不然每次进入页面都带有search

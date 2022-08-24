@@ -126,5 +126,8 @@ export default {
       this.$refs["hongbao_modal"].toggle();
     },
   },
+  activated() {
+    this.hongbao_handling = false;
+  },
 };
 </script>

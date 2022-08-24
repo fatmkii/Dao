@@ -149,5 +149,8 @@ export default {
       this.$refs["battle_modal"].toggle();
     },
   },
+  activated() {
+    this.battle_handing = false;
+  },
 };
 </script>
