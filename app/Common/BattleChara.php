@@ -564,10 +564,6 @@ class BattleChara
                 return random_int(1, 101);          
             default:
                 return random_int(1, 100);
-            case 3: 
-                return random_int(80, 100);    
-            default:
-                return random_int(1, 100);
         }
     }
 }
