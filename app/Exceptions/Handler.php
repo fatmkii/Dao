@@ -6,6 +6,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use App\Exceptions\CoinException;
 use App\Common\ResponseCode;
+use Illuminate\Database\QueryException;
 
 class Handler extends ExceptionHandler
 {
@@ -40,10 +41,19 @@ class Handler extends ExceptionHandler
             //
         });
 
-        $this->renderable(function (CoinException $e, $request) {
+        //已经由CoinException自定义异常类那边渲染了
+        // $this->renderable(function (CoinException $e, $request) {
+        //     return response()->json([
+        //         'code' => ResponseCode::COIN_NOT_ENOUGH,
+        //         'message' => ResponseCode::$codeMap[ResponseCode::COIN_NOT_ENOUGH] . '，请确认',
+        //     ]);
+        // });
+
+        $this->renderable(function (QueryException $e, $request) {
             return response()->json([
-                'code' => ResponseCode::COIN_NOT_ENOUGH,
-                'message' => ResponseCode::$codeMap[ResponseCode::COIN_NOT_ENOUGH] . '，请确认',
+                'code' => ResponseCode::DATABASE_FAILED,
+                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试。',
+                'error_message' => $e->getMessage(),
             ]);
         });
     }

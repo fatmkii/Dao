@@ -285,12 +285,9 @@ class UserController extends Controller
             }
 
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
+            throw $e;
         }
         $token = $user->createToken($binggan, ['normal'])->plainTextToken;
         //用redis记录饼干申请ip。限定7天内只能申请1次。
@@ -447,20 +444,9 @@ class UserController extends Controller
             ); //通过统一接口、记录操作  
 
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
-        } catch (CoinException $e) {
-            DB::rollback();
-            return response()->json(
-                [
-                    'code' => ResponseCode::COIN_NOT_ENOUGH,
-                    'message' => ResponseCode::$codeMap[ResponseCode::COIN_NOT_ENOUGH],
-                ],
-            );
+            throw $e;
         }
 
         //广播发帖动作
@@ -551,14 +537,10 @@ class UserController extends Controller
             $user->save();
             $pingbici->save();
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
+            throw $e;
         }
-
         return response()->json(
             [
                 'code' => ResponseCode::SUCCESS,
@@ -614,12 +596,9 @@ class UserController extends Controller
             $my_emoji->emojis = $request->my_emoji;
             $my_emoji->save();
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
+            throw $e;
         }
 
         ProcessUserActive::dispatch(
@@ -691,12 +670,9 @@ class UserController extends Controller
             $my_emoji->emojis = json_encode($my_emoji_array);
             $my_emoji->save();
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
+            throw $e;
         }
 
         ProcessUserActive::dispatch(
@@ -899,24 +875,9 @@ class UserController extends Controller
             $user->save();
 
             DB::commit();
-        } catch (QueryException $e) {
-            DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
-        } catch (CoinException $e) {
-            DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::COIN_NOT_ENOUGH,
-                'message' => ResponseCode::$codeMap[ResponseCode::COIN_NOT_ENOUGH],
-            ],);
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::USER_CANNOT,
-                'message' => $e->getMessage(),
-            ]);
+            throw $e;
         }
 
         return response()->json(

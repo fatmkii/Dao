@@ -17,6 +17,7 @@ use App\Models\GambleUser;
 use App\Models\GambleOption;
 use App\Models\GambleQuestion;
 use Carbon\Carbon;
+use Exception;
 
 class GambleController extends Controller
 {
@@ -159,20 +160,9 @@ class GambleController extends Controller
             $thread->save();
             $post->save();
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
-        } catch (CoinException $e) {
-            DB::rollback();
-            return response()->json(
-                [
-                    'code' => ResponseCode::COIN_NOT_ENOUGH,
-                    'message' => ResponseCode::$codeMap[ResponseCode::COIN_NOT_ENOUGH],
-                ],
-            );
+            throw $e;
         }
 
         ProcessUserActive::dispatch(
@@ -337,12 +327,9 @@ class GambleController extends Controller
             $thread->save();
             $post->save();
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
+            throw $e;
         }
         //发放所有投票结果
         ProcessGambleClose::dispatch(
@@ -436,12 +423,9 @@ class GambleController extends Controller
             $thread->save();
             $post->save();
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
+            throw $e;
         }
         //中止菠菜，所有olo原路返回
         ProcessGambleRepeal::dispatch(

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\QueryException;
 
 class BattlePolling extends Command
@@ -71,7 +72,7 @@ class BattlePolling extends Command
                 ->where('updated_at', "<", Carbon::now()->addMinutes(-5))
                 ->update(['progress' => 3],);
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
             return false;
         }

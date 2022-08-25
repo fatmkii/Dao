@@ -11,6 +11,7 @@ use App\Models\HongbaoUser;
 use App\Models\User;
 use App\Models\Thread;
 use App\Models\Post;
+use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
@@ -146,10 +147,7 @@ class HongbaoController extends Controller
                 $hongbao_user->save();
 
                 DB::commit();
-            } catch (QueryException $e) {
-                DB::rollback();
-                throw $e;
-            } catch (CoinException $e) {
+            } catch (Exception $e) {
                 DB::rollback();
                 throw $e;
             }

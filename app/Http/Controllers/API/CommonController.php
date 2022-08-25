@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Redis;
 use App\Models\Post;
 use App\Models\Thread;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
@@ -312,8 +313,9 @@ class CommonController extends Controller
                 ]);
             }
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
+            throw $e;
         }
     }
 

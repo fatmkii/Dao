@@ -4,21 +4,16 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Exceptions\CoinException;
 use Illuminate\Support\Facades\DB;
 use App\Models\Forum;
 use App\Models\Post;
 use App\Models\Thread;
-use Illuminate\Database\QueryException;
 use App\Common\ResponseCode;
 use App\Events\NewPostBroadcast;
-use App\Models\User;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redis;
 use App\Jobs\ProcessUserActive;
-use App\Jobs\ProcessIncomeStatement;
 use App\Models\HongbaoPost;
 use Carbon\Carbon;
+use Exception;
 
 class PostController extends Controller
 {
@@ -147,12 +142,9 @@ class PostController extends Controller
             $user->nickname = $request->nickname; //记录昵称
             $user->save();
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
+            throw $e;
         }
 
         if ($thread->hongbao_id != null) {
@@ -418,20 +410,9 @@ class PostController extends Controller
             $post->is_deleted = 1;
             $post->save();
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
-        } catch (CoinException $e) {
-            DB::rollback();
-            return response()->json(
-                [
-                    'code' => ResponseCode::COIN_NOT_ENOUGH,
-                    'message' => ResponseCode::$codeMap[ResponseCode::COIN_NOT_ENOUGH],
-                ],
-            );
+            throw $e;
         }
 
         ProcessUserActive::dispatch(
@@ -513,20 +494,9 @@ class PostController extends Controller
             $post->is_deleted = 0;
             $post->save();
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
-        } catch (CoinException $e) {
-            DB::rollback();
-            return response()->json(
-                [
-                    'code' => ResponseCode::COIN_NOT_ENOUGH,
-                    'message' => ResponseCode::$codeMap[ResponseCode::COIN_NOT_ENOUGH],
-                ],
-            );
+            throw $e;
         }
 
         ProcessUserActive::dispatch(
@@ -602,12 +572,9 @@ class PostController extends Controller
             $thread->save();
             $post->save();
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
+            throw $e;
         }
 
         //广播发帖动作

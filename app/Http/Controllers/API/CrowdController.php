@@ -15,6 +15,7 @@ use Illuminate\Database\QueryException;
 use App\Exceptions\CoinException;
 use App\Jobs\ProcessUserActive;
 use App\Jobs\ProcessCrowdRepeal;
+use Exception;
 
 class CrowdController extends Controller
 {
@@ -135,20 +136,9 @@ class CrowdController extends Controller
                 ]
             ); //扣除用户相应olo（通过统一接口、记录操作）
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
-        } catch (CoinException $e) {
-            DB::rollback();
-            return response()->json(
-                [
-                    'code' => ResponseCode::COIN_NOT_ENOUGH,
-                    'message' => ResponseCode::$codeMap[ResponseCode::COIN_NOT_ENOUGH],
-                ],
-            );
+            throw $e;
         }
 
 
@@ -245,12 +235,9 @@ class CrowdController extends Controller
             $thread->save();
             $post->save();
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
+            throw $e;
         }
         //中止菠菜，所有olo原路返回
         ProcessCrowdRepeal::dispatch(

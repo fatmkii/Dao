@@ -13,6 +13,7 @@ use App\Models\Thread;
 use App\Models\User;
 use App\Models\UserActive;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
@@ -486,12 +487,9 @@ class AdminController extends Controller
             $forum->banners = $request->banners;
             $forum->save();
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
+            throw $e;
         }
 
         //要清除板块的缓存
@@ -652,12 +650,9 @@ class AdminController extends Controller
             }
 
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
+            throw $e;
         }
 
 

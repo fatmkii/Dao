@@ -19,6 +19,7 @@ use App\Jobs\ProcessIncomeStatement;
 use App\Models\Thread;
 use Illuminate\Support\Carbon;
 use App\Events\NewPostBroadcast;
+use Exception;
 
 class BattleController extends Controller
 {
@@ -111,20 +112,9 @@ class BattleController extends Controller
             $user->coinConsume($request->battle_olo);
 
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
-        } catch (CoinException $e) {
-            DB::rollback();
-            return response()->json(
-                [
-                    'code' => ResponseCode::COIN_NOT_ENOUGH,
-                    'message' => ResponseCode::$codeMap[ResponseCode::COIN_NOT_ENOUGH],
-                ],
-            );
+            throw $e;
         }
 
         $user->waterRecord('new_post', $request->ip()); //用redis记录发帖频率。
@@ -357,20 +347,9 @@ class BattleController extends Controller
             );
 
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
-        } catch (CoinException $e) {
-            DB::rollback();
-            return response()->json(
-                [
-                    'code' => ResponseCode::COIN_NOT_ENOUGH,
-                    'message' => ResponseCode::$codeMap[ResponseCode::COIN_NOT_ENOUGH],
-                ],
-            );
+            throw $e;
         }
 
         switch ($battle_result) {
@@ -625,22 +604,10 @@ class BattleController extends Controller
             $battle->save();
 
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
-        } catch (CoinException $e) {
-            DB::rollback();
-            return response()->json(
-                [
-                    'code' => ResponseCode::COIN_NOT_ENOUGH,
-                    'message' => ResponseCode::$codeMap[ResponseCode::COIN_NOT_ENOUGH],
-                ],
-            );
+            throw $e;
         }
-
 
         ProcessUserActive::dispatch(
             [

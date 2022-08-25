@@ -20,6 +20,7 @@ use App\Models\Crowd;
 use App\Models\GambleQuestion;
 use App\Models\Hongbao;
 use App\Models\VoteQuestion;
+use Exception;
 
 class ThreadController extends Controller
 {
@@ -281,20 +282,9 @@ class ThreadController extends Controller
             $user->save();
 
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
-        } catch (CoinException $e) {
-            DB::rollback();
-            return response()->json(
-                [
-                    'code' => ResponseCode::COIN_NOT_ENOUGH,
-                    'message' => ResponseCode::$codeMap[ResponseCode::COIN_NOT_ENOUGH],
-                ],
-            );
+            throw $e;
         }
 
         $user->waterRecord('new_thread', $request->ip()); //用redis记录发帖频率。
@@ -602,12 +592,9 @@ class ThreadController extends Controller
             $CurrentThread->is_deleted = 1;
             $CurrentThread->save();
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
+            throw $e;
         }
 
         return response()->json([
@@ -666,14 +653,10 @@ class ThreadController extends Controller
                 ]
             ); //扣除用户相应olo（通过统一接口、记录操作）
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
+            throw $e;
         }
-
         return response()->json([
             'code' => ResponseCode::SUCCESS,
             'message' => '已变更标题颜色为' . $request->color,

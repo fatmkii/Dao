@@ -15,6 +15,7 @@ use App\Exceptions\CoinException;
 use App\Models\HongbaoPost;
 use App\Models\HongbaoPostUser;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\Log;
 
 class HongbaoPostController extends Controller
@@ -108,12 +109,9 @@ class HongbaoPostController extends Controller
             $post->save(); //前面要先save一次才有post_id
 
             DB::commit();
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试',
-            ]);
+            throw $e;
         }
 
         //广播发帖动作
@@ -219,10 +217,7 @@ class HongbaoPostController extends Controller
                     $hongbao_user->save();
 
                     DB::commit();
-                } catch (QueryException $e) {
-                    DB::rollback();
-                    throw $e;
-                } catch (CoinException $e) {
+                } catch (Exception $e) {
                     DB::rollback();
                     throw $e;
                 }
