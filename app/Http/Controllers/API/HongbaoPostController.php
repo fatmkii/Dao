@@ -11,6 +11,7 @@ use App\Common\ResponseCode;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 use App\Events\NewPostBroadcast;
+use App\Exceptions\CoinException;
 use App\Models\HongbaoPost;
 use App\Models\HongbaoPostUser;
 use Carbon\Carbon;
@@ -139,7 +140,7 @@ class HongbaoPostController extends Controller
         $hongbaos->each(function ($hongbao_item, $key) use ($post_original, $request, $thread, $user) {
 
             $keyword_prefix = '--红包口令: '; //为了方便前端识别并屏蔽，增加前缀
-            if ($hongbao_item->type == 1 && $post_original->content == $keyword_prefix . $hongbao_item->key_word) {
+            if (in_array($hongbao_item->type, [1, 2]) && $post_original->content == $keyword_prefix . $hongbao_item->key_word) {
 
                 $hongbao_user_exists  = HongbaoPostUser::where('hongbao_post_id', $hongbao_item->id)->where('user_id', $user->id)->exists();
                 if ($hongbao_user_exists) {
@@ -162,8 +163,12 @@ class HongbaoPostController extends Controller
                         $coin = $hongbao->olo_remains;
                         $message = sprintf("恭喜抢到最后一个红包，有%d个奥利奥！", $coin);
                     } else {
-                        $central = intval($hongbao->olo_remains / $hongbao->num_remains);
-                        $coin = rand(1, $central * 2);
+                        if ($hongbao->type == 1) {
+                            $central = intval($hongbao->olo_remains / $hongbao->num_remains);
+                            $coin = rand(1, $central * 2);
+                        } elseif ($hongbao->type == 2) {
+                            $coin = intval($hongbao->olo_total / $hongbao->num_total);
+                        }
                         $message = sprintf("你抢到了%d个奥利奥！",  $coin);
                     }
                     $message = "To №" . $post_original->floor . "：" . $message;
@@ -215,6 +220,9 @@ class HongbaoPostController extends Controller
 
                     DB::commit();
                 } catch (QueryException $e) {
+                    DB::rollback();
+                    throw $e;
+                } catch (CoinException $e) {
                     DB::rollback();
                     throw $e;
                 }

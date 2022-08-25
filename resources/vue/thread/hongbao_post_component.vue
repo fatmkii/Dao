@@ -3,9 +3,8 @@
     <div>
       <span @click="quote_click">红包口令：“{{ hongbao_data.key_word }}”</span>
     </div>
-
     <div>
-      <span>红包总olo：{{ hongbao_data.olo_total }}个</span>
+      <span>红包总olo：{{ hongbao_data.olo_total }}个（{{ hongbao_type_text }}）</span>
     </div>
     <div>
       <span
@@ -35,6 +34,17 @@ export default {
   computed: {
     button_theme() {
       return this.$store.getters.ButtonTheme;
+    },
+    hongbao_type_text() {
+      if (this.hongbao_data) {
+        if (this.hongbao_data.type == 1) {
+          return "随机红包";
+        } else if (this.hongbao_data.type == 2) {
+          return "定额红包";
+        }
+      } else {
+        return "";
+      }
     },
   },
   methods: {

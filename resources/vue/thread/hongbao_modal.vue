@@ -6,11 +6,18 @@
     <template v-slot:default>
       <div class="hongbao_input">
         <p>
-          友情提示：在红包olo总数以外，会追加扣除7%手续费。
+          友情提示：在红包olo总数以外，会追加扣除7%手续费
           <br />
-          总共扣除：
+          总共扣除：合计
           <span style="color: red">{{ Math.ceil(hongbao_olo * 1.07) }} </span
-          >块奥利奥。
+          >块奥利奥
+          <span v-show="hongbao_type == 2"
+            ><br />
+            <span>
+              定额红包：每个<span style="color: red">{{ hongbao_quota }}</span
+              >奥利奥</span
+            ></span
+          >
         </p>
         <b-input-group prepend="红包个数" class="mt-2">
           <b-form-input
@@ -35,6 +42,14 @@
             v-model="hongbao_message"
             placeholder="可选"
           ></b-form-input>
+        </b-input-group>
+        <b-input-group prepend="红包类型" class="mt-2">
+          <b-form-select
+            v-model="hongbao_type"
+            :options="hongbao_type_options"
+            value-field="value"
+            text-field="text"
+          ></b-form-select>
         </b-input-group>
       </div>
     </template>
@@ -68,11 +83,23 @@ export default {
       hongbao_key_word: undefined,
       hongbao_message: "",
       hongbao_handling: false,
+      hongbao_type: 1,
+      hongbao_type_options: [
+        { value: 1, text: "随机红包" },
+        { value: 2, text: "定额红包" },
+      ],
     };
   },
   computed: {
     button_theme() {
       return this.$store.getters.ButtonTheme;
+    },
+    hongbao_quota() {
+      if (this.hongbao_num) {
+        return Math.ceil(this.hongbao_olo / this.hongbao_num);
+      } else {
+        return 0;
+      }
     },
     ...mapState({
       forum_id: (state) =>
@@ -86,6 +113,10 @@ export default {
   created() {},
   methods: {
     hongbao_handle() {
+      if (this.hongbao_type == 2 && this.hongbao_olo % this.hongbao_num != 0) {
+        alert("选择定额红包时，总额要是红包数量的整倍数喔");
+        return;
+      }
       this.hongbao_handling = true;
       const config = {
         method: "post",
@@ -96,7 +127,7 @@ export default {
           thread_id: this.thread_id,
           hongbao_olo: this.hongbao_olo,
           hongbao_num: this.hongbao_num,
-          type: 1,
+          type: this.hongbao_type,
           hongbao_key_word: this.hongbao_key_word,
           hongbao_message: this.hongbao_message,
         },

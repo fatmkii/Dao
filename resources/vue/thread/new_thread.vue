@@ -175,12 +175,27 @@
               placeholder="可选"
             ></b-form-input>
           </b-input-group>
+          <b-input-group prepend="红包类型" class="mt-2">
+            <b-form-select
+              v-model="hongbao_type"
+              :options="hongbao_type_options"
+              value-field="value"
+              text-field="text"
+            ></b-form-select>
+          </b-input-group>
           <p>
-            友情提示：在红包olo总数以外，会追加扣除7%手续费。
+            友情提示：在红包olo总数以外，会追加扣除7%手续费
             <br />
             总共扣除：
             <span style="color: red">{{ Math.ceil(hongbao_olo * 1.07) }} </span
-            >块奥利奥。
+            >块奥利奥
+            <span v-show="hongbao_type == 2"
+              ><br />
+              <span>
+                定额红包：每个<span style="color: red">{{ hongbao_quota }}</span
+                >奥利奥</span
+              ></span
+            >
           </p>
         </div>
       </b-tab>
@@ -588,6 +603,11 @@ export default {
       hongbao_num: undefined,
       hongbao_key_word: undefined,
       hongbao_message: "",
+      hongbao_type: 1,
+      hongbao_type_options: [
+        { value: 1, text: "随机红包" },
+        { value: 2, text: "定额红包" },
+      ],
       end_time_selected: "00:00:00",
       end_date_selected: undefined,
       minDate: minDate,
@@ -693,6 +713,13 @@ export default {
       }
       return options;
     },
+    hongbao_quota() {
+      if (this.hongbao_num) {
+        return Math.ceil(this.hongbao_olo / this.hongbao_num);
+      } else {
+        return 0;
+      }
+    },
   },
   methods: {
     back_to_forum() {
@@ -727,10 +754,17 @@ export default {
         },
       };
       if (this.thread_type == "hongbao") {
+        if (
+          this.hongbao_type == 2 &&
+          this.hongbao_olo % this.hongbao_num != 0
+        ) {
+          alert("选择定额红包时，总额要是红包数量的整倍数喔");
+          return;
+        }
         //如果是红包贴，追加众筹相关的请求参数
         config.data.hongbao_olo = this.hongbao_olo;
         config.data.hongbao_num = this.hongbao_num;
-        config.data.type = 1;
+        config.data.type = this.hongbao_type;
         config.data.hongbao_key_word = this.hongbao_key_word;
         config.data.hongbao_message = this.hongbao_message;
       }
@@ -968,6 +1002,7 @@ export default {
     this.hongbao_num = undefined;
     this.hongbao_key_word = undefined;
     this.hongbao_message = "";
+    this.hongbao_type = 1;
     this.end_time_selected = "00:00:00";
     this.end_date_selected = undefined;
   },

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Hongbao;
 use Illuminate\Http\Request;
 use App\Common\ResponseCode;
+use App\Exceptions\CoinException;
 use App\Models\HongbaoUser;
 use App\Models\User;
 use App\Models\Thread;
@@ -51,7 +52,7 @@ class HongbaoController extends Controller
         }
 
         $keyword_prefix = '--红包口令: '; //为了方便前端识别并屏蔽，增加前缀
-        if ($hongbao->type == 1 && $post_original->content == $keyword_prefix . $hongbao->key_word) {
+        if (in_array($hongbao->type, [1, 2]) && $post_original->content == $keyword_prefix . $hongbao->key_word) {
 
             $hongbao_user_exists  = HongbaoUser::where('hongbao_id', $thread->hongbao_id)->where('user_id', $user->id)->exists();
             if ($hongbao_user_exists) {
@@ -89,9 +90,13 @@ class HongbaoController extends Controller
                     $coin = $hongbao->olo_remains;
                     $message = sprintf("恭喜抢到最后一个红包，有%d个奥利奥！", $coin);
                 } else {
-                    $central = intval($hongbao->olo_remains / $hongbao->num_remains);
-                    $coin = rand(1, $central * 2);
-                    $message = sprintf("你抢到了%d个奥利奥！", $coin);
+                    if ($hongbao->type == 1) {
+                        $central = intval($hongbao->olo_remains / $hongbao->num_remains);
+                        $coin = rand(1, $central * 2);
+                    } elseif ($hongbao->type == 2) {
+                        $coin = intval($hongbao->olo_total / $hongbao->num_total);
+                    }
+                    $message = sprintf("你抢到了%d个奥利奥！",  $coin);
                 }
                 $message = "To №" . $post_original->floor . "：" . $message;
                 if ($hongbao->message) {
@@ -143,6 +148,10 @@ class HongbaoController extends Controller
                 DB::commit();
             } catch (QueryException $e) {
                 DB::rollback();
+                throw $e;
+            } catch (CoinException $e) {
+                DB::rollback();
+                throw $e;
             }
         } else {
             return;
