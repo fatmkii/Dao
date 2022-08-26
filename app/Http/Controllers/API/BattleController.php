@@ -54,6 +54,8 @@ class BattleController extends Controller
             'battle_olo' => 'required|integer|max:100000|min:1',
             'chara_id' => 'required|integer',
             'chara_group' => 'required|integer',
+            'new_post_key' => 'string',
+            'timestamp' => 'integer',
         ]);
 
         $user = $request->user;
