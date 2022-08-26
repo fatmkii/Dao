@@ -153,6 +153,11 @@ class HongbaoPostController extends Controller
                     $message = ""; //红包回帖信息
 
                     $hongbao = HongbaoPost::lockForUpdate()->find($hongbao_item->id);
+                    if (!$hongbao) {
+                        //红包不能存在就直接返回
+                        DB::rollBack();
+                        return;
+                    }
                     if ($hongbao->num_remains == 0) {
                         DB::rollBack();
                         return;
