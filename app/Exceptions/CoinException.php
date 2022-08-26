@@ -20,4 +20,14 @@ class CoinException extends Exception
             'message' => ResponseCode::$codeMap[ResponseCode::COIN_NOT_ENOUGH] . '，请确认',
         ]);
     }
+
+    /**
+     * 报告异常
+     *
+     * @return void
+     */
+    public function report()
+    {
+        //什么都不做，不用写入log
+    }
 }
