@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Common\ResponseCode;
 use App\Models\User;
 use App\Jobs\ProcessUserActive;
-
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -15,14 +15,25 @@ class AuthController extends Controller
     {
         $request->validate([
             'binggan' => 'required|string',
+            'password' => 'nullable|string|alpha_dash',
         ]);
 
         $binggan  = $request->get('binggan');
-        $user = User::where('binggan', $binggan)->first();
+        $user = User::where(DB::raw('BINARY `binggan`'), $binggan)->first(); //用DB::raw区分大小写
         if (!$user) {
             return response()->json([
                 'code' => ResponseCode::USER_NOT_FOUND,
                 'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
+            ]);
+        }
+
+        if (
+            $user->password != null &&
+            $user->password != hash('sha256', $request->password . config('app.password_salt'))
+        ) {
+            return response()->json([
+                'code' => ResponseCode::USER_PASSWORD_ERROR,
+                'message' => ResponseCode::$codeMap[ResponseCode::USER_PASSWORD_ERROR],
             ]);
         }
 
@@ -38,20 +49,6 @@ class AuthController extends Controller
             );
         }
 
-        //为管理员颁发token
-        // switch ($user->admin) {
-        //     case 0:
-        //         $token = $user->createToken($binggan, ['normal'])->plainTextToken;
-        //         break;
-        //     case 1:
-        //         $token = $user->createToken($binggan, ['admin'])->plainTextToken;
-        //         break;
-        //     case 99:
-        //         $token = $user->createToken($binggan, ['super_admin', 'admin'])->plainTextToken;
-        //         break;
-        //     default:
-        //         $token = $user->createToken($binggan, ['normal'])->plainTextToken;
-        // }
         $token = $user->createToken($binggan, ['normal'])->plainTextToken;
 
         return response()->json(

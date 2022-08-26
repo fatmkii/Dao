@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('binggan')->unique()->index();
             $table->string('nickname')->nullable(); //自定义昵称
             $table->string('password')->nullable();
+            $table->boolean('is_custom')->default(0); //0=普通饼干；1=定制饼干；
             $table->boolean('is_banned')->default(0); //0=正常；1=banned；
             $table->timestamp('locked_until')->nullable(); //被暂时锁定直到某时间
             $table->tinyInteger('locked_count')->default(0);//被锁定的计数器，超过3次就封饼干

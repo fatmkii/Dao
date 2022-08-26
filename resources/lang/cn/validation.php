@@ -18,7 +18,7 @@ return [
     'after' => 'The :attribute must be a date after :date.',
     'after_or_equal' => 'The :attribute must be a date after or equal to :date.',
     'alpha' => 'The :attribute must only contain letters.',
-    'alpha_dash' => 'The :attribute must only contain letters, numbers, dashes and underscores.',
+    'alpha_dash' => ':attribute只能包含数字、字母和下划线',
     'alpha_num' => 'The :attribute must only contain letters and numbers.',
     'array' => 'The :attribute must be an array.',
     'before' => ':attribute不能晚于:date.',
@@ -152,6 +152,8 @@ return [
 
     'attributes' => [
         'binggan' => '饼干',
+        'binggan_apply' => '申请的饼干',
+        'password' => '密码',
         'content' => '内容',
         'title' => '标题',
         'title_pingbici' => '标题屏蔽词',

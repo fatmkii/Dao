@@ -11,12 +11,10 @@ use App\Models\Forum;
 use App\Models\Post;
 use App\Models\Thread;
 use App\Models\User;
-use App\Models\UserActive;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\QueryException;
 
 class AdminController extends Controller
 {

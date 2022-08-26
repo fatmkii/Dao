@@ -342,6 +342,75 @@ class UserController extends Controller
         );
     }
 
+    public function create_custom(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'binggan_apply' => 'required|string|alpha_dash|max:16|min:7',
+            'password' => 'required|string|alpha_dash|max:20|min:7',
+        ]);
+
+        $user_origin = $request->user;
+
+        if (User::where('binggan', $request->binggan_apply)->exists()) {
+            return response()->json([
+                'code' => ResponseCode::USER_REGISTER_FAIL,
+                'message' => ResponseCode::$codeMap[ResponseCode::USER_REGISTER_FAIL] . '，该饼干已经存在了',
+            ]);
+        }
+
+        try {
+            DB::beginTransaction();
+            $user = new User;
+            $user->binggan = $request->binggan_apply;
+            $user->created_ip = $request->ip();
+            $user->is_custom = true;
+            $user->coin = 300;
+            $user->password = hash('sha256', $request->password . config('app.password_salt'));
+            $user->save();
+
+            $user_origin->coinChange(
+                'normal', //记录类型
+                [
+                    'olo' => -100000, //定制饼干花费100000
+                    'content' => '申请了定制饼干',
+                ]
+            ); //通过统一接口、记录操作
+            $user_origin->save();
+
+            DB::table('user_custom')->insert([
+                'user_id' => $user->id,
+                'binggan' => $user->binggan,
+                'from_binggan' => $user_origin->binggan,
+                'created_at' => Carbon::now(),
+            ]);
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+
+        //记录申请饼干IP所在地
+        ProcessUserCreatedLocation::dispatch(
+            [
+                'IP' => $request->ip(),
+                'user_id' => $user->id,
+            ]
+        );
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '新建定制饼干成功！',
+                'data' => [
+                    'binggan' => $request->binggan_apply,
+                ],
+            ],
+            200
+        );
+    }
+
     public function check_reg_record(Request $request)
     {
         return response()->json(
@@ -410,7 +479,7 @@ class UserController extends Controller
             //这个和前端*1.07对不上
             // $tax = ceil($request->coin * 0.07); //税率0.07
             // $coin_pay = $request->coin + $tax;
-            
+
             $coin_pay = ceil($request->coin * 1.07);
             // $user->coinConsume($coin_pay);
             $user->coinChange(

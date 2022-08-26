@@ -47,6 +47,7 @@ class User extends Authenticatable
         'binggan',
         'admin',
         'password',
+        'is_custom',
         'last_login',
         'locked_count',
         'created_ip',

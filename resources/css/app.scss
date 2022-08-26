@@ -484,7 +484,9 @@ label.custom-file-label::after {
     @include background_color("scroller_color_hover");
 }
 
-.hongbao_input{
+.hongbao_input,
+.login_input,
+.binggan_custom_input{
     .input-group-prepend,
     .input-group-text{
         min-width: 100px;

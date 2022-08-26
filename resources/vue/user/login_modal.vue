@@ -6,26 +6,27 @@
       </template>
 
       <template v-slot:default>
-        <b-input-group class="mt-3">
-          <b-form-input
-            placeholder="请输入饼干"
-            v-model="binggan_input"
-          ></b-form-input>
-          <b-button
-            variant="outline-success"
-            type="submit"
-            @click="login_handle"
-          >
-            导入</b-button
-          >
-        </b-input-group>
-        <b-button
-          :variant="button_theme"
-          class="mt-4"
-          :disabled="reg_record_TTL > 0"
-          @click="register_handle"
-          >没有饼干？来一个！
-        </b-button>
+        <div class="login_input mt-2">
+          <b-input-group prepend="导入饼干" class="mt-2">
+            <b-form-input
+              v-model="binggan_input"
+              placeholder="请输入饼干"
+            ></b-form-input>
+          </b-input-group>
+          <b-input-group prepend="密码" class="mt-2">
+            <b-form-input
+              type="password"
+              v-model="binggan_password"
+              placeholder="（选填）定制饼干需要密码"
+            ></b-form-input>
+          </b-input-group>
+          <div class="d-flex flex-row-reverse align-items-center mt-2">
+            <b-button variant="outline-success" @click="login_handle"
+              >导入</b-button
+            >
+          </div>
+        </div>
+
         <p v-if="reg_record_TTL > 0">
           你需要等待{{
             Math.floor(reg_record_TTL / 86400) + 1
@@ -33,7 +34,14 @@
         </p>
       </template>
       <template v-slot:modal-footer="{ cancel }">
-        <b-button size="sm" variant="outline-seco ndary" @click="cancel()">
+        <b-button
+          :variant="button_theme"
+          class="mr-auto"
+          :disabled="reg_record_TTL > 1"
+          @click="register_handle"
+          >没有饼干？来一个！
+        </b-button>
+        <b-button variant="outline-secondary" @click="cancel()">
           取消
         </b-button>
       </template>
@@ -44,12 +52,13 @@
 
 <script>
 export default {
+  name: "login_modal",
   components: {},
   props: {},
   data() {
     return {
-      name: "login_modal",
       binggan_input: "",
+      binggan_password: "",
       reg_record_TTL: 1, //如果记录不存在，TTL返回-2
     };
   },
@@ -77,6 +86,7 @@ export default {
         url: "api/login",
         data: {
           binggan: this.binggan_input,
+          password: this.binggan_password,
         },
       };
       axios(config)
