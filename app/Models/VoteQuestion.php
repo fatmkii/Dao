@@ -43,7 +43,7 @@ class VoteQuestion extends Model
         return $date->format('Y-m-d H:i:s');
     }
 
-    public function create(Request $request, $thread_id)
+    public static function create(Request $request, $thread_id)
     {
         $request->validate([
             'vote_title' => 'required|string|max:100',
@@ -54,19 +54,20 @@ class VoteQuestion extends Model
 
         $request_options = json_decode($request->vote_options, true);
 
-        $this->thread_id = $thread_id;
-        $this->title = $request->vote_title;
-        $this->end_date = Carbon::parse($request->vote_end_time);
-        $this->multiple = $request->vote_multiple;
-        $this->save();
+        $vote_question = new VoteQuestion();
+        $vote_question->thread_id = $thread_id;
+        $vote_question->title = $request->vote_title;
+        $vote_question->end_date = Carbon::parse($request->vote_end_time);
+        $vote_question->multiple = $request->vote_multiple;
+        $vote_question->save();
 
         foreach ($request_options as $request_option) {
             $options = new VoteOption;
-            $options->vote_question_id = $this->id;
+            $options->vote_question_id = $vote_question->id;
             $options->option_text = $request_option;
             $options->save();
         }
 
-        return $this->id;
+        return $vote_question;
     }
 }

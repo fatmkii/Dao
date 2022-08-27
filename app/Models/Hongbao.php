@@ -64,7 +64,7 @@ class Hongbao extends Model
         }
     }
 
-    public function create(Request $request, $thread_id)
+    public static function create(Request $request, $thread_id)
     {
         $request->validate([
             'hongbao_olo' => 'required|integer|min:1000|max:1000000',
@@ -87,16 +87,17 @@ class Hongbao extends Model
             ]
         ); //扣除用户相应olo（通过统一接口、记录操作）
 
-        $this->thread_id = $thread_id;
-        $this->olo_total = $request->hongbao_olo;
-        $this->num_total = $request->hongbao_num;
-        $this->olo_remains = $request->hongbao_olo;
-        $this->num_remains = $request->hongbao_num;
-        $this->type = $request->type;
-        $this->key_word = $request->hongbao_key_word;
-        $this->message = $request->hongbao_message;
-        $this->save();
+        $hongbao = new Hongbao();
+        $hongbao->thread_id = $thread_id;
+        $hongbao->olo_total = $request->hongbao_olo;
+        $hongbao->num_total = $request->hongbao_num;
+        $hongbao->olo_remains = $request->hongbao_olo;
+        $hongbao->num_remains = $request->hongbao_num;
+        $hongbao->type = $request->type;
+        $hongbao->key_word = $request->hongbao_key_word;
+        $hongbao->message = $request->hongbao_message;
+        $hongbao->save();
 
-        return $this->id;
+        return $hongbao;
     }
 }

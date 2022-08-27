@@ -56,7 +56,7 @@ class GambleQuestion extends Model
     }
 
 
-    public function create(Request $request, $thread_id)
+    public static function create(Request $request, $thread_id)
     {
         $request->validate([
             'gamble_title' => 'required|string|max:100',
@@ -67,18 +67,19 @@ class GambleQuestion extends Model
 
         $request_options = json_decode($request->gamble_options, true);
 
-        $this->thread_id = $thread_id;
-        $this->title = $request->gamble_title;
-        $this->end_date = Carbon::parse($request->gamble_end_time);
-        $this->save();
+        $gamble_question = new GambleQuestion();
+        $gamble_question->thread_id = $thread_id;
+        $gamble_question->title = $request->gamble_title;
+        $gamble_question->end_date = Carbon::parse($request->gamble_end_time);
+        $gamble_question->save();
 
         foreach ($request_options as $request_option) {
             $options = new GambleOption;
-            $options->gamble_question_id = $this->id;
+            $options->gamble_question_id = $gamble_question->id;
             $options->option_text = $request_option;
             $options->save();
         }
 
-        return $this->id;
+        return $gamble_question;
     }
 }
