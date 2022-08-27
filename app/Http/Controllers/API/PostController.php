@@ -10,6 +10,7 @@ use App\Models\Post;
 use App\Models\Thread;
 use App\Common\ResponseCode;
 use App\Events\NewPostBroadcast;
+use App\Exceptions\CoinException;
 use App\Jobs\ProcessUserActive;
 use App\Models\HongbaoPost;
 use Carbon\Carbon;
@@ -113,25 +114,16 @@ class PostController extends Controller
         //执行追加新回复流程
         try {
             DB::beginTransaction();
-            $post = new Post;
-            $post->setSuffix(intval($request->thread_id / 10000));
-            $post->created_binggan = $request->binggan;
-            $post->forum_id = $request->forum_id;
-            $post->thread_id = $request->thread_id;
-            $post->content = $request->content;
-            $post->nickname = $request->nickname;
-            $post->created_by_admin = $request->post_with_admin  ? 1 : 0;
-            $post->created_ip = $request->ip();
-            $post->random_head = random_int(0, 39);
-            // $post->millisecond = intval(substr($request->timestamp, -3, 3));
+            $post = Post::create([
+                'created_binggan' => $request->binggan,
+                'forum_id' => $request->forum_id,
+                'thread_id' => $request->thread_id,
+                'content' => $request->content,
+                'nickname' => $request->nickname,
+                'created_by_admin' => $request->post_with_admin ? 1 : 0,
+                'created_IP' => $request->ip(),
+            ]);
 
-            $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
-            $post->floor = $thread->posts_num;
-
-            $thread->save();
-            $post->save();
-
-            // $user->coin += 10; //回复+10奥利奥
             $user->coinChange(
                 'post', //记录类型
                 [
@@ -311,6 +303,13 @@ class PostController extends Controller
         }
 
         $post = Post::suffix(intval($request->thread_id / 10000))->find($id);
+        if (!$post) {
+            return response()->json([
+                'code' => ResponseCode::POST_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::POST_NOT_FOUND],
+            ]);
+        }
+
 
         //如果有提供binggan，为每个post输入binggan，用来判断is_your_post（为前端提供是否是用户自己帖子的判据）
         if ($request->query('binggan')) {
