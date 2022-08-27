@@ -159,7 +159,8 @@ class PostController extends Controller
         $user->waterRecord('new_post', $request->ip());
 
         //广播发帖动作
-        broadcast(new NewPostBroadcast($request->thread_id, $post->id, $post->floor))->toOthers();
+        // broadcast(new NewPostBroadcast($request->thread_id, $post->id, $post->floor))->toOthers();
+        $post->broadcast();
 
         return response()->json(
             [
@@ -578,7 +579,8 @@ class PostController extends Controller
         }
 
         //广播发帖动作
-        broadcast(new NewPostBroadcast($request->thread_id, $post->id, $post->floor))->toOthers();
+        // broadcast(new NewPostBroadcast($request->thread_id, $post->id, $post->floor))->toOthers();
+        $post->broadcast();
 
         ProcessUserActive::dispatch(
             [

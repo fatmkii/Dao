@@ -3,11 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\myModel;
 use App\Models\Thread;
-use Illuminate\Support\Facades\Cache;
 use App\Common\ResponseCode;
+use App\Events\NewPostBroadcast;
 use App\Models\Battle;
 
 class Post extends myModel
@@ -216,5 +215,11 @@ class Post extends myModel
             //     return null;
             // }
         }
+    }
+
+    public function broadcast()
+    {
+        broadcast(new NewPostBroadcast($this->thread_id, $this->id, $this->floor))->toOthers();
+        return $this;
     }
 }

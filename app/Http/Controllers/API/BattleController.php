@@ -122,7 +122,8 @@ class BattleController extends Controller
         $user->waterRecord('new_post', $request->ip()); //用redis记录发帖频率。
 
         //广播发帖动作
-        broadcast(new NewPostBroadcast($request->thread_id, $post->id, $post->floor))->toOthers();
+        // broadcast(new NewPostBroadcast($request->thread_id, $post->id, $post->floor))->toOthers();
+        $post->broadcast();
 
         ProcessUserActive::dispatch(
             [
