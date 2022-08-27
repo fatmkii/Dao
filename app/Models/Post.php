@@ -71,33 +71,35 @@ class Post extends myModel
     public static function create(array $array)
     {
         //post需求的属性和其默认值
-        $attrs = [
-            'created_binggan' => null,
-            'forum_id' => 0,
-            'thread_id' => 0,
-            'content' => null,
-            'nickname' => null,
-            'created_by_admin' => 0,
-            'created_IP' => null,
+        $attrs_default = [
             'random_head' =>  random_int(0, 39),
         ];
 
         $post = new Post;
         $post->setSuffix(intval($array['thread_id'] / 10000));
 
-        //统一赋值。array参数未给出的就用默认值
-        foreach ($attrs as $attr => $default) {
-            if (isset($array[$attr])) {
-                $post->$attr = $array[$attr];
-            } else {
+        //统一赋值
+        foreach ($array as $attr => $value) {
+            $post->$attr = $value;
+        }
+
+        //array参数未给出的就用默认值
+        foreach ($attrs_default as $attr => $default) {
+            if (!isset($array[$attr])) {
                 $post->$attr = $default;
             }
         }
 
-        //更新thread的posts_num
-        $posts_num = POST::Suffix(intval($array['thread_id'] / 10000))->where('thread_id', $array['thread_id'])->count();
-        Thread::where('id', $array['thread_id'])->update(['posts_num' => $posts_num]);
-        $post->floor = $posts_num;
+
+        if (isset($array['floor'])) {
+            //如果有给出floor，说明是新主题的0楼，直接写入
+            $post->floor = $array['floor'];
+        } else {
+            //更新thread的posts_num
+            $posts_num = POST::Suffix(intval($array['thread_id'] / 10000))->where('thread_id', $array['thread_id'])->count();
+            Thread::where('id', $array['thread_id'])->update(['posts_num' => $posts_num]);
+            $post->floor = $posts_num;
+        }
         $post->save();
 
         return $post;

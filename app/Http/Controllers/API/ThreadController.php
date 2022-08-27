@@ -213,18 +213,29 @@ class ThreadController extends Controller
             $thread->is_delay = $request->is_delay;
             $thread->save();
             //发主题帖的第0楼（Post）
-            $post = new Post;
-            $post->setSuffix(intval($thread->id / 10000));
-            $post->created_binggan = $request->binggan;
-            $post->forum_id = $request->forum_id;
-            $post->thread_id = $thread->id;
-            $post->content = $request->content;
-            $post->nickname = $request->nickname;
-            $post->created_by_admin = $request->post_with_admin  ? 1 : 0;
-            $post->created_ip = $request->ip();
-            $post->random_head = random_int(0, 39);
-            $post->floor = 0;
-            $post->save();
+            // $post = new Post;
+            // $post->setSuffix(intval($thread->id / 10000));
+            // $post->created_binggan = $request->binggan;
+            // $post->forum_id = $request->forum_id;
+            // $post->thread_id = $thread->id;
+            // $post->content = $request->content;
+            // $post->nickname = $request->nickname;
+            // $post->created_by_admin = $request->post_with_admin  ? 1 : 0;
+            // $post->created_ip = $request->ip();
+            // $post->random_head = random_int(0, 39);
+            // $post->floor = 0;
+            // $post->save();
+
+            $post = Post::create([
+                'created_binggan' => $request->binggan,
+                'forum_id' => $request->forum_id,
+                'thread_id' => $thread->id,
+                'content' => $request->content,
+                'nickname' => $request->nickname,
+                'created_by_admin' => $request->post_with_admin  ? 1 : 0,
+                'created_IP' => $request->ip(),
+                'floor' => 0,
+            ]);
 
             //追加投票贴
             if ($request->thread_type == "vote") {

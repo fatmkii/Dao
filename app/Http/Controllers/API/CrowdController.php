@@ -106,24 +106,35 @@ class CrowdController extends Controller
             //执行新回复流程
             $thread_id = $crowd->thread_id;
             $post_content = sprintf("我众筹了%u块奥利奥", $olo_to_crowd);
-            $post = new Post;
-            $post->setSuffix(intval($thread_id / 10000));
-            $post->created_binggan = $request->binggan;
-            $post->forum_id = $crowd->Thread->Forum->id;
-            $post->thread_id = $thread_id;
-            $post->content = $post_content;
-            $post->nickname = '众筹系统';
-            $post->created_by_admin = 2;
-            $post->created_ip = $request->ip();
-            $post->random_head = random_int(0, 39);
+            // $post = new Post;
+            // $post->setSuffix(intval($thread_id / 10000));
+            // $post->created_binggan = $request->binggan;
+            // $post->forum_id = $crowd->Thread->Forum->id;
+            // $post->thread_id = $thread_id;
+            // $post->content = $post_content;
+            // $post->nickname = '众筹系统';
+            // $post->created_by_admin = 2;
+            // $post->created_ip = $request->ip();
+            // $post->random_head = random_int(0, 39);
+            // $thread = $post->thread;
+            // $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
+            // $post->floor = $thread->posts_num;
+            // $thread->save();
+            // $post->save();
+
+            $post = Post::create([
+                'created_binggan' => $request->binggan,
+                'forum_id' => $crowd->Thread->Forum->id,
+                'thread_id' => $thread_id,
+                'content' => $post_content,
+                'nickname' => '众筹系统',
+                'created_by_admin' => 2,
+                'created_IP' => $request->ip(),
+            ]);
+
             $thread = $post->thread;
-            $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
-            $post->floor = $thread->posts_num;
-            $thread->save();
-            $post->save();
 
             //扣除用户相应olo
-            // $user->coinConsume($olo_to_crowd);
             $user->coinChange(
                 'normal', //记录类型
                 [
@@ -219,21 +230,31 @@ class CrowdController extends Controller
             //执行新回复流程
             $thread_id = $crowd->Thread->id;
             $post_content = sprintf("管理员已中止此众筹，众筹的olo已退回。");
-            $post = new Post;
-            $post->setSuffix(intval($thread_id / 10000));
-            $post->created_binggan = $request->binggan;
-            $post->forum_id = $crowd->Thread->Forum->id;
-            $post->thread_id = $thread_id;
-            $post->content = $post_content;
-            $post->nickname = '众筹系统';
-            $post->created_by_admin = 2;
-            $post->created_ip = $request->ip();
-            $post->random_head = random_int(0, 39);
-            $thread = $post->thread;
-            $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
-            $post->floor = $thread->posts_num;
-            $thread->save();
-            $post->save();
+            // $post = new Post;
+            // $post->setSuffix(intval($thread_id / 10000));
+            // $post->created_binggan = $request->binggan;
+            // $post->forum_id = $crowd->Thread->Forum->id;
+            // $post->thread_id = $thread_id;
+            // $post->content = $post_content;
+            // $post->nickname = '众筹系统';
+            // $post->created_by_admin = 2;
+            // $post->created_ip = $request->ip();
+            // $post->random_head = random_int(0, 39);
+            // $thread = $post->thread;
+            // $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
+            // $post->floor = $thread->posts_num;
+            // $thread->save();
+            // $post->save();
+            $post = Post::create([
+                'created_binggan' => $request->binggan,
+                'forum_id' => $crowd->Thread->Forum->id,
+                'thread_id' => $thread_id,
+                'content' => $post_content,
+                'nickname' => '众筹系统',
+                'created_by_admin' => 2,
+                'created_IP' => $request->ip(),
+            ]);
+            
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();

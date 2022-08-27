@@ -60,22 +60,32 @@ class HongbaoController extends Controller
                 $message = "你已经领取过了，不要贪心喔！";
                 $message = "To №" . $post_original->floor . "：" . $message;
 
-                $post = new Post;
-                $post->setSuffix(intval($request->thread_id / 10000));
-                $post->created_binggan = $request->binggan;
-                $post->forum_id = $request->forum_id;
-                $post->thread_id = $request->thread_id;
-                $post->content = $message;
-                $post->nickname = '红包系统';
-                $post->created_by_admin = 2; //0=一般用户 1=管理员发布，2=系统发布
-                $post->created_ip = $request->ip();
-                $post->random_head = random_int(0, 39);
+                // $post = new Post;
+                // $post->setSuffix(intval($request->thread_id / 10000));
+                // $post->created_binggan = $request->binggan;
+                // $post->forum_id = $request->forum_id;
+                // $post->thread_id = $request->thread_id;
+                // $post->content = $message;
+                // $post->nickname = '红包系统';
+                // $post->created_by_admin = 2; //0=一般用户 1=管理员发布，2=系统发布
+                // $post->created_ip = $request->ip();
+                // $post->random_head = random_int(0, 39);
 
-                $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
-                $post->floor = $thread->posts_num;
+                // $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
+                // $post->floor = $thread->posts_num;
 
-                $thread->save();
-                $post->save();
+                // $thread->save();
+                // $post->save();
+
+                $post = Post::create([
+                    'created_binggan' => $request->binggan,
+                    'forum_id' => $request->forum_id,
+                    'thread_id' => $request->thread_id,
+                    'content' => $message,
+                    'nickname' => '红包系统',
+                    'created_by_admin' => 2,
+                    'created_IP' => $request->ip(),
+                ]);
                 return;
             }
 
@@ -108,22 +118,32 @@ class HongbaoController extends Controller
                 $hongbao->num_remains -= 1;
                 $hongbao->save();
 
-                $post = new Post;
-                $post->setSuffix(intval($request->thread_id / 10000));
-                $post->created_binggan = $request->binggan;
-                $post->forum_id = $request->forum_id;
-                $post->thread_id = $request->thread_id;
-                $post->content = $message;
-                $post->nickname = '红包结果';
-                $post->created_by_admin = 2; //0=一般用户 1=管理员发布，2=系统发布
-                $post->created_ip = $request->ip();
-                $post->random_head = random_int(0, 39);
+                // $post = new Post;
+                // $post->setSuffix(intval($request->thread_id / 10000));
+                // $post->created_binggan = $request->binggan;
+                // $post->forum_id = $request->forum_id;
+                // $post->thread_id = $request->thread_id;
+                // $post->content = $message;
+                // $post->nickname = '红包结果';
+                // $post->created_by_admin = 2; //0=一般用户 1=管理员发布，2=系统发布
+                // $post->created_ip = $request->ip();
+                // $post->random_head = random_int(0, 39);
 
-                $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
-                $post->floor = $thread->posts_num;
+                // $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
+                // $post->floor = $thread->posts_num;
 
-                $thread->save();
-                $post->save();
+                // $thread->save();
+                // $post->save();
+
+                $post = Post::create([
+                    'created_binggan' => $request->binggan,
+                    'forum_id' => $request->forum_id,
+                    'thread_id' => $request->thread_id,
+                    'content' => $message,
+                    'nickname' => '红包系统',
+                    'created_by_admin' => 2,
+                    'created_IP' => $request->ip(),
+                ]);
 
 
                 $user->coinChange(

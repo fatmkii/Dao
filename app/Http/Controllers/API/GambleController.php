@@ -127,24 +127,34 @@ class GambleController extends Controller
             $gamble_user->save();
 
             //执行新回复流程
-            $thread_id = $gamble_question->Thread->id;
+            $thread = $gamble_question->Thread;
+            $thread_id = $thread->id;
             $post_content = sprintf("我为“%s”下注了%u块奥利奥", $bet_option->option_text, $request->betting_olo); //TODO
-            $post = new Post;
-            $post->setSuffix(intval($thread_id / 10000));
-            $post->created_binggan = $request->binggan;
-            $post->forum_id = $gamble_question->Thread->Forum->id;
-            $post->thread_id = $thread_id;
-            $post->content = $post_content;
-            $post->nickname = '菠菜系统';
-            $post->created_by_admin = 2;
-            $post->created_ip = $request->ip();
-            $post->random_head = random_int(0, 39);
-            $thread = $post->thread;
-            $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
-            $post->floor = $thread->posts_num;
+            // $post = new Post;
+            // $post->setSuffix(intval($thread_id / 10000));
+            // $post->created_binggan = $request->binggan;
+            // $post->forum_id = $gamble_question->Thread->Forum->id;
+            // $post->thread_id = $thread_id;
+            // $post->content = $post_content;
+            // $post->nickname = '菠菜系统';
+            // $post->created_by_admin = 2;
+            // $post->created_ip = $request->ip();
+            // $post->random_head = random_int(0, 39);
+            // $thread = $post->thread;
+            // $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
+            // $post->floor = $thread->posts_num;
+
+            $post = Post::create([
+                'created_binggan' => $request->binggan,
+                'forum_id' => $gamble_question->Thread->Forum->id,
+                'thread_id' => $thread_id,
+                'content' => $post_content,
+                'nickname' => '菠菜系统',
+                'created_by_admin' => 2,
+                'created_IP' => $request->ip(),
+            ]);
 
             //扣除用户相应olo
-            // $user->coinConsume($request->betting_olo);
             $user->coinChange(
                 'normal', //记录类型
                 [
@@ -311,21 +321,32 @@ class GambleController extends Controller
             //执行新回复流程
             $thread_id = $gamble_question->Thread->id;
             $post_content = sprintf("管理员已为此菠菜开奖，中奖项为：%s <br>奖金已发放，恭喜中奖的各位！", $result_option->option_text);
-            $post = new Post;
-            $post->setSuffix(intval($thread_id / 10000));
-            $post->created_binggan = $request->binggan;
-            $post->forum_id = $gamble_question->Thread->Forum->id;
-            $post->thread_id = $thread_id;
-            $post->content = $post_content;
-            $post->nickname = '菠菜系统';
-            $post->created_by_admin = 2;
-            $post->created_ip = $request->ip();
-            $post->random_head = random_int(0, 39);
-            $thread = $post->thread;
-            $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
-            $post->floor = $thread->posts_num;
-            $thread->save();
-            $post->save();
+            // $post = new Post;
+            // $post->setSuffix(intval($thread_id / 10000));
+            // $post->created_binggan = $request->binggan;
+            // $post->forum_id = $gamble_question->Thread->Forum->id;
+            // $post->thread_id = $thread_id;
+            // $post->content = $post_content;
+            // $post->nickname = '菠菜系统';
+            // $post->created_by_admin = 2;
+            // $post->created_ip = $request->ip();
+            // $post->random_head = random_int(0, 39);
+            // $thread = $post->thread;
+            // $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
+            // $post->floor = $thread->posts_num;
+            // $thread->save();
+            // $post->save();
+
+            $post = Post::create([
+                'created_binggan' => $request->binggan,
+                'forum_id' => $gamble_question->Thread->Forum->id,
+                'thread_id' => $thread_id,
+                'content' => $post_content,
+                'nickname' => '菠菜系统',
+                'created_by_admin' => 2,
+                'created_IP' => $request->ip(),
+            ]);
+
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
@@ -407,21 +428,31 @@ class GambleController extends Controller
             //执行新回复流程
             $thread_id = $gamble_question->Thread->id;
             $post_content = sprintf("管理员已中止此菠菜，投注额已退回。");
-            $post = new Post;
-            $post->setSuffix(intval($thread_id / 10000));
-            $post->created_binggan = $request->binggan;
-            $post->forum_id = $gamble_question->Thread->Forum->id;
-            $post->thread_id = $thread_id;
-            $post->content = $post_content;
-            $post->nickname = '菠菜系统';
-            $post->created_by_admin = 2;
-            $post->created_ip = $request->ip();
-            $post->random_head = random_int(0, 39);
-            $thread = $post->thread;
-            $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
-            $post->floor = $thread->posts_num;
-            $thread->save();
-            $post->save();
+            // $post = new Post;
+            // $post->setSuffix(intval($thread_id / 10000));
+            // $post->created_binggan = $request->binggan;
+            // $post->forum_id = $gamble_question->Thread->Forum->id;
+            // $post->thread_id = $thread_id;
+            // $post->content = $post_content;
+            // $post->nickname = '菠菜系统';
+            // $post->created_by_admin = 2;
+            // $post->created_ip = $request->ip();
+            // $post->random_head = random_int(0, 39);
+            // $thread = $post->thread;
+            // $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
+            // $post->floor = $thread->posts_num;
+            // $thread->save();
+            // $post->save();
+
+            $post = Post::create([
+                'created_binggan' => $request->binggan,
+                'forum_id' => $gamble_question->Thread->Forum->id,
+                'thread_id' => $thread_id,
+                'content' => $post_content,
+                'nickname' => '菠菜系统',
+                'created_by_admin' => 2,
+                'created_IP' => $request->ip(),
+            ]);
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();

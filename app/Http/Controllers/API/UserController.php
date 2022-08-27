@@ -456,25 +456,43 @@ class UserController extends Controller
 
         try {
             DB::beginTransaction();
-            $post = new Post;
-            $post->setSuffix(intval($request->thread_id / 10000));
-            $post->created_binggan = $request->binggan;
-            $post->forum_id = $request->forum_id;
-            $post->thread_id = $request->thread_id;
-            $post->content = "<span class='quote_content'>" .
+            // $post = new Post;
+            // $post->setSuffix(intval($request->thread_id / 10000));
+            // $post->created_binggan = $request->binggan;
+            // $post->forum_id = $request->forum_id;
+            // $post->thread_id = $request->thread_id;
+            // $post->content = "<span class='quote_content'>" .
+            //     $request->post_floor_message .
+            //     '</span><br>我为你打赏了' . $request->coin .
+            //     '块奥利奥<br>——' . $request->content;
+            // $post->nickname = '奥利奥打赏系统';
+            // $post->created_by_admin = 2; //0=一般用户 1=管理员发布，2=系统发布
+            // $post->created_ip = $request->ip();
+            // $post->random_head = random_int(0, 39);
+
+            // $thread = $post->thread;
+            // $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
+            // $post->floor = $thread->posts_num;
+            // $thread->save();
+            // $post->save();
+
+            $post_content = "<span class='quote_content'>" .
                 $request->post_floor_message .
                 '</span><br>我为你打赏了' . $request->coin .
                 '块奥利奥<br>——' . $request->content;
-            $post->nickname = '奥利奥打赏系统';
-            $post->created_by_admin = 2; //0=一般用户 1=管理员发布，2=系统发布
-            $post->created_ip = $request->ip();
-            $post->random_head = random_int(0, 39);
+
+            $post = Post::create([
+                'created_binggan' => $request->binggan,
+                'forum_id' => $request->forum_id,
+                'thread_id' => $request->thread_id,
+                'content' => $post_content,
+                'nickname' => $request->nickname,
+                'created_by_admin' => 2,
+                'created_IP' => $request->ip(),
+                'floor' => 0,
+            ]);
 
             $thread = $post->thread;
-            $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
-            $post->floor = $thread->posts_num;
-            $thread->save();
-            $post->save();
 
             //这个和前端*1.07对不上
             // $tax = ceil($request->coin * 0.07); //税率0.07
