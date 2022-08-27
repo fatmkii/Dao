@@ -106,7 +106,7 @@ export default {
     }),
   },
   methods: {
-    battle_handle() {
+    battle_handle(event) {
       this.battle_handing = true;
       this.$parent.last_action = "new_battle";
       const timestamp = new Date().getTime();
@@ -120,6 +120,16 @@ export default {
           chara_group: this.battle_chara_group_id,
           battle_olo: this.battle_olo,
           chara_id: this.battle_chara_id,
+
+          new_post_key: CryptoJS.MD5(
+            this.thread_id +
+              this.$store.state.User.Binggan +
+              timestamp +
+              event.isTrusted
+              ? "true"
+              : "false"
+          ).toString(),
+          timestamp: timestamp,
         },
       };
       axios(config)
