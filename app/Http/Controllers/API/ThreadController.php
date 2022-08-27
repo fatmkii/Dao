@@ -238,8 +238,8 @@ class ThreadController extends Controller
                         'thread_title' => $thread->title,
                     ]
                 ); //通过统一接口、记录操作  
-                $vote_question = new VoteQuestion();
-                $thread->vote_question_id = $vote_question->create($request, $thread->id); //$vote_question->create会返回id
+                $vote_question = VoteQuestion::create($request, $thread->id);
+                $thread->vote_question_id = $vote_question->id;
                 $thread->save();
             }
 
@@ -255,22 +255,22 @@ class ThreadController extends Controller
                         'thread_title' => $thread->title,
                     ]
                 ); //通过统一接口、记录操作  
-                $gamble_question = new GambleQuestion();
-                $thread->gamble_question_id = $gamble_question->create($request, $thread->id); //$gamble_question->create会返回id
+                $gamble_question = GambleQuestion::create($request, $thread->id);
+                $thread->gamble_question_id = $gamble_question->id; //$gamble_question->create会返回id
                 $thread->save();
             }
 
             //追加菠众筹贴
             if ($request->thread_type == "crowd") {
-                $crowd = new Crowd();
-                $thread->crowd_id = $crowd->create($request, $thread->id); //$crowd->create会返回id
+                $crowd = Crowd::create($request, $thread->id);
+                $thread->crowd_id = $crowd->id; //$crowd->create会返回id
                 $thread->save();
             }
 
             //追加红包贴
             if ($request->thread_type == "hongbao") {
-                $hongbao = new Hongbao();
-                $thread->hongbao_id = $hongbao->create($request, $thread->id); //$hongbao->create会返回id
+                $hongbao = Hongbao::create($request, $thread->id);
+                $thread->hongbao_id = $hongbao->id; //$hongbao->create会返回id
                 $thread->save();
             }
 
@@ -345,7 +345,7 @@ class ThreadController extends Controller
 
         $CurrentForum = $CurrentThread->forum;
         $user = $request->user;
-    
+
         //用redis记录，全局每10秒搜索20次限制
         if ($request->has('search_content')) {
             if (Redis::exists('search_record_global')) {

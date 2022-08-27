@@ -40,7 +40,7 @@ class Crowd extends Model
             ->where('user_id', $user_id)->get();  //和vote不同，crowd返回的是collection类
     }
 
-    public function create(Request $request, $thread_id)
+    public static function create(Request $request, $thread_id)
     {
         $request->validate([
             'crowd_title' => 'required|string|max:100',
@@ -48,12 +48,13 @@ class Crowd extends Model
             'crowd_olo_target' => 'required|integer|max:10000000',
         ]);
 
-        $this->thread_id = $thread_id;
-        $this->title = $request->crowd_title;
-        $this->end_date = Carbon::parse($request->crowd_end_time);
-        $this->olo_target = $request->crowd_olo_target;
-        $this->save();
+        $crowd = new Crowd();
+        $crowd->thread_id = $thread_id;
+        $crowd->title = $request->crowd_title;
+        $crowd->end_date = Carbon::parse($request->crowd_end_time);
+        $crowd->olo_target = $request->crowd_olo_target;
+        $crowd->save();
 
-        return $this->id;
+        return $crowd;
     }
 }

@@ -104,8 +104,8 @@ class HongbaoPostController extends Controller
             $post->save();
 
             //追加红包贴
-            $hongbao = new HongbaoPost();
-            $post->hongbao_id = $hongbao->create($request, $thread->id, $post->id, $post->floor);
+            $hongbao = HongbaoPost::create($request, $thread->id, $post->id, $post->floor);
+            $post->hongbao_id = $hongbao->id;
             $post->save(); //前面要先save一次才有post_id
 
             DB::commit();

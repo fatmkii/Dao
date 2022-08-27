@@ -45,6 +45,15 @@ class Post extends myModel
 
     protected $guarded = [];
 
+    // /**
+    //  * 模型属性的默认值
+    //  *
+    //  * @var array
+    //  */
+    // protected $attributes = [
+    //     'random_head' => random_int(0, 39)
+    // ];
+
     protected static function booted()
     {
         // static::saving(function ($post) {
