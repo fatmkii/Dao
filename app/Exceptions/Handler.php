@@ -6,6 +6,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use App\Exceptions\CoinException;
 use App\Common\ResponseCode;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\QueryException;
 
@@ -51,9 +52,10 @@ class Handler extends ExceptionHandler
         // });
 
         $this->renderable(function (Exception $e, $request) {
+            $error_timestamp = Carbon::now()->toDateTimeString();
             return response()->json([
                 'code' => 500,
-                'message' => '嗷！后端遇到未知错误，请重试或者联络管理员。',
+                'message' => '嗷！后端遇到未知错误，请重试或者联络管理员。错误时间标签:' . $error_timestamp,
             ], 500);
         });
 
