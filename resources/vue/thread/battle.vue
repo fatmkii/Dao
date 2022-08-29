@@ -167,7 +167,7 @@ export default {
         .catch((error) => {
           this.roll_handling = false;
           // alert(Object.values(error.response.data.errors)[0]);
-          alert(error.response.data.message)
+          // alert(error.response.data.message)
         });
     },
     initiator_roll_handle() {
@@ -192,7 +192,7 @@ export default {
         .catch((error) => {
           this.roll_handling = false;
           // alert(Object.values(error.response.data.errors)[0]);
-          alert(error.response.data.message)
+          // alert(error.response.data.message)
         });
     },
   },

@@ -79,7 +79,7 @@ export default {
         .catch((error) => {
           this.admin_login_handling = false;
           // alert(Object.values(error.response.data.errors)[0]);
-          alert(error.response.data.message)
+          // alert(error.response.data.message)
         });
     },
   },
