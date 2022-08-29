@@ -51,20 +51,21 @@ class Handler extends ExceptionHandler
         //     ]);
         // });
 
-        $this->renderable(function (Exception $e, $request) {
-            $error_timestamp = Carbon::now()->toDateTimeString();
-            return response()->json([
-                'code' => 500,
-                'message' => '嗷！后端遇到未知错误，请重试或者联络管理员。错误时间标签:' . $error_timestamp,
-            ], 500);
-        });
-
         $this->renderable(function (QueryException $e, $request) {
             return response()->json([
                 'code' => ResponseCode::DATABASE_FAILED,
                 'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试。',
                 'error_message' => $e->getMessage(),
             ]);
+        });
+
+        $this->renderable(function (Exception $e, $request) {
+            //所有500错误统一返回。一定要放在最后。
+            $error_timestamp = Carbon::now()->toDateTimeString();
+            return response()->json([
+                'code' => 500,
+                'message' => '嗷！后端遇到未知错误，请重试或者联络管理员。错误时间标签:' . $error_timestamp,
+            ], 500);
         });
     }
 }

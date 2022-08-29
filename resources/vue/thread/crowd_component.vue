@@ -189,7 +189,7 @@ export default {
         })
         .catch((error) => {
           // alert(Object.values(error.response.data.errors)[0]);
-          alert(error.response.data.message);
+          // alert(error.response.data.message);
         });
     },
     new_crowd_handle() {
@@ -228,7 +228,7 @@ export default {
         .catch((error) => {
           this.new_crowd_handling = false;
           // alert(Object.values(error.response.data.errors)[0]);
-          alert(error.response.data.message);
+          // alert(error.response.data.message);
         });
     },
     crowd_repeal() {
@@ -263,7 +263,7 @@ export default {
         .catch((error) => {
           this.new_betting_handling = false;
           // alert(Object.values(error.response.data.errors)[0]);
-          alert(error.response.data.message);
+          // alert(error.response.data.message);
         });
     },
   },

@@ -1031,7 +1031,7 @@ export default {
           this.thread_response_code = 0;
           this.$store.commit("PostsLoadStatus_set", 2);
           // alert(Object.values(error.response.data.errors)[0]);
-          alert(error.response.data.message);
+          // alert(error.response.data.message);
         });
     },
     get_post_data_and_push(thread_id, post_id) {
@@ -1081,7 +1081,7 @@ export default {
         })
         .catch((error) => {
           // alert(Object.values(error.response.data.errors)[0]);
-          alert(error.response.data.message);
+          // alert(error.response.data.message);
         });
     },
     search_clear() {
@@ -1125,7 +1125,7 @@ export default {
         })
         .catch((error) => {
           // alert(Object.values(error.response.data.errors)[0]);
-          alert(error.response.data.message);
+          // alert(error.response.data.message);
         });
     },
     show_captcha() {
@@ -1303,7 +1303,7 @@ export default {
         .catch((error) => {
           this.new_post_handling = false;
           // alert(Object.values(error.response.data.errors)[0]);
-          alert(error.response.data.message);
+          // alert(error.response.data.message);
         });
     },
     modal_toggle(modal_name) {
@@ -1343,7 +1343,7 @@ export default {
         .catch((error) => {
           this.roll_handling = false;
           // alert(Object.values(error.response.data.errors)[0]);
-          alert(error.response.data.message);
+          // alert(error.response.data.message);
         });
     },
     jump_handle() {
@@ -1515,7 +1515,7 @@ export default {
         .catch((error) => {
           this.my_emoji_set_handling = false;
           // alert(Object.values(error.response.data.errors)[0]);
-          alert(error.response.data.message);
+          // alert(error.response.data.message);
         });
     },
     set_focus_threads() {
