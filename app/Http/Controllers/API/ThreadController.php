@@ -50,6 +50,7 @@ class ThreadController extends Controller
                 ->select('id')
                 ->where('thread_id', $thread_id)
                 ->where('content', 'like', '%' . $searchContent . '%')
+                ->where('is_deleted', 0)
                 ->offset($offset)->limit($limit);
         }
 
