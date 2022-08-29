@@ -65,17 +65,23 @@ class Handler extends ExceptionHandler
         $this->renderable(function (ValidationException $e, $request) {
             return response()->json([
                 'code' => 422,
-                'message' => $e->errors()['content'][0],
+                'message' => array_values($e->errors())[0],
             ], 422);
         });
 
         $this->renderable(function (Exception $e, $request) {
-            //所有500错误统一返回。一定要放在最后。
+            //其他各种代码错误统一返回。一定要放在最后。
+            if (method_exists($e, 'getStatusCode')) {
+                $status_code = $e->getStatusCode();
+            } else {
+                $status_code = 500;
+            }
+
             $error_timestamp = Carbon::now()->toDateTimeString();
             return response()->json([
-                'code' => $e->getStatusCode(),
-                'message' => sprintf('嗷！后端出错了，请重试或者联络管理员。错误代码：%s; 时间戳:%s; 错误信息:%s',  $e->getStatusCode(), $error_timestamp, $e->getMessage()),
-            ], $e->getStatusCode());
+                'code' =>  $status_code,
+                'message' => sprintf('嗷！后端出错了，请重试或者联络管理员。错误代码：%s; 时间戳:%s; 错误信息:%s',   $status_code, $error_timestamp, $e->getMessage()),
+            ],  $status_code);
         });
     }
 }
