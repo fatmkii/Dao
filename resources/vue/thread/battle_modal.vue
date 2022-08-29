@@ -125,9 +125,7 @@ export default {
             this.thread_id +
               this.$store.state.User.Binggan +
               timestamp +
-              event.isTrusted
-              ? "true"
-              : "false"
+              (event.isTrusted ? "true" : "false")
           ).toString(),
           timestamp: timestamp,
         },
