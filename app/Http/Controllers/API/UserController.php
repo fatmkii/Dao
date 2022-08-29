@@ -228,8 +228,10 @@ class UserController extends Controller
         if (substr($created_UUID, 0, 10) != "XiaoHuoGuo") {
             ProcessUserActive::dispatch(
                 [
+                    'user_id' => '0',
+                    'binggan' => 'none',
                     'active' => '怀疑有人用脚本申请饼干',
-                    'content' => 'ip:' . $request->ip(),
+                    'content' => sprintf('ip:%s  UUID:$s', $request->ip(), $created_UUID),
                 ]
             );
             return response()->json([
