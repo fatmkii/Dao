@@ -52,9 +52,10 @@ class Handler extends ExceptionHandler
         // });
 
         $this->renderable(function (QueryException $e, $request) {
+            $error_timestamp = Carbon::now()->toDateTimeString();
             return response()->json([
                 'code' => ResponseCode::DATABASE_FAILED,
-                'message' => ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED] . '，请重试。',
+                'message' => sprintf('%s，请重试。时间戳:%s', ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED], $error_timestamp),
                 'error_message' => $e->getMessage(),
             ]);
         });
@@ -63,9 +64,9 @@ class Handler extends ExceptionHandler
             //所有500错误统一返回。一定要放在最后。
             $error_timestamp = Carbon::now()->toDateTimeString();
             return response()->json([
-                'code' => 500,
-                'message' => '嗷！后端遇到未知错误，请重试或者联络管理员。错误时间标签:' . $error_timestamp,
-            ], 500);
+                'code' => $e->getStatusCode(),
+                'message' => sprintf('嗷！后端出错了，请重试或者联络管理员。错误代码：%s; 时间戳:%s; 错误信息:%s',  $e->getStatusCode(), $error_timestamp, $e->getMessage()),
+            ], $e->getStatusCode());
         });
     }
 }

@@ -58,15 +58,8 @@ axios.interceptors.response.use(
                 alert('此页面需先登录喔！');
             }
             window.location.href = '/login' //统一跳转到登陆页面
-        } else if (error.response.status !== undefined && error.response.status === 500) {
-            //500错误的返回信息
-            if (error.response.data.message) {
-                alert(error.response.data.message);
-            }
-            throw error
-        }
-        else {
-            alert(error.response);
+        } else {
+            alert(error.response.data.message);
             throw error
         }
     }
