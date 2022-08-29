@@ -9,6 +9,7 @@ use App\Common\ResponseCode;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\QueryException;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -58,6 +59,14 @@ class Handler extends ExceptionHandler
                 'message' => sprintf('%s，请重试。时间戳:%s', ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED], $error_timestamp),
                 'error_message' => $e->getMessage(),
             ]);
+        });
+
+
+        $this->renderable(function (ValidationException $e, $request) {
+            return response()->json([
+                'code' => 422,
+                'message' => $e->errors()['content'][0],
+            ], 422);
         });
 
         $this->renderable(function (Exception $e, $request) {
