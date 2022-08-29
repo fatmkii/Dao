@@ -319,7 +319,8 @@ export default {
         })
         .catch((error) => {
           this.$store.commit("ThreadsLoadStatus_set", 0);
-          alert(Object.values(error.response.data.errors)[0]);
+          // alert(Object.values(error.response.data.errors)[0]);
+          alert(error.response.data.message)
         });
     },
     get_delay_threads_data() {
@@ -349,7 +350,8 @@ export default {
         })
         .catch((error) => {
           this.$store.commit("ThreadsLoadStatus_set", 0);
-          alert(Object.values(error.response.data.errors)[0]);
+          // alert(Object.values(error.response.data.errors)[0]);
+          alert(error.response.data.message)
         });
     },
     new_thread_botton() {

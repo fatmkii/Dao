@@ -142,7 +142,8 @@ export default {
           }
         })
         .catch((error) => {
-          alert(Object.values(error.response.data.errors)[0]);
+          // alert(Object.values(error.response.data.errors)[0]);
+          alert(error.response.data.message)
         });
     },
   },

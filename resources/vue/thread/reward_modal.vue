@@ -102,7 +102,8 @@ export default {
         })
         .catch((error) => {
           this.reward_handling = false;
-          alert(Object.values(error.response.data.errors)[0]);
+          // alert(Object.values(error.response.data.errors)[0]);
+          alert(error.response.data.message);
         });
     },
   },

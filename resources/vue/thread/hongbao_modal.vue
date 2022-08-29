@@ -150,7 +150,8 @@ export default {
         })
         .catch((error) => {
           this.hongbao_handling = false;
-          alert(Object.values(error.response.data.errors)[0]);
+          // alert(Object.values(error.response.data.errors)[0]);
+          alert(error.response.data.message);
         });
     },
     toggle() {

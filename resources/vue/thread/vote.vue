@@ -134,7 +134,8 @@ export default {
           }
         })
         .catch((error) => {
-          alert(Object.values(error.response.data.errors)[0]);
+          // alert(Object.values(error.response.data.errors)[0]);
+          alert(error.response.data.message);
         });
     },
     new_vote_handle() {
@@ -169,8 +170,9 @@ export default {
           }
         })
         .catch((error) => {
-          alert(Object.values(error.response.data.errors)[0]);
           this.new_vote_handling = false;
+          // alert(Object.values(error.response.data.errors)[0]);
+          alert(error.response.data.message);
         });
     },
   },

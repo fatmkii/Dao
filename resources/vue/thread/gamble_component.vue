@@ -223,7 +223,8 @@ export default {
           }
         })
         .catch((error) => {
-          alert(Object.values(error.response.data.errors)[0]);
+          // alert(Object.values(error.response.data.errors)[0]);
+          alert(error.response.data.message);
         });
     },
     new_betting_handle() {
@@ -259,8 +260,9 @@ export default {
           }
         })
         .catch((error) => {
-          alert(Object.values(error.response.data.errors)[0]);
           this.new_betting_handling = false;
+          // alert(Object.values(error.response.data.errors)[0]);
+          alert(error.response.data.message);
         });
     },
     gamble_close() {
@@ -308,8 +310,9 @@ export default {
           }
         })
         .catch((error) => {
-          alert(Object.values(error.response.data.errors)[0]);
           this.new_betting_handling = false;
+          // alert(Object.values(error.response.data.errors)[0]);
+          alert(error.response.data.message);
         });
     },
     gamble_repeal() {
@@ -342,8 +345,9 @@ export default {
           }
         })
         .catch((error) => {
-          alert(Object.values(error.response.data.errors)[0]);
           this.new_betting_handling = false;
+          // alert(Object.values(error.response.data.errors)[0]);
+          alert(error.response.data.message);
         });
     },
   },

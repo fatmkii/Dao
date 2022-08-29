@@ -800,7 +800,8 @@ export default {
         })
         .catch((error) => {
           this.pingbici_set_handling = false;
-          alert(Object.values(error.response.data.errors)[0]);
+          // alert(Object.values(error.response.data.errors)[0]);
+          alert(error.response.data.message);
         });
     },
     pingbici_set_unique() {
@@ -862,7 +863,8 @@ export default {
         })
         .catch((error) => {
           this.my_emoji_set_handling = false;
-          alert(Object.values(error.response.data.errors)[0]);
+          // alert(Object.values(error.response.data.errors)[0]);
+          alert(error.response.data.message);
         });
     },
     my_emoji_set_unique() {
@@ -916,7 +918,8 @@ export default {
         })
         .catch((error) => {
           this.my_emoji_set_handling = false;
-          alert(Object.values(error.response.data.errors)[0]);
+          // alert(Object.values(error.response.data.errors)[0]);
+          alert(error.response.data.message);
         });
     },
     set_MyCSS() {
@@ -1000,7 +1003,8 @@ export default {
         })
         .catch((error) => {
           this.income_loading = 0;
-          alert(Object.values(error.response.data.errors)[0]);
+          // alert(Object.values(error.response.data.errors)[0]);
+          alert(error.response.data.message);
         });
     },
     get_income_data_sum() {
@@ -1028,7 +1032,8 @@ export default {
         })
         .catch((error) => {
           this.income_sum_loading = 0;
-          alert(Object.values(error.response.data.errors)[0]);
+          // alert(Object.values(error.response.data.errors)[0]);
+          alert(error.response.data.message);
         });
     },
     income_thread_link(thread_id, floor) {
@@ -1081,7 +1086,8 @@ export default {
         })
         .catch((error) => {
           this.my_emoji_set_handling = false;
-          alert(Object.values(error.response.data.errors)[0]);
+          // alert(Object.values(error.response.data.errors)[0]);
+          alert(error.response.data.message);
         });
     },
   },

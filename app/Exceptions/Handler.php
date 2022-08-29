@@ -6,6 +6,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use App\Exceptions\CoinException;
 use App\Common\ResponseCode;
+use Exception;
 use Illuminate\Database\QueryException;
 
 class Handler extends ExceptionHandler
@@ -48,6 +49,13 @@ class Handler extends ExceptionHandler
         //         'message' => ResponseCode::$codeMap[ResponseCode::COIN_NOT_ENOUGH] . '，请确认',
         //     ]);
         // });
+
+        $this->renderable(function (Exception $e, $request) {
+            return response()->json([
+                'code' => 500,
+                'message' => '嗷！后端遇到未知错误，请重试或者联络管理员。',
+            ], 500);
+        });
 
         $this->renderable(function (QueryException $e, $request) {
             return response()->json([
