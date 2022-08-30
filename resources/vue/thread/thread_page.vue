@@ -761,6 +761,7 @@ export default {
             });
         } catch (e) {
           this.is_listening = false;
+          console.log(e);
           alert("服务器的自动涮锅好像出错了，暂时不能使用");
         }
       } else {
