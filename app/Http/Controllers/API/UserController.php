@@ -488,10 +488,9 @@ class UserController extends Controller
                 'forum_id' => $request->forum_id,
                 'thread_id' => $request->thread_id,
                 'content' => $post_content,
-                'nickname' => $request->nickname,
+                'nickname' => '奥利奥打赏系统',
                 'created_by_admin' => 2,
                 'created_IP' => $request->ip(),
-                'floor' => 0,
             ]);
 
             $thread = $post->thread;
