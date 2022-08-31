@@ -56,7 +56,7 @@ class Handler extends ExceptionHandler
             $error_timestamp = Carbon::now()->toDateTimeString();
             return response()->json([
                 'code' => ResponseCode::DATABASE_FAILED,
-                'message' => sprintf('%s，请重试。时间戳:%s', ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED], $error_timestamp),
+                'message' => sprintf('%s，请重试或联络管理员。时间戳:%s', ResponseCode::$codeMap[ResponseCode::DATABASE_FAILED], $error_timestamp),
                 'error_message' => $e->getMessage(),
             ]);
         });
