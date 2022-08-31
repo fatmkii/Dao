@@ -21,7 +21,7 @@ class CreateThreadsTable extends Migration
             $table->integer('gamble_question_id')->nullable(); //菠菜贴的id
             $table->integer('crowd_id')->nullable(); //众筹贴的id
             $table->integer('hongbao_id')->nullable(); //红包贴的id
-            $table->string('nickname');
+            $table->string('nickname')->nullable();
             $table->text('title');
             $table->string('sub_title')->default('[闲聊]');
             $table->tinyInteger('random_heads_group')->default(1);
