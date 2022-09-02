@@ -137,6 +137,7 @@ class User extends Authenticatable
                             [
                                 'binggan' => $this->binggan,
                                 'user_id' => $this->id,
+                                'thread_id' => $thread_id,
                                 'active' => '用户触发了机器人刷帖警报',
                                 'content' => 'ip:' . $ip . ' record:' . $new_post_record_IP,
                             ]
@@ -182,6 +183,7 @@ class User extends Authenticatable
                                 [
                                     'binggan' => $this->binggan,
                                     'user_id' => $this->id,
+                                    'thread_id' => $thread_id,
                                     'active' => '怀疑用户用脚本刷帖(方差一致)',
                                     'content' => sprintf("ip:%s avg:%.1f  var:%.1f", $ip, $avg, $variance)
                                 ]
