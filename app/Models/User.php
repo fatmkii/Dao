@@ -131,11 +131,12 @@ class User extends Authenticatable
                         if (Redis::TTL($redis_key) == -1) {
                             //偶然会出现TTL失效，此时redis的key
                             Redis::del($redis_key);
+                            Log::error('new_post_record expired failed', ['key' => $redis_key]);
                         };
                         //批量查询和赋值
                         $$name = Redis::GET($redis_key);
                     }
-                    
+
                     // $new_post_record = Redis::GET('new_post_record_' . $this->binggan);
                     // $new_post_record_IP = Redis::GET('new_post_record_IP_' . $ip);
                     // $new_post_record_IP2 = Redis::GET('new_post_record_IP2_' . $ip);
