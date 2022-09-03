@@ -119,9 +119,26 @@ class User extends Authenticatable
         switch ($action) {
             case 'new_post': {
 
-                    $new_post_record = Redis::GET('new_post_record_' . $this->binggan); //记录饼干的redis
-                    $new_post_record_IP = Redis::GET('new_post_record_IP_' . $ip); //不输入验证码就不消除的
-                    $new_post_record_IP2 = Redis::GET('new_post_record_IP2_' . $ip); //每次看帖行为就消除的
+                    $records =
+                        [
+                            'new_post_record' => 'new_post_record_' . $this->binggan, //记录饼干的redis
+                            'new_post_record_IP' => 'new_post_record_IP_' . $ip, //不输入验证码就不消除的
+                            'new_post_record_IP2' => 'new_post_record_IP2_' . $ip, //每次看帖行为就消除的
+                        ];
+
+
+                    foreach ($records as $name => $redis_key) {
+                        if (Redis::TTL($redis_key) == -1) {
+                            //偶然会出现TTL失效，此时redis的key
+                            Redis::del($redis_key);
+                        };
+                        //批量查询和赋值
+                        $$name = Redis::GET($redis_key);
+                    }
+                    
+                    // $new_post_record = Redis::GET('new_post_record_' . $this->binggan);
+                    // $new_post_record_IP = Redis::GET('new_post_record_IP_' . $ip);
+                    // $new_post_record_IP2 = Redis::GET('new_post_record_IP2_' . $ip);
 
                     //第1类检查：饼干记录，1分钟最多10贴
                     if ($new_post_record >= self::NEW_POST_NUMBER && $this->admin == 0) {
