@@ -157,6 +157,12 @@
       class="nissined_img"
     />
 
+    <img
+      src="https://oss.cpttmm.com/xhg_other/notice_4.png"
+      v-if="threads_load_status == 2 && thread_reject_code == 21404"
+      class="nissined_img"
+    />
+
     <ZBar @reload="get_threads_data(true)" reload>
       <template v-slot:top>
         <div
@@ -305,7 +311,7 @@ export default {
             }
             this.show_delay = false;
           } else {
-            if ([22404].includes(response.data.code)) {
+            if ([21404, 22404].includes(response.data.code)) {
               this.thread_reject_code = response.data.code;
               //清空数据，避免显示上一个帖子的数据
               this.$store.commit("ThreadsData_set", "");

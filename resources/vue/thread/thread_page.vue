@@ -445,6 +445,11 @@
       v-if="posts_load_status == 2 && thread_response_code == 23404"
       class="nissined_img"
     />
+    <img
+      src="https://oss.cpttmm.com/xhg_other/notice_4.png"
+      v-if="posts_load_status == 2 && thread_response_code == 21404"
+      class="nissined_img"
+    />
 
     <div>
       <b-spinner
@@ -1015,7 +1020,9 @@ export default {
               this.load_focus_threads();
             });
           } else {
-            if ([23410, 23401, 234011, 23404].includes(response.data.code)) {
+            if (
+              [21404, 23410, 23401, 234011, 23404].includes(response.data.code)
+            ) {
               this.thread_response_code = response.data.code;
               //清空数据，避免显示上一个帖子的数据
               this.$store.commit("PostsData_set", "");
