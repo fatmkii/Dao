@@ -142,14 +142,14 @@ class User extends Authenticatable
                     // $new_post_record_IP2 = Redis::GET('new_post_record_IP2_' . $ip);
 
                     //第1类检查：饼干记录，1分钟最多10贴
-                    if ($new_post_record >= self::NEW_POST_NUMBER && $this->admin == 0) {
+                    if ($new_post_record >= self::NEW_POST_NUMBER && $this->admin < 10) {
                         return response()->json([
                             'code' => ResponseCode::POST_TOO_MANY,
                             'message' => ResponseCode::$codeMap[ResponseCode::POST_TOO_MANY] . '为防止刷屏，每1分钟最多回帖10次（含大乱斗）',
                         ]);
                     }
                     //第2类检查：IP记录，3600秒内100次弹出验证码
-                    if ($new_post_record_IP >= self::NEW_POST_NUMBER_IP && $this->admin == 0) {
+                    if ($new_post_record_IP >= self::NEW_POST_NUMBER_IP && $this->admin < 10) {
 
                         ProcessUserActive::dispatch(
                             [
@@ -168,7 +168,7 @@ class User extends Authenticatable
                     }
 
                     //第3类检查：IP记录，只回帖不看帖（防止直接操作API的脚本）
-                    if ($new_post_record_IP2 >= self::NEW_POST_NUMBER_IP2 && $new_post_record_IP2 % 5 == 0 && $this->admin == 0) {
+                    if ($new_post_record_IP2 >= self::NEW_POST_NUMBER_IP2 && $new_post_record_IP2 % 5 == 0 && $this->admin < 10) {
                         ProcessUserActive::dispatch(
                             [
                                 'binggan' => $this->binggan,
@@ -180,7 +180,7 @@ class User extends Authenticatable
                     }
 
                     //第4类检查：IP记录，回顾该用户前20个帖子的发帖间隔方差
-                    if ($new_post_record_IP == self::NEW_POST_NUMBER_IP3 && $this->admin == 0) {
+                    if ($new_post_record_IP == self::NEW_POST_NUMBER_IP3 && $this->admin < 10) {
                         $posts_time = Post::suffix(intval($thread_id / 10000))
                             ->where('created_binggan', $this->binggan)
                             ->orderBy('id', 'desc')->limit(21)->pluck('created_at')->toArray();
@@ -209,7 +209,7 @@ class User extends Authenticatable
                         }
                     }
                     //第5类检查：
-                    if ($new_post_record_IP % self::NEW_POST_NUMBER_IP4 == 0 && $this->admin == 0) {
+                    if ($new_post_record_IP % self::NEW_POST_NUMBER_IP4 == 0 && $this->admin < 10) {
                         //确认是否脚本机器人发帖（JS脚本类型）
                         $key_1 = md5($request->thread_id . $request->binggan . $request->timestamp . "true"); //浏览器的isTrusted为true时候;
                         if ($request->new_post_key != $key_1) {
