@@ -246,8 +246,10 @@ class BattleController extends Controller
             switch ($difference) {
                 case 0: { //平局！
                         $battle_result = 3;
-                        $challenger_user->coin += intval($battle->battle_olo * 1.96);
-                        $initiator_user->coin += intval($battle->battle_olo * 1.96);
+                        // $challenger_user->coin += intval($battle->battle_olo * 1.96);
+                        // $initiator_user->coin += intval($battle->battle_olo * 1.96);
+                        $challenger_user->increment('coin', intval($battle->battle_olo * 1.96));
+                        $initiator_user->increment('coin', intval($battle->battle_olo * 1.96));
                         $challenger_user->save();
                         $initiator_user->save();
 
@@ -283,7 +285,8 @@ class BattleController extends Controller
                     }
                 case $difference > 0: { //发起者胜利
                         $battle_result = 1;
-                        $initiator_user->coin += intval($battle->battle_olo * 1.96);
+                        // $initiator_user->coin += intval($battle->battle_olo * 1.96);
+                        $initiator_user->increment('coin', intval($battle->battle_olo * 1.96));
                         $initiator_user->save();
 
                         //胜利者公告
@@ -315,7 +318,8 @@ class BattleController extends Controller
                     }
                 case $difference < 0: { //挑战者胜利
                         $battle_result = 2;
-                        $challenger_user->coin += intval($battle->battle_olo * 1.96);
+                        // $challenger_user->coin += intval($battle->battle_olo * 1.96);
+                        $challenger_user->increment('coin', intval($battle->battle_olo * 1.96));
                         $challenger_user->save();
 
                         //胜利者公告

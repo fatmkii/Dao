@@ -306,7 +306,8 @@ class User extends Authenticatable
         if ($this->coin < $coin) {
             throw new CoinException();
         }
-        $this->coin -= $coin;
+        // $this->coin -= $coin;
+        $this->increment('coin', -$coin);
         $this->save();
     }
 
@@ -332,7 +333,8 @@ class User extends Authenticatable
         //执行异步的队列，记录olo变动操作
         ProcessIncomeStatement::dispatch($action, $income_statement);
 
-        $this->coin += $income_statement['olo'];
+        // $this->coin += $income_statement['olo'];
+        $this->increment('coin', $income_statement['olo']);
         $this->save();
     }
 
