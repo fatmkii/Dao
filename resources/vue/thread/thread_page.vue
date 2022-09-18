@@ -1368,14 +1368,22 @@ export default {
       }
       if (this.jump_page) {
         const page = this.jump_page;
-        var link = "/thread/" + this.thread_id + "/" + page;
+        const link = "/thread/" + this.thread_id + "/" + page;
+        this.$router.push(link);
+        this.$refs["jump_modal"].hide();
       } else if (this.jump_floor) {
         const page = Math.ceil(this.jump_floor / 200);
-        var link =
+        const link =
           "/thread/" + this.thread_id + "/" + page + "#f_" + this.jump_floor;
+        if (this.$router.currentRoute.fullPath.includes(link)) {
+          //如果当前页面就是需要跳转的楼层，则直接滚动到流程
+          document.getElementById("f_" + this.jump_floor).scrollIntoView(true);
+          this.$refs["jump_modal"].hide();
+        } else {
+          this.$router.push(link);
+          this.$refs["jump_modal"].hide();
+        }
       }
-      this.$router.push(link);
-      this.$refs["jump_modal"].hide();
     },
     quote_click_handle(quote_content) {
       this.$refs.post_input_com.quote_click_handle(quote_content);
