@@ -828,7 +828,7 @@ class UserController extends Controller
     public function income_show(Request $request)
     {
         $request->validate([
-            'income_date' => 'required|date|min:2022-01-01',
+            'income_date' => 'required|date|after:2022-01-01',
             'mode' => 'string',
         ]);
 
