@@ -15,8 +15,8 @@ return [
 
     'accepted' => 'The :attribute must be accepted.',
     'active_url' => 'The :attribute is not a valid URL.',
-    'after' => 'The :attribute must be a date after :date.',
-    'after_or_equal' => 'The :attribute must be a date after or equal to :date.',
+    'after' => ':attribute 必须在:date之后',
+    'after_or_equal' => ':attribute 必须在:date或之后',
     'alpha' => 'The :attribute must only contain letters.',
     'alpha_dash' => ':attribute只能包含数字、字母和下划线',
     'alpha_num' => 'The :attribute must only contain letters and numbers.',
@@ -171,6 +171,7 @@ return [
         'hongbao_num' => '红包个数',
         'hongbao_olo' => '红包的olo总数',
         'key_word' => '关键词（口令）',
+        'income_date' => '收支查询日期',
     ],
 
 ];
