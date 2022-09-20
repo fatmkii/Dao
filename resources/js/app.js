@@ -48,6 +48,10 @@ axios.interceptors.response.use(
         return response
     },
     error => {
+        if (!error.response) {
+            console.log(error)
+            throw error
+        }
         if (error.response.status !== undefined && error.response.status === 401) {
             localStorage.clear('Binggan')   //如果遇到401错误(用户未认证)，就清除Binggan和Token
             localStorage.clear('Token')
