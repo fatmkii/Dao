@@ -23,7 +23,7 @@ use App\Models\UserLV;
 use App\Models\UserMessages;
 use Exception;
 use App\Events\NewPostBroadcast;
-
+use App\Exceptions\RequestTooManyException;
 
 class UserController extends Controller
 {
@@ -455,6 +455,15 @@ class UserController extends Controller
                 'message' => '给自己打赏是想给税收做贡献吗？',
             ]);
         }
+
+        //判断是否重复打赏
+        $redis_key = sprintf('reward_%s_to_%d', $user->binggan, $request->post_id);
+        if (Redis::exists($redis_key)) {
+            throw new RequestTooManyException;
+        } else {
+            Redis::setex($redis_key, 2, 1);
+        }
+
 
         try {
             DB::beginTransaction();

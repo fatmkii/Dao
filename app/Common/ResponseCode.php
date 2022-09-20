@@ -6,6 +6,7 @@ class ResponseCode
 {
     const SUCCESS = 200;
     const FILED_ERROR = 20422;
+    const REQUEST_TOO_MANY = 20429;
 
     const USER_UNAUTHORIZED = 21401;
     const USER_CANNOT = 214011;
@@ -79,6 +80,7 @@ class ResponseCode
         self::SUCCESS => '请求成功',
         self::DEFAULT => '服务器异常',
         self::FILED_ERROR => '表单验证未通过',
+        self::REQUEST_TOO_MANY => '请求过于频繁，可能重复操作了。请重试。',
         self::USER_NOT_FOUND => '饼干无法找到',
         self::USER_LOCKED => '你的饼干已封禁',
         self::USER_BANNED => '你的饼干已碎',
