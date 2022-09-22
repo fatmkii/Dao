@@ -1185,7 +1185,7 @@ export default {
               alert(response.data.message);
             }
           })
-          .catch((error) => alert(error));
+          // .catch((error) => alert(error));
       }
     },
     change_thread_color() {
@@ -1208,7 +1208,7 @@ export default {
               alert(response.data.message);
             }
           })
-          .catch((error) => alert(error));
+          // .catch((error) => alert(error));
       } else {
         alert("未输入颜色");
       }
@@ -1241,7 +1241,7 @@ export default {
             alert(response.data.message);
           }
         })
-        .catch((error) => alert(error)); // Todo:写异常返回代码;
+        // .catch((error) => alert(error)); // Todo:写异常返回代码;
     },
     back_to_forum(new_tab) {
       if (new_tab) {
@@ -1408,7 +1408,7 @@ export default {
                 alert(response.data.message);
               }
             })
-            .catch((error) => alert(error));
+            // .catch((error) => alert(error));
         }
       } else if (this.thread_sub_id !== 1) {
         var user_confirm = confirm("把这个主题取消置顶吗？");
@@ -1429,7 +1429,7 @@ export default {
                 alert(response.data.message);
               }
             })
-            .catch((error) => alert(error));
+            // .catch((error) => alert(error));
         }
       }
     },

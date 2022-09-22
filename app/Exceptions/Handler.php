@@ -9,6 +9,8 @@ use App\Common\ResponseCode;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
@@ -69,6 +71,14 @@ class Handler extends ExceptionHandler
             ], 422);
         });
 
+        $this->renderable(function (AuthenticationException $e, $request) {
+            return response()->json([
+                'code' => 401,
+                'message' => sprintf('饼干认证失败，请尝试退出饼干后重新导入。'),
+                'error_message' => $e->getMessage(),
+            ], 401);
+        });
+
         $this->renderable(function (Exception $e, $request) {
             //其他各种代码错误统一返回。一定要放在最后。
             if (method_exists($e, 'getStatusCode')) {
@@ -76,6 +86,8 @@ class Handler extends ExceptionHandler
             } else {
                 $status_code = 500;
             }
+
+            Log::error($e);
 
             $error_timestamp = Carbon::now()->toDateTimeString();
             return response()->json([

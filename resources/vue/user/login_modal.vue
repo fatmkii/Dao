@@ -77,7 +77,7 @@ export default {
       .then((response) => {
         this.reg_record_TTL = response.data.data.reg_record_TTL;
       })
-      .catch((error) => alert(error)); // Todo:写异常返回代码
+      // .catch((error) => alert(error)); // Todo:写异常返回代码
   },
   methods: {
     login_handle() {
@@ -108,7 +108,7 @@ export default {
             alert(response.data.message);
           }
         })
-        .catch((error) => alert(error)); // Todo:写异常返回代码
+        // .catch((error) => alert(error)); // Todo:写异常返回代码
       this.$router.push({ name: "homepage" });
     },
     register_handle() {
@@ -138,7 +138,7 @@ export default {
             alert(response.data.message);
           }
         })
-        .catch((error) => alert(error)); // Todo:写异常返回代码
+        // .catch((error) => alert(error)); // Todo:写异常返回代码
     },
     bin2hex(s) {
       var i,

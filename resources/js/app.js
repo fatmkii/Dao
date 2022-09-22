@@ -52,20 +52,20 @@ axios.interceptors.response.use(
             console.log(error)
             throw error
         }
-        if (error.response.status !== undefined && error.response.status === 401) {
-            localStorage.clear('Binggan')   //如果遇到401错误(用户未认证)，就清除Binggan和Token
-            localStorage.clear('Token')
-            delete axios.defaults.headers.Authorization;
-            if (error.response.data !== undefined) {
-                alert(error.response.data.message)
-            } else {
-                alert('此页面需先登录喔！');
-            }
-            window.location.href = '/login' //统一跳转到登陆页面
-        } else {
-            alert(error.response.data.message);
-            throw error
-        }
+        // if (error.response.status !== undefined && error.response.status === 401) {
+        //     localStorage.clear('Binggan')   //如果遇到401错误(用户未认证)，就清除Binggan和Token
+        //     localStorage.clear('Token')
+        //     delete axios.defaults.headers.Authorization;
+        //     if (error.response.data !== undefined) {
+        //         alert(error.response.data.message)
+        //     } else {
+        //         alert('此页面需先登录喔！');
+        //     }
+        //     window.location.href = '/login' //统一跳转到登陆页面
+        // } else {
+        alert(error.response.data.message);
+        throw error
+        // }
     }
 );
 

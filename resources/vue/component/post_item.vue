@@ -378,7 +378,7 @@ export default {
               alert(response.data.message);
             }
           })
-          .catch((error) => alert(error));
+          // .catch((error) => alert(error));
       }
     },
     post_delete_recover_click() {
@@ -401,7 +401,7 @@ export default {
               alert(response.data.message);
             }
           })
-          .catch((error) => alert(error));
+          // .catch((error) => alert(error));
       }
     },
     post_delete_click_admin() {
@@ -424,7 +424,7 @@ export default {
               alert(response.data.message);
             }
           })
-          .catch((error) => alert(error));
+          // .catch((error) => alert(error));
       }
     },
     post_delete_recover_click_admin() {
@@ -447,7 +447,7 @@ export default {
               alert(response.data.message);
             }
           })
-          .catch((error) => alert(error));
+          // .catch((error) => alert(error));
       }
     },
     post_delete_all_click_admin() {
@@ -471,7 +471,7 @@ export default {
               alert(response.data.message);
             }
           })
-          .catch((error) => alert(error));
+          // .catch((error) => alert(error));
       }
     },
     ban_cookie_click_admin() {
@@ -495,7 +495,7 @@ export default {
               alert(response.data.message);
             }
           })
-          .catch((error) => alert(error));
+          // .catch((error) => alert(error));
       }
     },
     lock_cookie_click_admin() {
@@ -519,7 +519,7 @@ export default {
               alert(response.data.message);
             }
           })
-          .catch((error) => alert(error));
+          // .catch((error) => alert(error));
       }
     },
     quote_click() {
