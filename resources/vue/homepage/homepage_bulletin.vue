@@ -16,7 +16,7 @@
           <p class="my-2">这里是小火锅, 是个人论坛。欢迎来玩~</p>
           <p class="my-2">QQ小火锅避难群：156840110</p>
           <p class="my-2">
-            目前小火锅有5个网址：cpttmm.com、  www.cpttmm.com、  v2.cpttmm.com、  cpttmm.love、  www.cpttmm.love
+            目前小火锅有5个网址：cpttmm.com、  www.cpttmm.com、  cpttmm.love、  www.cpttmm.love、  v2.cpttmm.com(v2的域名解析被干扰得很厉害、尽量不要用)
           </p>
         </b-card-text>
       </b-card-body>
