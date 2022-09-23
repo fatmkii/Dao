@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -426,14 +427,23 @@ class AdminController extends Controller
             ]);
         }
 
-        $user_to_lock->locked_until = Carbon::now()->addDays(3);
+
+        if ($user_to_lock->locked_until != null && $user_to_lock->locked_until > Carbon::now()) {
+            return response()->json([
+                'code' => ResponseCode::DEFAULT,
+                'message' => '该饼干已经是封禁状态了。封禁期到：' . $user_to_lock->locked_until,
+            ]);
+        }
+
+        // $user_to_lock->locked_until = Carbon::now()->addDays(3);
         $user_to_lock->locked_count += 1;
+        $user_to_lock->locked_until = Carbon::now()->addDays(3 * $user_to_lock->locked_count); //每封禁一次，多3天
         if ($user_to_lock->locked_count >= 4) {
             //如果被锁定超过3次（≥4），则碎饼干
             $user_to_lock->is_banned = true;
             $msg = '该饼干已被累计封禁4次，已永久碎饼干。';
         } else {
-            $msg = '该饼干已封禁3天。';
+            $msg = sprintf('该饼干已封禁%d天。', $user_to_lock->locked_count * 3);
         }
         $user_to_lock->save();
         ProcessUserActive::dispatch(

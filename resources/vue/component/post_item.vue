@@ -451,7 +451,7 @@ export default {
       }
     },
     post_delete_all_click_admin() {
-      var content = prompt("要用管理员权限删除该饼干全部回复吗？请输入理由");
+      var content = prompt("要用管理员权限删除该饼干全部回复吗？请输入理由：\n（一般只有违规刷屏时候才会用）");
       if (content != null) {
         const config = {
           method: "post",
@@ -499,7 +499,7 @@ export default {
       }
     },
     lock_cookie_click_admin() {
-      var content = prompt("你要封禁这个饼干吗？（默认3天）请输入理由");
+      var content = prompt("你要封禁这个饼干吗？请输入理由：\n（第1次封3天、2次6天、3次9天、4次碎饼）");
       if (content != null) {
         const config = {
           method: "post",
