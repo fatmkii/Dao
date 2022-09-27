@@ -63,7 +63,7 @@ class CheckBinggan
             case 'show': //看帖等
                 {
                     //如果饼干被ban，返回错误
-                    if ($user->is_banned) {
+                    if ($user != null && $user->is_banned) {
                         return response()->json(
                             [
                                 'code' => ResponseCode::USER_BANNED,
