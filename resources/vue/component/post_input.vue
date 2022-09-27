@@ -73,7 +73,10 @@
           实时预览
         </b-form-checkbox>
       </div>
-      <div class="my-2 d-flex align-items-center justify-content-end" style="font-size: 0.875rem">
+      <div
+        class="my-2 d-flex align-items-center justify-content-end"
+        style="font-size: 0.875rem"
+      >
         <slot name="svg_icon"></slot>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -460,11 +463,31 @@ export default {
       }
     },
     insertSummaryTag() {
-      this.replaceSelection(
-        "content_input",
-        "<details><summary>折叠内容</summary>",
-        "</details>"
-      );
+      // 获取编辑器textarea对象
+      var editor = document.getElementById("content_input");
+      if (!editor) {
+        var editors = document.getElementsByName("content_input");
+        if (editors && editors.length > 0) {
+          editor = editors[0];
+        }
+      }
+      var selectionStart = editor.selectionStart; // textarea选中文本的开始索引
+      var selectionEnd = editor.selectionEnd; // textarea选中文本的结束索引
+      var selectStr = editor.value.substring(selectionStart, selectionEnd);
+      if (selectStr.length == 0) {
+        //如果没有选中文本，则追加“隐藏内容”4个字，以提示用户
+        this.replaceSelection(
+          "content_input",
+          "<details><summary>显示内容</summary>",
+          "隐藏内容</details>"
+        );
+      } else {
+        this.replaceSelection(
+          "content_input",
+          "<details><summary>显示内容</summary>",
+          "</details>"
+        );
+      }
     },
     upload_img_handle(file, mode) {
       if (!file) return;
