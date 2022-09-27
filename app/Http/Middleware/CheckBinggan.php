@@ -62,6 +62,19 @@ class CheckBinggan
                 }
             case 'show': //看帖等
                 {
+                    //如果饼干被ban，返回错误
+                    if ($user->is_banned) {
+                        return response()->json(
+                            [
+                                'code' => ResponseCode::USER_BANNED,
+                                'message' => ResponseCode::$codeMap[ResponseCode::USER_BANNED],
+                                'data' => [
+                                    'binggan' => $user->binggan,
+                                ],
+                            ],
+                            401
+                        );
+                    }
                     break;
                 }
         }
