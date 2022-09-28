@@ -12,6 +12,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 
 class Handler extends ExceptionHandler
 {
@@ -79,6 +80,16 @@ class Handler extends ExceptionHandler
             ], 401);
         });
 
+        $this->renderable(function (ThrottleRequestsException $e, $request) {
+            Log::error($e, ['request_url' => $request->url(), 'request_data' => $request->all()]);
+
+            return response()->json([
+                'code' => 429,
+                'message' => sprintf('请求过于频繁，请休息一下吧'),
+            ], 429);
+        });
+
+
         $this->renderable(function (Exception $e, $request) {
             //其他各种代码错误统一返回。一定要放在最后。
             if (method_exists($e, 'getStatusCode')) {
@@ -87,7 +98,7 @@ class Handler extends ExceptionHandler
                 $status_code = 500;
             }
 
-            Log::error($e);
+            Log::error($e, ['request_url' => $request->url(), 'request_data' => $request->all()]);
 
             $error_timestamp = Carbon::now()->toDateTimeString();
             return response()->json([
