@@ -81,7 +81,7 @@ class Handler extends ExceptionHandler
         });
 
         $this->renderable(function (ThrottleRequestsException $e, $request) {
-            Log::error($e, ['request_url' => $request->url(), 'request_data' => $request->all()]);
+            Log::error($e, ['request_url' => $request->url(), 'request_data' => $request->all(), 'request_ip' => $request->ip()]);
 
             return response()->json([
                 'code' => 429,
@@ -98,7 +98,7 @@ class Handler extends ExceptionHandler
                 $status_code = 500;
             }
 
-            Log::error($e, ['request_url' => $request->url(), 'request_data' => $request->all()]);
+            Log::error($e, ['request_url' => $request->url(), 'request_data' => $request->all(), 'request_ip' => $request->ip()]);
 
             $error_timestamp = Carbon::now()->toDateTimeString();
             return response()->json([
