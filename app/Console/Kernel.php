@@ -35,7 +35,7 @@ class Kernel extends ConsoleKernel
             ->sendOutputTo('/var/log/Laravel-schedule.log');
         $schedule->call(function () {
             if (Redis::TTL('search_record_global') == -1) {
-                Log::error('search_record_global expired failed');
+                Log::channel('my_log')->error('search_record_global expired failed');
                 Redis::del('search_record_global');
             } 
         })->everyMinute();

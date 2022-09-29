@@ -47,6 +47,13 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
+        //自用的信息，譬如redis expire失效等
+        'my_log' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/my_log.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
+
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),

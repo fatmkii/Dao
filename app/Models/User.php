@@ -131,7 +131,7 @@ class User extends Authenticatable
                         if (Redis::TTL($redis_key) == -1) {
                             //偶然会出现TTL失效，此时redis的key
                             Redis::del($redis_key);
-                            Log::error('new_post_record expired failed', ['key' => $redis_key]);
+                            Log::channel('my_log')->error('new_post_record expired failed', ['key' => $redis_key]);
                         };
                         //批量查询和赋值
                         $$name = Redis::GET($redis_key);
@@ -190,7 +190,7 @@ class User extends Authenticatable
                             array_push($posts_time_d, $posts_time[$i]->timestamp - $posts_time[$i + 1]->timestamp);
                         }
                         if (count($posts_time_d) == 0) {
-                            Log::warning('new_post check failed', ['array' => $posts_time_d, 'binggan' => $this->binggan]);
+                            Log::channel('my_log')->warning('new_post check failed', ['array' => $posts_time_d, 'binggan' => $this->binggan]);
                             break;
                         }
 
