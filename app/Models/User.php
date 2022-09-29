@@ -121,7 +121,8 @@ class User extends Authenticatable
 
                     $records =
                         [
-                            'new_post_record' => 'new_post_record_' . $this->binggan, //记录饼干的redis
+                            // 'new_post_record' => 'new_post_record_' . $this->binggan, //记录饼干的redis
+                            'new_post_record' => 'new_post_record_' . $ip, //1分钟10贴的记录（从饼干改为IP）
                             'new_post_record_IP' => 'new_post_record_IP_' . $ip, //不输入验证码就不消除的
                             'new_post_record_IP2' => 'new_post_record_IP2_' . $ip, //每次看帖行为就消除的
                         ];
@@ -265,10 +266,10 @@ class User extends Authenticatable
     {
         switch ($action) {
             case 'new_post': {
-                    if (Redis::exists('new_post_record_' . $this->binggan)) {
-                        Redis::incr('new_post_record_' . $this->binggan);
+                    if (Redis::exists('new_post_record_' . $ip)) {
+                        Redis::incr('new_post_record_' . $ip);
                     } else {
-                        Redis::setex('new_post_record_' . $this->binggan,  self::NEW_POST_INTERVAL, 1);
+                        Redis::setex('new_post_record_' . $ip,  self::NEW_POST_INTERVAL, 1);
                     }
                     if (Redis::exists('new_post_record_IP_' . $ip)) {
                         Redis::incr('new_post_record_IP_' . $ip);
