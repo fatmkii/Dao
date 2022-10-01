@@ -177,8 +177,12 @@
       <span class="post_footer_text" @click="quote_click"
         >№{{ post_data.floor }} ☆☆☆</span
       >
-      <span class="post_nick_name" :class="author_class">
+      <span class="post_nick_name align-items-center" :class="author_class">
         {{ post_data.nickname }}
+        <img
+          src="https://oss.cpttmm.com/xhg_other/GUOQI.png"
+          style="max-height: 18px"
+        />
       </span>
       <span class="post_footer_text">于</span>
       <span class="post_created_at">{{ post_data.created_at }}</span>
@@ -369,16 +373,15 @@ export default {
             thread_id: this.thread_id,
           },
         };
-        axios(config)
-          .then((response) => {
-            if (response.data.code == 200) {
-              alert("帖子删除成功");
-              this.$emit("get_posts_data");
-            } else {
-              alert(response.data.message);
-            }
-          })
-          // .catch((error) => alert(error));
+        axios(config).then((response) => {
+          if (response.data.code == 200) {
+            alert("帖子删除成功");
+            this.$emit("get_posts_data");
+          } else {
+            alert(response.data.message);
+          }
+        });
+        // .catch((error) => alert(error));
       }
     },
     post_delete_recover_click() {
@@ -392,16 +395,15 @@ export default {
             thread_id: this.thread_id,
           },
         };
-        axios(config)
-          .then((response) => {
-            if (response.data.code == 200) {
-              alert("帖子恢复成功");
-              this.$emit("get_posts_data");
-            } else {
-              alert(response.data.message);
-            }
-          })
-          // .catch((error) => alert(error));
+        axios(config).then((response) => {
+          if (response.data.code == 200) {
+            alert("帖子恢复成功");
+            this.$emit("get_posts_data");
+          } else {
+            alert(response.data.message);
+          }
+        });
+        // .catch((error) => alert(error));
       }
     },
     post_delete_click_admin() {
@@ -415,16 +417,15 @@ export default {
             content: content,
           },
         };
-        axios(config)
-          .then((response) => {
-            if (response.data.code == 200) {
-              alert(response.data.message);
-              this.$emit("get_posts_data");
-            } else {
-              alert(response.data.message);
-            }
-          })
-          // .catch((error) => alert(error));
+        axios(config).then((response) => {
+          if (response.data.code == 200) {
+            alert(response.data.message);
+            this.$emit("get_posts_data");
+          } else {
+            alert(response.data.message);
+          }
+        });
+        // .catch((error) => alert(error));
       }
     },
     post_delete_recover_click_admin() {
@@ -438,20 +439,21 @@ export default {
             content: content,
           },
         };
-        axios(config)
-          .then((response) => {
-            if (response.data.code == 200) {
-              alert(response.data.message);
-              this.$emit("get_posts_data");
-            } else {
-              alert(response.data.message);
-            }
-          })
-          // .catch((error) => alert(error));
+        axios(config).then((response) => {
+          if (response.data.code == 200) {
+            alert(response.data.message);
+            this.$emit("get_posts_data");
+          } else {
+            alert(response.data.message);
+          }
+        });
+        // .catch((error) => alert(error));
       }
     },
     post_delete_all_click_admin() {
-      var content = prompt("要用管理员权限删除该饼干全部回复吗？请输入理由：\n（一般只有违规刷屏时候才会用）");
+      var content = prompt(
+        "要用管理员权限删除该饼干全部回复吗？请输入理由：\n（一般只有违规刷屏时候才会用）"
+      );
       if (content != null) {
         const config = {
           method: "post",
@@ -462,16 +464,15 @@ export default {
             content: content,
           },
         };
-        axios(config)
-          .then((response) => {
-            if (response.data.code == 200) {
-              alert(response.data.message);
-              this.$emit("get_posts_data");
-            } else {
-              alert(response.data.message);
-            }
-          })
-          // .catch((error) => alert(error));
+        axios(config).then((response) => {
+          if (response.data.code == 200) {
+            alert(response.data.message);
+            this.$emit("get_posts_data");
+          } else {
+            alert(response.data.message);
+          }
+        });
+        // .catch((error) => alert(error));
       }
     },
     ban_cookie_click_admin() {
@@ -486,20 +487,21 @@ export default {
             content: content,
           },
         };
-        axios(config)
-          .then((response) => {
-            if (response.data.code == 200) {
-              alert(response.data.message);
-              this.$emit("get_posts_data");
-            } else {
-              alert(response.data.message);
-            }
-          })
-          // .catch((error) => alert(error));
+        axios(config).then((response) => {
+          if (response.data.code == 200) {
+            alert(response.data.message);
+            this.$emit("get_posts_data");
+          } else {
+            alert(response.data.message);
+          }
+        });
+        // .catch((error) => alert(error));
       }
     },
     lock_cookie_click_admin() {
-      var content = prompt("你要封禁这个饼干吗？请输入理由：\n（第1次封3天、2次6天、3次9天、4次碎饼）");
+      var content = prompt(
+        "你要封禁这个饼干吗？请输入理由：\n（第1次封3天、2次6天、3次9天、4次碎饼）"
+      );
       if (content != null) {
         const config = {
           method: "post",
@@ -510,16 +512,15 @@ export default {
             content: content,
           },
         };
-        axios(config)
-          .then((response) => {
-            if (response.data.code == 200) {
-              alert(response.data.message);
-              this.$emit("get_posts_data");
-            } else {
-              alert(response.data.message);
-            }
-          })
-          // .catch((error) => alert(error));
+        axios(config).then((response) => {
+          if (response.data.code == 200) {
+            alert(response.data.message);
+            this.$emit("get_posts_data");
+          } else {
+            alert(response.data.message);
+          }
+        });
+        // .catch((error) => alert(error));
       }
     },
     quote_click() {
