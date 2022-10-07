@@ -11,7 +11,14 @@
         :key="thread.id"
         v-show="subtitles_selected[thread.sub_title]"
       >
-        <div class="text-left my-1 py-1" :style="{ color: thread.title_color }">
+        <div
+          class="text-left"
+          :style="{
+            color: thread.title_color,
+            marginTop: threads_margin_padding_Y + 'px',
+            marginBottom: threads_margin_padding_Y+ 'px',
+          }"
+        >
           <span class="thread_sub_title"> {{ thread.sub_title }}&nbsp; </span>
           <span
             v-if="
@@ -59,7 +66,13 @@
           </router-link>
           <span v-if="thread.posts_num >= 1200">🔥</span>
         </div>
-        <div class="my-1 py-1" style="font-size: 0.8rem">
+        <div
+          style="font-size: 0.8rem"
+          :style="{
+            marginTop: threads_margin_padding_Y+ 'px',
+            marginBottom: threads_margin_padding_Y+ 'px',
+          }"
+        >
           <span>发帖人：{{ thread.nickname }} </span>
           <span>最新回复：{{ thread.updated_at }}</span>
           <span class="float-right">Re:{{ thread.posts_num }}</span>
@@ -113,10 +126,12 @@ export default {
         }
       }
     },
+
     ...mapState({
       threads_load_status: (state) => state.Threads.ThreadsLoadStatus,
       forum_is_nissin: (state) => state.Forums.CurrentForumData.is_nissin,
       focus_threads: (state) => state.User.FocusThreads,
+      threads_margin_padding_Y: (state) => state.MyCSS.ThreadsMarginPaddingY,
     }),
   },
   methods: {

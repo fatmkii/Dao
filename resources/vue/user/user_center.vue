@@ -86,6 +86,18 @@
           <span class="ml-1 mb-2">px</span>
         </div>
         <div class="mt-2 d-flex align-items-center">
+          <span class="mb-2">主题列表间距：</span>
+          <b-form-spinbutton
+            size="sm"
+            style="max-width: 120px"
+            class="mb-2"
+            min="0"
+            max="12"
+            v-model="ThreadsMarginPaddingY"
+          ></b-form-spinbutton>
+          <span class="ml-1 mb-2">px（仅手机版）</span>
+        </div>
+        <div class="mt-2 d-flex align-items-center">
           <span class="mb-2">回复多行折叠：</span>
           <b-form-spinbutton
             size="sm"
@@ -573,6 +585,14 @@ export default {
         this.$store.commit("ThreadsPerPage_set", value);
       },
     },
+    ThreadsMarginPaddingY: {
+      get() {
+        return this.$store.state.MyCSS.ThreadsMarginPaddingY;
+      },
+      set(value) {
+        this.$store.commit("ThreadsMarginPaddingY_set", value);
+      },
+    },
     FoldPingbici: {
       get() {
         return this.$store.state.User.FoldPingbici;
@@ -695,13 +715,13 @@ export default {
           delete axios.defaults.headers.Authorization;
           window.location.href = "/"; //因为想清空Vuex状态，所以用js原生的重定向，而不是Vuerouter的push
         })
-          .catch((error) => {
-            if (error.response.status === 401) {
-              localStorage.clear("Binggan"); //如果是token错误的情况，退出饼干的时候也返回401。此时直接删除localStorage强制退出。
-              localStorage.clear("Token");
-              window.location.href = "/"
-            }
-          }); // Todo:写异常返回代码;
+        .catch((error) => {
+          if (error.response.status === 401) {
+            localStorage.clear("Binggan"); //如果是token错误的情况，退出饼干的时候也返回401。此时直接删除localStorage强制退出。
+            localStorage.clear("Token");
+            window.location.href = "/";
+          }
+        }); // Todo:写异常返回代码;
     },
     get_user_data() {
       //更新用户信息
@@ -947,6 +967,7 @@ export default {
         PostsMaxLine: 16,
         QuoteMax: 3,
         ThreadsPerPage: 50,
+        ThreadsMarginPaddingY: 4,
       };
       this.$store.commit("MyCSS_set_all", my_css);
       this.set_MyCSS();
@@ -1084,7 +1105,7 @@ export default {
             this.binggan_apply_handling = false;
             this.binggan_password_repeat = "";
             this.binggan_password = "";
-            alert('定制饼干申请成功！重新导入即可使用。')
+            alert("定制饼干申请成功！重新导入即可使用。");
           } else {
             this.binggan_apply_handling = false;
             alert(response.data.message);

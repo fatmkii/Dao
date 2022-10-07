@@ -121,6 +121,9 @@ export default {
         if (this.$store.state.MyCSS.ThreadsPerPage == null) {
           this.$store.commit("ThreadsPerPage_set", 50); //临时的，给旧版本加默认值
         }
+        if (this.$store.state.MyCSS.ThreadsMarginPaddingY == null) {
+          this.$store.commit("ThreadsMarginPaddingY_set", 4); //临时的，给旧版本加默认值
+        }
         const my_css = this.$store.state.MyCSS;
         localStorage.my_css = JSON.stringify(my_css);
       }

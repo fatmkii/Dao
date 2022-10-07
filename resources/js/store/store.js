@@ -216,6 +216,7 @@ const module_css = {
         PostsMaxLine: 16,
         QuoteMax: 3,
         ThreadsPerPage: 50,
+        ThreadsMarginPaddingY: 4,
     }),
     mutations: {
         MyCSS_set_all(state, payload) {
@@ -227,6 +228,7 @@ const module_css = {
             state.PostsMaxLine = payload.PostsMaxLine
             state.QuoteMax = payload.QuoteMax
             state.ThreadsPerPage = payload.ThreadsPerPage
+            state.ThreadsMarginPaddingY = payload.ThreadsMarginPaddingY
         },
         PostsLineHeight_set(state, payload) {
             state.PostsLineHeight = payload
@@ -251,6 +253,9 @@ const module_css = {
         },
         ThreadsPerPage_set(state, payload) {
             state.ThreadsPerPage = payload
+        },
+        ThreadsMarginPaddingY_set(state, payload) {
+            state.ThreadsMarginPaddingY = payload
         },
     },
 }
