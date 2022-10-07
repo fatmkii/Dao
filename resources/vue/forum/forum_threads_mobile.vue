@@ -16,7 +16,9 @@
           :style="{
             color: thread.title_color,
             marginTop: threads_margin_padding_Y + 'px',
-            marginBottom: threads_margin_padding_Y+ 'px',
+            marginBottom: threads_margin_padding_Y + 'px',
+            paddingTop: threads_margin_padding_Y + 'px',
+            paddingBottom: threads_margin_padding_Y + 'px',
           }"
         >
           <span class="thread_sub_title"> {{ thread.sub_title }}&nbsp; </span>
@@ -69,8 +71,8 @@
         <div
           style="font-size: 0.8rem"
           :style="{
-            marginTop: threads_margin_padding_Y+ 'px',
-            marginBottom: threads_margin_padding_Y+ 'px',
+            paddingTop: threads_margin_padding_Y + 'px',
+            paddingBottom: threads_margin_padding_Y + 'px',
           }"
         >
           <span>发帖人：{{ thread.nickname }} </span>
