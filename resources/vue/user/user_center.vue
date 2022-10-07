@@ -95,7 +95,7 @@
             max="12"
             v-model="ThreadsMarginPaddingY"
           ></b-form-spinbutton>
-          <span class="ml-1 mb-2">px（仅手机版）</span>
+          <span class="ml-1 mb-2">px（手机版）</span>
         </div>
         <div class="mt-2 d-flex align-items-center">
           <span class="mb-2">回复多行折叠：</span>
