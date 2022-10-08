@@ -225,7 +225,7 @@ class HongbaoPostController extends Controller
                         'normal', //记录类型
                         [
                             'olo' => $coin,
-                            'content' => '抢到红包',
+                            'content' => $hongbao->message ? '抢到红包——' . $hongbao->message : '抢到红包',
                             'thread_id' => $thread->id,
                             'thread_title' => $thread->title,
                             'post_id' => $post_original->id,
