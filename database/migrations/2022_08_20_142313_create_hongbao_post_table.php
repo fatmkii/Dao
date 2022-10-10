@@ -22,6 +22,7 @@ class CreateHongbaoPostTable extends Migration
             $table->unsignedSmallInteger('num_remains');
             $table->unsignedInteger('olo_remains');
             $table->unsignedTinyInteger('type')->default(1); //1=口令红包
+            $table->boolean('olo_hide')->default(0);//是否隐藏奥利奥
             $table->string('key_word');
             $table->string('message')->nullable();
             $table->softDeletes();

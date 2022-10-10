@@ -51,6 +51,11 @@
             text-field="text"
           ></b-form-select>
         </b-input-group>
+        <div class="d-flex justify-content-end mt-2">
+          <b-form-checkbox v-model="hongbao_olo_hide" switch>
+            隐藏红包olo总额
+          </b-form-checkbox>
+        </div>
       </div>
     </template>
     <template v-slot:modal-footer="{ cancel }">
@@ -88,6 +93,7 @@ export default {
         { value: 1, text: "随机红包" },
         { value: 2, text: "定额红包" },
       ],
+      hongbao_olo_hide: false,
     };
   },
   computed: {
@@ -130,6 +136,7 @@ export default {
           type: this.hongbao_type,
           hongbao_key_word: this.hongbao_key_word,
           hongbao_message: this.hongbao_message,
+          hongbao_olo_hide:this.hongbao_olo_hide,
         },
       };
       axios(config)

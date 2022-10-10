@@ -8,7 +8,7 @@
     </div>
 
     <div>
-      <span>红包总olo：{{ hongbao_data.olo_total }}个（{{ hongbao_type_text }}）</span>
+      <span>红包总olo：{{ olo_total }}（{{ hongbao_type_text }}）</span>
     </div>
     <div>
       <span
@@ -76,6 +76,13 @@ export default {
         Array(this.hongbao_data.num_total - this.hongbao_data.num_remains),
         (v, k) => k
       );
+    },
+    olo_total() {
+      if (this.hongbao_data.olo_hide) {
+        return "（已隐藏olo总额）";
+      } else {
+        return this.hongbao_data.olo_total + "个";
+      }
     },
     hongbao_type_text() {
       if (this.hongbao_data) {

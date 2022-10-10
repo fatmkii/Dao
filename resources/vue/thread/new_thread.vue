@@ -183,6 +183,9 @@
               text-field="text"
             ></b-form-select>
           </b-input-group>
+          <b-form-checkbox v-model="hongbao_olo_hide" switch class="my-2">
+            隐藏红包olo总额
+          </b-form-checkbox>
           <p>
             友情提示：在红包olo总数以外，会追加扣除7%手续费
             <br />
@@ -608,6 +611,7 @@ export default {
         { value: 1, text: "随机红包" },
         { value: 2, text: "定额红包" },
       ],
+      hongbao_olo_hide: false,
       end_time_selected: "00:00:00",
       end_date_selected: undefined,
       minDate: minDate,
@@ -767,6 +771,7 @@ export default {
         config.data.type = this.hongbao_type;
         config.data.hongbao_key_word = this.hongbao_key_word;
         config.data.hongbao_message = this.hongbao_message;
+        config.data.hongbao_olo_hide = this.hongbao_olo_hide;
       }
       if (this.thread_type == "vote") {
         //如果是投票贴，追加投票相关的请求参数

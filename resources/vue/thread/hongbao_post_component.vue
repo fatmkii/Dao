@@ -4,7 +4,7 @@
       <span @click="quote_click">红包口令：“{{ hongbao_data.key_word }}”</span>
     </div>
     <div>
-      <span>红包总olo：{{ hongbao_data.olo_total }}个（{{ hongbao_type_text }}）</span>
+      <span>红包总olo：{{ olo_total }}（{{ hongbao_type_text }}）</span>
     </div>
     <div>
       <span
@@ -32,6 +32,13 @@ export default {
     return {};
   },
   computed: {
+    olo_total() {
+      if (this.hongbao_data.olo_hide) {
+        return "（已隐藏olo总额）";
+      } else {
+        return this.hongbao_data.olo_total + "个";
+      }
+    },
     button_theme() {
       return this.$store.getters.ButtonTheme;
     },

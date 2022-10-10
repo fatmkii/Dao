@@ -64,6 +64,17 @@ class Hongbao extends Model
         }
     }
 
+
+    public function getOloTotalAttribute($olo_total)
+    {
+        if ($this->olo_hide) {
+            //隐藏olo总额
+            return null;
+        } else {
+            return $olo_total;
+        }
+    }
+
     public static function create(Request $request, $thread_id)
     {
         $request->validate([
@@ -72,6 +83,7 @@ class Hongbao extends Model
             'type' => 'required|integer',
             'hongbao_key_word' => 'required|string|max:255',
             'hongbao_message' => 'nullable|string|max:255',
+            'hongbao_olo_hide' => 'nullable|boolean',
         ]);
 
         $user = $request->user;
@@ -96,6 +108,7 @@ class Hongbao extends Model
         $hongbao->type = $request->type;
         $hongbao->key_word = $request->hongbao_key_word;
         $hongbao->message = $request->hongbao_message;
+        $hongbao->olo_hide = $request->hongbao_olo_hide;
         $hongbao->save();
 
         return $hongbao;
