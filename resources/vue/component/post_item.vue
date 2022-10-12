@@ -179,10 +179,6 @@
       >
       <span class="post_nick_name align-items-center" :class="author_class">
         {{ post_data.nickname }}
-        <img
-          src="https://oss.cpttmm.com/xhg_other/GUOQI.png"
-          style="max-height: 18px"
-        />
       </span>
       <span class="post_footer_text">于</span>
       <span class="post_created_at">{{ post_data.created_at }}</span>
