@@ -106,14 +106,6 @@ export default {
         .replace("%s1", this.text_input_1)
         .replace("%s2", this.text_input_2);
     },
-    ...mapState({
-      forum_id: (state) =>
-        state.Forums.CurrentForumData.id ? state.Forums.CurrentForumData.id : 0,
-      thread_id: (state) =>
-        state.Threads.CurrentThreadData.id
-          ? state.Threads.CurrentThreadData.id
-          : 0,
-    }),
   },
   created() {},
   methods: {

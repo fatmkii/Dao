@@ -79,5 +79,10 @@ Vue.component('footer_navi', require('../vue/footer_navi.vue').default);
 
 const app = new Vue({
     router,
-    store
-}).$mount('#app')
+    store,
+    data: {
+        eventHub: new Vue()
+    }
+})
+Vue.prototype.$eventHub = Vue.prototype.$eventHub || new Vue()
+app.$mount('#app')

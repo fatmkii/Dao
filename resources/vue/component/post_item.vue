@@ -334,6 +334,10 @@ export default {
   },
   created() {
     this.pingbici_check();
+    let vm = this; //为了回调函数可以使用vue的方法
+    this.$eventHub.$on("pingbici_refresh", () => {
+      vm.pingbici_check();
+    });
   },
   activated() {
     this.pingbici_check();

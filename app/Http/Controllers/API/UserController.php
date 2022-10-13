@@ -650,6 +650,90 @@ class UserController extends Controller
         );
     }
 
+    //追加自定义屏蔽词
+    public function pingbici_add(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'content_pingbici' => 'required|string',
+        ]);
+
+        $user = $request->user;
+
+        $pingbici = $user->Pingbici;
+        if ($pingbici) {
+            $pingbici_array = json_decode($user->Pingbici->content_pingbici);
+            if (in_array($request->content_pingbici, $pingbici_array)) {
+                return response()->json([
+                    'code' => ResponseCode::USER_ERROR,
+                    'message' => '该内容屏蔽词已存在：' . $request->content_pingbici,
+                ]);
+            }
+            array_push($pingbici_array, $request->content_pingbici);
+        } else {
+            $pingbici = new Pingbici();
+            $pingbici_array = [$request->content_pingbici]; //得是个数组
+        }
+
+        //检查屏蔽词长度是否符合饼干等级
+        $user_lv = $user->UserLV;
+        if (!$user_lv) {
+            //如果不存在，则输入默认值
+            $user_lv = array(
+                'title_pingbici' => self::TITLE_PINGBICI_MIN,
+                'content_pingbici' => self::CONTENT_PINGBICI_MIN,
+                'fjf_pingbici' => self::FJF_PINGBICI_MIN,
+                'my_emoji' => self::MYEMOJI_MIN,
+            );
+        }
+        $user_lv_array = array(
+            // 'title_pingbici' => '标题屏蔽词',
+            'content_pingbici' => '内容屏蔽词',
+            // 'fjf_pingbici' => '反精分屏蔽词',
+        );
+        foreach ($user_lv_array as $name => $error_msg) {
+            if (mb_strlen($request[$name]) + mb_strlen($pingbici->$name) > $user_lv[$name]) {
+                return response()->json([
+                    'code' => ResponseCode::USER_ERROR,
+                    'message' => $error_msg . '长度为' . mb_strlen($request[$name]) . '。已超出了最大限制，可在个人中心升级限制。',
+                ]);
+            }
+        }
+
+
+        try {
+            DB::beginTransaction();
+            $user->use_pingbici = true;
+            $pingbici->user_id = $user->id;
+            // $pingbici->title_pingbici = $request->title_pingbici;
+            $pingbici->content_pingbici = json_encode($pingbici_array);
+            // $pingbici->fjf_pingbici = $request->fjf_pingbici;
+            $user->save();
+            $pingbici->save();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+
+        ProcessUserActive::dispatch(
+            [
+                'binggan' => $user->binggan,
+                'user_id' => $user->id,
+                'active' => '用户更新了屏蔽词(追加)',
+                'content' => '长度:' . mb_strlen($request->content_pingbici),
+            ]
+        );
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '已追加屏蔽词',
+                'content_pingbici' => json_encode($pingbici_array),
+            ],
+        );
+    }
+
     //设定我的表情包
     public function my_emoji_set(Request $request)
     {
@@ -720,7 +804,7 @@ class UserController extends Controller
         );
     }
 
-    //最爱我的表情包
+    //追加我的表情包
     public function my_emoji_add(Request $request)
     {
         $request->validate([
