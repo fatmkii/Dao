@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -22,7 +23,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        //
+        MethodNotAllowedHttpException::class, //对于请求方法错误不用留下记录（太多了）
     ];
 
     /**
@@ -64,7 +65,6 @@ class Handler extends ExceptionHandler
             ]);
         });
 
-
         $this->renderable(function (ValidationException $e, $request) {
             return response()->json([
                 'code' => 422,
@@ -98,7 +98,16 @@ class Handler extends ExceptionHandler
                 $status_code = 500;
             }
 
-            Log::error($e, ['request_url' => $request->url(), 'request_data' => $request->all(), 'request_ip' => $request->ip()]);
+            $should_report = true;
+            foreach ($this->dontReport as $class) {
+                //将不需要留下日志的筛选掉
+                if ($e instanceof $class) {
+                    $should_report = false;
+                }
+            }
+            if ($should_report) {
+                Log::error($e, ['request_url' => $request->url(), 'request_data' => $request->all(), 'request_ip' => $request->ip()]);
+            }
 
             $error_timestamp = Carbon::now()->toDateTimeString();
             return response()->json([
