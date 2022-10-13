@@ -1,5 +1,5 @@
 <template>
-  <div class="hongbao-content align-items-center">
+  <div class="hongbao-content align-items-center" style="word-wrap: break-word">
     <div>
       <span @click="quote_click">红包口令：“{{ hongbao_data.key_word }}”</span>
     </div>

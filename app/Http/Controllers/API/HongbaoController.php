@@ -33,6 +33,10 @@ class HongbaoController extends Controller
         if ($user) {
             $hongbao->setUserID($user->id);
         }
+        
+        if ($hongbao->olo_hide) {
+            $hongbao->makeHidden('olo_total');
+        }
 
         return response()->json([
             'code' => ResponseCode::SUCCESS,

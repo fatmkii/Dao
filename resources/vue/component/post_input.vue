@@ -99,8 +99,8 @@
           fill="currentColor"
           class="icon-hide bi bi-code-slash"
           viewBox="0 0 16 16"
-          v-b-popover.hover.left="'折叠内容'"
-          @click="insertSummaryTag"
+          v-b-popover.hover.left="'快捷代码'"
+          @click="modal_toggle('code_modal')"
         >
           <path
             d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"
@@ -226,6 +226,7 @@
           </b-button-group>
         </template>
       </b-modal>
+      <CodeModal ref="code_modal" @insert_handle="code_insert"></CodeModal>
     </div>
   </div>
 </template>
@@ -235,6 +236,7 @@ import PostItem from "./post_item.vue";
 import Emoji from "./emoji.vue";
 import Drawer from "./drawer.vue";
 import Imgtu from "./imgtu.vue";
+import CodeModal from "./code_modal.vue";
 
 export default {
   name: "post_input",
@@ -243,6 +245,7 @@ export default {
     Emoji,
     Drawer,
     Imgtu,
+    CodeModal,
   },
   props: {
     input_disable: Boolean, //可否输入（正在处理提交时设false）
@@ -462,33 +465,33 @@ export default {
         editor.focus();
       }
     },
-    insertSummaryTag() {
-      // 获取编辑器textarea对象
-      var editor = document.getElementById("content_input");
-      if (!editor) {
-        var editors = document.getElementsByName("content_input");
-        if (editors && editors.length > 0) {
-          editor = editors[0];
-        }
-      }
-      var selectionStart = editor.selectionStart; // textarea选中文本的开始索引
-      var selectionEnd = editor.selectionEnd; // textarea选中文本的结束索引
-      var selectStr = editor.value.substring(selectionStart, selectionEnd);
-      if (selectStr.length == 0) {
-        //如果没有选中文本，则追加“隐藏内容”4个字，以提示用户
-        this.replaceSelection(
-          "content_input",
-          "<details><summary>显示内容</summary>",
-          "隐藏内容</details>"
-        );
-      } else {
-        this.replaceSelection(
-          "content_input",
-          "<details><summary>显示内容</summary>",
-          "</details>"
-        );
-      }
-    },
+    // insertSummaryTag() {
+    //   // 获取编辑器textarea对象
+    //   var editor = document.getElementById("content_input");
+    //   if (!editor) {
+    //     var editors = document.getElementsByName("content_input");
+    //     if (editors && editors.length > 0) {
+    //       editor = editors[0];
+    //     }
+    //   }
+    //   var selectionStart = editor.selectionStart; // textarea选中文本的开始索引
+    //   var selectionEnd = editor.selectionEnd; // textarea选中文本的结束索引
+    //   var selectStr = editor.value.substring(selectionStart, selectionEnd);
+    //   if (selectStr.length == 0) {
+    //     //如果没有选中文本，则追加“隐藏内容”4个字，以提示用户
+    //     this.replaceSelection(
+    //       "content_input",
+    //       "<details><summary>显示内容</summary>",
+    //       "隐藏内容</details>"
+    //     );
+    //   } else {
+    //     this.replaceSelection(
+    //       "content_input",
+    //       "<details><summary>显示内容</summary>",
+    //       "</details>"
+    //     );
+    //   }
+    // },
     upload_img_handle(file, mode) {
       if (!file) return;
       this.upload_img_handling = true;
@@ -544,6 +547,12 @@ export default {
         this.title_input = "";
         this.content_input = "";
       }
+    },
+    code_insert(text) {
+      let textarea = document.getElementById("content_input");
+      this.content_input = this.insertAtCursor(textarea, text);
+      this.content_input_change();
+      this.$refs.content_input.focus();
     },
   },
   created() {

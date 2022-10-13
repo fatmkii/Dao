@@ -244,6 +244,9 @@ class Post extends myModel
                 if ($this->user_id) {
                     $hongbao->setUserID($this->user_id);
                 }
+                if ($hongbao->olo_hide) {
+                    $hongbao->makeHidden('olo_total');
+                }
                 return $hongbao;
             } else {
                 return null;
