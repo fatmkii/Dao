@@ -60,11 +60,20 @@ export default {
     return {
       code_type: 0,
       code_type_options: [
-        { value: 0, text: "图片" },
+        { value: 0, text: "折叠内容" },
         { value: 1, text: "超链接" },
-        { value: 2, text: "折叠内容" },
+        { value: 2, text: "图片" },
       ],
       code_type_para: [
+        {
+          prepend_1: "显示内容",
+          prepend_2: "隐藏内容",
+          input_1_enable: true,
+          input_2_enable: true,
+          input_1_default: "显示内容",
+          input_2_default: "隐藏内容",
+          insert_text: "<details><summary>%s1</summary>%s2</details>",
+        },
         {
           prepend_1: null,
           prepend_2: "图片链接",
@@ -82,15 +91,6 @@ export default {
           input_1_default: "点我跳转",
           input_2_default: "",
           insert_text: "<a href='%s2'>%s1</a>",
-        },
-        {
-          prepend_1: "显示内容",
-          prepend_2: "隐藏内容",
-          input_1_enable: true,
-          input_2_enable: true,
-          input_1_default: "显示内容",
-          input_2_default: "隐藏内容",
-          insert_text: "<details><summary>%s1</summary>%s2</details>",
         },
       ],
       text_input_1: "",
