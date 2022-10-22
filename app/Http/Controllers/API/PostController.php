@@ -133,18 +133,19 @@ class PostController extends Controller
             ); //回复+10奥利奥（通过统一接口、记录操作）
             $user->nickname = $request->nickname; //记录昵称
             $user->save();
+
+            if ($thread->hongbao_id != null) {
+                HongbaoController::store($request, $thread, $post); //抢红包流程（是否符合条件的判断也在里面）
+            }
+
+            if (HongbaoPost::where('thread_id', $thread->id)->exists()) {
+                HongbaoPostController::store($request, $thread, $post); //抢红包流程（是否符合条件的判断也在里面）
+            }
+
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
-        }
-
-        if ($thread->hongbao_id != null) {
-            HongbaoController::store($request, $thread, $post); //抢红包流程（是否符合条件的判断也在里面）
-        }
-
-        if (HongbaoPost::where('thread_id', $thread->id)->exists()) {
-            HongbaoPostController::store($request, $thread, $post); //抢红包流程（是否符合条件的判断也在里面）
         }
 
         //用redis记录回频率。
@@ -581,7 +582,7 @@ class PostController extends Controller
                 'created_by_admin' => 2,
                 'created_IP' => $request->ip(),
             ]);
-            
+
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();

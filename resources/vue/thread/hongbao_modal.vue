@@ -18,7 +18,17 @@
               >奥利奥</span
             ></span
           >
+          <br />
+          {{ key_word_type_note[key_word_type - 1] }}
         </p>
+        <b-input-group prepend="红包类型" class="mt-2">
+          <b-form-select
+            v-model="key_word_type"
+            :options="key_word_type_options"
+            value-field="value"
+            text-field="text"
+          ></b-form-select>
+        </b-input-group>
         <b-input-group prepend="红包个数" class="mt-2">
           <b-form-input
             v-model="hongbao_num"
@@ -37,13 +47,23 @@
             placeholder="必填"
           ></b-form-input>
         </b-input-group>
+        <b-input-group
+          prepend="口令提示"
+          class="mt-2"
+          v-if="[2, 3].includes(key_word_type)"
+        >
+          <b-form-input
+            v-model="hongbao_question"
+            placeholder="必填"
+          ></b-form-input>
+        </b-input-group>
         <b-input-group prepend="回复留言" class="mt-2">
           <b-form-input
             v-model="hongbao_message"
             placeholder="可选"
           ></b-form-input>
         </b-input-group>
-        <b-input-group prepend="红包类型" class="mt-2">
+        <b-input-group prepend="olo类型" class="mt-2">
           <b-form-select
             v-model="hongbao_type"
             :options="hongbao_type_options"
@@ -83,15 +103,27 @@ export default {
   props: {},
   data: function () {
     return {
-      hongbao_olo: "",
-      hongbao_num: undefined,
+      hongbao_olo: 3000,
+      hongbao_num: 10,
       hongbao_key_word: undefined,
       hongbao_message: "",
+      hongbao_question: "",
       hongbao_handling: false,
+      key_word_type: 1,
+      key_word_type_options: [
+        { value: 1, text: "口令红包" },
+        { value: 2, text: "抢答红包" },
+        { value: 3, text: "暗号红包" },
+      ],
+      key_word_type_note: [
+        "口令红包：口令会显示",
+        "抢答红包：口令会隐藏，回复中会显示",
+        "暗号红包：口令和回复中均隐藏",
+      ],
       hongbao_type: 1,
       hongbao_type_options: [
-        { value: 1, text: "随机红包" },
-        { value: 2, text: "定额红包" },
+        { value: 1, text: "随机olo" },
+        { value: 2, text: "定额olo" },
       ],
       hongbao_olo_hide: false,
     };
@@ -123,6 +155,10 @@ export default {
         alert("选择定额红包时，总额要是红包数量的整倍数喔");
         return;
       }
+      if ([2, 3].includes(this.key_word_type) && !this.hongbao_question) {
+        alert("抢答红包或者暗号红包，需要输入口令提示喔");
+        return;
+      }
       this.hongbao_handling = true;
       const config = {
         method: "post",
@@ -134,9 +170,11 @@ export default {
           hongbao_olo: this.hongbao_olo,
           hongbao_num: this.hongbao_num,
           type: this.hongbao_type,
+          key_word_type: this.key_word_type,
           hongbao_key_word: this.hongbao_key_word,
+          hongbao_question: this.hongbao_question,
           hongbao_message: this.hongbao_message,
-          hongbao_olo_hide:this.hongbao_olo_hide,
+          hongbao_olo_hide: this.hongbao_olo_hide,
         },
       };
       axios(config)

@@ -1,7 +1,14 @@
 <template>
   <div class="hongbao-content align-items-center" style="word-wrap: break-word">
     <div>
-      <span @click="quote_click">红包口令：“{{ hongbao_data.key_word }}”</span>
+      <span v-b-popover.hover.bottom="'点我输入'" @click="quote_click"
+        >红包口令：{{ hongbao_key_word }}</span
+      >
+    </div>
+    <div>
+      <span v-if="[2, 3].includes(hongbao_data.key_word_type)"
+        >口令提示：{{ hongbao_data.question }}</span
+      >
     </div>
     <div>
       <span>红包总olo：{{ olo_total }}（{{ hongbao_type_text }}）</span>
@@ -53,14 +60,28 @@ export default {
         return "";
       }
     },
+    hongbao_key_word() {
+      if (this.hongbao_data) {
+        if (this.hongbao_data.key_word_type == 1) {
+          return "“" + this.hongbao_data.key_word + "”";
+        } else if (this.hongbao_data.key_word_type == 2) {
+          return "（抢答红包已隐藏口令）";
+        } else if (this.hongbao_data.key_word_type == 3) {
+          return "（暗号红包已隐藏口令）";
+        }
+      } else {
+        return "";
+      }
+    },
   },
   methods: {
     quote_click() {
       const keyword_prefix = "--红包口令: "; //为了方便前端识别并屏蔽，增加前缀
-      return this.$emit(
-        "quote_click",
-        keyword_prefix + this.hongbao_data.key_word
-      );
+      if (this.hongbao_data.key_word_type == 1) {
+        this.$emit("quote_click", keyword_prefix + this.hongbao_data.key_word);
+      } else if ([2, 3].includes(this.hongbao_data.key_word_type)) {
+        this.$emit("quote_click", keyword_prefix);
+      }
     },
   },
 };

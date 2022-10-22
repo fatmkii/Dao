@@ -137,7 +137,7 @@ class HongbaoPostController extends Controller
     }
 
 
-    public static function store(Request $request, Thread $thread, Post $post_original)
+    public static function store(Request $request, Thread $thread, Post &$post_original)
     {
         $user = $request->user;
 
@@ -178,9 +178,11 @@ class HongbaoPostController extends Controller
                         $message = sprintf("恭喜抢到最后一个红包，有%d个奥利奥！", $coin);
                     } else {
                         if ($hongbao->type == 1) {
+                            //随机红包
                             $central = intval($hongbao->olo_remains / $hongbao->num_remains);
                             $coin = rand(1, $central * 2);
                         } elseif ($hongbao->type == 2) {
+                            //定额红包
                             $coin = intval($hongbao->olo_total / $hongbao->num_total);
                         }
                         $message = sprintf("你抢到了%d个奥利奥！",  $coin);
@@ -190,26 +192,15 @@ class HongbaoPostController extends Controller
                         $message = $message . '<br>——' . $hongbao->message;
                     }
 
+                    if ($hongbao_item->key_word_type == 3) {
+                        //暗号红包时，把回复中的红包口令隐藏起来
+                        $post_original->content = $keyword_prefix . "（暗号红包已隐藏口令）";
+                        $post_original->save();
+                    }
+
                     $hongbao->olo_remains -= $coin;
                     $hongbao->num_remains -= 1;
                     $hongbao->save();
-
-                    // $post = new Post;
-                    // $post->setSuffix(intval($request->thread_id / 10000));
-                    // $post->created_binggan = $request->binggan;
-                    // $post->forum_id = $request->forum_id;
-                    // $post->thread_id = $request->thread_id;
-                    // $post->content = $message;
-                    // $post->nickname = '红包结果';
-                    // $post->created_by_admin = 2; //0=一般用户 1=管理员发布，2=系统发布
-                    // $post->created_ip = $request->ip();
-                    // $post->random_head = random_int(0, 39);
-
-                    // $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
-                    // $post->floor = $thread->posts_num;
-
-                    // $thread->save();
-                    // $post->save();
 
                     $post = Post::create([
                         'created_binggan' => $request->binggan,

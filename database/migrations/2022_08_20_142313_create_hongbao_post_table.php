@@ -21,10 +21,12 @@ class CreateHongbaoPostTable extends Migration
             $table->unsignedInteger('olo_total');
             $table->unsignedSmallInteger('num_remains');
             $table->unsignedInteger('olo_remains');
-            $table->unsignedTinyInteger('type')->default(1); //1=口令红包
-            $table->boolean('olo_hide')->default(0);//是否隐藏奥利奥
-            $table->string('key_word');
-            $table->string('message')->nullable();
+            $table->unsignedTinyInteger('type')->default(1); //1=随机红包, 2=定额红包
+            $table->unsignedTinyInteger('key_word_type')->default(1); //1=普通口令红包, 2=抢答红包(答案不显示、回复显示), 3=暗号红包(答案回复都不显示)
+            $table->boolean('olo_hide')->default(0); //是否隐藏奥利奥
+            $table->string('key_word'); //红包口令
+            $table->string('question')->nullable(); //红包问题
+            $table->string('message')->nullable(); //回复留言
             $table->softDeletes();
             $table->timestamps();
         });

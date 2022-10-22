@@ -245,7 +245,12 @@ class Post extends myModel
                     $hongbao->setUserID($this->user_id);
                 }
                 if ($hongbao->olo_hide) {
+                    //隐藏olo总额
                     $hongbao->makeHidden('olo_total');
+                }
+                if (in_array($hongbao->key_word_type, [2, 3])) {
+                    //如果是抢答红包或者暗号红包，则隐藏红包口令
+                    $hongbao->makeHidden('key_word');
                 }
                 return $hongbao;
             } else {
