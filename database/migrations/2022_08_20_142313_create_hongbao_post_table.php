@@ -17,6 +17,7 @@ class CreateHongbaoPostTable extends Migration
             $table->id()->startingValue(10001);
             $table->foreignId('thread_id')->constrained();
             $table->unsignedInteger('post_id');
+            $table->unsignedInteger('floor')->nullable();
             $table->unsignedSmallInteger('num_total');
             $table->unsignedInteger('olo_total');
             $table->unsignedSmallInteger('num_remains');

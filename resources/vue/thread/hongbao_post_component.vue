@@ -65,9 +65,17 @@ export default {
         if (this.hongbao_data.key_word_type == 1) {
           return "“" + this.hongbao_data.key_word + "”";
         } else if (this.hongbao_data.key_word_type == 2) {
-          return "（抢答红包已隐藏口令）";
+          if (this.hongbao_data.key_word == undefined) {
+            return "（抢答红包已隐藏口令）";
+          } else {
+            return "“" + this.hongbao_data.key_word + "”（红包抢完，口令已公开）";
+          }
         } else if (this.hongbao_data.key_word_type == 3) {
-          return "（暗号红包已隐藏口令）";
+          if (this.hongbao_data.key_word == undefined) {
+            return "（暗号红包已隐藏口令）";
+          } else {
+            return "“" + this.hongbao_data.key_word + "”（红包抢完，口令已公开）";
+          }
         }
       } else {
         return "";

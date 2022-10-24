@@ -110,6 +110,7 @@ class HongbaoPost extends Model
         $hongbao = new HongbaoPost();
         $hongbao->thread_id = $thread_id;
         $hongbao->post_id = $post_id;
+        $hongbao->floor = $floor;
         $hongbao->olo_total = $request->hongbao_olo;
         $hongbao->num_total = $request->hongbao_num;
         $hongbao->olo_remains = $request->hongbao_olo;

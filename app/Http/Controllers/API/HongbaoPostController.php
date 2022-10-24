@@ -175,7 +175,7 @@ class HongbaoPostController extends Controller
                     } elseif ($hongbao->num_remains == 1) {
                         $hongbao->delete(); //软删除
                         $coin = $hongbao->olo_remains;
-                        $message = sprintf("恭喜抢到最后一个红包，有%d个奥利奥！", $coin);
+                        $message = sprintf("恭喜抢到来自№%d楼的最后一个红包，有%d个奥利奥！", $hongbao->floor, $coin);
                     } else {
                         if ($hongbao->type == 1) {
                             //随机红包
@@ -185,7 +185,7 @@ class HongbaoPostController extends Controller
                             //定额红包
                             $coin = intval($hongbao->olo_total / $hongbao->num_total);
                         }
-                        $message = sprintf("你抢到了%d个奥利奥！",  $coin);
+                        $message = sprintf("你抢到了来自№%d楼的%d个奥利奥！", $hongbao->floor,  $coin);
                     }
                     $message = "To №" . $post_original->floor . "：" . $message;
                     if ($hongbao->message) {
