@@ -571,7 +571,10 @@ export default {
           }
         }
         //处理fjf屏蔽词
-        if (this.thread_anti_jingfen) {
+        if (
+          this.thread_anti_jingfen &&
+          this.$store.state.User.FjfPingbici !== null
+        ) {
           const fjf_pingbici = this.$store.state.User.FjfPingbici;
           for (var i = 0; i < fjf_pingbici.length; i++) {
             var reg = new RegExp(fjf_pingbici[i], "g");
