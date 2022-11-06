@@ -248,7 +248,7 @@ class Post extends myModel
                     //隐藏olo总额
                     $hongbao->makeHidden('olo_total');
                 }
-                if (in_array($hongbao->key_word_type, [2, 3]) && is_null($hongbao->deleted_at)) {
+                if (in_array($hongbao->key_word_type, [2, 3]) && is_null($hongbao->deleted_at) && $this->binggan != $this->created_binggan) {
                     //如果是抢答红包或者暗号红包，则隐藏红包口令（被抢完后正常显示）
                     $hongbao->makeHidden('key_word');
                 }

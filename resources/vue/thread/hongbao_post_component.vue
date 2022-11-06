@@ -67,14 +67,24 @@ export default {
         } else if (this.hongbao_data.key_word_type == 2) {
           if (this.hongbao_data.key_word == undefined) {
             return "（抢答红包已隐藏口令）";
+          } else if (this.hongbao_data.num_remains != 0) {
+            //如果后端有给出口令，但是红包剩余不为0，说明是发红包者。此时显示口令
+            return "“" + this.hongbao_data.key_word + "”";
           } else {
-            return "“" + this.hongbao_data.key_word + "”（红包抢完，口令已公开）";
+            return (
+              "“" + this.hongbao_data.key_word + "”（红包抢完，口令已公开）"
+            );
           }
         } else if (this.hongbao_data.key_word_type == 3) {
           if (this.hongbao_data.key_word == undefined) {
             return "（暗号红包已隐藏口令）";
+          } else if (this.hongbao_data.num_remains != 0) {
+            //如果后端有给出口令，但是红包剩余不为0，说明是发红包者。此时显示口令
+            return "“" + this.hongbao_data.key_word + "”";
           } else {
-            return "“" + this.hongbao_data.key_word + "”（红包抢完，口令已公开）";
+            return (
+              "“" + this.hongbao_data.key_word + "”（红包抢完，口令已公开）"
+            );
           }
         }
       } else {
