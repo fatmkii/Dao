@@ -1176,16 +1176,15 @@ export default {
             content: content,
           },
         };
-        axios(config)
-          .then((response) => {
-            if (response.data.code == 200) {
-              alert(response.data.message);
-              this.get_posts_data();
-            } else {
-              alert(response.data.message);
-            }
-          })
-          // .catch((error) => alert(error));
+        axios(config).then((response) => {
+          if (response.data.code == 200) {
+            alert(response.data.message);
+            this.get_posts_data();
+          } else {
+            alert(response.data.message);
+          }
+        });
+        // .catch((error) => alert(error));
       }
     },
     change_thread_color() {
@@ -1199,16 +1198,15 @@ export default {
             binggan: this.$store.state.User.Binggan,
           },
         };
-        axios(config)
-          .then((response) => {
-            if (response.data.code == 200) {
-              alert(response.data.message);
-              this.modal_toggle("color_modal");
-            } else {
-              alert(response.data.message);
-            }
-          })
-          // .catch((error) => alert(error));
+        axios(config).then((response) => {
+          if (response.data.code == 200) {
+            alert(response.data.message);
+            this.modal_toggle("color_modal");
+          } else {
+            alert(response.data.message);
+          }
+        });
+        // .catch((error) => alert(error));
       } else {
         alert("未输入颜色");
       }
@@ -1228,20 +1226,19 @@ export default {
           content: content,
         },
       };
-      axios(config)
-        .then((response) => {
-          if (response.data.code == 200) {
-            this.$store.commit("PostsData_set", response.data.posts_data);
-            this.$store.commit(
-              "CurrentThreadData_set",
-              response.data.thread_data
-            );
-            this.$store.commit("PostsLoadStatus_set", 1);
-          } else {
-            alert(response.data.message);
-          }
-        })
-        // .catch((error) => alert(error)); // Todo:写异常返回代码;
+      axios(config).then((response) => {
+        if (response.data.code == 200) {
+          this.$store.commit("PostsData_set", response.data.posts_data);
+          this.$store.commit(
+            "CurrentThreadData_set",
+            response.data.thread_data
+          );
+          this.$store.commit("PostsLoadStatus_set", 1);
+        } else {
+          alert(response.data.message);
+        }
+      });
+      // .catch((error) => alert(error)); // Todo:写异常返回代码;
     },
     back_to_forum(new_tab) {
       if (new_tab) {
@@ -1366,6 +1363,7 @@ export default {
         alert("最大跳到第" + this.posts_last_page + "页喔！");
         return;
       }
+      this.search_input = ""; //跳楼时清空搜索
       if (this.jump_page) {
         const page = this.jump_page;
         const link = "/thread/" + this.thread_id + "/" + page;
@@ -1376,7 +1374,7 @@ export default {
         const link =
           "/thread/" + this.thread_id + "/" + page + "#f_" + this.jump_floor;
         if (this.$router.currentRoute.fullPath.includes(link)) {
-          //如果当前页面就是需要跳转的楼层，则直接滚动到流程
+          //如果当前页面就是需要跳转的楼层，则直接滚动到该楼层
           document.getElementById("f_" + this.jump_floor).scrollIntoView(true);
           this.$refs["jump_modal"].hide();
         } else {
@@ -1399,16 +1397,15 @@ export default {
               thread_id: this.thread_id,
             },
           };
-          axios(config)
-            .then((response) => {
-              if (response.data.code == 200) {
-                alert(response.data.message);
-                this.get_posts_data();
-              } else {
-                alert(response.data.message);
-              }
-            })
-            // .catch((error) => alert(error));
+          axios(config).then((response) => {
+            if (response.data.code == 200) {
+              alert(response.data.message);
+              this.get_posts_data();
+            } else {
+              alert(response.data.message);
+            }
+          });
+          // .catch((error) => alert(error));
         }
       } else if (this.thread_sub_id !== 1) {
         var user_confirm = confirm("把这个主题取消置顶吗？");
@@ -1420,16 +1417,15 @@ export default {
               thread_id: this.thread_id,
             },
           };
-          axios(config)
-            .then((response) => {
-              if (response.data.code == 200) {
-                alert(response.data.message);
-                this.get_posts_data();
-              } else {
-                alert(response.data.message);
-              }
-            })
-            // .catch((error) => alert(error));
+          axios(config).then((response) => {
+            if (response.data.code == 200) {
+              alert(response.data.message);
+              this.get_posts_data();
+            } else {
+              alert(response.data.message);
+            }
+          });
+          // .catch((error) => alert(error));
         }
       }
     },

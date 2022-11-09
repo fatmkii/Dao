@@ -20,11 +20,13 @@ class PostSeeder extends Seeder
         $faker = Factory::create();
         for ($i = 0; $i < 198; $i++) {
             DB::table('posts_1')->insert([
-                'forum_id' => 12,
-                'thread_id' => 10063,
+                'created_binggan'=>"cX8fg1NTm",
+                'created_IP'=>'127.0.0.1',
+                'forum_id' => 2,
+                'thread_id' => 10001,
                 'floor' => $i + 1,
                 'random_head' => $faker->randomDigit(),
-                'content' => $faker->text(200),
+                'content' => $faker->text(20),
             ]);
             DB::table('threads')->where('id', 10063)->increment('posts_num');
         }
