@@ -19,6 +19,7 @@ use App\Jobs\ProcessIncomeStatement;
 use App\Models\Thread;
 use Illuminate\Support\Carbon;
 use App\Events\NewPostBroadcast;
+use App\Models\UserMedalRecord;
 use Exception;
 
 class BattleController extends Controller
@@ -448,7 +449,32 @@ class BattleController extends Controller
             ]
         );
 
+        //成就变量查询
+        $initiator_medal_record = $challenger_user->UserMedalRecord()->firstOrCreate(); //如果记录不存在就追加
+        $challenger_medal_record = $initiator_user->UserMedalRecord()->firstOrCreate(); //如果记录不存在就追加
 
+        //检查成就（发起者olo）
+        if ($initiator_income_olo > 0) {
+            $initiator_medal_record->push_battle_in($initiator_income_olo);
+        } else {
+            $initiator_medal_record->push_battle_out($initiator_income_olo);
+            $initiator_medal_record->check_olo_0($initiator_user); //有可能olo清零，检查成就
+        }
+        //检查成就（挑战者olo）
+        if ($challenger_income_olo > 0) {
+            $challenger_medal_record->push_battle_in($challenger_income_olo);
+        } else {
+            $challenger_medal_record->push_battle_out($challenger_income_olo);
+            $challenger_medal_record->check_olo_0($challenger_user); //有可能olo清零，检查成就
+        }
+        //检查成就（平局时）
+        if ($difference == 0) {
+            $challenger_medal_record->check_battle_draw();
+            $initiator_medal_record->check_battle_draw();
+        }
+        //检查成就（点数）
+        $challenger_medal_record->check_battle_num($initiator_rand_num);
+        $initiator_medal_record->check_battle_num($challenger_rand_num);
 
         return response()->json([
             'code' => ResponseCode::SUCCESS,

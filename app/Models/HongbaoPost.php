@@ -123,6 +123,9 @@ class HongbaoPost extends Model
         $hongbao->olo_hide = $request->hongbao_olo_hide;
         $hongbao->save();
 
+        $user_medal_record = $user->UserMedalRecord()->firstOrCreate();
+        $user_medal_record->push_hongbao_out($request->hongbao_olo);
+
         return $hongbao;
     }
 }

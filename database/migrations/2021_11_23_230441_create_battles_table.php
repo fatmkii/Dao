@@ -15,8 +15,10 @@ class CreateBattlesTable extends Migration
     {
         Schema::create('battles', function (Blueprint $table) {
             $table->id()->startingValue(10001);
+            $table->unsignedInteger('thread_id');
+            $table->unsignedInteger('post_id');
             $table->string('created_binggan');
-            $table->string('challenger_binggan');
+            $table->string('challenger_binggan')->nullable();
             $table->tinyInteger('chara_group')->default(0);
             $table->tinyInteger('progress')->default(0)->index(); //0=等待挑战者；1=挑战者已参加；2=正常结束；3=超时关闭
             $table->integer('initiator_user_id');

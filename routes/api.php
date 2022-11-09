@@ -115,6 +115,8 @@ Route::prefix('user')->group(function () {
     Route::post('/user_lv_up', [UserController::class, 'user_lv_up'])->middleware('CheckBinggan:create');
     Route::post('/show_messages_index', [UserController::class, 'show_messages_index'])->middleware('CheckBinggan:show'); //获得站内消息列表
     Route::post('/show_messages_content', [UserController::class, 'show_messages_content'])->middleware('CheckBinggan:show'); //获得站内消息具体内容
+    Route::post('/show_medals', [UserController::class, 'show_medals'])->middleware('CheckBinggan:show'); //获得已经获得的成就数据
+    Route::post('/show_medal_progress', [UserController::class, 'show_medal_progress'])->middleware('CheckBinggan:show'); //获得某个成就的进度
 });
 
 

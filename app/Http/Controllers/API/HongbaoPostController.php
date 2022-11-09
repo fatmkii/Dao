@@ -153,6 +153,7 @@ class HongbaoPostController extends Controller
 
                 $hongbao_user_exists  = HongbaoPostUser::where('hongbao_post_id', $hongbao_item->id)->where('user_id', $user->id)->exists();
                 if ($hongbao_user_exists) {
+                    //已经抢过的红包就什么都不做
                     return;
                 }
 
@@ -238,6 +239,11 @@ class HongbaoPostController extends Controller
                     DB::rollback();
                     throw $e;
                 }
+
+                //检查成就
+                $user_medal_record = $user->UserMedalRecord()->firstOrCreate();
+                $user_medal_record->push_hongbao_in($coin);
+                
             } else {
                 return;
             }

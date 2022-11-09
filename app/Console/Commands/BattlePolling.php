@@ -2,11 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Models\UserMedalRecord;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
 
 class BattlePolling extends Command
 {
@@ -52,6 +54,11 @@ class BattlePolling extends Command
 
             foreach ($battles_outdate as $battle_outdate) {
                 DB::table('users')->where('id', $battle_outdate->initiator_user_id)->increment('coin', $battle_outdate->battle_olo);
+
+                //检查成就
+                $user_medal_record = UserMedalRecord::firstOrCreate(['user_id' => $battle_outdate->initiator_user_id]);
+                $user_medal_record->push_battle_ignored();
+
                 if ($battle_outdate->progress == 1) {
                     DB::table('users')->where('id', $battle_outdate->challenger_user_id)->increment('coin', $battle_outdate->battle_olo);
                 }
@@ -74,6 +81,7 @@ class BattlePolling extends Command
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
+            Log::debug('$exception', [$e]);
             return false;
         }
 

@@ -33,7 +33,7 @@ class HongbaoController extends Controller
         if ($user) {
             $hongbao->setUserID($user->id);
         }
-        
+
         if ($hongbao->olo_hide) {
             $hongbao->makeHidden('olo_total');
         }
@@ -175,6 +175,10 @@ class HongbaoController extends Controller
                 DB::rollback();
                 throw $e;
             }
+
+            //检查成就
+            $user_medal_record = $user->UserMedalRecord()->firstOrCreate();
+            $user_medal_record->push_hongbao_in($coin);
         } else {
             return;
         }

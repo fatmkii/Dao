@@ -1851,3 +1851,289 @@ var subtitles = [
         ],
     }
 ]
+
+//成就数据
+var medals = {
+    //拥有的olo数量
+    1: {
+        'name': '好的开始是成功的一半',
+        'describe': '拥有10w个olo',
+        'threshold': 100000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztZSns.png',
+    },
+    2: {
+        'name': '千仓万箱',
+        'describe': '拥有50w个olo',
+        'threshold': 500000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztZ97q.png',
+    },
+    3: {
+        'name': '财富自由',
+        'describe': '拥有100w个olo',
+        'threshold': 1000000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztZpBn.png',
+    },
+    4: {
+        'name': '锅中首富',
+        'describe': '拥有500w个olo',
+        'threshold': 5000000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztZPA0.png',
+    },
+
+    //通过大乱斗获得的olo数量
+    11: {
+        'name': '一鸣惊人',
+        'describe': '通过大乱斗获得5w个olo',
+        'threshold': 50000,
+        'img': 'https://img.mjj.today/2022/11/28/fce95c3c2a308959ffeacc48b0a7a81f.png',
+    },
+    12: {
+        'name': '常胜将军',
+        'describe': '通过大乱斗获得10w个olo',
+        'threshold': 100000,
+        'img': 'https://img.mjj.today/2022/11/28/85aad545c15a817e353f6e7a3d9c6d41.png',
+    },
+    13: {
+        'name': '赌仙在世',
+        'describe': '通过大乱斗获得50w个olo',
+        'threshold': 500000,
+        'img': 'https://img.mjj.today/2022/11/28/12218dfe59234d4a9ab41d7f4b885c77.png',
+    },
+    14: {
+        'name': '今夜做梦也会笑',
+        'describe': '通过大乱斗获得100w个olo',
+        'threshold': 1000000,
+        'img': 'https://img.mjj.today/2022/11/28/2ddaec3e77725235ee3a9ab38c23f893.png',
+    },
+
+    //通过大乱斗失去的olo数量
+    21: {
+        'name': '出师不利',
+        'describe': '由于大乱斗失去5w个olo',
+        'threshold': 50000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztEkV0.png',
+    },
+    22: {
+        'name': '一败涂地',
+        'describe': '由于大乱斗失去10w个olo',
+        'threshold': 100000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztEE5T.png',
+    },
+    23: {
+        'name': '家徒四壁',
+        'describe': '由于大乱斗失去50w个olo',
+        'threshold': 500000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztEPrn.png',
+    },
+    24: {
+        'name': '倾家荡产',
+        'describe': '由于大乱斗失去100w个olo',
+        'threshold': 1000000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztEibq.png',
+    },
+
+    //通过红包获得的olo数量 
+    31: {
+        'name': '天降横财',
+        'describe': '通过红包获得5w个olo',
+        'threshold': 50000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztVuY8.png',
+    },
+    32: {
+        'name': '时来运转',
+        'describe': '通过红包获得10w个olo',
+        'threshold': 100000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztVQSg.png',
+    },
+    33: {
+        'name': '鸿运当头',
+        'describe': '通过红包获得50w个olo',
+        'threshold': 500000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztVnFf.png',
+    },
+    34: {
+        'name': '天选之子',
+        'describe': '通过红包获得100w个olo',
+        'threshold': 1000000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztVKfS.png',
+    },
+
+    //通过红包失去的olo数量
+    41: {
+        'name': '元元之民',
+        'describe': '派发红包合计5w个olo',
+        'threshold': 50000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztVDX9.png',
+    },
+    42: {
+        'name': '乐善好施',
+        'describe': '派发红包合计10w个olo',
+        'threshold': 100000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztVB6J.png',
+    },
+    43: {
+        'name': '行善积德',
+        'describe': '派发红包合计50w个olo',
+        'threshold': 500000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztVy01.png',
+    },
+    44: {
+        'name': '有钱就是任性',
+        'describe': '派发红包合计100w个olo',
+        'threshold': 1000000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztVsmR.png',
+    },
+
+    //发起大乱斗没人接的次数 
+    51: {
+        'name': '无人在意',
+        'describe': '发起大乱斗没人接',
+        'threshold': 1,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztEHWF.png',
+    },
+
+
+    //删楼次数
+    61: {
+        'name': '手滑了一下',
+        'describe': '删了一个楼',
+        'threshold': 1,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztAh4O.png',
+    },
+
+
+    //回帖数量
+    81: {
+        'name': '轻轻松松',
+        'describe': '发表了1000个回帖',
+        'threshold': 10000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztFaMn.png',
+    },
+    82: {
+        'name': '小菜一碟',
+        'describe': '发表了5000个回帖',
+        'threshold': 5000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztFt2j.png',
+    },
+    83: {
+        'name': '火锅劳模',
+        'describe': '发表了1w个回帖',
+        'threshold': 10000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztFNxs.png',
+    },
+    84: {
+        'name': '决战紫禁之巅',
+        'describe': '发表了5w个回帖',
+        'threshold': 50000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztFdrq.png',
+    },
+    85: {
+        'name': '火锅有你了不起',
+        'describe': '发表了10w个回帖',
+        'threshold': 100000,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztFYGQ.png',
+    },
+
+    //大乱斗平局次数
+    111: {
+        'name': '双赢才是最好的',
+        'describe': '大乱斗平局',
+        'threshold': 1,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztE5d0.png',
+    },
+
+    //饼干等级
+    141: {
+        'name': '我要变强',
+        'describe': '饼干升到5级',
+        'threshold': 5,
+        'img': 'https://s1.ax1x.com/2022/12/03/zrKNLR.png',
+    },
+    142: {
+        'name': '潮到出水',
+        'describe': '饼干升到10级',
+        'threshold': 10,
+        'img': 'https://s1.ax1x.com/2022/12/03/zrKYQJ.png',
+    },
+    143: {
+        'name': '表情包大户',
+        'describe': '饼干升到20级',
+        'threshold': 20,
+        'img': 'https://s1.ax1x.com/2022/12/03/zrKty9.png',
+    },
+    144: {
+        'name': '神仙饼干',
+        'describe': '饼干升到40级',
+        'threshold': 40,
+        'img': 'https://s1.ax1x.com/2022/12/03/zrKGz4.png',
+    },
+}
+
+//隐藏成就数据
+var medals_hide = {
+    //发起大乱斗没人接的次数 
+    52: {
+        'name': '透明人',
+        'describe': '发起大乱斗100次没人接',
+        'threshold': 100,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztELQJ.png',
+    },
+
+    //删楼次数
+    62: {
+        'name': '你是五嬷吗',
+        'describe': '进行了100次删楼',
+        'threshold': 100,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztAWE6.png',
+    },
+
+    //使olo数量达到0
+    71: {
+        'name': '归零！',
+        'describe': 'olo归零',
+        'threshold': 0,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztZA9U.png',
+    },
+
+    //抢到某楼的10000层
+    91: {
+        'name': '万中有一',
+        'describe': '抢到第10000楼',
+        'threshold': 0,
+        'img': 'https://s1.ax1x.com/2022/12/01/z0guvj.png',
+    },
+
+    //大乱斗掷出101点
+    101: {
+        'name': '元元的爱',
+        'describe': '大乱斗掷出101点',
+        'threshold': 0,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztVRfO.png',
+    },
+
+
+    //大乱斗平局次数
+    112: {
+        'name': '火锅之神也被你薅秃了',
+        'describe': '大乱斗平局100次',
+        'threshold': 100,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztE4Zq.png',
+    },
+
+    //红包抢到0个olo
+    121: {
+        'name': '小火锅的负责人是个骗子',
+        'describe': '红包抢到0个olo',
+        'threshold': 0,
+        'img': 'https://s1.ax1x.com/2022/12/01/z0gMKs.png',
+    },
+
+
+    //申请一个定制饼干
+    131: {
+        'name': '个人财产+1',
+        'describe': '申请1个定制饼干',
+        'threshold': 0,
+        'img': 'https://s1.ax1x.com/2022/11/25/ztZE3F.png',
+    },
+}

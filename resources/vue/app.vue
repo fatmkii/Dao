@@ -148,6 +148,9 @@ export default {
       }
       this.$store.commit("LockedTTL_set", response_data.binggan.locked_TTL);
       this.$store.commit("UsePingbici_set", response_data.binggan.use_pingbici);
+      this.$store.commit("UserLv_set", response_data.binggan.user_lv);
+      this.$store.commit("UserLvData_set", response_data.user_lv);
+      this.$store.commit("UserCoin_set", response_data.binggan.coin);
       if (response_data.binggan.nickname) {
         this.$store.commit("NickName_set", response_data.binggan.nickname);
       } else {
@@ -156,19 +159,19 @@ export default {
       if (response_data.pingbici) {
         this.$store.commit(
           "TitlePingbici_set",
-          response_data.pingbici.title_pingbici
+          JSON.parse(response_data.pingbici.title_pingbici)
         );
         this.$store.commit(
           "ContentPingbici_set",
-          response_data.pingbici.content_pingbici
+          JSON.parse(response_data.pingbici.content_pingbici)
         );
         this.$store.commit(
           "FjfPingbici_set",
-          response_data.pingbici.fjf_pingbici
+          JSON.parse(response_data.pingbici.fjf_pingbici)
         );
       }
       if (response_data.my_emoji != null) {
-        this.$store.commit("MyEmoji_set", response_data.my_emoji);
+        this.$store.commit("MyEmoji_set", JSON.parse(response_data.my_emoji));
       }
     },
     get_ip() {
@@ -190,11 +193,18 @@ export default {
     this.get_forums_data();
     this.get_user_data();
 
+    let vm = this; //为了回调函数可以使用vue的方法
+    this.$eventHub.$on("user_data_refresh", () => {
+      vm.get_user_data(); //监听全局的需要刷新用户数据的需求
+    });
+
     //把常用数据写入Vuex，变量来源于json/json.js下的定义
     this.$store.commit("Emojis_set", emoji_json);
     this.$store.commit("RandomHeads_set", random_heads_json);
     this.$store.commit("CharaIndex_set", chara_index);
     this.$store.commit("CharaGroupIndex_set", chara_group_index);
+    this.$store.commit("Medals_set", medals);
+    this.$store.commit("MedalsHide_set", medals_hide);
 
     this.set_LocalStorage(); //把LocalStorage变量存到Vuex
   },

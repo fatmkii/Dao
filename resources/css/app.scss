@@ -487,13 +487,49 @@ label.custom-file-label::after {
 
 .hongbao_input,
 .login_input,
-.binggan_custom_input{
+.binggan_custom_input {
     .input-group-prepend,
-    .input-group-text{
+    .input-group-text {
         min-width: 100px;
     }
 }
 
+//成就相关
+.medals_slot {
+    @media all and (min-width: 1200px) {
+        max-width: 135px;
+    }
+    @media not all and (min-width: 1200px) {
+        max-width: 18vw;
+    }
+}
+.medals_img {
+    @media all and (min-width: 1200px) {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+    @media not all and (min-width: 1200px) {
+        margin-left: 2.5px;
+        margin-right: 2.5px;
+    }
+}
+.medals_name {
+    @media all and (min-width: 1200px) {
+        font-size: 1rem;
+    }
+    @media not all and (min-width: 1200px) {
+        font-size: 0.6rem;
+    }
+}
+
+.medals_describe {
+    @media all and (min-width: 1200px) {
+        font-size: 1.2rem;
+    }
+    @media not all and (min-width: 1200px) {
+        font-size: 1rem;
+    }
+}
 
 [v-cloak] {
     display: none;
