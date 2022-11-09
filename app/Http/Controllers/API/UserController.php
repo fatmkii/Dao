@@ -508,7 +508,13 @@ class UserController extends Controller
             // $tax = ceil($request->coin * 0.07); //税率0.07
             // $coin_pay = $request->coin + $tax;
 
-            $coin_pay = ceil($request->coin * 1.07);
+            if (Carbon::now()->between('2022/11/11 00:00:00', '2022/11/12 00:00:00')) {
+                //双十一期间免税
+                $tax_rate = 1;
+            } else {
+                $tax_rate = 1.07;
+            }
+            $coin_pay = ceil($request->coin * $tax_rate);
             // $user->coinConsume($coin_pay);
             $user->coinChange(
                 'normal', //记录类型

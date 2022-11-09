@@ -6,10 +6,18 @@
     <template v-slot:default>
       <div class="hongbao_input">
         <p>
-          友情提示：在红包olo总数以外，会追加扣除7%手续费
+          <span v-if="!is_double11">
+            友情提示：在打赏额以外，会追加扣除7%手续费。</span
+          >
+          <span v-else
+            ><del>友情提示：在打赏额以外，会追加扣除7%手续费。</del>
+            <br />
+            双十一当日限时免手续费喔！
+          </span>
           <br />
           总共扣除：合计
-          <span style="color: red">{{ Math.ceil(hongbao_olo * 1.07) }} </span
+          <span style="color: red"
+            >{{ Math.ceil(hongbao_olo * (is_double11 ? 1 : 1.07)) }} </span
           >块奥利奥
           <span v-show="hongbao_type == 2"
             ><br />
@@ -138,6 +146,11 @@ export default {
       } else {
         return 0;
       }
+    },
+    is_double11() {
+      const double11 = new Date("2022-11-11");
+      const now = new Date(Date.now());
+      return now.toLocaleDateString() === double11.toLocaleDateString();
     },
     ...mapState({
       forum_id: (state) =>

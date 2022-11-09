@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\HongbaoPostUser;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -94,7 +95,14 @@ class HongbaoPost extends Model
 
         $user = $request->user;
 
-        $coin_pay = ceil($request->hongbao_olo * 1.07);
+
+        if (Carbon::now()->between('2022/11/11 00:00:00', '2022/11/12 00:00:00')) {
+            //双十一期间免税
+            $tax_rate = 1;
+        } else {
+            $tax_rate = 1.07;
+        }
+        $coin_pay = ceil($request->hongbao_olo * $tax_rate);
         $user->coinChange(
             'normal', //记录类型
             [
