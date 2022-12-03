@@ -98,6 +98,10 @@ class Handler extends ExceptionHandler
                 $status_code = 500;
             }
 
+            if ($status_code == 503) {
+                return response()->view('errors/503');
+            }
+
             $should_report = true;
             foreach ($this->dontReport as $class) {
                 //将不需要留下日志的筛选掉
