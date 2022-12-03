@@ -24,6 +24,11 @@ use App\Models\UserMessages;
 use Exception;
 use App\Events\NewPostBroadcast;
 use App\Exceptions\RequestTooManyException;
+use App\Models\UserAchievement;
+use App\Models\UserMedal;
+use App\Models\UserMedalRecord;
+use App\Common\Medals;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -272,6 +277,12 @@ class UserController extends Controller
             $user->coin = 300;
             $user->save();
 
+            //添加相应的成就进度记录
+            $user_medal_record = new UserMedalRecord([
+                'user_id' => $user->id,
+            ]);
+            $user_medal_record->save();
+
             //记录UUID申请次数
             if (DB::table('user_register')->where('created_UUID', $created_UUID_short)->exists()) {
                 DB::table('user_register')->where('created_UUID', $created_UUID_short)->increment('count');
@@ -392,6 +403,10 @@ class UserController extends Controller
             DB::rollback();
             throw $e;
         }
+
+        //检查成就
+        $user_medal_record = $user_origin->UserMedalRecord()->firstOrCreate();
+        $user_medal_record->check_custom_binggan();
 
         //记录申请饼干IP所在地
         ProcessUserCreatedLocation::dispatch(
@@ -1068,6 +1083,9 @@ class UserController extends Controller
             throw $e;
         }
 
+        //检查成就
+        UserMedalRecord::Check_user_lv($user);
+
         return response()->json(
             [
                 'code' => ResponseCode::SUCCESS,
@@ -1178,6 +1196,79 @@ class UserController extends Controller
                 'code' => ResponseCode::SUCCESS,
                 'message' => '返回站内消息详细内容',
                 'data' => $result,
+            ]
+        );
+    }
+
+    public function show_medals(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+        ]);
+
+        UserMedal::where('user_id', $request->user->id)->where('is_read', 0)->update(['is_read' => 1]);
+        $user_medals = $request->user->UserMedal()->pluck('medal_id')->toArray();
+        // $user_medals->where('is_read', 0)->update(['is_read' => 1]);
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '已获取成就数据',
+                'data' => $user_medals,
+            ]
+        );
+    }
+
+    public function show_medal_progress(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'medal_id' => 'required|integer',
+        ]);
+
+        $user = $request->user;
+        if (!$user) {
+            return response()->json([
+                'code' => ResponseCode::USER_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
+            ]);
+        }
+        $varname = Medals::DATA[$request->medal_id]['varname'];
+
+        $threshold = Medals::DATA[$request->medal_id]['threshold'];
+
+        $this_medal = $user->UserMedal()->where('medal_id', $request->medal_id)->first();
+        if ($this_medal) {
+            $medal_created_at = $this_medal->created_at;
+        } else {
+            $medal_created_at = null;
+        }
+
+        if ($varname == 'olo') {
+            $progress = $user->coin;
+        } elseif ($varname == 'user_lv') {
+            $progress = $user->user_lv;
+        } elseif ($varname != null) {
+            $progress_arr = $user->UserMedalRecord()->pluck($varname)->toArray();
+            Log::debug("progress_arr", [$progress_arr]);
+            if ($progress_arr) {
+                $progress = $progress_arr[0];
+            } else {
+                $progress = 0;
+            }
+        } else {
+            $progress = null;
+        }
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '已获取成就进度',
+                'data' => [
+                    'medal_id' => $request->medal_id,
+                    'threshold' => $threshold,
+                    'progress' => $progress,
+                    'medal_created_at' => $medal_created_at,
+                ],
             ]
         );
     }

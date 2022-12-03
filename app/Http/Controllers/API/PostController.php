@@ -13,6 +13,7 @@ use App\Events\NewPostBroadcast;
 use App\Exceptions\CoinException;
 use App\Jobs\ProcessUserActive;
 use App\Models\HongbaoPost;
+use App\Models\UserMedalRecord;
 use Carbon\Carbon;
 use Exception;
 
@@ -150,6 +151,13 @@ class PostController extends Controller
 
         //用redis记录回频率。
         $user->waterRecord('new_post', $request->ip());
+
+        //检查成就（抢到特定楼层）
+        UserMedalRecord::check_floor($post->floor, $user);
+
+        //检查成就（回帖数量）
+        $user_medal_record = $user->UserMedalRecord()->firstOrCreate();//如果记录不存在就追加
+        $user_medal_record->push_posts_num();
 
         //广播发帖动作
         // broadcast(new NewPostBroadcast($request->thread_id, $post->id, $post->floor))->toOthers();
@@ -415,6 +423,10 @@ class PostController extends Controller
             DB::rollback();
             throw $e;
         }
+
+        //检查成就
+        $user_medal_record = $user->UserMedalRecord()->firstOrCreate();
+        $user_medal_record->check_delete_posts_num();
 
         ProcessUserActive::dispatch(
             [

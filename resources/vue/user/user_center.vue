@@ -2,20 +2,26 @@
 <template>
   <div>
     <p class="mt-2">你好！别来无恙。</p>
-    <p>你的饼干是：{{ binggan }}</p>
-    <p>饼干等级是：Lv. {{ user_lv }}</p>
-    <p>你的奥利奥：{{ user_coin }} 个</p>
+    <p @click="binggan_show = true" :class="is_mobile ? 'mb-1' : ''">
+      你的饼干是：{{ binggan_show ? binggan : "*点击显示*" }}
+    </p>
+    <p :class="is_mobile ? 'mb-1' : ''">饼干等级是：Lv. {{ user_lv }}</p>
+    <p :class="is_mobile ? 'mb-1' : ''">你的奥利奥：{{ user_coin }} 个</p>
     <b-button
-      size="md"
+      :size="is_mobile ? 'sm' : 'md'"
       class="my-1 my-sm-0"
       variant="dark"
       @click="logout_handle"
       >退出饼干</b-button
     >
-    <hr />
-    <b-tabs pills>
+    <hr :class="is_mobile ? 'my-1' : ''" />
+    <b-tabs pills :small="is_mobile">
+      <b-tab title="我的成就">
+        <hr :class="is_mobile ? 'my-1' : ''" />
+        <MedalsTab></MedalsTab>
+      </b-tab>
       <b-tab title="一般设定">
-        <hr />
+        <hr :class="is_mobile ? 'my-1' : ''" />
         <b-form-checkbox class="mx-2 my-2" switch v-model="z_bar_left">
           侧边栏放左侧
         </b-form-checkbox>
@@ -24,7 +30,7 @@
             >减少弹窗提示</span
           >
         </b-form-checkbox>
-        <hr />
+        <hr :class="is_mobile ? 'my-1' : ''" />
         <div class="mt-2 d-flex align-items-center">
           <span class="mb-2">帖子内容行距：</span>
           <b-form-spinbutton
@@ -121,7 +127,7 @@
           ></b-form-spinbutton>
           <span class="ml-1 mb-2">层</span>
         </div>
-        <hr />
+        <hr :class="is_mobile ? 'my-1' : ''" />
         <div class="mt-2 d-flex align-items-center">
           <span class="mb-2">每页的主题数：</span>
           <b-form-spinbutton
@@ -135,9 +141,17 @@
           ></b-form-spinbutton>
           <span class="ml-1 mb-2">个</span>
         </div>
-        <hr />
-        <b-button :variant="button_theme" @click="set_MyCSS">保存</b-button>
-        <b-button variant="outline-dark" @click="default_MyCSS"
+        <hr :class="is_mobile ? 'my-1' : ''" />
+        <b-button
+          :variant="button_theme"
+          @click="set_MyCSS"
+          :size="is_mobile ? 'sm' : 'md'"
+          >保存</b-button
+        >
+        <b-button
+          variant="outline-dark"
+          @click="default_MyCSS"
+          :size="is_mobile ? 'sm' : 'md'"
           >恢复默认</b-button
         >
       </b-tab>
@@ -173,6 +187,7 @@
           </div>
           <div class="d-flex align-items-center mt-2">
             <b-button
+              :size="is_mobile ? 'sm' : 'md'"
               :variant="button_theme"
               :disabled="pingbici_set_handling"
               @click="pingbici_set_handle"
@@ -181,7 +196,7 @@
             <b-form-checkbox
               switch
               class="ml-2"
-              v-model="use_pingbici_input"
+              v-model="UsePingbici"
               v-b-popover.hover.bottom="'切换后也要点击提交喔'"
             >
               启用
@@ -206,11 +221,10 @@
             v-model.lazy="my_emoji_input"
             rows="3"
             max-rows="8"
-            @change="my_emoji_input_change"
           ></b-form-textarea>
           <div
             class="emoji_box m-1 d-inline-flex"
-            v-for="(emoji_src, index) in my_emoji_input_arr"
+            v-for="(emoji_src, index) in $store.state.User.MyEmoji.emojis"
             :key="index"
           >
             <b-img
@@ -227,6 +241,7 @@
           </div>
           <div class="d-flex align-items-center mt-2">
             <b-button
+              :size="is_mobile ? 'sm' : 'md'"
               :variant="button_theme"
               :disabled="my_emoji_set_handling"
               @click="my_emoji_set_handle"
@@ -274,7 +289,7 @@
           <b-button
             class="ml-2"
             :variant="button_theme"
-            size="sm"
+            :size="is_mobile ? 'sm' : 'md'"
             :disabled="pingbici_set_handling"
             @click="get_income_data(1)"
             >查询
@@ -446,7 +461,10 @@
           </b-input-group>
 
           <div class="d-flex align-items-center mt-2">
-            <b-button :variant="button_theme" @click="binggan_custom_handle"
+            <b-button
+              :variant="button_theme"
+              @click="binggan_custom_handle"
+              :size="is_mobile ? 'sm' : 'md'"
               >提交</b-button
             >
             <span class="ml-2">请务必保存好饼干和密码喔</span>
@@ -454,7 +472,7 @@
         </div>
       </b-tab>
     </b-tabs>
-    <hr />
+    <hr :class="is_mobile ? 'my-1' : ''" />
     <router-link to="admin_center" tag="a" style="font-size: 0.875rem">
       管理
     </router-link>
@@ -464,9 +482,11 @@
 
 <script>
 import { mapState } from "vuex";
+import MedalsTab from "./medals_tab.vue";
 
 export default {
-  components: {},
+  name: "user_center",
+  components: { MedalsTab },
   props: {},
   watch: {
     z_bar_left: function () {
@@ -479,29 +499,15 @@ export default {
   },
   data: function () {
     return {
-      name: "user_center",
-      user_coin: "读取中",
-      user_lv: "读取中",
-      user_lv_data: {
-        title_pingbici: 1000,
-        content_pingbici: 1000,
-        fjf_pingbici: 1000,
-        my_emoji: 5000,
-      },
+      binggan_show: false,
       user_lv_sheet: [
         { name: "title_pingbici", chinese: "标题屏蔽词", price: 4000 },
         { name: "content_pingbici", chinese: "内容屏蔽词", price: 4000 },
         { name: "fjf_pingbici", chinese: "FJF黑名单", price: 4000 },
         { name: "my_emoji", chinese: "我的表情包", price: 20000 },
       ],
-      title_pingbici_input: "屏蔽词1,屏蔽词2",
-      content_pingbici_input: "屏蔽词1,屏蔽词2",
-      fjf_pingbici_input: "小尾巴1,小尾巴2",
-      use_pingbici_input: false,
       pingbici_set_handling: false,
       user_lv_up_handling: false,
-      my_emoji_input:
-        "https://z3.ax1x.com/2021/08/01/Wznvbq.jpg,\nhttps://z3.ax1x.com/2021/08/01/Wznjrn.jpg",
       my_emoji_set_handling: false,
       z_bar_left: false,
       less_toast: false,
@@ -602,6 +608,14 @@ export default {
         this.$store.commit("FoldPingbici_set", value);
       },
     },
+    UsePingbici: {
+      get() {
+        return this.$store.state.User.UsePingbici;
+      },
+      set(value) {
+        this.$store.commit("UsePingbici_set", value);
+      },
+    },
     LessToast: {
       get() {
         return this.$store.state.User.LessToast;
@@ -627,65 +641,86 @@ export default {
     button_theme() {
       return this.$store.getters.ButtonTheme;
     },
-    my_emoji_input_arr() {
-      try {
-        var arr = this.my_emoji_input
-          .replace(/(\n|\r|\s)/g, "")
-          .replace(/(，)/g, ",")
-          .split(",");
-        return arr.filter(function (el) {
-          //去掉空元素
-          return el;
-        });
-      } catch (e) {
-        return [];
-      } //没什么用，就是不想在输入过程中报错
+    my_emoji_input: {
+      get() {
+        return this.$store.state.User.MyEmoji.emojis.join(",\n");
+      },
+      set(value) {
+        var input_arr = [];
+        try {
+          var arr = value
+            .replace(/(\n|\r|\s)/g, "")
+            .replace(/(，)/g, ",")
+            .split(",");
+          input_arr = arr.filter(function (el) {
+            //去掉空元素
+            return el;
+          });
+        } catch (e) {
+          input_arr = [];
+        } //没什么用，就是不想在输入过程中报错
+        this.$store.commit("MyEmoji_set", input_arr);
+      },
     },
-    content_pingbici_input_arr() {
-      try {
-        var arr = this.content_pingbici_input
-          .replace(/(\n|\r|\s)/g, "")
-          .replace(/(，)/g, ",")
-          .split(",");
-        return arr.filter(function (el) {
-          //去掉空元素
-          return el;
-        });
-      } catch (e) {
-        return [];
-      } //没什么用，就是不想在输入过程中报错
+    content_pingbici_input: {
+      get() {
+        return this.$store.state.User.ContentPingbici.join(", ");
+      },
+      set(value) {
+        var input_arr = [];
+        try {
+          var arr = value
+            .replace(/(\n|\r|\s)/g, "")
+            .replace(/(，)/g, ",")
+            .split(",");
+          input_arr = arr.filter(function (el) {
+            //去掉空元素
+            return el;
+          });
+        } catch (e) {
+          input_arr = [];
+        } //没什么用，就是不想在输入过程中报错
+        this.$store.commit("ContentPingbici_set", input_arr);
+      },
     },
-    title_pingbici_input_arr() {
-      try {
-        var arr = this.title_pingbici_input
-          .replace(/(\n|\r|\s)/g, "")
-          .replace(/(，)/g, ",")
-          .split(",");
-        return arr.filter(function (el) {
-          //去掉空元素
-          return el;
-        });
-      } catch (e) {
-        return [];
-      } //没什么用，就是不想在输入过程中报错
+    title_pingbici_input: {
+      get() {
+        return this.$store.state.User.TitlePingbici.join(", ");
+      },
+      set(value) {
+        var input_arr = [];
+        try {
+          var arr = value
+            .replace(/(\n|\r|\s)/g, "")
+            .replace(/(，)/g, ",")
+            .split(",");
+          input_arr = arr.filter(function (el) {
+            //去掉空元素
+            return el;
+          });
+        } catch (e) {
+          input_arr = [];
+        } //没什么用，就是不想在输入过程中报错
+        this.$store.commit("TitlePingbici_set", input_arr);
+      },
     },
-    fjf_pingbici_input_arr() {
-      try {
-        var arr = this.fjf_pingbici_input
-          .replace(/(\n|\r|\s)/g, "")
-          .replace(/(，)/g, ",")
-          .split(",");
-        return arr.filter(function (el) {
-          //去掉空元素
-          return el;
-        });
-      } catch (e) {
-        return [];
-      } //没什么用，就是不想在输入过程中报错
+    fjf_pingbici_input: {
+      get() {
+        return this.$store.state.User.FjfPingbici.join(", ");
+      },
+      set(value) {
+        // this.$store.commit("TitlePingbici_set", value);
+      },
+    },
+    is_mobile() {
+      return document.body.clientWidth < 1200;
     },
     ...mapState({
       login_status: (state) => state.User.LoginStatus,
       binggan: (state) => state.User.Binggan,
+      user_coin: (state) => state.User.UserCoin,
+      user_lv: (state) => state.User.UserLv,
+      user_lv_data: (state) => state.User.UserLvData,
       my_emoji: (state) => state.User.MyEmoji.emojis,
     }),
   },
@@ -723,76 +758,11 @@ export default {
           }
         }); // Todo:写异常返回代码;
     },
-    get_user_data() {
-      //更新用户信息
-      if (localStorage.Token != null && localStorage.Binggan != null) {
-        const config = {
-          method: "post",
-          url: "/api/user/show",
-          data: {
-            binggan: localStorage.Binggan,
-          },
-        };
-        axios(config)
-          .then((response) => {
-            this.user_coin = response.data.data.binggan.coin;
-            this.user_lv = response.data.data.binggan.user_lv;
-            this.user_lv_data = response.data.data.user_lv;
-            this.use_pingbici_input = Boolean(
-              response.data.data.binggan.use_pingbici
-            );
-            this.$store.commit(
-              "UsePingbici_set",
-              response.data.data.binggan.use_pingbici
-            );
-            if (response.data.data.pingbici) {
-              if (response.data.data.pingbici.title_pingbici) {
-                this.$store.commit(
-                  "TitlePingbici_set",
-                  response.data.data.pingbici.title_pingbici
-                );
-                this.title_pingbici_input =
-                  this.$store.state.User.TitlePingbici.join(", ");
-              }
-              if (response.data.data.pingbici.content_pingbici) {
-                this.$store.commit(
-                  "ContentPingbici_set",
-                  response.data.data.pingbici.content_pingbici
-                );
-                this.content_pingbici_input =
-                  this.$store.state.User.ContentPingbici.join(", ");
-              }
-              if (response.data.data.pingbici.fjf_pingbici) {
-                this.$store.commit(
-                  "FjfPingbici_set",
-                  response.data.data.pingbici.fjf_pingbici
-                );
-                this.fjf_pingbici_input =
-                  this.$store.state.User.FjfPingbici.join(", ");
-              }
-            }
-
-            //设定表情包相关状态
-            if (response.data.data.my_emoji) {
-              this.$store.commit("MyEmoji_set", response.data.data.my_emoji);
-              this.my_emoji_input = this.my_emoji.join(",\n");
-            }
-          })
-          .catch((error) => {
-            // if (error.response.status === 401) {
-            //   localStorage.clear("Binggan"); //如果遇到401错误(用户未认证)，就清除Binggan和Token
-            //   localStorage.clear("Token");
-            //   delete axios.defaults.headers.Authorization;
-            // }
-            // alert(error);
-          }); // Todo:写异常返回代码;
-      }
-    },
     pingbici_set_handle() {
       if (
-        this.content_pingbici_input_arr.length == 0 ||
-        this.title_pingbici_input_arr.length == 0 ||
-        this.fjf_pingbici_input_arr.length == 0
+        this.$store.state.User.TitlePingbici.length == 0 ||
+        this.$store.state.User.ContentPingbici.length == 0 ||
+        this.$store.state.User.FjfPingbici.length == 0
       ) {
         alert("屏蔽词格式输入有误、或者是空的，请检查");
         return;
@@ -803,16 +773,17 @@ export default {
         url: "/api/user/pingbici_set",
         data: {
           binggan: this.$store.state.User.Binggan,
-          title_pingbici: JSON.stringify(this.title_pingbici_input_arr),
-          content_pingbici: JSON.stringify(this.content_pingbici_input_arr),
-          fjf_pingbici: JSON.stringify(this.fjf_pingbici_input_arr),
-          use_pingbici: this.use_pingbici_input,
+          title_pingbici: JSON.stringify(this.$store.state.User.TitlePingbici),
+          content_pingbici: JSON.stringify(
+            this.$store.state.User.ContentPingbici
+          ),
+          fjf_pingbici: JSON.stringify(this.$store.state.User.FjfPingbici),
+          use_pingbici: this.UsePingbici,
         },
       };
       axios(config)
         .then((response) => {
           if (response.data.code == 200) {
-            this.get_user_data();
             this.$bvToast.toast(response.data.message, {
               title: "Done.",
               autoHideDelay: 1500,
@@ -836,21 +807,21 @@ export default {
         return Array.from(new Set(arr));
       }
       if (
-        this.content_pingbici_input_arr.length == 0 ||
-        this.title_pingbici_input_arr.length == 0 ||
-        this.fjf_pingbici_input_arr.length == 0
+        this.$store.state.User.TitlePingbici.length == 0 ||
+        this.$store.state.User.ContentPingbici.length == 0 ||
+        this.$store.state.User.FjfPingbici.length == 0
       ) {
         alert("屏蔽词格式输入有误、或者是空的，请检查");
         return;
       }
       var arr_unique = [];
-      arr_unique = unique(this.title_pingbici_input_arr);
+      arr_unique = unique(this.$store.state.User.TitlePingbici);
       this.title_pingbici_input = arr_unique.join(", ");
 
-      arr_unique = unique(this.content_pingbici_input_arr);
+      arr_unique = unique(this.$store.state.User.ContentPingbici);
       this.content_pingbici_input = arr_unique.join(", ");
 
-      arr_unique = unique(this.fjf_pingbici_input_arr);
+      arr_unique = unique(this.$store.state.User.FjfPingbici);
       this.fjf_pingbici_input = arr_unique.join(", ");
 
       this.$bvToast.toast("已去除重复的屏蔽词", {
@@ -860,7 +831,7 @@ export default {
       });
     },
     my_emoji_set_handle() {
-      if (this.my_emoji_input_arr.length == 0) {
+      if (this.$store.state.User.MyEmoji.emojis.length == 0) {
         alert("屏蔽词格式输入有误、或者是空的，请检查");
         return;
       }
@@ -870,7 +841,7 @@ export default {
         url: "/api/user/my_emoji_set",
         data: {
           binggan: this.$store.state.User.Binggan,
-          my_emoji: JSON.stringify(this.my_emoji_input_arr),
+          my_emoji: JSON.stringify(this.$store.state.User.MyEmoji.emojis),
         },
       };
       axios(config)
@@ -898,12 +869,12 @@ export default {
         //去重函数
         return Array.from(new Set(arr));
       }
-      if (this.my_emoji_input_arr.length == 0) {
+      if (this.$store.state.User.MyEmoji.emojis.length == 0) {
         alert("表情包格式输入有误、或者是空的，请检查");
         return;
       }
-      var arr_unique = unique(this.my_emoji_input_arr);
-      this.$store.commit("MyEmoji_set_from_arr", arr_unique);
+      var arr_unique = unique(this.$store.state.User.MyEmoji.emojis);
+      this.$store.commit("MyEmoji_set", arr_unique);
       this.my_emoji_input = this.my_emoji.join(",\n");
       this.$bvToast.toast("已去除重复的表情包", {
         title: "Done.",
@@ -930,7 +901,7 @@ export default {
       axios(config)
         .then((response) => {
           if (response.data.code == 200) {
-            this.get_user_data();
+            this.$eventHub.$emit("user_data_refresh"); //通过eventHub空vue对象分发事件
             this.$bvToast.toast(response.data.message, {
               title: "Done.",
               autoHideDelay: 1500,
@@ -977,11 +948,6 @@ export default {
         this.$store.state.User.MyEmoji.emojis.splice(index, 1);
         this.my_emoji_input = this.my_emoji.join(",\n");
       }
-    },
-    my_emoji_input_change(value) {
-      try {
-        this.$store.commit("MyEmoji_set_from_arr", this.my_emoji_input_arr);
-      } catch (e) {} //没什么用，就是不想在输入过程中报错
     },
     set_income_date_default() {
       var dateTime = new Date(); //默认日期是今天
@@ -1120,7 +1086,6 @@ export default {
   },
   created() {
     document.title = "个人中心";
-    this.get_user_data();
     if (localStorage.getItem("z_bar_left") == null) {
       localStorage.z_bar_left = "";
     } else {
@@ -1130,5 +1095,6 @@ export default {
   mounted() {
     this.set_income_date_default();
   },
+  activated() {},
 };
 </script>

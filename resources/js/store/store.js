@@ -12,19 +12,25 @@ const module_user = {
         AdminForums: [],
         LockedTTL: 0,
         UsePingbici: false,
-        TitlePingbici: "",
-        ContentPingbici: "",
-        FjfPingbici: "",
+        TitlePingbici: ["屏蔽词1", "屏蔽词2"],
+        ContentPingbici: ["屏蔽词1", "屏蔽词2"],
+        FjfPingbici: ["小尾巴1", "小尾巴2"],
         FoldPingbici: false,
         LessToast: false,
-        MyEmoji: { name: '我的表情包', emojis: [] },
+        MyEmoji: { name: '我的表情包', emojis: ["https://z3.ax1x.com/2021/08/01/Wznvbq.jpg", "https://z3.ax1x.com/2021/08/01/Wznjrn.jpg"] },
         Emojis: [],
         RandomHeads: [],
         CharaIndex: [],
         CharaGroupIndex: [],
+        Medals:{},
+        MedalsHide:{},
         BrowseLogger: {},
         NickName: "",
         FocusThreads: {},
+        UserLv: 0,
+        UserLvData: {},
+        UserCoin: 0,
+
     }),
     mutations: {
         UserDataLoaded_set(state, payload) {
@@ -49,16 +55,16 @@ const module_user = {
             state.LockedTTL = payload
         },
         UsePingbici_set(state, payload) {
-            state.UsePingbici = payload
+            state.UsePingbici = Boolean(payload);//要强制转为bool，否则v-model有点问题
         },
         TitlePingbici_set(state, payload) {
-            state.TitlePingbici = JSON.parse(payload) //因为数据库传送过来的是纯文本json，要手动转换为数组
+            state.TitlePingbici = payload //payload应为数组
         },
         ContentPingbici_set(state, payload) {
-            state.ContentPingbici = JSON.parse(payload) //因为数据库传送过来的是纯文本json，要手动转换为数组
+            state.ContentPingbici = payload //payload应为数组
         },
         FjfPingbici_set(state, payload) {
-            state.FjfPingbici = JSON.parse(payload) //因为数据库传送过来的是纯文本json，要手动转换为数组
+            state.FjfPingbici = payload //因为数据库传送过来的是纯文本json，要手动转换为数组
         },
         FoldPingbici_set(state, payload) {
             state.FoldPingbici = payload
@@ -67,16 +73,22 @@ const module_user = {
             state.LessToast = payload
         },
         MyEmoji_set(state, payload) {
-            state.MyEmoji.emojis = JSON.parse(payload) //因为数据库传送过来的是纯文本json，要手动转换为数组
+            state.MyEmoji.emojis = payload //payload应为数组
         },
-        MyEmoji_set_from_arr(state, payload) {
-            state.MyEmoji.emojis = payload //直接导入arr的mutation
-        },
+        // MyEmoji_set_from_arr(state, payload) {
+        //     state.MyEmoji.emojis = payload //直接导入arr的mutation
+        // },
         Emojis_set(state, payload) {
             state.Emojis = payload
         },
         RandomHeads_set(state, payload) {
             state.RandomHeads = payload
+        },
+        Medals_set(state, payload) {
+            state.Medals = payload
+        },
+        MedalsHide_set(state, payload) {
+            state.MedalsHide = payload
         },
         CharaGroupIndex_set(state, payload) {
             state.CharaGroupIndex = payload
@@ -113,6 +125,16 @@ const module_user = {
         FocusThreads_set_all(state, payload) {
             state.FocusThreads = payload
         },
+        UserLv_set(state, payload) {
+            state.UserLv = payload
+        },
+        UserLvData_set(state, payload) {
+            state.UserLvData = payload
+        },
+        UserCoin_set(state, payload) {
+            state.UserCoin = payload
+        },
+
     },
     actions: {},
     getters: {}

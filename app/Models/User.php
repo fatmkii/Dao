@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,6 +20,8 @@ use App\Jobs\ProcessUserActive;
 use App\Models\IncomeStatement;
 use App\Jobs\ProcessIncomeStatement;
 use App\Models\UserMessages;
+use App\Models\UserMedalRecord;
+use App\Models\UserMedal;
 use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable
@@ -310,6 +311,9 @@ class User extends Authenticatable
         // $this->coin -= $coin;
         $this->increment('coin', -$coin);
         $this->save();
+
+        //检查olo是否清零的成就
+        UserMedalRecord::check_olo_0($this);
     }
 
     //统一的奥利奥变更接口，并且留下income_statement记录
@@ -337,6 +341,15 @@ class User extends Authenticatable
         // $this->coin += $income_statement['olo'];
         $this->increment('coin', $income_statement['olo']);
         $this->save();
+
+        //检查成就
+        if ($income_statement['olo'] > 0) {
+            //只有olo是增加的才需要检查
+            UserMedalRecord::check_olo($this);
+        } else {
+            //检查olo清零的
+            UserMedalRecord::check_olo_0($this);
+        }
     }
 
     public function Pingbici()
@@ -367,6 +380,17 @@ class User extends Authenticatable
     public function IncomeStatement()
     {
         return $this->hasMany(IncomeStatement::class);
+    }
+
+    public function UserMedal()
+    {
+        return $this->hasMany(UserMedal::class);
+    }
+
+
+    public function UserMedalRecord()
+    {
+        return $this->hasOne(UserMedalRecord::class);
     }
 
     public function UserMessages()
