@@ -5,8 +5,16 @@
     <p @click="binggan_show = true" :class="is_mobile ? 'mb-1' : ''">
       你的饼干是：{{ binggan_show ? binggan : "*点击显示*" }}
     </p>
-    <p :class="is_mobile ? 'mb-1' : ''">饼干等级是：Lv. {{ user_lv }}</p>
-    <p :class="is_mobile ? 'mb-1' : ''">你的奥利奥：{{ user_coin }} 个</p>
+    <p :class="is_mobile ? 'mb-1' : ''">
+      饼干等级是：Lv.
+      {{ $store.state.User.UserDataLoaded == 2 ? user_lv : "读取中" }}
+    </p>
+    <p :class="is_mobile ? 'mb-1' : ''">
+      你的奥利奥：{{
+        $store.state.User.UserDataLoaded == 2 ? user_coin : "读取中"
+      }}
+      个
+    </p>
     <b-button
       :size="is_mobile ? 'sm' : 'md'"
       class="my-1 my-sm-0"
@@ -496,6 +504,20 @@ export default {
         this.z_bar_left
       );
     },
+    $route(to) {
+      if (to.name == "thread") {
+        //因为这个页面做了keep-alive，所以每次点进来都会算作$route变动
+        this.get_browse_current();
+        this.$store.commit("PostsLoadStatus_set", 1);
+        if (this.search_input) {
+          this.get_posts_data(false, false, this.search_input);
+        } else {
+          this.get_posts_data(false, true);
+        }
+        this.show_listen_next_page = false;
+        this.is_listening = false;
+      }
+    },
   },
   data: function () {
     return {
@@ -524,6 +546,7 @@ export default {
       binggan_password: "",
       binggan_password_repeat: "",
       binggan_apply_handling: false,
+      from_path: "/",
     };
   },
   computed: {
@@ -1094,7 +1117,16 @@ export default {
   },
   mounted() {
     this.set_income_date_default();
+    if (this.from_path != "/") {
+      this.$eventHub.$emit("user_data_refresh"); //通过eventHub空vue对象分发事件
+    }
   },
   activated() {},
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      // 通过 `vm` 访问组件实例,from_path
+      vm.from_path = from.path; //上一个路由的地址
+    });
+  },
 };
 </script>
