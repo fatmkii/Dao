@@ -46,11 +46,11 @@ class UserMedalRecord extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function UserMedal()
-    {
-        //不确定能用
-        return $this->hasManyThrough(UserMedal::class, User::class, 'id', 'user_id');
-    }
+    // public function UserMedal()
+    // {
+    //     //不确定能用
+    //     return $this->hasManyThrough(UserMedal::class, User::class, 'id', 'user_id');
+    // }
 
     public function push_battle_in(int $olo)
     {
@@ -61,7 +61,8 @@ class UserMedalRecord extends Model
         $medals_id = array(11, 12, 13, 14);
 
         //已经获得过的徽章（统一查询一次，用于后续判断）
-        $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        $medals_id_retain = UserMedal::where('user_id', $this->user_id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
 
         foreach ($medals_id as $medal_id) {
             //循环判断此系列的成就id是否满足阈值threshold条件
@@ -86,7 +87,8 @@ class UserMedalRecord extends Model
         $medals_id = array(21, 22, 23, 24);
 
         //已经获得过的徽章（统一查询一次，用于后续判断）
-        $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        $medals_id_retain = UserMedal::where('user_id', $this->user_id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
 
         foreach ($medals_id as $medal_id) {
             //循环判断此系列的成就id是否满足阈值threshold条件
@@ -111,7 +113,8 @@ class UserMedalRecord extends Model
         $medals_id = array(31, 32, 33, 34);
 
         //已经获得过的徽章（统一查询一次，用于后续判断）
-        $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        $medals_id_retain = UserMedal::where('user_id', $this->user_id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
 
         foreach ($medals_id as $medal_id) {
             //循环判断此系列的成就id是否满足阈值threshold条件
@@ -136,7 +139,8 @@ class UserMedalRecord extends Model
         $medals_id = array(41, 42, 43, 44);
 
         //已经获得过的徽章（统一查询一次，用于后续判断）
-        $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        $medals_id_retain = UserMedal::where('user_id', $this->user_id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
 
         foreach ($medals_id as $medal_id) {
             //循环判断此系列的成就id是否满足阈值threshold条件
@@ -161,7 +165,8 @@ class UserMedalRecord extends Model
         $medals_id = array(51, 52);
 
         //已经获得过的徽章（统一查询一次，用于后续判断）
-        $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        $medals_id_retain = UserMedal::where('user_id', $this->user_id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
 
         foreach ($medals_id as $medal_id) {
             //循环判断此系列的成就id是否满足阈值threshold条件
@@ -187,7 +192,8 @@ class UserMedalRecord extends Model
         $medals_id = array(111, 112);
 
         //已经获得过的徽章（统一查询一次，用于后续判断）
-        $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        $medals_id_retain = UserMedal::where('user_id', $this->user_id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
 
         foreach ($medals_id as $medal_id) {
             //循环判断此系列的成就id是否满足阈值threshold条件
@@ -213,7 +219,8 @@ class UserMedalRecord extends Model
         $medals_id = array(61, 62);
 
         //已经获得过的徽章（统一查询一次，用于后续判断）
-        $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        $medals_id_retain = UserMedal::where('user_id', $this->user_id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
 
         foreach ($medals_id as $medal_id) {
             //循环判断此系列的成就id是否满足阈值threshold条件
@@ -238,7 +245,8 @@ class UserMedalRecord extends Model
         $medals_id = array(81, 82, 83, 84, 85);
 
         //已经获得过的徽章（统一查询一次，用于后续判断）
-        $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        $medals_id_retain = UserMedal::where('user_id', $this->user_id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
 
         foreach ($medals_id as $medal_id) {
             //循环判断此系列的成就id是否满足阈值threshold条件
@@ -260,7 +268,8 @@ class UserMedalRecord extends Model
         $medals_id = array(1, 2, 3, 4); //71是olo归零
 
         //已经获得过的徽章（统一查询一次，用于后续判断）
-        $medals_id_retain = $user->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        // $medals_id_retain = $user->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        $medals_id_retain = UserMedal::where('user_id', $user->id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
 
         foreach ($medals_id as $medal_id) {
             //循环判断此系列的成就id是否满足阈值threshold条件
@@ -280,7 +289,8 @@ class UserMedalRecord extends Model
         //单独用于判断olo清零成就的
         //单个数字确定型的徽章，则先判断数字，以减少查询量
         if ($user->coin == 0) {
-            $medals_code_exists = $user->UserMedal()->where('medal_id', 71)->exists();
+            // $medals_code_exists = $user->UserMedal()->where('medal_id', 71)->exists();
+            $medals_code_exists = UserMedal::where('user_id', $user->id)->where('medal_id', 71)->exists();
             if (!$medals_code_exists) {
                 $user_medal = new UserMedal;
                 $user_medal->user_id = $user->id;
@@ -295,7 +305,8 @@ class UserMedalRecord extends Model
     {
         //单个数字确定型的徽章，则先判断数字，以减少查询量
         if ($floor == 10000) {
-            $medals_code_exists = $user->UserMedal()->where('medal_id', 91)->exists();
+            // $medals_code_exists = $user->UserMedal()->where('medal_id', 91)->exists();
+            $medals_code_exists = UserMedal::where('user_id', $user->id)->where('medal_id', 91)->exists();
             if (!$medals_code_exists) {
                 $user_medal = new UserMedal;
                 $user_medal->user_id = $user->id;
@@ -311,7 +322,8 @@ class UserMedalRecord extends Model
         //掷出大于100点的成就
         //单个数字确定型的徽章，则先判断数字，以减少查询量
         if ($battle_num > 100) {
-            $medals_code_exists = $this->UserMedal()->where('medal_id', 101)->exists();
+            // $medals_code_exists = $this->UserMedal()->where('medal_id', 101)->exists();
+            $medals_code_exists = UserMedal::where('user_id', $this->user_id)->where('medal_id', 101)->exists();
             if (!$medals_code_exists) {
                 $user_medal = new UserMedal;
                 $user_medal->user_id = $this->user_id;
@@ -325,7 +337,8 @@ class UserMedalRecord extends Model
     public function check_custom_binggan()
     {
         //纯粹行为型的徽章，直接查询
-        $medals_code_exists = $this->UserMedal()->where('medal_id', 131)->exists();
+        // $medals_code_exists = $this->UserMedal()->where('medal_id', 131)->exists();
+        $medals_code_exists = UserMedal::where('user_id', $this->user_id)->where('medal_id', 131)->exists();
         if (!$medals_code_exists) {
             $user_medal = new UserMedal;
             $user_medal->user_id = $this->user_id;
@@ -341,7 +354,8 @@ class UserMedalRecord extends Model
         $medals_id = array(141, 142, 143, 144);
 
         //已经获得过的徽章（统一查询一次，用于后续判断）
-        $medals_id_retain = $user->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        // $medals_id_retain = $user->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        $medals_id_retain = UserMedal::where('user_id', $user->id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
 
         foreach ($medals_id as $medal_id) {
             //循环判断此系列的成就id是否满足阈值threshold条件
