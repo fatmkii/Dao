@@ -177,7 +177,7 @@ class Medals
         81 => array(
             'name' => '轻轻松松',
             'describe' => '发表了1000个回帖',
-            'threshold' => 10000,
+            'threshold' => 1000,
             'varname' => 'posts_num',
         ),
         82 => array(

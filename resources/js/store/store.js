@@ -22,8 +22,8 @@ const module_user = {
         RandomHeads: [],
         CharaIndex: [],
         CharaGroupIndex: [],
-        Medals:{},
-        MedalsHide:{},
+        Medals: {},
+        MedalsHide: {},
         BrowseLogger: {},
         NickName: "",
         FocusThreads: {},
@@ -58,13 +58,25 @@ const module_user = {
             state.UsePingbici = Boolean(payload);//要强制转为bool，否则v-model有点问题
         },
         TitlePingbici_set(state, payload) {
-            state.TitlePingbici = payload //payload应为数组
+            if (payload == null) {
+                state.TitlePingbici = ["屏蔽词1", "屏蔽词2"]
+            } else {
+                state.TitlePingbici = payload//payload应为数组
+            }
         },
         ContentPingbici_set(state, payload) {
-            state.ContentPingbici = payload //payload应为数组
+            if (payload == null) {
+                state.ContentPingbici = ["屏蔽词1", "屏蔽词2"]
+            } else {
+                state.ContentPingbici = payload//payload应为数组
+            }
         },
         FjfPingbici_set(state, payload) {
-            state.FjfPingbici = payload //因为数据库传送过来的是纯文本json，要手动转换为数组
+            if (payload == null) {
+                state.FjfPingbici = ["小尾巴1", "小尾巴2"]
+            } else {
+                state.FjfPingbici = payload//payload应为数组
+            }
         },
         FoldPingbici_set(state, payload) {
             state.FoldPingbici = payload

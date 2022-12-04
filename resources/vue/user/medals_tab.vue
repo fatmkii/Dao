@@ -52,7 +52,7 @@
           v-if="get_progress_handling == 2"
         >
           <img
-            class="medals_img"
+            class="medals_img_modal"
             :src="
               has_medal(show_medal_id)
                 ? show_medal_data.img

@@ -69,7 +69,7 @@ export default {
             this.$store.commit("UsePingbici_set", true);
             this.$store.commit(
               "ContentPingbici_set",
-              response.data.content_pingbici
+              JSON.parse(response.data.content_pingbici)
             );
             this.$refs["pingbici_modal"].toggle();
             this.add_pingbici_handling = false;

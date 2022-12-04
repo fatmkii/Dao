@@ -450,8 +450,8 @@ class BattleController extends Controller
         );
 
         //成就变量查询
-        $initiator_medal_record = $challenger_user->UserMedalRecord()->firstOrCreate(); //如果记录不存在就追加
-        $challenger_medal_record = $initiator_user->UserMedalRecord()->firstOrCreate(); //如果记录不存在就追加
+        $initiator_medal_record = $initiator_user->UserMedalRecord()->firstOrCreate(); //如果记录不存在就追加
+        $challenger_medal_record = $challenger_user->UserMedalRecord()->firstOrCreate(); //如果记录不存在就追加
 
         //检查成就（发起者olo）
         if ($initiator_income_olo > 0) {

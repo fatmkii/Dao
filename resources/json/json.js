@@ -2052,7 +2052,7 @@ var medals = {
     81: {
         'name': '轻轻松松',
         'describe': '发表了1000个回帖',
-        'threshold': 10000,
+        'threshold': 1000,
         'img': 'https://s1.ax1x.com/2022/11/25/ztFaMn.png',
     },
     82: {

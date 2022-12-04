@@ -503,12 +503,17 @@ label.custom-file-label::after {
         max-width: 18vw;
     }
 }
+
 .medals_img {
     @media all and (min-width: 1200px) {
+        max-width: 125px;
+        max-height: 125px;
         margin-left: 5px;
         margin-right: 5px;
     }
     @media not all and (min-width: 1200px) {
+        max-width: calc(18vw-5px);
+        max-height: calc(18vw-5px);
         margin-left: 2.5px;
         margin-right: 2.5px;
     }
