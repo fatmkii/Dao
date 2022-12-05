@@ -473,8 +473,8 @@ class BattleController extends Controller
             $initiator_medal_record->check_battle_draw();
         }
         //检查成就（点数）
-        $challenger_medal_record->check_battle_num($initiator_rand_num);
-        $initiator_medal_record->check_battle_num($challenger_rand_num);
+        $challenger_medal_record->check_battle_num($challenger_rand_num);
+        $initiator_medal_record->check_battle_num($initiator_rand_num);
 
         return response()->json([
             'code' => ResponseCode::SUCCESS,
