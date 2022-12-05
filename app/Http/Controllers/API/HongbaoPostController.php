@@ -22,6 +22,13 @@ class HongbaoPostController extends Controller
 {
     public function create(Request $request)
     {
+        if (Carbon::now()->between('2022/12/6 08:00:00', '2022/12/7 00:00:00')) {
+            return response()->json([
+                'code' => ResponseCode::DEFAULT,
+                'message' => '今天8:00到24:00暂停大乱斗和红包。T_T',
+            ]);
+        } 
+        
         $request->validate([
             'binggan' => 'required|string',
             'forum_id' => 'required|integer',
