@@ -33,6 +33,7 @@
       >
         <img
           class="medals_img"
+          v-if="has_medal(medal_id) || show_medal_not_has"
           :src="
             has_medal(medal_id)
               ? medal_data.img
@@ -41,10 +42,21 @@
           :alt="medal_data.name"
           @click="show_modal(medal_id, medal_data)"
         />
-        <span class="text-center medals_name">{{ medal_data.name }}</span>
+        <span
+          class="text-center medals_name"
+          v-if="has_medal(medal_id) || show_medal_not_has"
+          >{{ medal_data.name }}</span
+        >
       </div>
     </div>
-
+    <b-form-checkbox
+      class="mt-2"
+      v-model="show_medal_not_has"
+      switch
+      :small="is_mobile"
+    >
+      显示未获得的成就
+    </b-form-checkbox>
     <b-modal ref="medal_modal" id="medal_modal" hide-header>
       <template v-slot:default>
         <div
@@ -99,6 +111,7 @@ export default {
     return {
       get_data_handling: 0,
       get_progress_handling: 0,
+      show_medal_not_has: false,
       has_medal_arr: [],
       show_medal_id: 0,
       show_medal_data: {},
@@ -120,6 +133,9 @@ export default {
         }
       }
       return medals;
+    },
+    is_mobile() {
+      return document.body.clientWidth < 1200;
     },
     ...mapState({
       medals_data: (state) => state.User.Medals,
@@ -183,6 +199,7 @@ export default {
       // return true;
       return this.has_medal_arr.includes(Number(medal_id));
     },
+    show_medal() {},
     show_modal(medal_id, medal_data) {
       this.show_medal_id = medal_id;
       this.show_medal_data = medal_data;
