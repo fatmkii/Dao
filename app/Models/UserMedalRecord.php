@@ -310,7 +310,7 @@ class UserMedalRecord extends Model
             if (!$medals_code_exists) {
                 $user_medal = new UserMedal;
                 $user_medal->user_id = $user->id;
-                $user_medal->medal_id = 92;
+                $user_medal->medal_id = 91;
                 $user_medal->created_at = Carbon::now();
                 $user_medal->save();
             }
