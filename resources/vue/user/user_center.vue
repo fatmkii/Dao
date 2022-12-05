@@ -732,7 +732,20 @@ export default {
         return this.$store.state.User.FjfPingbici.join(", ");
       },
       set(value) {
-        // this.$store.commit("TitlePingbici_set", value);
+        var input_arr = [];
+        try {
+          var arr = value
+            .replace(/(\n|\r|\s)/g, "")
+            .replace(/(，)/g, ",")
+            .split(",");
+          input_arr = arr.filter(function (el) {
+            //去掉空元素
+            return el;
+          });
+        } catch (e) {
+          input_arr = [];
+        } //没什么用，就是不想在输入过程中报错
+        this.$store.commit("FjfPingbici_set", input_arr);
       },
     },
     is_mobile() {
