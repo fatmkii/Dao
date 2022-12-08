@@ -1518,7 +1518,10 @@ export default {
               appendToast: true,
             });
             if (response.data.data.my_emoji != null) {
-              this.$store.commit("MyEmoji_set", response.data.data.my_emoji);
+              this.$store.commit(
+                "MyEmoji_set",
+                JSON.parse(response.data.data.my_emoji)
+              );
             }
           } else {
             alert(response.data.message);
