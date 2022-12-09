@@ -73,7 +73,6 @@ class UserMedalRecord extends Model
                 $user_medal->medal_id = $medal_id;
                 $user_medal->created_at = Carbon::now();
                 $user_medal->save();
-                break;
             }
         }
     }
@@ -99,7 +98,6 @@ class UserMedalRecord extends Model
                 $user_medal->medal_id = $medal_id;
                 $user_medal->created_at = Carbon::now();
                 $user_medal->save();
-                break;
             }
         }
     }
@@ -125,7 +123,6 @@ class UserMedalRecord extends Model
                 $user_medal->medal_id = $medal_id;
                 $user_medal->created_at = Carbon::now();
                 $user_medal->save();
-                break;
             }
         }
     }
@@ -151,7 +148,6 @@ class UserMedalRecord extends Model
                 $user_medal->medal_id = $medal_id;
                 $user_medal->created_at = Carbon::now();
                 $user_medal->save();
-                break;
             }
         }
     }
@@ -178,7 +174,6 @@ class UserMedalRecord extends Model
                 $user_medal->medal_id = $medal_id;
                 $user_medal->created_at = Carbon::now();
                 $user_medal->save();
-                break;
             }
         }
     }
@@ -204,7 +199,6 @@ class UserMedalRecord extends Model
                 $user_medal->medal_id = $medal_id;
                 $user_medal->created_at = Carbon::now();
                 $user_medal->save();
-                break;
             }
         }
     }
@@ -231,7 +225,6 @@ class UserMedalRecord extends Model
                 $user_medal->medal_id = $medal_id;
                 $user_medal->created_at = Carbon::now();
                 $user_medal->save();
-                break;
             }
         }
     }
@@ -257,7 +250,6 @@ class UserMedalRecord extends Model
                 $user_medal->medal_id = $medal_id;
                 $user_medal->created_at = Carbon::now();
                 $user_medal->save();
-                break;
             }
         }
     }
@@ -279,7 +271,6 @@ class UserMedalRecord extends Model
                 $user_medal->medal_id = $medal_id;
                 $user_medal->created_at = Carbon::now();
                 $user_medal->save();
-                break;
             }
         }
     }
@@ -366,7 +357,6 @@ class UserMedalRecord extends Model
                 $user_medal->medal_id = $medal_id;
                 $user_medal->created_at = Carbon::now();
                 $user_medal->save();
-                break;
             }
         }
     }
