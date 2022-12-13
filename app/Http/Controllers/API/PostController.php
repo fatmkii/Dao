@@ -41,7 +41,7 @@ class PostController extends Controller
             'forum_id' => 'required|integer',
             'thread_id' => 'required|integer',
             'content' => 'required|string|max:20000',
-            'nickname' => '',
+            'nickname' => 'max:30',
             'post_with_admin' => 'boolean',
             'new_post_key' => 'required|string',
             'timestamp' => 'integer',

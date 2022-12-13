@@ -115,6 +115,7 @@ class ThreadController extends Controller
             'is_delay' => 'boolean|required',
             'is_private' => 'boolean|required',
             'can_battle' => 'boolean|required',
+            'nickname' => 'max:30',
         ]);
 
 
