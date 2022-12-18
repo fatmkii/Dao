@@ -107,7 +107,7 @@ class HongbaoController extends Controller
                 } else {
                     if ($hongbao->type == 1) {
                         $central = intval($hongbao->olo_remains / $hongbao->num_remains);
-                        $coin = rand(1, $central * 2);
+                        $coin = rand(0, $central * 2);
                     } elseif ($hongbao->type == 2) {
                         $coin = intval($hongbao->olo_total / $hongbao->num_total);
                     }
@@ -118,8 +118,8 @@ class HongbaoController extends Controller
                     $message = $message . '<br>——' . $hongbao->message;
                 }
 
-                $hongbao->olo_remains -= $coin;
-                $hongbao->num_remains -= 1;
+                $hongbao->increment('olo_remains', -$coin);
+                $hongbao->increment('num_remains', -1);
                 $hongbao->save();
 
                 // $post = new Post;

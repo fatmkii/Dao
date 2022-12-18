@@ -27,8 +27,8 @@ class HongbaoPostController extends Controller
                 'code' => ResponseCode::DEFAULT,
                 'message' => '今天8:00到24:00暂停大乱斗和红包。T_T',
             ]);
-        } 
-        
+        }
+
         $request->validate([
             'binggan' => 'required|string',
             'forum_id' => 'required|integer',
@@ -188,7 +188,7 @@ class HongbaoPostController extends Controller
                         if ($hongbao->type == 1) {
                             //随机红包
                             $central = intval($hongbao->olo_remains / $hongbao->num_remains);
-                            $coin = rand(1, $central * 2);
+                            $coin = rand(0, $central * 2);
                         } elseif ($hongbao->type == 2) {
                             //定额红包
                             $coin = intval($hongbao->olo_total / $hongbao->num_total);
@@ -206,8 +206,8 @@ class HongbaoPostController extends Controller
                         $post_original->save();
                     }
 
-                    $hongbao->olo_remains -= $coin;
-                    $hongbao->num_remains -= 1;
+                    $hongbao->increment('olo_remains', -$coin);
+                    $hongbao->increment('num_remains', -1);
                     $hongbao->save();
 
                     $post = Post::create([
@@ -250,7 +250,6 @@ class HongbaoPostController extends Controller
                 //检查成就
                 $user_medal_record = $user->UserMedalRecord()->firstOrCreate();
                 $user_medal_record->push_hongbao_in($coin);
-                
             } else {
                 return;
             }
