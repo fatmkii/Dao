@@ -16,7 +16,6 @@ class VoteQuestion extends Model
 
     public $hidden = [
         'thread_id',
-        'vote_total',
         'created_at',
         'updated_at',
         'VoteOption',
@@ -49,6 +48,7 @@ class VoteQuestion extends Model
             'vote_title' => 'required|string|max:100',
             'vote_end_time' => 'required|date_format:Y-m-d H:i:s|before:' . Carbon::now()->addMonth(1), //投票时长最多一个月
             'vote_options' => 'json|required|max:5000',
+            'vote_max_choices' => 'integer|required',
             'vote_multiple' => 'boolean|required'
         ]);
 
@@ -59,6 +59,7 @@ class VoteQuestion extends Model
         $vote_question->title = $request->vote_title;
         $vote_question->end_date = Carbon::parse($request->vote_end_time);
         $vote_question->multiple = $request->vote_multiple;
+        $vote_question->max_choices = $request->vote_max_choices;
         $vote_question->save();
 
         foreach ($request_options as $request_option) {

@@ -442,6 +442,13 @@ label.custom-file-label::after {
     }
 }
 
+.custom-control.custom-checkbox,
+.custom-control.custom-radio {
+    label {
+        width: 100%;
+    }
+}
+
 //大乱斗相关
 .battle-item {
     max-width: 600px;

@@ -79,20 +79,41 @@ class VoteController extends Controller
         };
 
         $request_options_id = json_decode($request->vote_options, true);
-        foreach ($request_options_id as $option_id) {
-            $option = VoteOption::find($option_id);
+        // foreach ($request_options_id as $option_id) {
+        //     $option = VoteOption::find($option_id);
+        //     //检查投票选项id是否存在
+        //     if (!$option) {
+        //         return response()->json([
+        //             'code' => ResponseCode::VOTE_OPTION_NOT_FOUND,
+        //             'message' => ResponseCode::$codeMap[ResponseCode::VOTE_OPTION_NOT_FOUND],
+        //         ]);
+        //     }
+        //     $option->vote_total++;
+        //     $option->save();
+        // }
+
+        //多选重写
+        $request_options_num = VoteOption::whereIn('id', $request_options_id)->count(); //用whereIn和count比较节省SQL查询
+        if (count($request_options_id) != $request_options_num) {
             //检查投票选项id是否存在
-            if (!$option) {
-                return response()->json([
-                    'code' => ResponseCode::VOTE_OPTION_NOT_FOUND,
-                    'message' => ResponseCode::$codeMap[ResponseCode::VOTE_OPTION_NOT_FOUND],
-                ]);
-            }
-            $option->vote_total++;
-            $option->save();
+            return response()->json([
+                'code' => ResponseCode::VOTE_OPTION_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::VOTE_OPTION_NOT_FOUND],
+            ]);
+        }
+        //检查是否可以多选
+        if (count($request_options_id) > 1 && $vote_question->multiple == false) {
+            return response()->json([
+                'code' => ResponseCode::VOTE_NOT_MUTIPLE,
+                'message' => ResponseCode::$codeMap[ResponseCode::VOTE_NOT_MUTIPLE],
+            ]);
         }
 
-        $vote_question->vote_total++;
+
+        VoteOption::whereIn('id', $request_options_id)->increment('vote_total', 1);
+
+        // $vote_question->vote_total++;
+        $vote_question->increment('vote_total', count($request_options_id));
         $vote_question->save();
 
         $vote_user = new VoteUser;

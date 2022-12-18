@@ -5,26 +5,60 @@
         >投票： {{ vote_question.title }}
       </span>
     </div>
-    <div
-      class="vote-option my-2"
-      v-for="(vote_option, index) in vote_options"
-      :key="index"
-    >
-      <b-form-radio v-model="choice_seleted" :value="vote_option.id">
-        {{ index + 1 }}：{{ vote_option.option_text }}
-      </b-form-radio>
-      <div class="d-flex">
-        <span style="min-width: 100px" class="pl-1">{{
-          vote_option.vote_total
-        }}</span>
-        <b-progress
-          class="w-75 ml-4"
-          height="1.5rem"
-          :value="vote_option.vote_total"
-          :max="vote_question.vote_total"
-        ></b-progress>
+    <div v-if="!get_vote_data_handling && !vote_question.multiple">
+      <div
+        class="vote-option my-2"
+        v-for="(vote_option, index) in vote_options"
+        :key="index"
+      >
+        <b-form-radio
+          v-model="choice_seleted"
+          :value="vote_option.id"
+          :disabled="user_choices != null"
+        >
+          {{ index + 1 }}：{{ vote_option.option_text }}
+          <div class="d-flex">
+            <span style="min-width: 100px" class="pl-1">{{
+              vote_option.vote_total
+            }}</span>
+            <b-progress
+              class="w-75 ml-4"
+              height="1.5rem"
+              :value="vote_option.vote_total"
+              :max="vote_question.vote_total"
+            ></b-progress>
+          </div>
+        </b-form-radio>
       </div>
     </div>
+    <div v-if="!get_vote_data_handling && vote_question.multiple">
+      <b-form-checkbox-group
+        v-model="choice_seleted_multiple"
+        stacked
+        :disabled="user_choices != null"
+        @change="multiple_change"
+      >
+        <b-form-checkbox
+          v-for="(vote_option, index) in vote_options"
+          :key="index"
+          :value="vote_option.id"
+          >{{ index + 1 }}：{{ vote_option.option_text }}
+          <div class="d-flex">
+            <span style="min-width: 100px" class="pl-1">{{
+              vote_option.vote_total
+            }}</span>
+            <b-progress
+              class="w-75 ml-4"
+              height="1.5rem"
+              :value="vote_option.vote_total"
+              :max="vote_question.vote_total"
+            ></b-progress>
+          </div>
+        </b-form-checkbox>
+      </b-form-checkbox-group>
+      最多可以选择：{{ vote_question.max_choices }} 个选项
+    </div>
+
     <div class="my-2">
       <b-button
         :variant="button_theme"
@@ -69,6 +103,7 @@ export default {
       user_choices: [],
       choice_seleted: undefined,
       choice_seleted_multiple: [],
+      choice_seleted_multiple_last: [], //记忆上次的选择
     };
   },
   computed: {
@@ -126,7 +161,9 @@ export default {
               let user_voted = JSON.parse(this.user_choices.options_id);
               if (user_voted.length == 1) {
                 this.choice_seleted = user_voted[0];
-              } //todo 写多选情况
+              } else {
+                this.choice_seleted_multiple = user_voted;
+              }
             }
             this.get_vote_data_handling = false;
           } else {
@@ -144,6 +181,7 @@ export default {
       if (this.vote_question.multiple == false) {
         vote_options.push(this.choice_seleted);
       } else {
+        vote_options = this.choice_seleted_multiple;
       }
       const config = {
         method: "post",
@@ -174,6 +212,14 @@ export default {
           // alert(Object.values(error.response.data.errors)[0]);
           // alert(error.response.data.message);
         });
+    },
+    multiple_change(value) {
+      if (value.length > this.vote_question.max_choices) {
+        alert("最多只可以选择" + this.vote_question.max_choices + "个选项喔");
+        this.choice_seleted_multiple = this.choice_seleted_multiple_last;
+      } else {
+        this.choice_seleted_multiple_last = value;
+      }
     },
   },
   created() {

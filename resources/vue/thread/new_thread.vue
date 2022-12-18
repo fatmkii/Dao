@@ -247,16 +247,6 @@
             </svg>
           </div>
           <div class="col-auto my-2">
-            <b-form-checkbox
-              class="mr-3"
-              v-model="vote_multiple"
-              v-b-popover.hover.right="'未启用'"
-              disabled
-            >
-              投票多选
-            </b-form-checkbox>
-          </div>
-          <div class="col-auto my-2">
             <b-input-group style="max-width: 160px">
               <b-form-input
                 v-model="end_date_selected"
@@ -308,6 +298,21 @@
           </div>
         </div>
         <div v-show="thread_type == 'vote'">
+          <div class="d-flex my-2">
+            <b-form-checkbox class="mr-3" v-model="vote_multiple">
+              投票多选
+            </b-form-checkbox>
+            <span class="ml-2" v-if="vote_multiple">最多可选：</span>
+            <b-form-spinbutton
+              size="sm"
+              style="max-width: 120px"
+              min="1"
+              :max="vote_options.length"
+              v-model="vote_max_choices"
+              v-if="vote_multiple"
+            ></b-form-spinbutton>
+            <span class="ml-1 mb-2" v-if="vote_multiple">个</span>
+          </div>
           <div class="my-2" style="font-size: 0.875rem">投票标题</div>
           <b-form-input
             id="vote_title_input"
@@ -609,6 +614,7 @@ export default {
       vote_multiple: false,
       vote_title_input: "",
       vote_options: ["", "", ""],
+      vote_max_choices: 1,
       crowd_olo_input: undefined,
       hongbao_olo: "",
       hongbao_num: undefined,
@@ -799,6 +805,7 @@ export default {
         config.data.vote_options = JSON.stringify(this.vote_options);
         config.data.vote_end_time =
           this.end_date_selected + " " + this.end_time_selected;
+        config.data.vote_max_choices = this.vote_max_choices;
       }
       if (this.thread_type == "gamble") {
         //如果是菠菜贴，追加菠菜相关的请求参数

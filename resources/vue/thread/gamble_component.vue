@@ -18,18 +18,18 @@
           gamble_option.id == gamble_question.result_option_id ? "⭐" : ""
         }}
         {{ gamble_option.option_text }}
+        <div class="d-flex">
+          <span style="min-width: 100px" class="pl-1">{{
+            gamble_option.olo_total
+          }}</span
+          ><b-progress
+            class="w-75 ml-4"
+            height="1.5rem"
+            :value="gamble_option.olo_total"
+            :max="gamble_question.olo_total"
+          ></b-progress>
+        </div>
       </b-form-radio>
-      <div class="d-flex">
-        <span style="min-width: 100px" class="pl-1">{{
-          gamble_option.olo_total
-        }}</span
-        ><b-progress
-          class="w-75 ml-4"
-          height="1.5rem"
-          :value="gamble_option.olo_total"
-          :max="gamble_question.olo_total"
-        ></b-progress>
-      </div>
     </div>
     <div class="my-2">
       <b-input-group class="my-2" size="sm">

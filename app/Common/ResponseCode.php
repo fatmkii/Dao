@@ -42,6 +42,7 @@ class ResponseCode
     const VOTE_OPTION_NOT_FOUND = 254041;
     const VOTE_WAS_OUTDATE = 25410;
     const VOTE_HAVE_BEEN_VOTE = 25403;
+    const VOTE_NOT_MUTIPLE = 25401;
 
     const GAMBLE_NOT_FOUND = 26404;
     const GAMBLE_OPTION_NOT_FOUND = 264041;
@@ -109,6 +110,7 @@ class ResponseCode
         self::VOTE_OPTION_NOT_FOUND => '投票选项不存在',
         self::VOTE_WAS_OUTDATE => '投票已过期',
         self::VOTE_HAVE_BEEN_VOTE => '你已经投过票了',
+        self::VOTE_NOT_MUTIPLE => '非多选投票',
         self::GAMBLE_NOT_FOUND => '菠菜不存在',
         self::GAMBLE_OPTION_NOT_FOUND => '菠菜选项不存在',
         self::GAMBLE_WAS_OUTDATE => '菠菜已过期',
