@@ -206,9 +206,11 @@ class HongbaoPostController extends Controller
                         $post_original->save();
                     }
 
-                    $hongbao->increment('olo_remains', -$coin);
-                    $hongbao->increment('num_remains', -1);
-                    $hongbao->save();
+                    HongbaoPost::withTrashed()->where('id', $hongbao_item->id)->increment('olo_remains', -$coin); //直接用$hongbao->withTrashed()的话， SQL查询语句会失去全部where条件，导致变更所有记录。可能是laravel的bug
+                    HongbaoPost::withTrashed()->where('id', $hongbao_item->id)->decrement('num_remains');
+                    // $hongbao->increment('olo_remains', -$coin);
+                    // $hongbao->increment('num_remains', -1);
+                    // $hongbao->save();
 
                     $post = Post::create([
                         'created_binggan' => $request->binggan,
