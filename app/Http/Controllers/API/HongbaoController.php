@@ -118,11 +118,9 @@ class HongbaoController extends Controller
                     $message = $message . '<br>——' . $hongbao->message;
                 }
 
-                Hongbao::withTrashed()->where('id', $thread->hongbao_id)->increment('olo_remains', -$coin); //用Eloquent模型的话会被软删除影响
-                Hongbao::withTrashed()->where('id', $thread->hongbao_id)->decrement('num_remains');
-                // $hongbao->increment('olo_remains', -$coin);
-                // $hongbao->increment('num_remains', -1);
-                // $hongbao->save();
+                $hongbao->increment('olo_remains', -$coin);
+                $hongbao->decrement('num_remains');
+                $hongbao->save();
 
                 // $post = new Post;
                 // $post->setSuffix(intval($request->thread_id / 10000));
