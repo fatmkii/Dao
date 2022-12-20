@@ -9,8 +9,6 @@ use App\Models\Forum;
 use App\Models\Post;
 use App\Models\Thread;
 use App\Common\ResponseCode;
-use App\Events\NewPostBroadcast;
-use App\Exceptions\CoinException;
 use App\Jobs\ProcessUserActive;
 use App\Models\HongbaoPost;
 use App\Models\UserMedalRecord;
@@ -156,7 +154,7 @@ class PostController extends Controller
         UserMedalRecord::check_floor($post->floor, $user);
 
         //检查成就（回帖数量）
-        $user_medal_record = $user->UserMedalRecord()->firstOrCreate();//如果记录不存在就追加
+        $user_medal_record = $user->UserMedalRecord()->firstOrCreate(); //如果记录不存在就追加
         $user_medal_record->push_posts_num();
 
         //广播发帖动作
@@ -417,6 +415,13 @@ class PostController extends Controller
 
 
             $post->is_deleted = 1;
+            if ($post->battle_id != null) {
+                $post->battle_id = null;
+            }
+            if ($post->hongbao_id != null) {
+                HongbaoPost::where('id', $post->hongbao_id)->update(['deleted_at' => Carbon::now()]);
+                $post->hongbao_id = null;
+            }
             $post->save();
             DB::commit();
         } catch (Exception $e) {

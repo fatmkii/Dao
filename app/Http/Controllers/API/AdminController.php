@@ -8,6 +8,7 @@ use App\Common\ResponseCode;
 use App\Jobs\ProcessUserActive;
 use App\Models\AnnoucementMessages;
 use App\Models\Forum;
+use App\Models\HongbaoPost;
 use App\Models\Post;
 use App\Models\Thread;
 use App\Models\User;
@@ -15,7 +16,6 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -197,6 +197,13 @@ class AdminController extends Controller
         }
 
         $post->is_deleted = 2;
+        if ($post->battle_id != null) {
+            $post->battle_id = null;
+        }
+        if ($post->hongbao_id != null) {
+            HongbaoPost::where('id', $post->hongbao_id)->update(['deleted_at' => Carbon::now()]);
+            $post->hongbao_id = null;
+        }
         $post->save();
 
         ProcessUserActive::dispatch(

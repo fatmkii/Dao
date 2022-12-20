@@ -364,7 +364,13 @@ export default {
     },
     post_delete_click() {
       var isdelete = confirm("要删除这个回复吗？（消费300奥利奥）");
-      if (isdelete == true) {
+      var confirmed = true;
+      if (this.post_data.hongbao_id != null) {
+        confirmed = confirm(
+          "这个回帖有红包。删除后红包将消失，并且olo不退回。是否确认？"
+        );
+      }
+      if (isdelete == true && confirmed == true) {
         const config = {
           method: "delete",
           url: "/api/posts/" + this.post_data.id,
@@ -408,7 +414,13 @@ export default {
     },
     post_delete_click_admin() {
       var content = prompt("要用管理员权限删除这个回复吗？请输入理由");
-      if (content != null) {
+      var confirmed = true;
+      if (this.post_data.hongbao_id != null) {
+        confirmed = confirm(
+          "这个回帖有红包。删除后红包将消失，并且olo不退回。是否确认？"
+        );
+      }
+      if (content != null && confirmed != false) {
         const config = {
           method: "delete",
           url: "/api/admin/post_delete/" + this.post_data.id,
