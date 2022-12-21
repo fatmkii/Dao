@@ -207,6 +207,15 @@ export default {
     this.$store.commit("MedalsHide_set", medals_hide);
 
     this.set_LocalStorage(); //把LocalStorage变量存到Vuex
+
+    //解决safari后退前进之后，confirm，alert及prompt不出现的问题
+    window.onload = function () {
+      setTimeout(function () {
+        window.addEventListener("popstate", function () {
+          window.location.reload();
+        });
+      }, 0);
+    };
   },
 };
 </script>
