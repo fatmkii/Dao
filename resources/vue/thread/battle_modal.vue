@@ -55,7 +55,9 @@ export default {
     battle_chara_group_id() {
       if (
         this.$store.state.User.CharaIndex[this.battle_chara_group_id] !=
-        undefined
+          undefined &&
+        this.$store.state.User.CharaIndex[this.battle_chara_group_id].length !=
+          0
       ) {
         this.battle_chara_options =
           this.$store.state.User.CharaIndex[this.battle_chara_group_id];
@@ -82,7 +84,9 @@ export default {
         if (
           random_heads_group != 1 &&
           this.$store.state.User.CharaGroupIndex[random_heads_group - 1] !=
-            undefined
+            undefined &&
+          this.$store.state.User.CharaGroupIndex[random_heads_group - 1]
+            .available == true
         ) {
           this.battle_chara_group_id = random_heads_group - 1; //random_heads_group是从1开始数的
           const chara_group =

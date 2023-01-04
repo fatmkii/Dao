@@ -140,6 +140,53 @@ var random_heads_json = [
             "https://i.loli.net/2020/05/12/J8uH6ClX4EGLifc.png"
         ],
         "deleted_at": null
+    },
+    {
+        "id": "4",
+        "name": "兵兵球",
+        "random_heads": [
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-01.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-02.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-03.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-04.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-05.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-06.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-07.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-08.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-09.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-10.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-11.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-12.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-13.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-14.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-15.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-16.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-17.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-18.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-19.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-20.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-21.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-22.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-23.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-24.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-25.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-26.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-27.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-28.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-29.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-30.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-31.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-32.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-33.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-34.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-35.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-36.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-37.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-38.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-39.gif",
+            "https://hcfgt.com/unicorn/i/1890/touxiang/zhuqiu-40.gif"
+        ],
+        "deleted_at": null
     }
 
 ]
@@ -1758,7 +1805,67 @@ var emoji_json = [
             "https://s2.loli.net/2021/12/31/TYwKGJ1qvyr69jc.png"
         ],
         "deleted_at": null
+    },
+    {
+        "id": "13",
+        "heads_id": "4",
+        "name": "兵兵球",
+        "emojis": [
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-01.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-02.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-03.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-04.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-05.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-06.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-07.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-08.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-09.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-10.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-11.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-12.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-13.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-14.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-15.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-16.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-17.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-18.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-19.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-20.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-21.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-22.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-23.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-24.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-25.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-26.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-27.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-28.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-29.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-30.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-31.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-32.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-33.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-34.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-35.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-36.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-37.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-38.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-39.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-40.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-41.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-42.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-43.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-44.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-45.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-46.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-47.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-48.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-49.gif",
+            "https://hcfgt.com/unicorn/i/1890/biaoqing-50.gif",
+        ],
+        "deleted_at": null
     }
+
+
 ]
 
 //大乱斗角色
@@ -1862,13 +1969,58 @@ var chara_index = [
             "value": 199,
             "text": "芥见下下"
         },
+    ],
+    [],//这是国配岛的留空
+    [
+        {
+            "value": 201,
+            "text": "zumi"
+        },
+        {
+            "value": 202,
+            "text": "奶瓶雕"
+        },
+        {
+            "value": 203,
+            "text": "什么夫"
+        },
+        {
+            "value": 204,
+            "text": "盘盘兔"
+        },
+        {
+            "value": 205,
+            "text": "龙小可"
+        },
+        {
+            "value": 206,
+            "text": "皱海蒯"
+        },
+        {
+            "value": 207,
+            "text": "肥肥鲨"
+        },
+        {
+            "value": 208,
+            "text": "保龄鸭"
+        },
+        {
+            "value": 209,
+            "text": "小emo"
+        },
+        {
+            "value": 210,
+            "text": "彩虹马"
+        },
     ]
 ]
 
 //大乱斗角色分组
 var chara_group_index = [
-    { "value": 0, "text": "共通" },
-    { "value": 1, "text": "咒术回战" },
+    { "value": 0, "text": "共通", 'available': true },
+    { "value": 1, "text": "咒术回战", 'available': true },
+    { 'available': false },//这是国配岛的留空
+    { "value": 3, "text": "兵兵球", 'available': true },
 ]
 
 //发新主题时候的副标题。id=1是一般的、id=2是管理员专用、id=3是只能显示时筛选、发主题时不能主动选择的
