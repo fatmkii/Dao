@@ -57,6 +57,12 @@ body {
     width: 500px;
 }
 
+//限制头像尺寸
+img[class^="head_"] {
+    max-width: 32px;
+    max-height: 32px;
+}
+
 //侧边栏及其他
 .spinner.document-loading {
     @include font_color("icon_color1");
