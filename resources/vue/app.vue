@@ -69,9 +69,7 @@ export default {
           JSON.parse(localStorage.browse_logger)
         );
       } else {
-        localStorage.browse_logger = JSON.stringify(
-          this.$store.state.User.BrowseLogger
-        );
+        localStorage.browse_logger = JSON.stringify(this.$store.state.User.BrowseLogger);
       }
       //读取localStorage的皮肤主题
       if (localStorage.getItem("theme") == null) {
@@ -94,6 +92,14 @@ export default {
         this.$store.commit(
           "FoldPingbici_set",
           localStorage.getItem("fold_pingbici") === "true"
+        );
+      }
+
+      //读取是否屏蔽词忽略大小写
+      if (localStorage.getItem("pingbici_ignore_case") != null) {
+        this.$store.commit(
+          "PingbiciIngnoreCase_set",
+          localStorage.getItem("pingbici_ignore_case") === "true"
         );
       }
 

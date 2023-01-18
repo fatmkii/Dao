@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <p class="mt-2">你好！别来无恙。</p>
@@ -10,9 +9,7 @@
       {{ $store.state.User.UserDataLoaded == 2 ? user_lv : "读取中" }}
     </p>
     <p :class="is_mobile ? 'mb-1' : ''">
-      你的奥利奥：{{
-        $store.state.User.UserDataLoaded == 2 ? user_coin : "读取中"
-      }}
+      你的奥利奥：{{ $store.state.User.UserDataLoaded == 2 ? user_coin : "读取中" }}
       个
     </p>
     <b-button
@@ -34,9 +31,7 @@
           侧边栏放左侧
         </b-form-checkbox>
         <b-form-checkbox class="mx-2 my-2" switch v-model="LessToast">
-          <span v-b-popover.hover.bottom="'“已滚动到阅读进度”等'"
-            >减少弹窗提示</span
-          >
+          <span v-b-popover.hover.bottom="'“已滚动到阅读进度”等'">减少弹窗提示</span>
         </b-form-checkbox>
         <hr :class="is_mobile ? 'my-1' : ''" />
         <div class="mt-2 d-flex align-items-center">
@@ -218,6 +213,14 @@
             >
               完全隐藏楼层
             </b-form-checkbox>
+            <b-form-checkbox
+              class="ml-2"
+              switch
+              v-model="PingbiciIngnoreCase"
+              v-b-popover.hover.bottom="'不包括小尾巴'"
+            >
+              忽略大小写
+            </b-form-checkbox>
           </div>
         </div>
       </b-tab>
@@ -304,11 +307,7 @@
           </b-button>
           <span class="ml-2" v-show="income_no_data">无数据</span>
         </div>
-        <div
-          v-show="income_loading == 2"
-          class="my-2"
-          style="font-size: 0.9rem"
-        >
+        <div v-show="income_loading == 2" class="my-2" style="font-size: 0.9rem">
           <div>当日总计：{{ income_total }}</div>
           <div>
             <span>当月总计：</span
@@ -346,11 +345,7 @@
                 <td class="text-left">{{ income.content }}</td>
                 <td class="text-left">
                   <div
-                    style="
-                      text-overflow: ellipsis;
-                      overflow: hidden;
-                      white-space: nowrap;
-                    "
+                    style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap"
                   >
                     <router-link
                       class="thread_title"
@@ -384,11 +379,7 @@
             </div>
             <div
               class="text-left my-1 py-1"
-              style="
-                text-overflow: ellipsis;
-                overflow: hidden;
-                white-space: nowrap;
-              "
+              style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap"
               v-if="income.thread_title !== null"
             >
               <span>主题：</span>
@@ -409,9 +400,7 @@
         ></b-pagination>
       </b-tab>
       <b-tab title="升级饼干">
-        <p class="my-2">
-          说明：可通过支付奥利奥升级饼干，以增加屏蔽词或表情包容量。
-        </p>
+        <p class="my-2">说明：可通过支付奥利奥升级饼干，以增加屏蔽词或表情包容量。</p>
         <a
           href="https://oss.cpttmm.com/xhg_other/price_list.png"
           target="view_frame"
@@ -487,7 +476,6 @@
   </div>
 </template>
 
-
 <script>
 import { mapState } from "vuex";
 import MedalsTab from "./medals_tab.vue";
@@ -499,10 +487,7 @@ export default {
   watch: {
     z_bar_left: function () {
       localStorage.setItem("z_bar_left", this.z_bar_left ? "true" : "");
-      window.document.documentElement.setAttribute(
-        "z-bar-left",
-        this.z_bar_left
-      );
+      window.document.documentElement.setAttribute("z-bar-left", this.z_bar_left);
     },
     $route(to) {
       if (to.name == "thread") {
@@ -629,6 +614,15 @@ export default {
       set(value) {
         localStorage.setItem("fold_pingbici", value ? "true" : "");
         this.$store.commit("FoldPingbici_set", value);
+      },
+    },
+    PingbiciIngnoreCase: {
+      get() {
+        return this.$store.state.User.PingbiciIngnoreCase;
+      },
+      set(value) {
+        localStorage.setItem("pingbici_ignore_case", value ? "true" : "");
+        this.$store.commit("PingbiciIngnoreCase_set", value);
       },
     },
     UsePingbici: {
@@ -810,9 +804,7 @@ export default {
         data: {
           binggan: this.$store.state.User.Binggan,
           title_pingbici: JSON.stringify(this.$store.state.User.TitlePingbici),
-          content_pingbici: JSON.stringify(
-            this.$store.state.User.ContentPingbici
-          ),
+          content_pingbici: JSON.stringify(this.$store.state.User.ContentPingbici),
           fjf_pingbici: JSON.stringify(this.$store.state.User.FjfPingbici),
           use_pingbici: this.UsePingbici,
         },
@@ -919,9 +911,7 @@ export default {
       });
     },
     user_lv_up_handle(name, chinese_name, price) {
-      var confirmed = confirm(
-        "要升级" + chinese_name + "吗？将会花费" + price + "个olo"
-      );
+      var confirmed = confirm("要升级" + chinese_name + "吗？将会花费" + price + "个olo");
       if (confirmed == false) {
         return;
       }

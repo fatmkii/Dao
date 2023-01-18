@@ -16,6 +16,7 @@ const module_user = {
         ContentPingbici: ["屏蔽词1", "屏蔽词2"],
         FjfPingbici: ["小尾巴1", "小尾巴2"],
         FoldPingbici: false,
+        PingbiciIngnoreCase: false,
         LessToast: false,
         MyEmoji: { name: '我的表情包', emojis: ["https://z3.ax1x.com/2021/08/01/Wznvbq.jpg", "https://z3.ax1x.com/2021/08/01/Wznjrn.jpg"] },
         Emojis: [],
@@ -80,6 +81,9 @@ const module_user = {
         },
         FoldPingbici_set(state, payload) {
             state.FoldPingbici = payload
+        },
+        PingbiciIngnoreCase_set(state, payload) {
+            state.PingbiciIngnoreCase = payload
         },
         LessToast_set(state, payload) {
             state.LessToast = payload

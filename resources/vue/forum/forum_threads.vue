@@ -1,4 +1,3 @@
-
 <template>
   <div class="d-none d-lg-block d-xl-block">
     <table v-show="threads_load_status == 2" class="threads_table">
@@ -40,16 +39,9 @@
             >
               {{ thread.title }}
             </router-link>
-            <span v-if="thread.locked_by_coin > 0"
-              >🔒{{ thread.locked_by_coin }}</span
-            >
+            <span v-if="thread.locked_by_coin > 0">🔒{{ thread.locked_by_coin }}</span>
             <router-link
-              :to="
-                '/thread/' +
-                thread.id +
-                '/' +
-                Math.ceil((thread.posts_num + 1) / 200)
-              "
+              :to="'/thread/' + thread.id + '/' + Math.ceil((thread.posts_num + 1) / 200)"
               :target="router_target"
               v-if="thread.posts_num > 200"
               class="thread_page ml-1"
@@ -81,7 +73,6 @@
   </div>
 </template>
 
-
 <script>
 import { mapState } from "vuex";
 
@@ -101,6 +92,9 @@ export default {
     router_target() {
       return this.new_window_to_post == true ? "_blank" : "false";
     },
+    regexp_mode() {
+      return this.pingbici_ignore_case ? "gi" : "g";
+    },
     threads_data() {
       if (this.threads_load_status == 2) {
         if (
@@ -111,7 +105,7 @@ export default {
           const title_pingbici = this.$store.state.User.TitlePingbici;
           return this.$store.state.Threads.ThreadsData.data.filter((thread) => {
             for (var i = 0; i < title_pingbici.length; i++) {
-              var reg = new RegExp(title_pingbici[i], "g");
+              var reg = new RegExp(title_pingbici[i], this.regexp_mode);
               if (reg.test(thread.title)) {
                 return false;
               }
@@ -124,6 +118,7 @@ export default {
       }
     },
     ...mapState({
+      pingbici_ignore_case: (state) => state.User.PingbiciIngnoreCase,
       threads_load_status: (state) => state.Threads.ThreadsLoadStatus,
       forum_is_nissin: (state) => state.Forums.CurrentForumData.is_nissin,
       focus_threads: (state) => state.User.FocusThreads,

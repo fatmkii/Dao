@@ -5,10 +5,7 @@
     v-if="!(!this.post_content_show && this.fold_pingbici)"
   >
     <slot name="header"></slot>
-    <div
-      class="float-right post_buttons"
-      v-if="this.$store.state.User.LoginStatus"
-    >
+    <div class="float-right post_buttons" v-if="this.$store.state.User.LoginStatus">
       <b-button
         size="sm"
         variant="warning"
@@ -145,10 +142,7 @@
         @click="post_content_show = !post_content_show"
         >*手贱了，收回去*</span
       >
-      <span
-        style="cursor: pointer"
-        v-else
-        @click="post_content_show = !post_content_show"
+      <span style="cursor: pointer" v-else @click="post_content_show = !post_content_show"
         >*此回帖已屏蔽{{ hide_reason }}，点击展开*</span
       >
     </div>
@@ -197,7 +191,6 @@
     </span>
   </div>
 </template>
-
 
 <script>
 import { mapState } from "vuex";
@@ -262,9 +255,6 @@ export default {
         created_by_admin2: this.post_data.created_by_admin == 2,
       };
     },
-    forum_id() {
-      return this.$store.state.Forums.CurrentForumData.id;
-    },
     post_content() {
       // const img_svg =
       //   '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-image img_svg" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/><path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/></svg>';
@@ -295,12 +285,6 @@ export default {
         .replace(/<script/g, "<**禁止使用script**")
         .replace(/\n/g, "<br>");
     },
-    use_pingbici() {
-      return this.$store.state.User.UsePingbici;
-    },
-    fold_pingbici() {
-      return this.$store.state.User.FoldPingbici;
-    },
     post_content_css() {
       if (this.post_max_height == 0) {
         var maxHeight = "none";
@@ -324,12 +308,17 @@ export default {
         top: this.post_top_offset + "px",
       };
     },
+    regexp_mode() {
+      return this.pingbici_ignore_case ? "gi" : "g";
+    },
     ...mapState({
+      forum_id: (state) => state.Forums.CurrentForumData.id,
+      use_pingbici: (state) => state.User.UsePingbici,
+      fold_pingbici: (state) => state.User.FoldPingbici,
+      pingbici_ignore_case: (state) => state.User.PingbiciIngnoreCase,
       quote_max: (state) => state.MyCSS.QuoteMax,
       thread_id: (state) =>
-        state.Threads.CurrentThreadData.id
-          ? state.Threads.CurrentThreadData.id
-          : 0,
+        state.Threads.CurrentThreadData.id ? state.Threads.CurrentThreadData.id : 0,
     }),
   },
   created() {
@@ -575,7 +564,7 @@ export default {
         //处理内容屏蔽词
         const content_pingbici = this.$store.state.User.ContentPingbici;
         for (var i = 0; i < content_pingbici.length; i++) {
-          var reg = new RegExp(content_pingbici[i], "g");
+          var reg = new RegExp(content_pingbici[i], this.regexp_mode);
           if (reg.test(this.post_data.content)) {
             this.post_content_show = false; //回帖是否显示的开关
             this.post_content_should_hiden = true;
@@ -583,10 +572,7 @@ export default {
           }
         }
         //处理fjf屏蔽词
-        if (
-          this.thread_anti_jingfen &&
-          this.$store.state.User.FjfPingbici !== null
-        ) {
+        if (this.thread_anti_jingfen && this.$store.state.User.FjfPingbici !== null) {
           const fjf_pingbici = this.$store.state.User.FjfPingbici;
           for (var i = 0; i < fjf_pingbici.length; i++) {
             var reg = new RegExp(fjf_pingbici[i], "g");
@@ -614,16 +600,12 @@ export default {
       this.post_max_height = 0;
     },
     fold_img() {
-      const img_doms =
-        this.$refs.post_content.getElementsByClassName("img_svg");
+      const img_doms = this.$refs.post_content.getElementsByClassName("img_svg");
       for (let dom of img_doms) {
         dom.addEventListener("click", (event) => {
           const src_old = event.target.getAttribute("src");
           event.target.setAttribute("src", "");
-          event.target.setAttribute(
-            "src",
-            event.target.getAttribute("data-src")
-          );
+          event.target.setAttribute("src", event.target.getAttribute("data-src"));
           event.target.setAttribute("data-src", src_old);
         });
       }
