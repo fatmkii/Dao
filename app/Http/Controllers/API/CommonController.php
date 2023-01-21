@@ -216,50 +216,50 @@ class CommonController extends Controller
         $coin = 0; //红包金额
         $message = ""; //红包回帖信息
 
-        if (Carbon::now() < Carbon::create("2022-2-1 0:0:0")) {
+        if (Carbon::now() < Carbon::create("2023-1-22 0:0:0")) {
             $coin = 0;
             $message = "本次活动尚未开始，请稍等喔";
-        } elseif (Carbon::now() > Carbon::create("2022-2-2 0:0:0")) {
+        } elseif (Carbon::now() > Carbon::create("2023-1-23 0:0:0")) {
             $coin = 0;
             $message = "本次活动已经结束，你来晚啦";
         } elseif (DB::table("hongbao_record")->where('user_id', $user->id)->lockForUpdate()->exists()) {
             $coin = 0;
             $message = "你已经领取过了，不要贪心喔！";
-        } elseif (Carbon::parse($user->created_at) > Carbon::create("2022-1-30 0:0:0")) {
+        } elseif (Carbon::parse($user->created_at) > Carbon::create("2023-1-21 0:0:0")) {
             $coin = 0;
-            $message = "你的饼干不符合领取条件";
+            $message = "你的饼干不符合领取条件（23年1月21日0点前领取的饼干）";
         } else {
-            $rand_num = random_int(1, 10000);
+            $rand_num = random_int(1, 1000);
             switch ($rand_num) {
-                case $rand_num == 10000: {
+                case $rand_num == 1000: {
                         if (DB::table("hongbao_record")->where('olo', 100000)->exists()) {
                             $coin = 10000;
-                            $message = "哇喔，传说！是SSSR！获得了1w个olo，恭喜！ ";
+                            $message = "哇喔，传说！是SSSR！获得了1w个olo，恭喜！ <img src='https://s2.ax1x.com/2019/09/20/nviqyQ.gif' class='emoji_img'>";
                             break;
                         } else {
                             $coin = 100000;
-                            $message = "哇喔，金色传说！屁元从天而降给你施放「屁元的祝福」。获得10w个olo，恭喜！<img src='https://z3.ax1x.com/2021/05/26/2Cntbj.jpg' class='emoji_img'>";
+                            $message = "哇喔！！！迷之粉红色兔给了你一个眼色，留下了10w个olo！<img src='https://hcfgt.com/unicorn/i/1890/biaoqing-12.gif' class='emoji_img'>";
                             break;
                         }
                     }
-                case $rand_num >= 9900: {
+                case $rand_num >= 990: {
                         $coin = 10000;
-                        $message = "哇喔，传说！是SSSR！获得了1w个olo，恭喜！ ";
+                        $message = "哇喔！你抽到了SSSR！获得了1w个olo，恭喜！ <img src='https://s2.ax1x.com/2019/09/20/nviqyQ.gif' class='emoji_img'>";
                         break;
                     }
-                case $rand_num >= 9000: {
+                case $rand_num >= 900: {
                         $coin = 3000;
-                        $message = "哇喔！你抽到了SSR！获得了3000个olo，恭喜！ ";
+                        $message = "哇喔！是SSR！获得了3000个olo，恭喜！ <img src='https://img.mjj.today/2022/07/20/8117c2b89add547313d46aed693150e2.jpg' class='emoji_img'>";
                         break;
                     }
-                case $rand_num >= 6000: {
+                case $rand_num >= 600: {
                         $coin = 1000;
-                        $message = "你抽到了SR。 获得了1000个olo，恭喜！ ";
+                        $message = "你抽到了SR。 获得了1000个olo，恭喜！ <img src='https://img.mjj.today/2022/07/20/7b88b43c26202e58fa1cb4beddcae042.jpg' class='emoji_img'>";
                         break;
                     }
                 default: {
                         $coin = 500;
-                        $message = "你抽到了NR。 获得了500个olo，恭喜！ ";
+                        $message = "你抽到了NR。 获得了500个olo，恭喜！ <img src='https://img.mjj.today/2022/07/20/afc130443d7d9c479c679ebbbbe2a508.jpg' class='emoji_img'>";
                         break;
                     }
             }
@@ -270,22 +270,17 @@ class CommonController extends Controller
         //执行追加新回复流程
         try {
             DB::beginTransaction();
-            $post = new Post;
-            $post->setSuffix(intval($request->thread_id / 10000));
-            $post->created_binggan = $request->binggan;
-            $post->forum_id = $request->forum_id;
-            $post->thread_id = $request->thread_id;
-            $post->content = $message;
-            $post->nickname = '新春红包系统';
-            $post->created_by_admin = 2; //0=一般用户 1=管理员发布，2=系统发布
-            $post->created_ip = $request->ip();
-            $post->random_head = random_int(0, 39);
 
-            $thread->posts_num = POST::Suffix(intval($thread->id / 10000))->where('thread_id', $thread->id)->count();
-            $post->floor = $thread->posts_num;
+            $post = Post::create([
+                'created_binggan' => $request->binggan,
+                'forum_id' => $request->forum_id,
+                'thread_id' => $request->thread_id,
+                'content' => $message,
+                'nickname' => '新春红包系统',
+                'created_by_admin' => 2,
+                'created_IP' => $request->ip(),
+            ]);
 
-            $thread->save();
-            $post->save();
 
             if ($coin > 0) {
                 // $user->coin += $coin;
