@@ -175,6 +175,7 @@ class User extends Authenticatable
                             [
                                 'binggan' => $this->binggan,
                                 'user_id' => $this->id,
+                                'thread_id' => $thread_id,
                                 'active' => '怀疑用户用脚本刷帖(回帖不看帖)',
                                 'content' => 'ip:' . $ip . ' record:' . $new_post_record_IP2,
                             ]
