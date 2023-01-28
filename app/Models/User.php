@@ -318,11 +318,17 @@ class User extends Authenticatable
     }
 
     //统一的奥利奥变更接口，并且留下income_statement记录
-    public function coinChange(string $action = "normal", array $income_statement)
+    public function coinChange(string $action = "normal", array $income_statement, bool $ignore_olo_0 = false)
     {
         //检查olo是否足够
         if ($income_statement['olo'] < 0 && $this->coin < -$income_statement['olo']) {
-            throw new CoinException();
+            if ($ignore_olo_0 == false) {
+                //如果olo不足，则报错
+                throw new CoinException();
+            } else {
+                //假如忽略olo低于0的情况（用于罚款等情况），直接把剩余olo扣除到0为止
+                $income_statement['olo'] = -$this->coin;
+            }
         }
 
         //如果没有传入user_id、binggan、created_at，则使用此模型的饼干（简化传参）

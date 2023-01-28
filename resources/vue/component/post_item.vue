@@ -403,12 +403,16 @@ export default {
     },
     post_delete_click_admin() {
       var content = prompt("要用管理员权限删除这个回复吗？请输入理由");
+      if (content == null) {
+        return;
+      }
       var confirmed = true;
       if (this.post_data.hongbao_id != null) {
         confirmed = confirm(
           "这个回帖有红包。删除后红包将消失，并且olo不退回。是否确认？"
         );
       }
+      var reduce_olo = confirm("是否需要对该饼干罚款500个olo？");
       if (content != null && confirmed != false) {
         const config = {
           method: "delete",
@@ -416,6 +420,7 @@ export default {
           data: {
             thread_id: this.thread_id,
             content: content,
+            reduce_olo: reduce_olo,
           },
         };
         axios(config).then((response) => {
@@ -455,6 +460,12 @@ export default {
       var content = prompt(
         "要用管理员权限删除该饼干全部回复吗？请输入理由：\n（一般只有违规刷屏时候才会用）"
       );
+      if (content == null) {
+        return;
+      }
+      var reduce_olo = confirm(
+        "是否需要对该饼干进行罚款？\n每个帖子罚款500，封顶5000个olo"
+      );
       if (content != null) {
         const config = {
           method: "post",
@@ -463,6 +474,7 @@ export default {
             post_id: this.post_data.id,
             thread_id: this.thread_id,
             content: content,
+            reduce_olo: reduce_olo,
           },
         };
         axios(config).then((response) => {

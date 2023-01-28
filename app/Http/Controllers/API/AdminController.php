@@ -171,7 +171,8 @@ class AdminController extends Controller
     {
         $request->validate([
             'thread_id' => 'required|integer',
-            'content' => 'required|string|max:255'
+            'content' => 'required|string|max:255',
+            'reduce_olo' => 'required|boolean'
         ]);
 
         $user = $request->user();
@@ -181,6 +182,14 @@ class AdminController extends Controller
             return response()->json([
                 'code' => ResponseCode::POST_NOT_FOUND,
                 'message' => ResponseCode::$codeMap[ResponseCode::POST_NOT_FOUND],
+            ]);
+        }
+
+        //确认是否已经删除过了
+        if ($post->is_deleted != 0) {
+            return response()->json([
+                'code' => ResponseCode::DEFAULT,
+                'message' => '该帖子已经被删除过了',
             ]);
         }
 
@@ -205,6 +214,26 @@ class AdminController extends Controller
             $post->hongbao_id = null;
         }
         $post->save();
+
+
+        if ($request->reduce_olo == True) {
+            //扣除被删帖用户的olo 500个
+            $user_to_delete = User::where('binggan', $post->created_binggan)->first();
+            if ($user_to_delete) {
+                $user_to_delete->coinChange(
+                    'normal', //记录类型
+                    [
+                        'olo' => -500,
+                        'content' => '被管理员删除帖子并扣除olo',
+                        'thread_id' => $post->thread_id,
+                        'thread_title' => Thread::where('id', $post->thread_id)->value('title'),
+                        'post_id' => $post->id,
+                        'floor' => $post->floor,
+                    ],
+                    true //$ignore_olo_0 = true，即使用户olo不足也强制扣除
+                ); //扣除奥利奥（通过统一接口、记录操作）
+            }
+        }
 
         ProcessUserActive::dispatch(
             [
@@ -284,7 +313,8 @@ class AdminController extends Controller
         $request->validate([
             'post_id' => 'required|Integer',
             'thread_id' => 'required|integer',
-            'content' => 'required|string|max:255'
+            'content' => 'required|string|max:255',
+            'reduce_olo' => 'required|boolean'
         ]);
 
         $user = $request->user();
@@ -309,14 +339,23 @@ class AdminController extends Controller
             );
         }
 
-        $user_to_delete_all = User::where('binggan', $post->created_binggan)->first();
-        // $posts_to_delete = Post::suffix(intval($request->thread_id / 10000))
-        //     ->where('thread_id', $request->thread_id)
-        //     ->where('created_binggan', $user_to_delete_all->binggan)
-        //     ->get();
+        $posts_num = Post::suffix(intval($request->thread_id / 10000))
+            ->where('thread_id', $request->thread_id)
+            ->where('created_binggan', $post->created_binggan)
+            ->where('is_deleted', 0)
+            ->count();
+        //确认是否已经删除过了
+        if ($posts_num == 0) {
+            return response()->json([
+                'code' => ResponseCode::DEFAULT,
+                'message' => '该用户的全部帖子都被删除过了',
+            ]);
+        }
+
         Post::suffix(intval($request->thread_id / 10000))
             ->where('thread_id', $request->thread_id)
-            ->where('created_binggan', $user_to_delete_all->binggan)
+            ->where('created_binggan', $post->created_binggan)
+            ->where('is_deleted', 0)
             ->chunk(5, function ($posts_to_delete) {
                 foreach ($posts_to_delete as $post_to_delete) {
                     $post_to_delete->is_deleted = 2;
@@ -324,20 +363,40 @@ class AdminController extends Controller
                 }
             });
 
+        if ($request->reduce_olo == True) {
+            //扣除被删帖用户的olo 500个/每个帖子（上限5000）
+            $olo = $posts_num >= 10 ? 5000 : $posts_num * 500; //注意这里是个正数
+            $user_to_delete_all = User::where('binggan', $post->created_binggan)->first();
+            if ($user_to_delete_all) {
+                $user_to_delete_all->coinChange(
+                    'normal', //记录类型
+                    [
+                        'olo' => -$olo,
+                        'content' => '被管理员删除帖子并扣除olo',
+                        'thread_id' => $post->thread_id,
+                        'thread_title' => Thread::where('id', $post->thread_id)->value('title'),
+                        'post_id' => $post->id,
+                        'floor' => $post->floor,
+                    ],
+                    true //$ignore_olo_0 = true，即使用户olo不足也强制扣除
+                ); //扣除奥利奥（通过统一接口、记录操作）
+            }
+        }
+
         ProcessUserActive::dispatch(
             [
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
                 'active' => '管理员删除该用户全部的回帖',
                 'thread_id' => $request->thread_id,
-                'binggan_target' => $user_to_delete_all->binggan,
+                'binggan_target' => $post->created_binggan,
                 'content' => $request->content,
             ]
         );
 
         return response()->json([
             'code' => ResponseCode::SUCCESS,
-            'message' => '该作者全部帖子已删除。',
+            'message' =>  sprintf('该作者全部帖子已删除。一共有%d个帖子', $posts_num),
         ]);
     }
 
@@ -659,7 +718,7 @@ class AdminController extends Controller
             $annoucement_message->created_at = Carbon::now();
             $annoucement_message->save();
 
-            if ($request->type = 1) {
+            if ($request->type == 1) {
                 //如果是全体公告，则所有用户的new_msg设为true，以拉取消息
                 User::all()->update(['new_msg', true]);
             }
