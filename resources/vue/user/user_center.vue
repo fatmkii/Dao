@@ -241,7 +241,7 @@
             <b-img
               :src="emoji_src"
               fluid
-              alt="Fluid-grow image"
+              alt="emoji"
               @click="emoji_delete(index)"
             ></b-img>
           </div>

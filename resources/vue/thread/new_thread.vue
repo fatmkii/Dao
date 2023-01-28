@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <div class="row align-items-center mt-3">
@@ -15,9 +14,7 @@
     <PostInput
       ref="post_input_com"
       :input_disable="
-        !this.$store.state.User.LoginStatus ||
-        Boolean(locked_TTL) ||
-        new_thread_handling
+        !this.$store.state.User.LoginStatus || Boolean(locked_TTL) || new_thread_handling
       "
       :new_post_handling="new_thread_handling"
       :random_heads_group="random_heads_group_selected"
@@ -30,9 +27,7 @@
     <div class="row align-items-center mt-2">
       <div class="col-auto ml-auto" style="font-size: 0.875rem">
         <span v-if="locked_TTL">
-          你的饼干封禁中，将于{{
-            Math.floor(locked_TTL / 3600) + 1
-          }}小时后解封。
+          你的饼干封禁中，将于{{ Math.floor(locked_TTL / 3600) + 1 }}小时后解封。
         </span>
       </div>
     </div>
@@ -152,28 +147,16 @@
           class="hongbao_input"
         >
           <b-input-group prepend="红包个数" class="mt-2">
-            <b-form-input
-              v-model="hongbao_num"
-              placeholder="红包个数"
-            ></b-form-input>
+            <b-form-input v-model="hongbao_num" placeholder="红包个数"></b-form-input>
           </b-input-group>
           <b-input-group prepend="olo总数" class="mt-2">
-            <b-form-input
-              v-model="hongbao_olo"
-              placeholder="olo总数"
-            ></b-form-input>
+            <b-form-input v-model="hongbao_olo" placeholder="olo总数"></b-form-input>
           </b-input-group>
           <b-input-group prepend="红包口令" class="mt-2">
-            <b-form-input
-              v-model="hongbao_key_word"
-              placeholder="必填"
-            ></b-form-input>
+            <b-form-input v-model="hongbao_key_word" placeholder="必填"></b-form-input>
           </b-input-group>
           <b-input-group prepend="回复留言" class="mt-2">
-            <b-form-input
-              v-model="hongbao_message"
-              placeholder="可选"
-            ></b-form-input>
+            <b-form-input v-model="hongbao_message" placeholder="可选"></b-form-input>
           </b-input-group>
           <b-input-group prepend="红包类型" class="mt-2">
             <b-form-select
@@ -187,9 +170,7 @@
             隐藏红包olo总额
           </b-form-checkbox>
           <p>
-            <span v-if="!is_double11">
-              友情提示：在打赏额以外，会追加扣除7%手续费。</span
-            >
+            <span v-if="!is_double11"> 友情提示：在打赏额以外，会追加扣除7%手续费。</span>
             <span v-else
               ><del>友情提示：在打赏额以外，会追加扣除7%手续费。</del>
               <br />
@@ -551,7 +532,6 @@
   </div>
 </template>
 
-
 <script>
 import Emoji from "../component/emoji.vue";
 import PostItem from "../component/post_item.vue";
@@ -637,10 +617,7 @@ export default {
       this.nickname_input = this.post_with_admin ? "管理员" : "= =";
     },
     emoji_auto_hide: function () {
-      localStorage.setItem(
-        "emoji_auto_hide",
-        this.emoji_auto_hide ? "true" : ""
-      );
+      localStorage.setItem("emoji_auto_hide", this.emoji_auto_hide ? "true" : "");
     },
     subtitles_selected() {
       if (this.subtitles_selected == "[专楼]") {
@@ -777,10 +754,7 @@ export default {
         },
       };
       if (this.thread_type == "hongbao") {
-        if (
-          this.hongbao_type == 2 &&
-          this.hongbao_olo % this.hongbao_num != 0
-        ) {
+        if (this.hongbao_type == 2 && this.hongbao_olo % this.hongbao_num != 0) {
           alert("选择定额红包时，总额要是红包数量的整倍数喔");
           return;
         }
@@ -803,8 +777,7 @@ export default {
         config.data.vote_multiple = this.vote_multiple;
         config.data.vote_title = this.vote_title_input;
         config.data.vote_options = JSON.stringify(this.vote_options);
-        config.data.vote_end_time =
-          this.end_date_selected + " " + this.end_time_selected;
+        config.data.vote_end_time = this.end_date_selected + " " + this.end_time_selected;
         config.data.vote_max_choices = this.vote_max_choices;
       }
       if (this.thread_type == "gamble") {
@@ -866,14 +839,12 @@ export default {
         this.content_input = this.content_input_array[0];
       }
     },
-    emoji_append(emoji_src) {
-      // this.content_input += "<img src='" + emoji_src + "' class='emoji_img'>";
-      // this.content_input_change();
-      // this.$refs.content_input.focus();
+    emoji_append(emoji_src, is_my_emoji) {
       let textarea = document.getElementById("content_input");
+      var class_name = is_my_emoji ? "custom_emoji_img" : "emoji_img";
       this.content_input = this.insertAtCursor(
         textarea,
-        "<img src='" + emoji_src + "' class='emoji_img'>"
+        `<img src='${emoji_src}' class='${class_name}'>`
       );
       this.content_input_change();
       this.$refs.content_input.focus();

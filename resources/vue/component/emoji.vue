@@ -26,15 +26,14 @@
           <b-img
             :src="emoji_src"
             fluid
-            alt="Fluid-grow image"
-            @click="emoji_click(emoji_src)"
+            alt="emoji"
+            @click="emoji_click(emoji_src, emoji_data.name)"
           ></b-img>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 
 <script>
 export default {
@@ -74,8 +73,13 @@ export default {
     },
   },
   methods: {
-    emoji_click(emoji_src) {
-      this.$emit("emoji_append", emoji_src);
+    emoji_click(emoji_src, emoji_data_name) {
+      if (emoji_data_name == "我的表情包") {
+        var is_my_emoji = true;
+      } else {
+        var is_my_emoji = false;
+      }
+      this.$emit("emoji_append", emoji_src, is_my_emoji);
       if (this.emoji_auto_hide) {
         this.emoji_show = -1;
       }

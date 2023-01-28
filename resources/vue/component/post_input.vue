@@ -31,11 +31,7 @@
       <div class="my-2 row d-inline-flex" style="font-size: 0.875rem">
         <div class="col-auto pr-0">昵称</div>
         <div class="col-auto d-inline-flex">
-          <b-form-checkbox
-            class="mr-auto ml-2"
-            v-model="emoji_auto_hide"
-            switch
-          >
+          <b-form-checkbox class="mr-auto ml-2" v-model="emoji_auto_hide" switch>
             表情包自动收起
           </b-form-checkbox>
           <b-form-checkbox
@@ -204,12 +200,7 @@
       </div>
     </div>
     <div>
-      <b-modal
-        ref="drawer_modal"
-        id="drawer_modal"
-        class="drawer_modal"
-        centered
-      >
+      <b-modal ref="drawer_modal" id="drawer_modal" class="drawer_modal" centered>
         <template v-slot:modal-header>
           <span style="font-size: 1rem">涂鸦板</span>
         </template>
@@ -231,10 +222,7 @@
             @input="drawer_insert"
           ></b-form-file>
           <b-button-group>
-            <b-button
-              :variant="button_theme"
-              size="sm"
-              @click="upload_drawer_click"
+            <b-button :variant="button_theme" size="sm" @click="upload_drawer_click"
               >上传</b-button
             >
             <b-button variant="outline-secondary" size="sm" @click="cancel()">
@@ -299,10 +287,7 @@ export default {
       this.nickname_input = this.post_with_admin ? "管理员" : "= =";
     },
     emoji_auto_hide() {
-      localStorage.setItem(
-        "emoji_auto_hide",
-        this.emoji_auto_hide ? "true" : ""
-      );
+      localStorage.setItem("emoji_auto_hide", this.emoji_auto_hide ? "true" : "");
     },
   },
   data: function () {
@@ -367,11 +352,12 @@ export default {
         ist: event.isTrusted ? "true" : "false",
       });
     },
-    emoji_append(emoji_src) {
+    emoji_append(emoji_src, is_my_emoji) {
       let textarea = document.getElementById("content_input");
+      var class_name = is_my_emoji ? "custom_emoji_img" : "emoji_img";
       this.content_input = this.insertAtCursor(
         textarea,
-        "<img src='" + emoji_src + "' class='emoji_img'>"
+        `<img src='${emoji_src}' class='${class_name}'>`
       );
       this.content_input_change();
       this.$refs.content_input.focus();
@@ -468,18 +454,12 @@ export default {
           textRight += " ";
         }
         var leftStr = editor.value.substring(0, selectionStart);
-        var rightStr = editor.value.substring(
-          selectionEnd,
-          editor.value.length
-        );
+        var rightStr = editor.value.substring(selectionEnd, editor.value.length);
         editor.value = leftStr + textLeft + selectStr + textRight + rightStr;
         this.content_input = editor.value; //.value赋值不会触发vue的data
         //重新选中新文本
         selectionEnd =
-          selectionStart +
-          textLeft.length +
-          selectStr.length +
-          textRight.length;
+          selectionStart + textLeft.length + selectStr.length + textRight.length;
         editor.setSelectionRange(selectionStart, selectionEnd);
         //非IE浏览器必须获取焦点
         editor.focus();
@@ -553,9 +533,7 @@ export default {
         if (localStorage.getItem(localStorage_array[i]) == null) {
           localStorage[localStorage_array[i]] = "";
         } else {
-          this[localStorage_array[i]] = Boolean(
-            localStorage[localStorage_array[i]]
-          );
+          this[localStorage_array[i]] = Boolean(localStorage[localStorage_array[i]]);
         }
       }
     },

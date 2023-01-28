@@ -220,6 +220,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    no_custom_emoji_mode: {
+      type: Boolean,
+      default: false,
+    },
     no_head_mode: {
       type: Boolean,
       default: false,
@@ -264,7 +268,15 @@ export default {
         if (match.search(/class='emoji_img'/g) != -1) {
           //判断是否表情包
           if (vm.no_emoji_mode) {
-            //no_emoji_mode:无表情包模式
+            //no_emoji_mode:无一般表情包模式
+            return "";
+          } else {
+            return match;
+          }
+        } else if (match.search(/class='custom_emoji_img'/g) != -1) {
+          //判断是否表情包
+          if (vm.no_custom_emoji_mode) {
+            //no_custom_emoji_mode:无自定义表情包模式
             return "";
           } else {
             return match;

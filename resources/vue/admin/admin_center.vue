@@ -39,7 +39,7 @@
             v-for="(banner_src, index) in banners_array"
             :key="index"
           >
-            <b-img :src="banner_src" fluid alt="Fluid-grow image"></b-img>
+            <b-img :src="banner_src" fluid alt="banner"></b-img>
           </div>
         </div>
       </b-tab>

@@ -401,6 +401,10 @@ img[class^="head_"] {
     max-height: 67px;
     max-width: 67px;
 }
+.custom_emoji_img {
+    max-height: 67px;
+    max-width: 67px;
+}
 .quote_content {
     @include font_color("font_color1");
 }

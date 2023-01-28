@@ -1,10 +1,6 @@
-
 <template>
   <div>
-    <div
-      class="thread_body"
-      v-show="posts_load_status == 2 && !thread_response_code"
-    >
+    <div class="thread_body" v-show="posts_load_status == 2 && !thread_response_code">
       <div class="row align-items-center mt-3">
         <div class="col-auto h5 d-none d-lg-block d-xl-block">
           <b-badge variant="secondary" pill class="float-left">
@@ -22,32 +18,30 @@
             forum_name
           }}</router-link>
         </div>
-        <b-dropdown
-          id="shield-dropdown"
-          text="屏蔽"
-          variant="outline-dark"
-          size="sm"
-        >
+        <b-dropdown id="shield-dropdown" text="屏蔽" variant="outline-dark" size="sm">
           <b-form-checkbox v-model="no_video_mode" switch class="ml-2 my-2">
-            无视频音频
+            视频音频
           </b-form-checkbox>
           <b-form-checkbox v-model="no_image_mode" switch class="ml-2 my-2">
-            无图
+            图片
           </b-form-checkbox>
           <b-form-checkbox v-model="no_emoji_mode" switch class="ml-2 my-2">
-            无表情包
+            一般表情包
+          </b-form-checkbox>
+          <b-form-checkbox v-model="no_custom_emoji_mode" switch class="ml-2 my-2">
+            自定义表情包
           </b-form-checkbox>
           <b-form-checkbox v-model="no_head_mode" switch class="ml-2 my-2">
-            无头像
+            头像
           </b-form-checkbox>
           <b-form-checkbox v-model="no_battle_mode" switch class="ml-2 my-2">
-            无大乱斗
+            大乱斗
           </b-form-checkbox>
           <b-form-checkbox v-model="no_roll_mode" switch class="ml-2 my-2">
-            无roll点
+            roll点
           </b-form-checkbox>
           <b-form-checkbox v-model="no_hongbao_mode" switch class="ml-2 my-2">
-            无红包结果
+            红包结果
           </b-form-checkbox>
         </b-dropdown>
         <b-button
@@ -92,10 +86,7 @@
       >
       </ThreadPaginator>
       <div class="post_container">
-        <div
-          class="jump_page alert alert-success px-1 py-1"
-          v-if="jump_page_show"
-        >
+        <div class="jump_page alert alert-success px-1 py-1" v-if="jump_page_show">
           <span style="font-size: 0.875rem"
             >你上次已阅读到第{{ browse_current.page }}页，<router-link
               :to="'/thread/' + thread_id + '/' + browse_current.page"
@@ -207,6 +198,7 @@
             :admin_button_show="admin_button_show"
             :no_image_mode="no_image_mode"
             :no_emoji_mode="no_emoji_mode"
+            :no_custom_emoji_mode="no_custom_emoji_mode"
             :no_head_mode="no_head_mode"
             :no_video_mode="no_video_mode"
             @quote_click="quote_click_handle"
@@ -216,9 +208,7 @@
             <template
               v-slot:battle
               v-if="
-                post_data.battle_id &&
-                posts_load_status == 2 &&
-                no_battle_mode == false
+                post_data.battle_id && posts_load_status == 2 && no_battle_mode == false
               "
             >
               <Battle
@@ -247,9 +237,7 @@
             id="listen_button"
             @click="listen_channel"
             :disabled="!enable_listening || show_listen_next_page"
-            >{{
-              !is_listening || show_listen_next_page ? "自动涮锅" : "正在涮锅"
-            }}
+            >{{ !is_listening || show_listen_next_page ? "自动涮锅" : "正在涮锅" }}
           </b-button>
 
           <div>
@@ -279,9 +267,7 @@
       <PostInput
         ref="post_input_com"
         :input_disable="
-          !this.$store.state.User.LoginStatus ||
-          Boolean(locked_TTL) ||
-          new_post_handling
+          !this.$store.state.User.LoginStatus || Boolean(locked_TTL) || new_post_handling
         "
         :new_post_handling="new_post_handling"
         :random_heads_group="random_heads_group"
@@ -383,13 +369,10 @@
       <div class="row align-items-center mt-2">
         <div class="col-auto ml-auto" style="font-size: 0.875rem">
           <span v-if="!this.$store.state.User.LoginStatus">
-            请在先<router-link to="/login">导入或领取饼干</router-link
-            >后才能发言喔
+            请在先<router-link to="/login">导入或领取饼干</router-link>后才能发言喔
           </span>
           <span v-if="locked_TTL">
-            你的饼干封禁中，将于{{
-              Math.floor(locked_TTL / 3600) + 1
-            }}小时后解封。
+            你的饼干封禁中，将于{{ Math.floor(locked_TTL / 3600) + 1 }}小时后解封。
           </span>
           <span
             v-if="
@@ -461,11 +444,7 @@
 
       <ZBar @reload="get_posts_data(true, false)" reload>
         <template v-slot:top>
-          <div
-            class="icon-roll"
-            @click="modal_toggle('roll_modal')"
-            key="icon-roll"
-          >
+          <div class="icon-roll" @click="modal_toggle('roll_modal')" key="icon-roll">
             <svg
               aria-hidden="true"
               focusable="false"
@@ -484,11 +463,7 @@
           </div>
         </template>
         <template v-slot:bottom>
-          <div
-            class="icon-jump"
-            @click="modal_toggle('jump_modal')"
-            key="icon-jump"
-          >
+          <div class="icon-jump" @click="modal_toggle('jump_modal')" key="icon-jump">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
@@ -503,14 +478,8 @@
         </template>
       </ZBar>
 
-      <b-toast
-        id="save_emoji_toast"
-        title="保存为我的表情包？"
-        autoHideDelay="1500"
-      >
-        <a href="javascript:;" class="save_emoji" @click="add_emoji_handle"
-          >确定</a
-        >
+      <b-toast id="save_emoji_toast" title="保存为我的表情包？" autoHideDelay="1500">
+        <a href="javascript:;" class="save_emoji" @click="add_emoji_handle">确定</a>
       </b-toast>
 
       <b-modal ref="roll_modal" id="roll_modal" class="roll_modal">
@@ -527,24 +496,15 @@
           </p>
           <div class="my-1">
             <b-input-group prepend="Roll点昵称">
-              <b-form-input
-                v-model="roll_name"
-                placeholder="可留空"
-              ></b-form-input>
+              <b-form-input v-model="roll_name" placeholder="可留空"></b-form-input>
             </b-input-group>
             <b-input-group prepend="Roll点事件">
-              <b-form-input
-                v-model="roll_event"
-                placeholder="可留空"
-              ></b-form-input>
+              <b-form-input v-model="roll_event" placeholder="可留空"></b-form-input>
             </b-input-group>
           </div>
           <div class="mt-3">
             <b-input-group prepend="骰子数量">
-              <b-form-input
-                v-model="roll_num"
-                placeholder="max:1000"
-              ></b-form-input>
+              <b-form-input v-model="roll_num" placeholder="max:1000"></b-form-input>
             </b-input-group>
             <b-input-group prepend="骰子大小">
               <b-form-input
@@ -562,9 +522,7 @@
               @click="roll_handle"
               >Roll it！</b-button
             >
-            <b-button variant="outline-secondary" @click="cancel()">
-              取消
-            </b-button>
+            <b-button variant="outline-secondary" @click="cancel()"> 取消 </b-button>
           </b-button-group>
         </template>
       </b-modal>
@@ -597,12 +555,8 @@
         <template v-slot:modal-footer="{ cancel }">
           <span style="fontsize: 0.6rem">*两者都输入时，优先跳页</span>
           <b-button-group>
-            <b-button :variant="button_theme" @click="jump_handle"
-              >Jump！</b-button
-            >
-            <b-button variant="outline-secondary" @click="cancel()">
-              取消
-            </b-button>
+            <b-button :variant="button_theme" @click="jump_handle">Jump！</b-button>
+            <b-button variant="outline-secondary" @click="cancel()"> 取消 </b-button>
           </b-button-group>
         </template>
       </b-modal>
@@ -632,12 +586,8 @@
         </template>
         <template v-slot:modal-footer="{ cancel }">
           <b-button-group>
-            <b-button :variant="button_theme" @click="commit_captcha"
-              >提交</b-button
-            >
-            <b-button variant="outline-secondary" @click="cancel()">
-              取消
-            </b-button>
+            <b-button :variant="button_theme" @click="commit_captcha">提交</b-button>
+            <b-button variant="outline-secondary" @click="cancel()"> 取消 </b-button>
           </b-button-group>
         </template>
       </b-modal>
@@ -662,12 +612,8 @@
         </template>
         <template v-slot:modal-footer="{ cancel }">
           <b-button-group>
-            <b-button :variant="button_theme" @click="change_thread_color"
-              >提交</b-button
-            >
-            <b-button variant="outline-secondary" @click="cancel()">
-              取消
-            </b-button>
+            <b-button :variant="button_theme" @click="change_thread_color">提交</b-button>
+            <b-button variant="outline-secondary" @click="cancel()"> 取消 </b-button>
           </b-button-group>
         </template>
       </b-modal>
@@ -741,29 +687,22 @@ export default {
     is_listening() {
       if (this.is_listening === true) {
         try {
-          this.$echo
-            .channel("thread_" + this.thread_id)
-            .listen("NewPost", (response) => {
-              if (response.post_floor >= this.page * 200) {
-                //如果新回复通知中，楼层号大于本页的，则关闭监听并显示翻页选项
-                this.is_listening = false;
-                this.show_listen_next_page = true;
-              } else {
-                //否则，请求新回复数据
-                var post_exist = this.$store.state.Posts.PostsData.data.find(
-                  (post) => {
-                    return post.id == response.post_id;
-                  }
-                );
-                if (!post_exist) {
-                  //如果post_id不存在，才去获取新数据
-                  this.get_post_data_and_push(
-                    response.thread_id,
-                    response.post_id
-                  );
-                }
+          this.$echo.channel("thread_" + this.thread_id).listen("NewPost", (response) => {
+            if (response.post_floor >= this.page * 200) {
+              //如果新回复通知中，楼层号大于本页的，则关闭监听并显示翻页选项
+              this.is_listening = false;
+              this.show_listen_next_page = true;
+            } else {
+              //否则，请求新回复数据
+              var post_exist = this.$store.state.Posts.PostsData.data.find((post) => {
+                return post.id == response.post_id;
+              });
+              if (!post_exist) {
+                //如果post_id不存在，才去获取新数据
+                this.get_post_data_and_push(response.thread_id, response.post_id);
               }
-            });
+            }
+          });
         } catch (e) {
           this.is_listening = false;
           console.log(e);
@@ -784,6 +723,12 @@ export default {
     no_emoji_mode() {
       localStorage.setItem("no_emoji_mode", this.no_emoji_mode ? "true" : "");
     },
+    no_custom_emoji_mode() {
+      localStorage.setItem(
+        "no_custom_emoji_mode",
+        this.no_custom_emoji_mode ? "true" : ""
+      );
+    },
     no_head_mode() {
       localStorage.setItem("no_head_mode", this.no_head_mode ? "true" : "");
     },
@@ -794,10 +739,7 @@ export default {
       localStorage.setItem("no_roll_mode", this.no_roll_mode ? "true" : "");
     },
     no_hongbao_mode() {
-      localStorage.setItem(
-        "no_hongbao_mode",
-        this.no_hongbao_mode ? "true" : ""
-      );
+      localStorage.setItem("no_hongbao_mode", this.no_hongbao_mode ? "true" : "");
     },
   },
   beforeRouteUpdate(to, from, next) {
@@ -823,6 +765,7 @@ export default {
       no_video_mode: false,
       no_image_mode: false,
       no_emoji_mode: false,
+      no_custom_emoji_mode: false,
       no_head_mode: false,
       no_battle_mode: false,
       no_roll_mode: false,
@@ -853,10 +796,8 @@ export default {
     nissin_TTL() {
       const seconds =
         (Date.parse(
-          this.$store.state.Threads.CurrentThreadData.nissin_date.replace(
-            /-/g,
-            "/"
-          ) + " GMT+800"
+          this.$store.state.Threads.CurrentThreadData.nissin_date.replace(/-/g, "/") +
+            " GMT+800"
         ) -
           Date.now()) /
         1000;
@@ -907,8 +848,7 @@ export default {
               post.nickname == "红包结果" &&
               !post.is_your_post;
             //抢红包的口令屏蔽条件
-            const condition2 =
-              /--红包口令: /.test(post.content) && !post.is_your_post;
+            const condition2 = /--红包口令: /.test(post.content) && !post.is_your_post;
             if (condition1 || condition2) {
               return false;
             } else {
@@ -931,25 +871,19 @@ export default {
     },
     ...mapState({
       forum_name: (state) =>
-        state.Forums.CurrentForumData.name
-          ? state.Forums.CurrentForumData.name
-          : "",
+        state.Forums.CurrentForumData.name ? state.Forums.CurrentForumData.name : "",
       forum_id: (state) =>
         state.Forums.CurrentForumData.id ? state.Forums.CurrentForumData.id : 0,
       thread_title: (state) => state.Threads.CurrentThreadData.title,
       thread_sub_id: (state) => state.Threads.CurrentThreadData.sub_id,
-      thread_anti_jingfen: (state) =>
-        state.Threads.CurrentThreadData.anti_jingfen,
+      thread_anti_jingfen: (state) => state.Threads.CurrentThreadData.anti_jingfen,
       thread_posts_num: (state) => state.Threads.CurrentThreadData.posts_num,
       is_your_thread: (state) => state.Threads.CurrentThreadData.is_your_thread,
-      vote_question_id: (state) =>
-        state.Threads.CurrentThreadData.vote_question_id,
-      gamble_question_id: (state) =>
-        state.Threads.CurrentThreadData.gamble_question_id,
+      vote_question_id: (state) => state.Threads.CurrentThreadData.vote_question_id,
+      gamble_question_id: (state) => state.Threads.CurrentThreadData.gamble_question_id,
       crowd_id: (state) => state.Threads.CurrentThreadData.crowd_id,
       hongbao_id: (state) => state.Threads.CurrentThreadData.hongbao_id,
-      random_heads_group: (state) =>
-        state.Threads.CurrentThreadData.random_heads_group,
+      random_heads_group: (state) => state.Threads.CurrentThreadData.random_heads_group,
       posts_last_page: (state) => state.Posts.PostsData.lastPage,
       posts_load_status: (state) => state.Posts.PostsLoadStatus,
       locked_TTL: (state) => state.User.LockedTTL,
@@ -958,11 +892,7 @@ export default {
     }),
   },
   methods: {
-    get_posts_data(
-      remind = false,
-      scroll_enable = false,
-      search_content = null
-    ) {
+    get_posts_data(remind = false, scroll_enable = false, search_content = null) {
       if (search_content) {
         this.$store.commit("PostsLoadStatus_set", 1);
       }
@@ -982,14 +912,8 @@ export default {
           if (response.data.code == 200) {
             this.thread_response_code = 0;
             this.$store.commit("PostsData_set", response.data.posts_data);
-            this.$store.commit(
-              "CurrentThreadData_set",
-              response.data.thread_data
-            );
-            this.$store.commit(
-              "CurrentForumData_set",
-              response.data.forum_data
-            );
+            this.$store.commit("CurrentThreadData_set", response.data.thread_data);
+            this.$store.commit("CurrentForumData_set", response.data.forum_data);
             document.title = this.thread_title; //设置浏览器页面标签文字
             if (remind && !this.less_toast) {
               this.$bvToast.toast("已刷新帖子", {
@@ -1003,9 +927,8 @@ export default {
               //如果有设定上次阅读进度，则滚动到上次进度
               if (
                 this.browse_current.page == this.page &&
-                typeof this.$store.state.User.BrowseLogger[
-                  this.thread_id.toString()
-                ] != "undefined" &&
+                typeof this.$store.state.User.BrowseLogger[this.thread_id.toString()] !=
+                  "undefined" &&
                 scroll_enable
               ) {
                 this.scroll_to_lasttime();
@@ -1020,9 +943,7 @@ export default {
               this.load_focus_threads();
             });
           } else {
-            if (
-              [21404, 23410, 23401, 234011, 23404].includes(response.data.code)
-            ) {
+            if ([21404, 23410, 23401, 234011, 23404].includes(response.data.code)) {
               this.thread_response_code = response.data.code;
               //清空数据，避免显示上一个帖子的数据
               this.$store.commit("PostsData_set", "");
@@ -1058,8 +979,7 @@ export default {
           this.$store.commit("PostsData_push", response.data.post_data);
           this.$nextTick(() => {
             if (
-              document.activeElement ===
-              this.$refs.post_input_com.$refs.content_input
+              document.activeElement === this.$refs.post_input_com.$refs.content_input
             ) {
               document.documentElement.scrollTop =
                 document.body.clientHeight - scroll_top_now;
@@ -1146,9 +1066,7 @@ export default {
         "undefined"
       ) {
         this.browse_current = JSON.parse(
-          JSON.stringify(
-            this.$store.state.User.BrowseLogger[this.thread_id.toString()]
-          )
+          JSON.stringify(this.$store.state.User.BrowseLogger[this.thread_id.toString()])
         );
       }
       // const page = isNaN(this.page) ? 1 : this.page;
@@ -1163,10 +1081,7 @@ export default {
       }
     },
     thread_delete_click_admin() {
-      var content = prompt(
-        "要用管理员权限删除这个主题吗？请输入理由",
-        "请输入理由"
-      );
+      var content = prompt("要用管理员权限删除这个主题吗？请输入理由", "请输入理由");
       if (content != null) {
         const config = {
           method: "post",
@@ -1214,10 +1129,7 @@ export default {
     check_jingfen_admin() {
       alert("现在不需要这样喔~~");
       return; //暂时关闭此功能
-      var content = prompt(
-        "要用查看这个主题的反精分吗？请输入理由",
-        "请输入理由"
-      );
+      var content = prompt("要用查看这个主题的反精分吗？请输入理由", "请输入理由");
       const config = {
         method: "post",
         url: "/api/admin/check_jingfen",
@@ -1229,10 +1141,7 @@ export default {
       axios(config).then((response) => {
         if (response.data.code == 200) {
           this.$store.commit("PostsData_set", response.data.posts_data);
-          this.$store.commit(
-            "CurrentThreadData_set",
-            response.data.thread_data
-          );
+          this.$store.commit("CurrentThreadData_set", response.data.thread_data);
           this.$store.commit("PostsLoadStatus_set", 1);
         } else {
           alert(response.data.message);
@@ -1275,10 +1184,7 @@ export default {
           post_with_admin: content.post_with_admin,
 
           new_post_key: CryptoJS.MD5(
-            this.thread_id +
-              this.$store.state.User.Binggan +
-              timestamp +
-              content.ist
+            this.thread_id + this.$store.state.User.Binggan + timestamp + content.ist
           ).toString(),
           timestamp: timestamp,
         },
@@ -1371,8 +1277,7 @@ export default {
         this.$refs["jump_modal"].hide();
       } else if (this.jump_floor) {
         const page = Math.ceil(this.jump_floor / 200);
-        const link =
-          "/thread/" + this.thread_id + "/" + page + "#f_" + this.jump_floor;
+        const link = "/thread/" + this.thread_id + "/" + page + "#f_" + this.jump_floor;
         if (this.$router.currentRoute.fullPath.includes(link)) {
           //如果当前页面就是需要跳转的楼层，则直接滚动到该楼层
           document.getElementById("f_" + this.jump_floor).scrollIntoView(true);
@@ -1465,9 +1370,7 @@ export default {
           suffix: this.thread_id.toString(),
           browse_current: this.browse_current,
         });
-        localStorage.browse_logger = JSON.stringify(
-          this.$store.state.User.BrowseLogger
-        );
+        localStorage.browse_logger = JSON.stringify(this.$store.state.User.BrowseLogger);
       }
     },
     emit_reward(payload) {
@@ -1518,10 +1421,7 @@ export default {
               appendToast: true,
             });
             if (response.data.data.my_emoji != null) {
-              this.$store.commit(
-                "MyEmoji_set",
-                JSON.parse(response.data.data.my_emoji)
-              );
+              this.$store.commit("MyEmoji_set", JSON.parse(response.data.data.my_emoji));
             }
           } else {
             alert(response.data.message);
@@ -1566,6 +1466,7 @@ export default {
         "no_video_mode",
         "no_image_mode",
         "no_emoji_mode",
+        "no_custom_emoji_mode",
         "no_head_mode",
         "no_battle_mode",
         "no_roll_mode",
@@ -1576,9 +1477,7 @@ export default {
         if (localStorage.getItem(localStorage_array[i]) == null) {
           localStorage[localStorage_array[i]] = "";
         } else {
-          this[localStorage_array[i]] = Boolean(
-            localStorage[localStorage_array[i]]
-          );
+          this[localStorage_array[i]] = Boolean(localStorage[localStorage_array[i]]);
         }
       }
     },
@@ -1621,4 +1520,4 @@ export default {
     } catch (e) {}
   },
 };
-</script> 
+</script>
