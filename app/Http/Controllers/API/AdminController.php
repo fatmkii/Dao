@@ -352,16 +352,21 @@ class AdminController extends Controller
             ]);
         }
 
+        // Post::suffix(intval($request->thread_id / 10000))
+        //     ->where('thread_id', $request->thread_id)
+        //     ->where('created_binggan', $post->created_binggan)
+        //     ->where('is_deleted', 0)
+        //     ->chunk(5, function ($posts_to_delete) {
+        //         foreach ($posts_to_delete as $post_to_delete) {
+        //             $post_to_delete->is_deleted = 2;
+        //             $post_to_delete->save();
+        //         }
+        //     });
         Post::suffix(intval($request->thread_id / 10000))
             ->where('thread_id', $request->thread_id)
             ->where('created_binggan', $post->created_binggan)
             ->where('is_deleted', 0)
-            ->chunk(5, function ($posts_to_delete) {
-                foreach ($posts_to_delete as $post_to_delete) {
-                    $post_to_delete->is_deleted = 2;
-                    $post_to_delete->save();
-                }
-            });
+            ->update(['is_deleted' => 2]);
 
         if ($request->reduce_olo == True) {
             //扣除被删帖用户的olo 500个/每个帖子（上限5000）
