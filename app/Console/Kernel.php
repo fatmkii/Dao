@@ -29,8 +29,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('BattlePolling:run')->everyMinute(); //过期大乱斗处理
-        $schedule->command('DelayThreadHandle:run')->dailyAt('8:00'); //日清的处理
-        $schedule->command('DelayThreadHandle:run')->dailyAt('8:00'); //延迟主题的处理，务必要要在日清处理之前！
+        $schedule->command('DailyNissinHandle:run')->dailyAt('8:00'); //日清的处理
+        $schedule->command('DelayThreadHandle:run')->dailyAt('8:00'); //延迟主题的处理，务必要要在日清处理之后！
 
         //定时重启Echo-server
         $schedule->exec('supervisorctl restart Laravel-Echo-server:Laravel-Echo-server_00')

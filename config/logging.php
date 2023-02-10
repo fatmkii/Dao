@@ -47,6 +47,12 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
+        //自用的信息，譬如数据库处理结果等
+        'database_log' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/database_log.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
         //自用的信息，譬如redis expire失效等
         'my_log' => [
             'driver' => 'single',

@@ -15,7 +15,7 @@ class CreateBattlesTable extends Migration
     {
         Schema::create('battles', function (Blueprint $table) {
             $table->id()->startingValue(10001);
-            $table->unsignedInteger('thread_id');
+            $table->unsignedInteger('thread_id')->index();
             $table->unsignedInteger('post_id');
             $table->string('created_binggan');
             $table->string('challenger_binggan')->nullable();
