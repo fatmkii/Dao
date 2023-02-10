@@ -279,6 +279,17 @@ class PostController extends Controller
             case 0:
                 break;
             case 1: //按照8点日清模式
+                //新日清判断模式
+                // if ($CurrentThread->has_nissined == True) {
+                //     if ($user != null && $user->admin == 99) {
+                //         break;
+                //     } else {
+                //         return response()->json([
+                //             'code' => ResponseCode::THREAD_WAS_NISSINED,
+                //             'message' => ResponseCode::$codeMap[ResponseCode::THREAD_WAS_NISSINED],
+                //         ]);
+                //     }
+                // }
                 $hour_now = Carbon::now()->hour;
                 if ($hour_now >= 8) { //根据时间确定8点日清的节点
                     $nissin_breakpoint = Carbon::today()->addHours(8);

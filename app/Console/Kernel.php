@@ -28,16 +28,21 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('BattlePolling:run')->everyMinute();
-        $schedule->command('DelayThreadHandle:run')->dailyAt('8:00');
+        $schedule->command('BattlePolling:run')->everyMinute(); //过期大乱斗处理
+        $schedule->command('DelayThreadHandle:run')->dailyAt('8:00'); //日清的处理
+        $schedule->command('DelayThreadHandle:run')->dailyAt('8:00'); //延迟主题的处理，务必要要在日清处理之前！
+
+        //定时重启Echo-server
         $schedule->exec('supervisorctl restart Laravel-Echo-server:Laravel-Echo-server_00')
             ->dailyAt('3:00')
             ->sendOutputTo('/var/log/Laravel-schedule.log');
+
+        //定时检查全局搜索的redis计时器失效
         $schedule->call(function () {
             if (Redis::TTL('search_record_global') == -1) {
                 Log::channel('my_log')->error('search_record_global expired failed');
                 Redis::del('search_record_global');
-            } 
+            }
         })->everyMinute();
     }
 

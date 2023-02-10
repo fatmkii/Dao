@@ -31,6 +31,7 @@ class CreateThreadsTable extends Migration
             $table->string('created_binggan')->nullable()->default(null);
             $table->boolean('anti_jingfen')->default(0);
             $table->timestamp('nissin_date')->nullable();
+            $table->boolean('has_nissined')->default(0)->index(); //0=正常；1=已经被日清
             $table->tinyInteger('is_deleted')->default(0); //0=正常；1=被用户删除；2=被管理员删除
             $table->boolean('can_battle')->default(1);
             $table->boolean('is_delay')->default(0);
