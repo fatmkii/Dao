@@ -134,21 +134,21 @@ class ForumController extends Controller
                 break;
             case 1: //按照8点日清模式
                 //新日清判断模式
-                // $threads->where('has_nissined', 0);
+                $threads->where('has_nissined', 0);
 
-                $hour_now = Carbon::now()->hour;
-                if ($hour_now >= 8) { //根据时间确定8点日清的节点
-                    $nissin_breakpoint = Carbon::today()->addHours(8);
-                } else {
-                    $nissin_breakpoint = Carbon::yesterday()->addHours(8);
-                }
-                $threads->where('created_at', '>', $nissin_breakpoint)
-                    ->orWhere(function ($query) use ($forum_id) {  //但要把本版公告加回来(sub_id=10)
-                        $query->where('forum_id', $forum_id)
-                            ->where('sub_id', 10)
-                            ->where('is_deleted', 0);
-                    });
-                break;
+                // $hour_now = Carbon::now()->hour;
+                // if ($hour_now >= 8) { //根据时间确定8点日清的节点
+                //     $nissin_breakpoint = Carbon::today()->addHours(8);
+                // } else {
+                //     $nissin_breakpoint = Carbon::yesterday()->addHours(8);
+                // }
+                // $threads->where('created_at', '>', $nissin_breakpoint)
+                //     ->orWhere(function ($query) use ($forum_id) {  //但要把本版公告加回来(sub_id=10)
+                //         $query->where('forum_id', $forum_id)
+                //             ->where('sub_id', 10)
+                //             ->where('is_deleted', 0);
+                //     });
+                // break;
             case 2: //按照24小时日清模式(目前咒版不清标题)
                 break;
         }
