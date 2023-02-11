@@ -43,7 +43,8 @@ class DailyNissinHandle extends Command
     {
         //日清类型1处理（按照每日8点日清）
         $nissin_forums_id1 = Forum::where('is_nissin', 1)->pluck('id');
-        Thread::whereIn('forum_id', $nissin_forums_id1)
+        DB::table('threads')
+            ->whereIn('forum_id', $nissin_forums_id1)
             ->where('has_nissined',  0)
             ->where('sub_id', 0)
             ->where('is_delay', 0)
@@ -52,7 +53,8 @@ class DailyNissinHandle extends Command
         //日清类型2处理（按帖子有效时间计算的日清）
         //实际上类型2并不会根据'has_nissined'字段处理，只是方便日后清数据
         $nissin_forums_id2 = Forum::where('is_nissin', 2)->pluck('id');
-        Thread::whereIn('forum_id', $nissin_forums_id2)
+        DB::table('threads')
+            ->whereIn('forum_id', $nissin_forums_id2)
             ->where('has_nissined',  0)
             ->where('sub_id', 0)
             ->where('is_delay', 0)
