@@ -450,6 +450,8 @@ class AdminController extends Controller
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
                 'active' => '管理员碎了饼干',
+                'thread_id' => $request->thread_id,
+                'post_id' => $request->post_id,
                 'binggan_target' => $user_to_ban->binggan,
                 'content' => $request->content,
             ]
@@ -522,6 +524,8 @@ class AdminController extends Controller
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
                 'active' => '管理员封禁了饼干',
+                'thread_id' => $request->thread_id,
+                'post_id' => $request->post_id,
                 'binggan_target' => $user_to_lock->binggan,
                 'content' => $request->content,
             ]
