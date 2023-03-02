@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <b-carousel
@@ -7,15 +6,11 @@
       :interval="10000"
       img-width="825"
       img-height="224"
-      v-if="forum_banners && threads_load_status == 2"
+      v-if="threads_load_status == 2 && forum_banners"
       v-show="!banner_hiden"
     >
       <b-carousel-slide
-        v-for="(banner, index) in JSON.parse(
-          this.$store.state.Forums.CurrentForumData.banners
-        ).sort(function () {
-          return 0.5 - Math.random();
-        })"
+        v-for="(banner, index) in forum_banners"
         :key="index"
         :img-src="banner"
       ></b-carousel-slide>
@@ -42,12 +37,7 @@
         </b-form-checkbox>
       </div>
       <div class="col-auto d-inline-flex">
-        <b-dropdown
-          id="shield-dropdown"
-          text="筛选"
-          variant="outline-dark"
-          size="sm"
-        >
+        <b-dropdown id="shield-dropdown" text="筛选" variant="outline-dark" size="sm">
           <b-form-checkbox
             v-for="(option, index) in subtitles_options"
             :key="index"
@@ -112,12 +102,7 @@
         style="min-width: 46px"
         :variant="button_theme"
         @click="
-          get_threads_data(
-            true,
-            threads_per_page,
-            subtitles_excluded,
-            search_input
-          )
+          get_threads_data(true, threads_per_page, subtitles_excluded, search_input)
         "
         >搜索</b-button
       >
@@ -137,16 +122,8 @@
         :forum_id="forum_id"
         :last_page="threads_last_page"
       ></ForumPaginator>
-      <a
-        v-if="show_delay"
-        @click="get_threads_data"
-        class="thread_title ml-auto"
-        >关闭</a
-      >
-      <a
-        v-if="!show_delay"
-        @click="get_delay_threads_data"
-        class="thread_title ml-auto"
+      <a v-if="show_delay" @click="get_threads_data" class="thread_title ml-auto">关闭</a>
+      <a v-if="!show_delay" @click="get_delay_threads_data" class="thread_title ml-auto"
         >查看延时发送主题</a
       >
     </div>
@@ -165,11 +142,7 @@
 
     <ZBar @reload="get_threads_data(true)" reload>
       <template v-slot:top>
-        <div
-          class="icon-new-thread"
-          @click="new_thread_botton"
-          key="icon-new-thread"
-        >
+        <div class="icon-new-thread" @click="new_thread_botton" key="icon-new-thread">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"
@@ -184,7 +157,6 @@
     </ZBar>
   </div>
 </template>
-
 
 <script>
 import { mapState } from "vuex";
@@ -215,10 +187,7 @@ export default {
       }
     },
     new_window_to_post: function () {
-      localStorage.setItem(
-        "new_window_to_post",
-        this.new_window_to_post ? "true" : ""
-      );
+      localStorage.setItem("new_window_to_post", this.new_window_to_post ? "true" : "");
     },
     banner_hiden: function () {
       localStorage.setItem("banner_hiden", this.banner_hiden ? "true" : "");
@@ -261,12 +230,12 @@ export default {
     button_theme() {
       return this.$store.getters.ButtonTheme;
     },
+
     ...mapState({
       forum_name: (state) =>
-        state.Forums.CurrentForumData.name
-          ? state.Forums.CurrentForumData.name
-          : "",
-      forum_banners: (state) => state.Forums.CurrentForumData.banners,
+        state.Forums.CurrentForumData.name ? state.Forums.CurrentForumData.name : "",
+      forum_banners: (state) =>
+        JSON.parse(state.Forums.CurrentForumData.banners).sort(() => Math.random() - 0.5),
       threads_load_status: (state) => state.Threads.ThreadsLoadStatus,
       threads_last_page: (state) => state.Threads.ThreadsData.lastPage,
       threads_per_page: (state) => state.MyCSS.ThreadsPerPage,
@@ -296,10 +265,7 @@ export default {
         .then((response) => {
           if (response.data.code == 200) {
             this.$store.commit("ThreadsData_set", response.data.threads_data);
-            this.$store.commit(
-              "CurrentForumData_set",
-              response.data.forum_data
-            );
+            this.$store.commit("CurrentForumData_set", response.data.forum_data);
             this.$store.commit("ThreadsLoadStatus_set", 2);
             document.title = this.forum_name;
             if (remind) {
@@ -342,10 +308,7 @@ export default {
         .then((response) => {
           if (response.data.code == 200) {
             this.$store.commit("ThreadsData_set", response.data.threads_data);
-            this.$store.commit(
-              "CurrentForumData_set",
-              response.data.forum_data
-            );
+            this.$store.commit("CurrentForumData_set", response.data.forum_data);
             this.$store.commit("ThreadsLoadStatus_set", 2);
             document.title = this.forum_name;
             this.show_delay = true;
@@ -388,10 +351,7 @@ export default {
       }
     },
     set_subtitltes_selected() {
-      localStorage.setItem(
-        "subtitles_filter",
-        JSON.stringify(this.subtitles_selected)
-      );
+      localStorage.setItem("subtitles_filter", JSON.stringify(this.subtitles_selected));
       this.get_threads_data();
     },
   },
