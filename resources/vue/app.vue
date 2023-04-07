@@ -111,6 +111,14 @@ export default {
         );
       }
 
+      //读取是否减少toast提示
+      if (localStorage.getItem("hongbao_then_stop") != null) {
+        this.$store.commit(
+          "HongbaoThenStop_set",
+          localStorage.getItem("hongbao_then_stop") === "true"
+        );
+      }
+
       //读取MyCss（自定义字体大小和行距等）
       if (localStorage.my_css != null) {
         this.$store.commit("MyCSS_set_all", JSON.parse(localStorage.my_css));

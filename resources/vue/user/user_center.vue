@@ -33,6 +33,9 @@
         <b-form-checkbox class="mx-2 my-2" switch v-model="LessToast">
           <span v-b-popover.hover.bottom="'“已滚动到阅读进度”等'">减少弹窗提示</span>
         </b-form-checkbox>
+        <b-form-checkbox class="mx-2 my-2" switch v-model="HongbaoThenStop">
+          自动涮锅时遇红包停止
+        </b-form-checkbox>
         <hr :class="is_mobile ? 'my-1' : ''" />
         <div class="mt-2 d-flex align-items-center">
           <span class="mb-2">帖子内容行距：</span>
@@ -640,6 +643,15 @@ export default {
       set(value) {
         localStorage.setItem("less_toast", value ? "true" : "");
         this.$store.commit("LessToast_set", value);
+      },
+    },
+    HongbaoThenStop: {
+      get() {
+        return this.$store.state.User.HongbaoThenStop;
+      },
+      set(value) {
+        localStorage.setItem("hongbao_then_stop", value ? "true" : "");
+        this.$store.commit("HongbaoThenStop_set", value);
       },
     },
     income_rows() {
