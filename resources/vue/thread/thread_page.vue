@@ -986,7 +986,7 @@ export default {
                 document.body.clientHeight - scroll_top_now;
             } //如果正在输入，则使窗口位置保持不变
           });
-          if (hongbao_then_stop === true && response.data.post_data.hongbao_id !== null) {
+          if (this.hongbao_then_stop === true && response.data.post_data.hongbao_id !== null) {
             //如果刷出来红包，并且启动了“自动涮锅遇到红包暂停”功能，则停止自动涮锅
             this.listen_channel();
           }
