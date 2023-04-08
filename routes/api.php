@@ -33,6 +33,7 @@ use App\Http\Controllers\API\HongbaoPostController;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/admin_login', [AuthController::class, 'admin_login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/set_password', [AuthController::class, 'set_password'])->middleware('CheckBinggan:create');   //设定饼干密码
 
 //Forum系列
 Route::prefix('forums')->group(function () {

@@ -17,7 +17,7 @@
             <b-form-input
               type="password"
               v-model="binggan_password"
-              placeholder="（选填）定制饼干需要密码"
+              placeholder="（选填）如果没设定密码可留空"
             ></b-form-input>
           </b-input-group>
           <div class="d-flex flex-row-reverse align-items-center mt-2">

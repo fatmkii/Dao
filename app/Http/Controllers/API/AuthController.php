@@ -51,6 +51,15 @@ class AuthController extends Controller
 
         $token = $user->createToken($binggan, ['normal'])->plainTextToken;
 
+        ProcessUserActive::dispatch(
+            [
+                'binggan' => $user->binggan,
+                'user_id' => $user->id,
+                'active' => '用户导入了饼干',
+                'content' => $request->ip(),
+            ]
+        );
+
         return response()->json(
             [
                 'code' => ResponseCode::SUCCESS,
@@ -61,15 +70,6 @@ class AuthController extends Controller
                 ],
             ],
             200
-        );
-
-        ProcessUserActive::dispatch(
-            [
-                'binggan' => $user->binggan,
-                'user_id' => $user->id,
-                'active' => '用户导入了饼干',
-                'content' => $request->ip(),
-            ]
         );
     }
 
@@ -178,6 +178,15 @@ class AuthController extends Controller
                 $token = $user->createToken($binggan, ['normal'])->plainTextToken;
         }
 
+        ProcessUserActive::dispatch(
+            [
+                'binggan' => $user->binggan,
+                'user_id' => $user->id,
+                'active' => '管理员登陆了饼干',
+                'content' => $request->ip(),
+            ]
+        );
+
         return response()->json(
             [
                 'code' => ResponseCode::SUCCESS,
@@ -189,13 +198,48 @@ class AuthController extends Controller
             ],
             200
         );
-        ProcessUserActive::dispatch(
+    }
+
+    public function set_password(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'old_password' => 'nullable|string|alpha_dash',
+            'new_password' => 'required|string|alpha_dash|max:20|min:7',
+        ]);
+
+        $binggan  = $request->get('binggan');
+        $user = User::where(DB::raw('BINARY `binggan`'), $binggan)->first(); //用DB::raw区分大小写
+        if (!$user) {
+            return response()->json([
+                'code' => ResponseCode::USER_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
+            ]);
+        }
+
+        if (
+            $user->password != null &&
+            $user->password != hash('sha256', $request->old_password . config('app.password_salt'))
+        ) {
+            return response()->json([
+                'code' => ResponseCode::USER_PASSWORD_ERROR,
+                'message' => ResponseCode::$codeMap[ResponseCode::USER_PASSWORD_ERROR],
+            ]);
+        }
+
+        //设定新密码
+        $user->password = hash('sha256', $request->new_password . config('app.password_salt'));
+        $user->save();
+
+        return response()->json(
             [
-                'binggan' => $user->binggan,
-                'user_id' => $user->id,
-                'active' => '管理员登陆了饼干',
-                'content' => $request->ip(),
-            ]
+                'code' => ResponseCode::SUCCESS,
+                'message' => '密码设定成功！',
+                'data' => [
+                    'binggan' => $binggan,
+                ],
+            ],
+            200
         );
     }
 }
