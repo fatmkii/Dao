@@ -412,6 +412,9 @@
           >
           </b-form-input>
         </div>
+        <div v-show="thread_type == 'gamble'" class="my-2" style="font-size: 0.875rem">
+          菠菜开奖时只能开奖单独一个选项
+        </div>
         <div
           v-show="thread_type == 'gamble'"
           class="my-2"
