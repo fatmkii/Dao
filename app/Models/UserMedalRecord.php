@@ -340,13 +340,14 @@ class UserMedalRecord extends Model
 
     public function check_custom_binggan()
     {
+        $medal_id = 131;
         //纯粹行为型的徽章，直接查询
         // $medals_code_exists = $this->UserMedal()->where('medal_id', 131)->exists();
-        $medals_code_exists = UserMedal::where('user_id', $this->user_id)->where('medal_id', 131)->exists();
+        $medals_code_exists = UserMedal::where('user_id', $this->user_id)->where('medal_id', $medal_id)->exists();
         if (!$medals_code_exists) {
             $user_medal = new UserMedal;
             $user_medal->user_id = $this->user_id;
-            $user_medal->medal_id = 131;
+            $user_medal->medal_id = $medal_id;
             $user_medal->created_at = Carbon::now();
             $user_medal->save();
         }
@@ -371,6 +372,29 @@ class UserMedalRecord extends Model
                 $user_medal->created_at = Carbon::now();
                 $user_medal->save();
             }
+        }
+    }
+
+
+    public function check_anniversary()
+    {
+
+        if (Carbon::now() > Carbon::create("2023-5-7 0:0:0")) {
+            //如果时间已经过期，就什么都不做
+            return;
+        }
+
+        $medal_id = 151;
+
+        //纯粹行为型的徽章，直接查询
+        // $medals_code_exists = $this->UserMedal()->where('medal_id', 131)->exists();
+        $medals_code_exists = UserMedal::where('user_id', $this->user_id)->where('medal_id', $medal_id)->exists();
+        if (!$medals_code_exists) {
+            $user_medal = new UserMedal;
+            $user_medal->user_id = $this->user_id;
+            $user_medal->medal_id = $medal_id;
+            $user_medal->created_at = Carbon::now();
+            $user_medal->save();
         }
     }
 }

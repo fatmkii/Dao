@@ -278,5 +278,13 @@ class Medals
             'threshold' => 40,
             'varname' => 'user_lv',
         ),
+
+        //小火锅周年活动
+        151 => array(
+            'name' => '小火锅二周年',
+            'describe' => '我们要一直在一起 — 至少十年吧！',
+            'threshold' => null,
+            'varname' => null,
+        ),
     );
 }
