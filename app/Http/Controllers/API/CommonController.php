@@ -216,50 +216,50 @@ class CommonController extends Controller
         $coin = 0; //红包金额
         $message = ""; //红包回帖信息
 
-        if (Carbon::now() < Carbon::create("2023-1-22 0:0:0")) {
+        if (Carbon::now() < Carbon::create("2023-4-28 0:0:0")) {
             $coin = 0;
             $message = "本次活动尚未开始，请稍等喔";
-        } elseif (Carbon::now() > Carbon::create("2023-1-23 0:0:0")) {
+        } elseif (Carbon::now() > Carbon::create("2023-5-2 0:0:0")) {
             $coin = 0;
             $message = "本次活动已经结束，你来晚啦";
         } elseif (DB::table("hongbao_record")->where('user_id', $user->id)->lockForUpdate()->exists()) {
             $coin = 0;
             $message = "你已经领取过了，不要贪心喔！";
-        } elseif (Carbon::parse($user->created_at) > Carbon::create("2023-1-21 0:0:0")) {
+        } elseif (Carbon::parse($user->created_at) > Carbon::create("2023-4-28 0:0:0")) {
             $coin = 0;
-            $message = "你的饼干不符合领取条件（23年1月21日0点前领取的饼干）";
+            $message = "你的饼干不符合领取条件（23年4月28日0点前领取的饼干）";
         } else {
             $rand_num = random_int(1, 1000);
             switch ($rand_num) {
                 case $rand_num == 1000: {
-                        if (DB::table("hongbao_record")->where('olo', 100000)->exists()) {
+                        if (DB::table("hongbao_record")->where('rand_num', 1000)->exists()) {
                             $coin = 10000;
-                            $message = "哇喔，传说！是SSSR！获得了1w个olo，恭喜！ <img src='https://s2.ax1x.com/2019/09/20/nviqyQ.gif' class='emoji_img'>";
+                            $message = "哇喔！恭喜抽到1w个olo！感谢您继续支持小火锅~！ <img src='https://img.mjj.today/2022/06/26/ef232ad2a61c42966a5bb04732457ec3.gif' class='emoji_img'>";
                             break;
                         } else {
                             $coin = 100000;
-                            $message = "哇喔！！！迷之粉红色兔给了你一个眼色，留下了10w个olo！<img src='https://hcfgt.com/unicorn/i/1890/biaoqing-12.gif' class='emoji_img'>";
+                            $message = "哇喔！！！这是唯一大奖10w个olo！恭喜！！<img src='https://img.mjj.today/2022/10/18/df14947d315f468dad272680313e29c9.gif' class='emoji_img'>";
                             break;
                         }
                     }
                 case $rand_num >= 990: {
                         $coin = 10000;
-                        $message = "哇喔！你抽到了SSSR！获得了1w个olo，恭喜！ <img src='https://s2.ax1x.com/2019/09/20/nviqyQ.gif' class='emoji_img'>";
+                        $message = "哇喔！恭喜抽到1w个olo！感谢您继续支持小火锅~！  <img src='https://img.mjj.today/2022/06/26/ef232ad2a61c42966a5bb04732457ec3.gif' class='emoji_img'>";
                         break;
                     }
                 case $rand_num >= 900: {
                         $coin = 3000;
-                        $message = "哇喔！是SSR！获得了3000个olo，恭喜！ <img src='https://img.mjj.today/2022/07/20/8117c2b89add547313d46aed693150e2.jpg' class='emoji_img'>";
+                        $message = "哇喔！恭喜抽到3000个olo！感谢您继续支持小火锅~！  <img src='https://img.mjj.today/2022/07/20/acdae76f36d1931931a59c4a9d453944.gif' class='emoji_img'>";
                         break;
                     }
                 case $rand_num >= 600: {
                         $coin = 1000;
-                        $message = "你抽到了SR。 获得了1000个olo，恭喜！ <img src='https://img.mjj.today/2022/07/20/7b88b43c26202e58fa1cb4beddcae042.jpg' class='emoji_img'>";
+                        $message = "恭喜抽到1000个olo！感谢您继续支持小火锅~！ <img src='https://img.mjj.today/2022/10/18/8a486bd71d4df7263544618561915199.gif' class='emoji_img'>";
                         break;
                     }
                 default: {
                         $coin = 500;
-                        $message = "你抽到了NR。 获得了500个olo，恭喜！ <img src='https://img.mjj.today/2022/07/20/afc130443d7d9c479c679ebbbbe2a508.jpg' class='emoji_img'>";
+                        $message = "恭喜抽到500个olo！感谢您继续支持小火锅~！ <img src='https://img.mjj.today/2022/10/18/79c5e0400efa7308fcb2899faf40b89e.gif' class='emoji_img'>";
                         break;
                     }
             }
