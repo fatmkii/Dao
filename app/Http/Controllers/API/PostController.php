@@ -149,7 +149,7 @@ class PostController extends Controller
 
         if (
             //小火锅2周年红包
-            $request->thread_id == 123321321
+            $request->thread_id == 68446
             && strpos($request->content, '2周年') !== false
         ) {
             CommonController::post_hongbao($request, $thread, $post); //执行送红包流程
