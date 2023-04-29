@@ -298,7 +298,8 @@ var emoji_json = [
             "https://img.mjj.today/2022/07/20/b7a8867825e3d8ab65512e568c3ea372.gif",
             "https://s1.ax1x.com/2022/05/28/XuB4dU.png",
             "https://s1.ax1x.com/2022/05/28/XuBhZT.png",
-            "https://img.mjj.today/2022/11/27/bb4ff7fcce500ae0c10f0cf7ecf80ac3.png",
+            "https://img.mjj.today/2023/04/29/e885e61dcd855225bcabc45ee9bef925.png",
+            "https://img.mjj.today/2023/04/29/8f91781e29c3442a3472231436ee2aff.png",
             "https://img.mjj.today/2022/07/20/ae7372da83804323d55137c6af6a9c21.gif",
             "https://img.mjj.today/2022/07/20/51d62f657ef08db0f7970a96ebb22e47.gif",
             "https://s1.ax1x.com/2022/05/28/XuB5oF.png"
