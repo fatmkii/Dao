@@ -664,6 +664,18 @@ class UserController extends Controller
             DB::rollback();
             throw $e;
         }
+
+        ProcessUserActive::dispatch(
+            [
+                'binggan' => $user->binggan,
+                'user_id' => $user->id,
+                'active' => '用户更新了屏蔽词(新设定)',
+                'content' => 'title长度:' . mb_strlen($request->title_pingbici)
+                    . 'content长度:' . mb_strlen($request->content_pingbici)
+                    . 'fjf长度:' . mb_strlen($request->fjf_pingbici),
+            ]
+        );
+
         return response()->json(
             [
                 'code' => ResponseCode::SUCCESS,
