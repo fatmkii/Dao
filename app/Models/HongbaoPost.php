@@ -84,7 +84,7 @@ class HongbaoPost extends Model
     {
         $request->validate([
             'hongbao_olo' => 'required|integer|min:3000|max:1000000',
-            'hongbao_num' => 'required|integer|min:10|max:50',
+            'hongbao_num' => 'required|integer|min:5|max:50',
             'type' => 'required|integer',
             'key_word_type' => 'nullable|integer',
             'hongbao_key_word' => 'required|string|max:255',
