@@ -78,7 +78,7 @@ class Hongbao extends Model
     public static function create(Request $request, $thread_id)
     {
         $request->validate([
-            'hongbao_olo' => 'required|integer|min:1000|max:1000000',
+            'hongbao_olo' => 'required|integer|min:20000|max:1000000',
             'hongbao_num' => 'required|integer|min:1|max:600',
             'type' => 'required|integer',
             'hongbao_key_word' => 'required|string|max:255',
