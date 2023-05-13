@@ -171,8 +171,11 @@ class AuthController extends Controller
             case 10: //一般管理员
                 $token = $user->createToken($binggan, ['forum_admin', 'admin'])->plainTextToken;
                 break;
+            case 20: //高级管理员
+                $token = $user->createToken($binggan, ['forum_admin', 'admin', 'senior_admin'])->plainTextToken;
+                break;
             case 99: //超级管理员
-                $token = $user->createToken($binggan, ['forum_admin', 'admin', 'super_admin'])->plainTextToken;
+                $token = $user->createToken($binggan, ['forum_admin', 'admin', 'senior_admin', 'super_admin'])->plainTextToken;
                 break;
             default:
                 $token = $user->createToken($binggan, ['normal'])->plainTextToken;

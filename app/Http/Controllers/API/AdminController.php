@@ -594,6 +594,66 @@ class AdminController extends Controller
         ]);
     }
 
+    public function check_post(Request $request)
+    {
+        $request->validate([
+            'thread_id' => 'required|Integer',
+            'post_id' => 'required|Integer',
+        ]);
+
+        $user = $request->user();
+
+        $post = Post::suffix(intval($request->thread_id / 10000))->find($request->post_id);
+        if (!$post) {
+            return response()->json([
+                'code' => ResponseCode::POST_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::POST_NOT_FOUND],
+            ]);
+        }
+
+        //确认是否拥有该版面的管理员权限
+        if (
+            !($user->tokenCan('senior_admin') && in_array($post->forum_id, json_decode($user->AdminPermissions->forums)))
+        ) {
+            return response()->json(
+                [
+                    'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+                    'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+                ],
+            );
+        }
+
+        $user_target = User::where('binggan', $post->created_binggan)->first();
+        if (!$user_target) {
+            return response()->json([
+                'code' => ResponseCode::USER_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
+            ]);
+        }
+
+        $user_status = "";
+        if ($user_target->is_banned) {
+            $user_status = '已被碎了';
+        } else {
+            if ($user_target->locked_until) {
+                if (Carbon::parse($user_target->locked_until) > Carbon::now()) {
+                    $user_status = '被封禁至' . $user_target->locked_until;
+                } else {
+                    $user_status = '状态正常';
+                }
+            } else {
+                $user_status = '状态正常';
+            }
+        }
+
+        return response()->json([
+            'code' => ResponseCode::SUCCESS,
+            'message' => '已经查到用户信息',
+            'locked_count' => $user_target->locked_count,
+            'user_status' => $user_status,
+        ]);
+    }
+
     //已废弃
     // public function check_user_post(Request $request)
     // {
