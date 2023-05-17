@@ -25,7 +25,7 @@ class TestController extends Controller
     {
         return response()->json([
             'code' => 200,
-            'message' => '登陆成功',
+            'message' => '登录成功',
             'data' => [
                 'binggan' => Auth::user(),
             ],
@@ -38,7 +38,7 @@ class TestController extends Controller
         Auth::loginUsingId(100001,true);
         return response()->json([
             'code' => 200,
-            'message' => '登陆成功',
+            'message' => '登录成功',
             'data' => [
                 'binggan' => Auth::user(),
             ],
