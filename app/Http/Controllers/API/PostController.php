@@ -82,7 +82,7 @@ class PostController extends Controller
 
         //判断是否达到可以访问板块的最少奥利奥
         if ($forum->accessible_coin > 0) {
-            if ($user->coin < $forum->accessible_coin && !(in_array($user->admin, [99, 10]))) {
+            if ($user->coin < $forum->accessible_coin && !(in_array($user->admin, [99, 20, 10]))) {
                 return response()->json([
                     'code' => ResponseCode::THREAD_UNAUTHORIZED,
                     'message' => sprintf("本小岛需要拥有大于%u奥利奥才能查看喔", $forum->accessible_coin),
@@ -92,7 +92,7 @@ class PostController extends Controller
 
         //判断奥利奥锁定权限贴
         if ($thread->locked_by_coin > 0) {
-            if ($user->coin < $thread->locked_by_coin && !(in_array($user->admin, [99, 10]))) {
+            if ($user->coin < $thread->locked_by_coin && !(in_array($user->admin, [99, 20, 10]))) {
                 return response()->json([
                     'code' => ResponseCode::THREAD_UNAUTHORIZED,
                     'message' => sprintf("本贴需要拥有大于%u奥利奥才能查看喔", $thread->locked_by_coin),
@@ -234,7 +234,7 @@ class PostController extends Controller
                     'message' => '本小岛需要饼干才能查看喔',
                 ]);
             }
-            if ($user->coin < $CurrentForum->accessible_coin && !(in_array($user->admin, [99, 10]))) {
+            if ($user->coin < $CurrentForum->accessible_coin && !(in_array($user->admin, [99, 20, 10]))) {
                 return response()->json([
                     'code' => ResponseCode::THREAD_UNAUTHORIZED,
                     'message' => sprintf("本小岛需要拥有大于%u奥利奥才能查看喔", $CurrentForum->accessible_coin),
@@ -250,7 +250,7 @@ class PostController extends Controller
                     'message' => '本贴需要饼干才能查看喔',
                 ]);
             }
-            if ($user->coin < $CurrentThread->locked_by_coin && !(in_array($user->admin, [99, 10]))) {
+            if ($user->coin < $CurrentThread->locked_by_coin && !(in_array($user->admin, [99, 20, 10]))) {
                 return response()->json([
                     'code' => ResponseCode::THREAD_UNAUTHORIZED,
                     'message' => sprintf("本贴需要拥有大于%u奥利奥才能查看喔", $CurrentThread->locked_by_coin),

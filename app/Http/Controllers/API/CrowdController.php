@@ -203,7 +203,7 @@ class CrowdController extends Controller
         }
 
         //检查管理员权限
-        if (!in_array($user->admin, [99, 10])) {
+        if (!in_array($user->admin, [99, 20, 10])) {
             return response()->json(
                 [
                     'code' => ResponseCode::ADMIN_UNAUTHORIZED,
@@ -254,7 +254,7 @@ class CrowdController extends Controller
                 'created_by_admin' => 2,
                 'created_IP' => $request->ip(),
             ]);
-            
+
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();

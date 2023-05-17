@@ -300,7 +300,7 @@ class GambleController extends Controller
         }
 
         //检查管理员权限
-        if (!in_array($user->admin, [99, 10])) {
+        if (!in_array($user->admin, [99, 20, 10])) {
             return response()->json(
                 [
                     'code' => ResponseCode::ADMIN_UNAUTHORIZED,
@@ -407,7 +407,7 @@ class GambleController extends Controller
         }
 
         //检查管理员权限
-        if (!in_array($user->admin, [99, 10])) {
+        if (!in_array($user->admin, [99, 20, 10])) {
             return response()->json(
                 [
                     'code' => ResponseCode::ADMIN_UNAUTHORIZED,
