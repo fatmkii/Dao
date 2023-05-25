@@ -61,7 +61,7 @@ axios.interceptors.response.use(
         //     } else {
         //         alert('此页面需先登录喔！');
         //     }
-        //     window.location.href = '/login' //统一跳转到登陆页面
+        //     window.location.href = '/login' //统一跳转到登录页面
         // } else {
         alert(error.response.data.message);
         throw error

@@ -1,6 +1,6 @@
 <template>
   <div class="my-3 container" style="max-width: 400px">
-    <p>管理员登陆</p>
+    <p>管理员登录</p>
     <b-input-group prepend="饼干：">
       <b-form-input
         v-model="binggan"
@@ -17,13 +17,13 @@
     </b-input-group>
     <div class="d-flex flex-row align-items-center my-2">
       <b-button @click="admin_login_handle" class="my-2" variant="success"
-        >{{ admin_login_handling ? "提交中" : "登陆" }}
+        >{{ admin_login_handling ? "提交中" : "登录" }}
       </b-button>
       <b-form-checkbox class="ml-auto" v-model="password_visible">
         显示密码
       </b-form-checkbox>
     </div>
-    <p>第一次登陆时输入的密码<br />将保存为正式密码，请谨记。</p>
+    <p>第一次登录时输入的密码<br />将保存为正式密码，请谨记。</p>
   </div>
 </template>
 
@@ -42,7 +42,7 @@ export default {
     };
   },
   mounted() {
-    document.title = "管理员登陆";
+    document.title = "管理员登录";
   },
   methods: {
     admin_login_handle() {

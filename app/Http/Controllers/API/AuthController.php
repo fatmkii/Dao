@@ -63,7 +63,7 @@ class AuthController extends Controller
         return response()->json(
             [
                 'code' => ResponseCode::SUCCESS,
-                'message' => '登陆成功',
+                'message' => '登录成功',
                 'data' => [
                     'binggan' => $binggan,
                     'token' => $token,
@@ -127,7 +127,7 @@ class AuthController extends Controller
             ]);
         }
 
-        //确认是管理员才能用用admin_login登陆
+        //确认是管理员才能用用admin_login登录
         if ($user->admin == 0) {
             return response()->json([
                 'code' => ResponseCode::LOGIN_FAILED,
@@ -185,7 +185,7 @@ class AuthController extends Controller
             [
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
-                'active' => '管理员登陆了饼干',
+                'active' => '管理员登录了饼干',
                 'content' => $request->ip(),
             ]
         );
@@ -193,7 +193,7 @@ class AuthController extends Controller
         return response()->json(
             [
                 'code' => ResponseCode::SUCCESS,
-                'message' => ' 管理员登陆成功！',
+                'message' => ' 管理员登录成功！',
                 'data' => [
                     'binggan' => $binggan,
                     'token' => $token,
