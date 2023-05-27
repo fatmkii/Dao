@@ -2415,11 +2415,20 @@ var medals_hide = {
         'img': 'https://s1.ax1x.com/2022/11/25/ztZE3F.png',
     },
 
-    //申请一个定制饼干
+    //小火锅周年徽章
     151: {
         'name': '小火锅二周年',
         'describe': '我们要一直在一起 — 至少十年吧！',
         'threshold': 0,
         'img': 'https://s1.ax1x.com/2023/04/28/p9lvQhD.png',
     },
+
+    //管理员荣誉徽章
+    182: {
+        'name': '小火锅守护者',
+        'describe': '我来组成小火锅锅底！',
+        'threshold': 0,
+        'img': 'https://s1.ax1x.com/2023/05/27/p9LycrT.png',
+    },
+
 }

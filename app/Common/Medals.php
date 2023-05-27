@@ -286,5 +286,13 @@ class Medals
             'threshold' => null,
             'varname' => null,
         ),
+
+        //管理员荣誉徽章
+        182 => array(
+            'name' => '小火锅守护者',
+            'describe' => '我来组成小火锅锅底！',
+            'threshold' => null,
+            'varname' => null,
+        ),
     );
 }

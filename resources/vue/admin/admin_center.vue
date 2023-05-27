@@ -15,30 +15,14 @@
     <b-tabs pills>
       <b-tab title="版头设定">
         <div class="mx-2 my-2">
-          <b-form-select
-            v-model="forum_selected"
-            :options="forum_options"
-          ></b-form-select>
-          <b-form-textarea
-            id="banner_input"
-            class="my-2"
-            v-model.lazy="banner_input"
-            rows="3"
-            max-rows="8"
-          ></b-form-textarea>
+          <b-form-select v-model="forum_selected" :options="forum_options"></b-form-select>
+          <b-form-textarea id="banner_input" class="my-2" v-model.lazy="banner_input" rows="3"
+            max-rows="8"></b-form-textarea>
           <div class="d-flex align-items-center mt-2">
-            <b-button
-              :variant="button_theme"
-              :disabled="banner_set_handling"
-              @click="banner_set_handle"
-              >提交
+            <b-button :variant="button_theme" :disabled="ajax_handling" @click="banner_set_handle">提交
             </b-button>
           </div>
-          <div
-            class="m-1"
-            v-for="(banner_src, index) in banners_array"
-            :key="index"
-          >
+          <div class="m-1" v-for="(banner_src, index) in banners_array" :key="index">
             <b-img :src="banner_src" fluid alt="banner"></b-img>
           </div>
         </div>
@@ -49,6 +33,21 @@
       超管操作面板
     </p>
     <b-tabs pills v-if="this.$store.state.User.AdminStatus == 99">
+      <b-tab title="发放成就">
+        <div class="mx-2 my-2" style="max-width: 350px;">
+          <b-input-group prepend="发放饼干" class="mt-2">
+            <b-form-input v-model="binggan_target"></b-form-input>
+          </b-input-group>
+          <b-input-group prepend="发放成就" class="mt-2">
+            <b-form-select v-model="medal_id" :options="medal_id_options" value-field="value"
+              text-field="text"></b-form-select>
+          </b-input-group>
+          <div class="mt-2">
+            <b-button :variant="button_theme" :disabled="ajax_handling" @click="create_medal_handle">提交
+            </b-button>
+          </div>
+        </div>
+      </b-tab>
       <b-tab title="发帖记录">
         <div class="mx-2 my-2">
           <router-link to="/admin/check_user_post">
@@ -92,8 +91,13 @@ export default {
     return {
       name: "admin_center",
       forum_selected: 0,
-      banner_set_handling: false,
+      ajax_handling: false,
       banner_input: "",
+      binggan_target: "",
+      medal_id_options: [
+        { value: 182, text: "小火锅守护者" },
+      ],
+      medal_id: 182,
     };
   },
   computed: {
@@ -159,7 +163,7 @@ export default {
         alert("版头JSON格式输入有误，请检查");
         return;
       }
-      this.banner_set_handling = true;
+      this.ajax_handling = true;
       const config = {
         method: "post",
         url: "/api/admin/set_banner",
@@ -177,14 +181,51 @@ export default {
               autoHideDelay: 1500,
               appendToast: true,
             });
-            this.banner_set_handling = false;
+            this.ajax_handling = false;
           } else {
-            this.banner_set_handling = false;
+            this.ajax_handling = false;
             alert(response.data.message);
           }
         })
         .catch((error) => {
-          this.banner_set_handling = false;
+          this.ajax_handling = false;
+          // alert(Object.values(error.response.data.errors)[0]);
+          // alert(error.response.data.message)
+        });
+    },
+    create_medal_handle() {
+      var confirmed = confirm("要给该用户发放成就吗")
+      if (confirmed == false) {
+        return;
+      }
+
+      if (this.binggan_target == null) {
+        alert('未输入发放饼干')
+        return;
+      }
+
+      this.ajax_handling = true;
+      const config = {
+        method: "post",
+        url: "/api/admin/create_medal",
+        data: {
+          binggan: this.$store.state.User.Binggan,
+          binggan_target: this.binggan_target,
+          medal_id: this.medal_id
+        },
+      };
+      axios(config)
+        .then((response) => {
+          if (response.data.code == 200) {
+            alert(response.data.message);
+            this.ajax_handling = false;
+          } else {
+            this.ajax_handling = false;
+            alert(response.data.message);
+          }
+        })
+        .catch((error) => {
+          this.ajax_handling = false;
           // alert(Object.values(error.response.data.errors)[0]);
           // alert(error.response.data.message)
         });
@@ -199,6 +240,6 @@ export default {
       this.banner_input = banners;
     },
   },
-  created() {},
+  created() { },
 };
 </script>

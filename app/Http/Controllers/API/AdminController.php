@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Common\Medals;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Common\ResponseCode;
@@ -12,6 +13,7 @@ use App\Models\HongbaoPost;
 use App\Models\Post;
 use App\Models\Thread;
 use App\Models\User;
+use App\Models\UserMedal;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Cache;
@@ -653,6 +655,66 @@ class AdminController extends Controller
             'user_status' => $user_status,
         ]);
     }
+
+
+    public function create_medal(Request $request)
+    {
+        // 手动给用户发送成就（超管功能）
+        $request->validate([
+            'binggan_target' => 'required|string',
+            'medal_id' => 'required|Integer',
+        ]);
+
+        $user = $request->user();
+
+        $user_target = User::where('binggan', $request->binggan_target)->first();
+        if (!$user_target) {
+            return response()->json([
+                'code' => ResponseCode::USER_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
+            ]);
+        }
+
+        //确认是否超管
+        if (!$user->tokenCan('super_admin')) {
+            return response()->json(
+                [
+                    'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+                    'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+                ],
+            );
+        }
+
+        if (!array_key_exists($request->medal_id, Medals::DATA)) {
+            return response()->json(
+                [
+                    'code' => ResponseCode::DEFAULT,
+                    'message' => '此成就id不存在',
+                ],
+            );
+        }
+
+        if ($user_target->UserMedal()->where('medal_id', $request->medal_id)->exists()) {
+            return response()->json(
+                [
+                    'code' => ResponseCode::DEFAULT,
+                    'message' => '该用户已经拥有此成就',
+                ],
+            );
+        }
+
+        $user_medal = new UserMedal;
+        $user_medal->user_id = $user_target->id;
+        $user_medal->medal_id = $request->medal_id;
+        $user_medal->created_at = Carbon::now();
+        $user_medal->save();
+
+        return response()->json([
+            'code' => ResponseCode::SUCCESS,
+            'message' => '已为用户追加此成就',
+        ]);
+    }
+
 
     //已废弃
     // public function check_user_post(Request $request)
