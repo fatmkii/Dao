@@ -288,6 +288,14 @@ class Medals
         ),
 
         //管理员荣誉徽章
+        181 => array(
+            'name' => '皇家御用画宗',
+            'describe' => '大触快教教我画画',
+            'threshold' => null,
+            'varname' => null,
+        ),
+
+        //管理员荣誉徽章
         182 => array(
             'name' => '小火锅守护者',
             'describe' => '我来组成小火锅锅底！',

@@ -2423,6 +2423,15 @@ var medals_hide = {
         'img': 'https://s1.ax1x.com/2023/04/28/p9lvQhD.png',
     },
 
+    //画师荣誉徽章
+    181: {
+        'name': '皇家御用画宗',
+        'describe': '大触快教教我画画',
+        'threshold': 0,
+        'img': 'https://s1.ax1x.com/2023/05/30/p9jOiVO.png',
+    },
+
+
     //管理员荣誉徽章
     182: {
         'name': '小火锅守护者',

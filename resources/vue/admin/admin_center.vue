@@ -95,9 +95,10 @@ export default {
       banner_input: "",
       binggan_target: "",
       medal_id_options: [
+        { value: 181, text: "皇家御用画宗" },
         { value: 182, text: "小火锅守护者" },
       ],
-      medal_id: 182,
+      medal_id: 181,
     };
   },
   computed: {
