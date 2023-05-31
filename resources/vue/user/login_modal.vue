@@ -133,6 +133,7 @@ export default {
             }
             axios.defaults.headers.Authorization =
               "Bearer " + localStorage.Token;
+            alert(response.data.message);
             window.location.href = "/"; //因为想清空Vuex状态，所以用js原生的重定向，而不是Vuerouter的push
           } else {
             alert(response.data.message);

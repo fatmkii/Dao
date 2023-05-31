@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use App\Common\ResponseCode;
 use App\Models\User;
+use Illuminate\Support\Facades\Redis;
 
 class CheckBinggan
 {
@@ -35,6 +36,17 @@ class CheckBinggan
                             ],
                         );
                     }
+
+                    //新饼干24小时内不能发帖
+                    if (Redis::exists('new_user_' . $user->binggan)) {
+                        return response()->json(
+                            [
+                                'code' => ResponseCode::USER_CANNOT,
+                                'message' => '新领取的饼干24小时内暂时不能发表回复哦',
+                            ],
+                        );
+                    }
+
                     //如果饼干被ban，返回错误
                     if ($user->is_banned) {
                         return response()->json(

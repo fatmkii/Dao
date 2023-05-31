@@ -310,6 +310,9 @@ class UserController extends Controller
         //用redis记录饼干申请ip。限定7天内只能申请1次。
         Redis::setex('reg_record_' . $request->ip(), 7 * 24 * 3600, 1);
 
+        //用redis记录新饼干，24小时内不能发表回复。
+        Redis::setex('new_user_' . $user->binggan, 24 * 3600, 1);
+
         //对新用户检查公告并拉取
         // $annoucement_ids_all = AnnoucementMessages::where('type', 1) //type = 1是全体公告
         //     ->where('to_new_users', true)   //to_new_users==true则一定可以拉取
@@ -349,7 +352,7 @@ class UserController extends Controller
         return response()->json(
             [
                 'code' => ResponseCode::SUCCESS,
-                'message' => '创建饼干成功！',
+                'message' => '领取饼干成功！建议在个人中心设置密码哦。（新饼干24小时内暂时不能发帖）',
                 'data' => [
                     'binggan' => $binggan,
                     'token' => $token,
