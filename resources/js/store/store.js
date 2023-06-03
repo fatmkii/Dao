@@ -19,6 +19,7 @@ const module_user = {
         PingbiciIngnoreCase: false,
         LessToast: false,
         HongbaoThenStop: false,
+        ListeningHoldPage: false,
         MyEmoji: { name: '我的表情包', emojis: ["https://z3.ax1x.com/2021/08/01/Wznvbq.jpg", "https://z3.ax1x.com/2021/08/01/Wznjrn.jpg"] },
         Emojis: [],
         RandomHeads: [],
@@ -91,6 +92,9 @@ const module_user = {
         },
         HongbaoThenStop_set(state, payload) {
             state.HongbaoThenStop = payload
+        },
+        ListeningHoldPage_set(state, payload) {
+            state.ListeningHoldPage = payload
         },
         MyEmoji_set(state, payload) {
             state.MyEmoji.emojis = payload //payload应为数组

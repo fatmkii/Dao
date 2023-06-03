@@ -111,11 +111,18 @@ export default {
         );
       }
 
-      //读取是否减少toast提示
+      //读取是否遇到红包时停止自动涮锅
       if (localStorage.getItem("hongbao_then_stop") != null) {
         this.$store.commit(
           "HongbaoThenStop_set",
           localStorage.getItem("hongbao_then_stop") === "true"
+        );
+      }
+      //读取是否自动涮锅时保持页面停止
+      if (localStorage.getItem("listening_hold_page") != null) {
+        this.$store.commit(
+          "ListeningHoldPage_set",
+          localStorage.getItem("listening_hold_page") === "true"
         );
       }
 
@@ -187,20 +194,6 @@ export default {
       if (response_data.my_emoji != null) {
         this.$store.commit("MyEmoji_set", JSON.parse(response_data.my_emoji));
       }
-    },
-    get_ip() {
-      const config = {
-        method: "get",
-        url: "http://ip-api.com/json/" + "117.136.79.87",
-        params: {
-          fields: "16401",
-        },
-      };
-      axios(config)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => alert(error)); // Todo:写异常返回代码;}
     },
   },
   created() {

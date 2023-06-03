@@ -30,6 +30,9 @@
         <b-form-checkbox class="mx-2 my-2" switch v-model="HongbaoThenStop">
           自动涮锅时遇红包停止
         </b-form-checkbox>
+        <b-form-checkbox class="mx-2 my-2" switch v-model="ListeningHoldPage">
+          自动涮锅时页面保持不动
+        </b-form-checkbox>
         <hr :class="is_mobile ? 'my-1' : ''" />
         <div class="mt-2 d-flex align-items-center">
           <span class="mb-2">帖子内容行距：</span>
@@ -466,6 +469,15 @@ export default {
       set(value) {
         localStorage.setItem("hongbao_then_stop", value ? "true" : "");
         this.$store.commit("HongbaoThenStop_set", value);
+      },
+    },
+    ListeningHoldPage: {
+      get() {
+        return this.$store.state.User.ListeningHoldPage;
+      },
+      set(value) {
+        localStorage.setItem("listening_hold_page", value ? "true" : "");
+        this.$store.commit("ListeningHoldPage_set", value);
       },
     },
     income_rows() {
