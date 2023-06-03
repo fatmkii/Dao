@@ -715,6 +715,50 @@ class AdminController extends Controller
         ]);
     }
 
+    public function set_user_olo(Request $request)
+    {
+        // 手动给用户发送成就（超管功能）
+        $request->validate([
+            'binggan_target' => 'required|string',
+            'olo_num' => 'required|Integer',
+            'olo_message' => 'required|string',
+        ]);
+
+        $user = $request->user();
+
+        $user_target = User::where('binggan', $request->binggan_target)->first();
+        if (!$user_target) {
+            return response()->json([
+                'code' => ResponseCode::USER_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::USER_NOT_FOUND],
+            ]);
+        }
+
+        //确认是否超管
+        if (!$user->tokenCan('super_admin')) {
+            return response()->json(
+                [
+                    'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+                    'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+                ],
+            );
+        }
+
+        $user_target->coinChange(
+            'normal', //记录类型
+            [
+                'olo' => $request->olo_num,
+                'content' => $request->olo_message,
+            ],
+            true //$ignore_olo_0 = true，即使用户olo不足也强制扣除
+        ); //扣除奥利奥（通过统一接口、记录操作）
+        $user->save();
+
+        return response()->json([
+            'code' => ResponseCode::SUCCESS,
+            'message' => sprintf("已%s该饼干%d个olo", $request->olo_num > 0 ? '奖励' : '扣除', $request->olo_num),
+        ]);
+    }
 
     //已废弃
     // public function check_user_post(Request $request)

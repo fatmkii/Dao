@@ -34,9 +34,9 @@
     </p>
     <b-tabs pills v-if="this.$store.state.User.AdminStatus == 99">
       <b-tab title="发放成就">
-        <div class="mx-2 my-2" style="max-width: 350px;">
+        <div class="mx-2 my-2 binggan_custom_input" style="max-width: 400px;">
           <b-input-group prepend="发放饼干" class="mt-2">
-            <b-form-input v-model="binggan_target"></b-form-input>
+            <b-form-input v-model="binggan_target" type="text"></b-form-input>
           </b-input-group>
           <b-input-group prepend="发放成就" class="mt-2">
             <b-form-select v-model="medal_id" :options="medal_id_options" value-field="value"
@@ -44,6 +44,23 @@
           </b-input-group>
           <div class="mt-2">
             <b-button :variant="button_theme" :disabled="ajax_handling" @click="create_medal_handle">提交
+            </b-button>
+          </div>
+        </div>
+      </b-tab>
+      <b-tab title="奖罚奥利奥">
+        <div class="mx-2 my-2 binggan_custom_input" style="max-width: 400px;">
+          <b-input-group prepend="对象饼干" class="mt-2">
+            <b-form-input v-model="binggan_target" type="text"></b-form-input>
+          </b-input-group>
+          <b-input-group prepend="附带留言" class="mt-2">
+            <b-form-input v-model="olo_message" type="text" placeholder="将显示在收支记录"></b-form-input>
+          </b-input-group>
+          <b-input-group prepend="奖罚金额" class="mt-2">
+            <b-form-input v-model="olo_num" type="number" placeholder="正数是奖励，负数为罚款"></b-form-input>
+          </b-input-group>
+          <div class="mt-2">
+            <b-button :variant="button_theme" :disabled="ajax_handling" @click="olo_set_handle">提交
             </b-button>
           </div>
         </div>
@@ -99,6 +116,8 @@ export default {
         { value: 182, text: "小火锅守护者" },
       ],
       medal_id: 181,
+      olo_num: undefined,
+      olo_message: "",
     };
   },
   computed: {
@@ -195,13 +214,13 @@ export default {
         });
     },
     create_medal_handle() {
-      var confirmed = confirm("要给该用户发放成就吗")
-      if (confirmed == false) {
+      if (this.binggan_target == null) {
+        alert('未输入发放饼干')
         return;
       }
 
-      if (this.binggan_target == null) {
-        alert('未输入发放饼干')
+      var confirmed = confirm("要给该用户发放成就吗")
+      if (confirmed == false) {
         return;
       }
 
@@ -220,6 +239,53 @@ export default {
           if (response.data.code == 200) {
             alert(response.data.message);
             this.ajax_handling = false;
+            this.binggan_target = ""
+          } else {
+            this.ajax_handling = false;
+            alert(response.data.message);
+          }
+        })
+        .catch((error) => {
+          this.ajax_handling = false;
+          // alert(Object.values(error.response.data.errors)[0]);
+          // alert(error.response.data.message)
+        });
+    },
+    olo_set_handle() {
+      if (this.binggan_target == null) {
+        alert('未输入发放饼干')
+        return;
+      }
+
+      if (this.olo_num > 0) {
+        var message = `确定要给该用户 奖励 ${this.olo_num}个olo吗？`
+      } else {
+        var message = `确定要给该用户 扣除 ${this.olo_num}个olo吗？`
+      }
+      var confirmed = confirm(message)
+      if (confirmed == false) {
+        return;
+      }
+
+      this.ajax_handling = true;
+      const config = {
+        method: "post",
+        url: "/api/admin/set_user_olo",
+        data: {
+          binggan: this.$store.state.User.Binggan,
+          binggan_target: this.binggan_target,
+          olo_num: this.olo_num,
+          olo_message: this.olo_message
+        },
+      };
+      axios(config)
+        .then((response) => {
+          if (response.data.code == 200) {
+            alert(response.data.message);
+            this.ajax_handling = false;
+            this.olo_num = 0;
+            this.olo_message = ""
+            this.binggan_target = ""
           } else {
             this.ajax_handling = false;
             alert(response.data.message);

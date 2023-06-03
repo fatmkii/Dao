@@ -12,13 +12,7 @@
       你的奥利奥：{{ $store.state.User.UserDataLoaded == 2 ? user_coin : "读取中" }}
       个
     </p>
-    <b-button
-      :size="is_mobile ? 'sm' : 'md'"
-      class="my-1 my-sm-0"
-      variant="dark"
-      @click="logout_handle"
-      >退出饼干</b-button
-    >
+    <b-button :size="is_mobile ? 'sm' : 'md'" class="my-1 my-sm-0" variant="dark" @click="logout_handle">退出饼干</b-button>
     <hr :class="is_mobile ? 'my-1' : ''" />
     <b-tabs pills :small="is_mobile">
       <b-tab title="我的成就">
@@ -39,189 +33,90 @@
         <hr :class="is_mobile ? 'my-1' : ''" />
         <div class="mt-2 d-flex align-items-center">
           <span class="mb-2">帖子内容行距：</span>
-          <b-form-spinbutton
-            size="sm"
-            style="max-width: 120px"
-            class="mb-2"
-            min="16"
-            max="40"
-            v-model="PostsLineHeight"
-          ></b-form-spinbutton>
+          <b-form-spinbutton size="sm" style="max-width: 120px" class="mb-2" min="16" max="40"
+            v-model="PostsLineHeight"></b-form-spinbutton>
           <span class="ml-1 mb-2">px</span>
         </div>
         <div class="mt-2 d-flex align-items-center">
           <span class="mb-2">回复字体大小：</span>
-          <b-form-spinbutton
-            size="sm"
-            style="max-width: 120px"
-            class="mb-2"
-            min="10"
-            max="24"
-            v-model="PostsFontSize"
-          ></b-form-spinbutton>
+          <b-form-spinbutton size="sm" style="max-width: 120px" class="mb-2" min="10" max="24"
+            v-model="PostsFontSize"></b-form-spinbutton>
           <span class="ml-1 mb-2">px</span>
         </div>
         <div class="mt-2 d-flex align-items-center">
           <span class="mb-2">引用字体大小：</span>
-          <b-form-spinbutton
-            size="sm"
-            style="max-width: 120px"
-            class="mb-2"
-            min="10"
-            max="24"
-            v-model="QuoteFontSize"
-          ></b-form-spinbutton>
+          <b-form-spinbutton size="sm" style="max-width: 120px" class="mb-2" min="10" max="24"
+            v-model="QuoteFontSize"></b-form-spinbutton>
           <span class="ml-1 mb-2">px</span>
         </div>
         <div class="mt-2 d-flex align-items-center">
           <span class="mb-2">楼层字体大小：</span>
-          <b-form-spinbutton
-            size="sm"
-            style="max-width: 120px"
-            class="mb-2"
-            min="10"
-            max="24"
-            v-model="SysInfoFontSize"
-          ></b-form-spinbutton>
+          <b-form-spinbutton size="sm" style="max-width: 120px" class="mb-2" min="10" max="24"
+            v-model="SysInfoFontSize"></b-form-spinbutton>
           <span class="ml-1 mb-2">px</span>
         </div>
         <div class="mt-2 d-flex align-items-center">
           <span class="mb-2">回复顶部留空：</span>
-          <b-form-spinbutton
-            size="sm"
-            style="max-width: 120px"
-            class="mb-2"
-            min="1"
-            max="48"
-            v-model="PostsMarginTop"
-          ></b-form-spinbutton>
+          <b-form-spinbutton size="sm" style="max-width: 120px" class="mb-2" min="1" max="48"
+            v-model="PostsMarginTop"></b-form-spinbutton>
           <span class="ml-1 mb-2">px</span>
         </div>
         <div class="mt-2 d-flex align-items-center">
           <span class="mb-2">主题列表间距：</span>
-          <b-form-spinbutton
-            size="sm"
-            style="max-width: 120px"
-            class="mb-2"
-            min="0"
-            max="12"
-            v-model="ThreadsMarginPaddingY"
-          ></b-form-spinbutton>
+          <b-form-spinbutton size="sm" style="max-width: 120px" class="mb-2" min="0" max="12"
+            v-model="ThreadsMarginPaddingY"></b-form-spinbutton>
           <span class="ml-1 mb-2">px（手机版）</span>
         </div>
         <div class="mt-2 d-flex align-items-center">
           <span class="mb-2">回复多行折叠：</span>
-          <b-form-spinbutton
-            size="sm"
-            style="max-width: 120px"
-            class="mb-2"
-            min="3"
-            max="32"
-            v-model="PostsMaxLine"
-          ></b-form-spinbutton>
+          <b-form-spinbutton size="sm" style="max-width: 120px" class="mb-2" min="3" max="32"
+            v-model="PostsMaxLine"></b-form-spinbutton>
           <span class="ml-1 mb-2">行</span>
         </div>
         <div class="mt-2 d-flex align-items-center">
           <span class="mb-2">回复最大引用：</span>
-          <b-form-spinbutton
-            size="sm"
-            style="max-width: 120px"
-            class="mb-2"
-            min="1"
-            max="10"
-            v-model="QuoteMax"
-          ></b-form-spinbutton>
+          <b-form-spinbutton size="sm" style="max-width: 120px" class="mb-2" min="1" max="10"
+            v-model="QuoteMax"></b-form-spinbutton>
           <span class="ml-1 mb-2">层</span>
         </div>
         <hr :class="is_mobile ? 'my-1' : ''" />
         <div class="mt-2 d-flex align-items-center">
           <span class="mb-2">每页的主题数：</span>
-          <b-form-spinbutton
-            size="sm"
-            style="max-width: 120px"
-            class="mb-2"
-            step="5"
-            min="30"
-            max="100"
-            v-model="ThreadsPerPage"
-          ></b-form-spinbutton>
+          <b-form-spinbutton size="sm" style="max-width: 120px" class="mb-2" step="5" min="30" max="100"
+            v-model="ThreadsPerPage"></b-form-spinbutton>
           <span class="ml-1 mb-2">个</span>
         </div>
         <hr :class="is_mobile ? 'my-1' : ''" />
-        <b-button
-          :variant="button_theme"
-          @click="set_MyCSS"
-          :size="is_mobile ? 'sm' : 'md'"
-          >保存</b-button
-        >
-        <b-button
-          variant="outline-dark"
-          @click="default_MyCSS"
-          :size="is_mobile ? 'sm' : 'md'"
-          >恢复默认</b-button
-        >
+        <b-button :variant="button_theme" @click="set_MyCSS" :size="is_mobile ? 'sm' : 'md'">保存</b-button>
+        <b-button variant="outline-dark" @click="default_MyCSS" :size="is_mobile ? 'sm' : 'md'">恢复默认</b-button>
       </b-tab>
       <b-tab title="屏蔽词">
         <div class="mx-2 my-2">
           <p class="my-2">标题屏蔽词：（用英文逗号分隔）</p>
-          <b-form-textarea
-            id="title_pingbici_input"
-            v-model="title_pingbici_input"
-            rows="3"
-            max-rows="20"
-          ></b-form-textarea>
+          <b-form-textarea id="title_pingbici_input" v-model="title_pingbici_input" rows="3"
+            max-rows="20"></b-form-textarea>
           <p class="my-2">内容屏蔽词：（用英文逗号分隔）</p>
-          <b-form-textarea
-            id="content_pingbici_input"
-            v-model="content_pingbici_input"
-            rows="3"
-            max-rows="20"
-          ></b-form-textarea>
+          <b-form-textarea id="content_pingbici_input" v-model="content_pingbici_input" rows="3"
+            max-rows="20"></b-form-textarea>
           <p class="my-2">
             FJF小尾巴黑名单：（注意：同一个饼干在不同FJF主题中，小尾巴会不同）
           </p>
-          <b-form-textarea
-            id="fjf_pingbici_input"
-            v-model="fjf_pingbici_input"
-            rows="3"
-            max-rows="20"
-          ></b-form-textarea>
+          <b-form-textarea id="fjf_pingbici_input" v-model="fjf_pingbici_input" rows="3" max-rows="20"></b-form-textarea>
           <div class="d-flex align-items-center mt-2">
-            <a href="javascript:;" @click="pingbici_set_unique"
-              >去除重复的屏蔽词（之后要点提交喔）</a
-            >
+            <a href="javascript:;" @click="pingbici_set_unique">去除重复的屏蔽词（之后要点提交喔）</a>
           </div>
           <div class="d-flex align-items-center mt-2">
-            <b-button
-              :size="is_mobile ? 'sm' : 'md'"
-              :variant="button_theme"
-              :disabled="pingbici_set_handling"
-              @click="pingbici_set_handle"
-              >提交
+            <b-button :size="is_mobile ? 'sm' : 'md'" :variant="button_theme" :disabled="pingbici_set_handling"
+              @click="pingbici_set_handle">提交
             </b-button>
-            <b-form-checkbox
-              switch
-              class="ml-2"
-              v-model="UsePingbici"
-              v-b-popover.hover.bottom="'切换后也要点击提交喔'"
-            >
+            <b-form-checkbox switch class="ml-2" v-model="UsePingbici" v-b-popover.hover.bottom="'切换后也要点击提交喔'">
               启用
             </b-form-checkbox>
 
-            <b-form-checkbox
-              class="ml-2"
-              switch
-              v-model="FoldPingbici"
-              v-b-popover.hover.bottom="'这个保存在本地不用提交'"
-            >
+            <b-form-checkbox class="ml-2" switch v-model="FoldPingbici" v-b-popover.hover.bottom="'这个保存在本地不用提交'">
               完全隐藏楼层
             </b-form-checkbox>
-            <b-form-checkbox
-              class="ml-2"
-              switch
-              v-model="PingbiciIngnoreCase"
-              v-b-popover.hover.bottom="'不包括小尾巴'"
-            >
+            <b-form-checkbox class="ml-2" switch v-model="PingbiciIngnoreCase" v-b-popover.hover.bottom="'不包括小尾巴'">
               忽略大小写
             </b-form-checkbox>
           </div>
@@ -230,43 +125,19 @@
       <b-tab title="我的表情包">
         <div class="mx-2 my-2">
           <p class="my-2">我的表情包：（用英文的逗号分隔）</p>
-          <b-form-textarea
-            id="my_emoji_input"
-            v-model.lazy="my_emoji_input"
-            rows="3"
-            max-rows="8"
-          ></b-form-textarea>
-          <div
-            class="emoji_box m-1 d-inline-flex"
-            v-for="(emoji_src, index) in $store.state.User.MyEmoji.emojis"
-            :key="index"
-          >
-            <b-img
-              :src="emoji_src"
-              fluid
-              alt="emoji"
-              @click="emoji_delete(index)"
-            ></b-img>
+          <b-form-textarea id="my_emoji_input" v-model.lazy="my_emoji_input" rows="3" max-rows="8"></b-form-textarea>
+          <div class="emoji_box m-1 d-inline-flex" v-for="(emoji_src, index) in $store.state.User.MyEmoji.emojis"
+            :key="index">
+            <b-img :src="emoji_src" fluid alt="emoji" @click="emoji_delete(index)"></b-img>
           </div>
           <div class="d-flex align-items-center mt-2">
-            <a href="javascript:;" @click="my_emoji_set_unique"
-              >去除重复的表情包（之后要点提交喔）</a
-            >
+            <a href="javascript:;" @click="my_emoji_set_unique">去除重复的表情包（之后要点提交喔）</a>
           </div>
           <div class="d-flex align-items-center mt-2">
-            <b-button
-              :size="is_mobile ? 'sm' : 'md'"
-              :variant="button_theme"
-              :disabled="my_emoji_set_handling"
-              @click="my_emoji_set_handle"
-              >提交
+            <b-button :size="is_mobile ? 'sm' : 'md'" :variant="button_theme" :disabled="my_emoji_set_handling"
+              @click="my_emoji_set_handle">提交
             </b-button>
-            <b-form-checkbox
-              switch
-              class="ml-2"
-              v-model="emoji_delete_mode"
-              v-b-popover.hover.bottom="'整理后记得提交喔'"
-            >
+            <b-form-checkbox switch class="ml-2" v-model="emoji_delete_mode" v-b-popover.hover.bottom="'整理后记得提交喔'">
               {{ this.emoji_delete_mode ? "点击表情包可删除" : "整理表情包" }}
             </b-form-checkbox>
           </div>
@@ -275,54 +146,30 @@
       <b-tab title="收支记录">
         <div class="d-flex mt-1">
           <b-input-group style="max-width: 160px">
-            <b-form-input
-              v-model="income_date_selected"
-              size="sm"
-              type="text"
-              placeholder="结束日期"
-            ></b-form-input>
+            <b-form-input v-model="income_date_selected" size="sm" type="text" placeholder="结束日期"></b-form-input>
             <b-input-group-append>
-              <b-form-datepicker
-                v-model="income_date_selected"
-                size="sm"
-                placeholder="结束日期"
-                locale="zh"
-                button-only
-                today-button
-                reset-button
-                close-button
-                :date-format-options="{
+              <b-form-datepicker v-model="income_date_selected" size="sm" placeholder="结束日期" locale="zh" button-only
+                today-button reset-button close-button :date-format-options="{
                   year: 'numeric',
                   month: 'numeric',
                   day: 'numeric',
-                }"
-                label-help="请选择投票结束的日期"
-              ></b-form-datepicker>
+                }" label-help="请选择投票结束的日期"></b-form-datepicker>
             </b-input-group-append>
           </b-input-group>
-          <b-button
-            class="ml-2"
-            :variant="button_theme"
-            :size="is_mobile ? 'sm' : 'md'"
-            :disabled="pingbici_set_handling"
-            @click="get_income_data(1)"
-            >查询
+          <b-button class="ml-2" :variant="button_theme" :size="is_mobile ? 'sm' : 'md'" :disabled="pingbici_set_handling"
+            @click="get_income_data(1)">查询
           </b-button>
           <span class="ml-2" v-show="income_no_data">无数据</span>
         </div>
         <div v-show="income_loading == 2" class="my-2" style="font-size: 0.9rem">
           <div>当日总计：{{ income_total }}</div>
           <div>
-            <span>当月总计：</span
-            ><span v-if="income_sum_loading == 0" @click="get_income_data_sum"
-              >*点击查询*</span
-            ><span v-else> {{ income_sum_month }}</span>
+            <span>当月总计：</span><span v-if="income_sum_loading == 0" @click="get_income_data_sum">*点击查询*</span><span v-else>
+              {{ income_sum_month }}</span>
           </div>
           <div>
-            <span>全年总计：</span
-            ><span v-if="income_sum_loading == 0" @click="get_income_data_sum"
-              >*点击查询*</span
-            ><span v-else> {{ income_sum_year }}</span>
+            <span>全年总计：</span><span v-if="income_sum_loading == 0" @click="get_income_data_sum">*点击查询*</span><span v-else>
+              {{ income_sum_year }}</span>
           </div>
         </div>
         <div class="d-none d-lg-block d-xl-block">
@@ -336,25 +183,17 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                v-for="(income, index) in income_data.slice(
-                  income_offset,
-                  income_offset + 30
-                )"
-                :key="index"
-              >
+              <tr v-for="(income, index) in income_data.slice(
+                income_offset,
+                income_offset + 30
+              )" :key="index">
                 <td class="text-left">{{ income.created_at }}</td>
                 <td class="text-left">{{ income.olo }}</td>
                 <td class="text-left">{{ income.content }}</td>
                 <td class="text-left">
-                  <div
-                    style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap"
-                  >
-                    <router-link
-                      class="thread_title"
-                      :to="income_thread_link(income.thread_id, income.floor)"
-                      >{{ income.thread_title }}</router-link
-                    >
+                  <div style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
+                    <router-link class="thread_title" :to="income_thread_link(income.thread_id, income.floor)">{{
+                      income.thread_title }}</router-link>
                   </div>
                 </td>
               </tr>
@@ -365,14 +204,10 @@
           <div class="threads_table_header my-2 py-1 text-center">
             <span>收支记录</span>
           </div>
-          <div
-            class="threads_container"
-            v-for="(income, index) in income_data.slice(
-              income_offset,
-              income_offset + 30
-            )"
-            :key="index"
-          >
+          <div class="threads_container" v-for="(income, index) in income_data.slice(
+            income_offset,
+            income_offset + 30
+          )" :key="index">
             <div class="my-1 py-1">
               <span>时间：{{ income.created_at }} </span>
               <span class="float-right">收支：{{ income.olo }}</span>
@@ -380,56 +215,25 @@
             <div class="my-1 py-1">
               <span>内容：{{ income.content }}</span>
             </div>
-            <div
-              class="text-left my-1 py-1"
-              style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap"
-              v-if="income.thread_title !== null"
-            >
+            <div class="text-left my-1 py-1" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap"
+              v-if="income.thread_title !== null">
               <span>主题：</span>
-              <router-link
-                class="thread_title"
-                :to="income_thread_link(income.thread_id, income.floor)"
-              >
-                {{ income.thread_title }}</router-link
-              >
+              <router-link class="thread_title" :to="income_thread_link(income.thread_id, income.floor)">
+                {{ income.thread_title }}</router-link>
             </div>
           </div>
         </div>
-        <b-pagination
-          v-model="income_page"
-          :total-rows="income_rows"
-          per-page="30"
-          size="sm"
-        ></b-pagination>
+        <b-pagination v-model="income_page" :total-rows="income_rows" per-page="30" size="sm"></b-pagination>
       </b-tab>
       <b-tab title="升级饼干">
         <p class="my-2">说明：可通过支付奥利奥升级饼干，以增加屏蔽词或表情包容量。</p>
-        <a
-          href="https://oss.cpttmm.com/xhg_other/price_list.png"
-          target="view_frame"
-          class="my-2"
-          >饼干升级价目表</a
-        >
+        <a href="https://oss.cpttmm.com/xhg_other/price_list.png" target="view_frame" class="my-2">饼干升级价目表</a>
         <p class="my-2">现在容量：(字符数)</p>
-        <div
-          v-for="(line, index) in user_lv_sheet"
-          :key="index"
-          class="my-2 d-flex align-items-center"
-        >
+        <div v-for="(line, index) in user_lv_sheet" :key="index" class="my-2 d-flex align-items-center">
           <span style="min-width: 100px">{{ line.chinese }}</span>
-          <b-form-input
-            size="sm"
-            style="max-width: 65px"
-            disabled
-            v-model="user_lv_data[line.name]"
-          ></b-form-input>
-          <a
-            href="javascript:;"
-            class="ml-2"
-            @click="user_lv_up_handle(line.name, line.chinese, line.price)"
-            :disabled="user_lv_up_handling"
-            >升级</a
-          >
+          <b-form-input size="sm" style="max-width: 65px" disabled v-model="user_lv_data[line.name]"></b-form-input>
+          <a href="javascript:;" class="ml-2" @click="user_lv_up_handle(line.name, line.chinese, line.price)"
+            :disabled="user_lv_up_handling">升级</a>
         </div>
       </b-tab>
       <b-tab title="定制饼干">
@@ -438,35 +242,19 @@
         </p>
         <div style="max-width: 400px" class="binggan_custom_input">
           <b-input-group prepend="定制饼干" class="mt-2">
-            <b-form-input
-              v-model="binggan_apply"
-              placeholder="7~16个字符(字母、数字、下划线)"
-            ></b-form-input>
+            <b-form-input v-model="binggan_apply" placeholder="7~16个字符(字母、数字、下划线)"></b-form-input>
           </b-input-group>
           <b-input-group prepend="密码" class="mt-2">
-            <b-form-input
-              type="password"
-              v-model="binggan_password"
-              :state="binggan_password == binggan_password_repeat"
-              placeholder="7~20个字符(字母、数字、下划线)"
-            ></b-form-input>
+            <b-form-input type="password" v-model="binggan_password" :state="binggan_password == binggan_password_repeat"
+              placeholder="7~20个字符(字母、数字、下划线)"></b-form-input>
           </b-input-group>
           <b-input-group prepend="重复密码" class="mt-2">
-            <b-form-input
-              type="password"
-              v-model="binggan_password_repeat"
-              :state="binggan_password == binggan_password_repeat"
-              placeholder="再次输入密码"
-            ></b-form-input>
+            <b-form-input type="password" v-model="binggan_password_repeat"
+              :state="binggan_password == binggan_password_repeat" placeholder="再次输入密码"></b-form-input>
           </b-input-group>
 
           <div class="d-flex align-items-center mt-2">
-            <b-button
-              :variant="button_theme"
-              @click="binggan_custom_handle"
-              :size="is_mobile ? 'sm' : 'md'"
-              >提交</b-button
-            >
+            <b-button :variant="button_theme" @click="binggan_custom_handle" :size="is_mobile ? 'sm' : 'md'">提交</b-button>
             <span class="ml-2">请务必保存好饼干和密码喔</span>
           </div>
         </div>
@@ -475,36 +263,21 @@
         <p class="my-2">新饼干无密码，建议在此处尽快设定密码，以免饼干遗失。</p>
         <div style="max-width: 400px" class="binggan_custom_input">
           <b-input-group prepend="旧密码" class="mt-2">
-            <b-form-input
-              type="password"
-              v-model="old_binggan_password"
-              placeholder="（选填）如果未设定密码可留空"
-            ></b-form-input>
+            <b-form-input type="password" v-model="old_binggan_password" placeholder="（选填）如果未设定密码可留空"></b-form-input>
           </b-input-group>
           <b-input-group prepend="新密码" class="mt-2">
-            <b-form-input
-              type="password"
-              v-model="new_binggan_password"
+            <b-form-input type="password" v-model="new_binggan_password"
               :state="new_binggan_password == new_binggan_password_repeat"
-              placeholder="7~20个字符(字母、数字、下划线)"
-            ></b-form-input>
+              placeholder="7~20个字符(字母、数字、下划线)"></b-form-input>
           </b-input-group>
           <b-input-group prepend="重复密码" class="mt-2">
-            <b-form-input
-              type="password"
-              v-model="new_binggan_password_repeat"
-              :state="new_binggan_password == new_binggan_password_repeat"
-              placeholder="再次输入密码"
-            ></b-form-input>
+            <b-form-input type="password" v-model="new_binggan_password_repeat"
+              :state="new_binggan_password == new_binggan_password_repeat" placeholder="再次输入密码"></b-form-input>
           </b-input-group>
 
           <div class="d-flex align-items-center mt-2">
-            <b-button
-              :variant="button_theme"
-              @click="binggan_set_password_handle"
-              :size="is_mobile ? 'sm' : 'md'"
-              >提交</b-button
-            >
+            <b-button :variant="button_theme" @click="binggan_set_password_handle"
+              :size="is_mobile ? 'sm' : 'md'">提交</b-button>
           </div>
         </div>
       </b-tab>
@@ -571,6 +344,7 @@ export default {
       binggan_password: "",
       binggan_password_repeat: "",
       binggan_apply_handling: false,
+      old_binggan_password: "",
       new_binggan_password: "",
       new_binggan_password_repeat: "",
       binggan_set_password_handling: false,
@@ -1220,7 +994,7 @@ export default {
       this.$eventHub.$emit("user_data_refresh"); //通过eventHub空vue对象分发事件
     }
   },
-  activated() {},
+  activated() { },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       // 通过 `vm` 访问组件实例,from_path
