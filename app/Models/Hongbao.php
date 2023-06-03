@@ -83,6 +83,7 @@ class Hongbao extends Model
             'type' => 'required|integer',
             'hongbao_key_word' => 'required|string|max:255',
             'hongbao_message' => 'nullable|string|max:255',
+            'hongbao_message_json' => 'nullable|json|max:1000',
             'hongbao_olo_hide' => 'nullable|boolean',
         ]);
 
@@ -114,6 +115,7 @@ class Hongbao extends Model
         $hongbao->type = $request->type;
         $hongbao->key_word = $request->hongbao_key_word;
         $hongbao->message = $request->hongbao_message;
+        $hongbao->message_json = $request->hongbao_message_json;
         $hongbao->olo_hide = $request->hongbao_olo_hide;
         $hongbao->save();
 

@@ -646,7 +646,7 @@ export default {
       random_heads_data: (state) => state.User.RandomHeads,
       less_toast: (state) => state.User.LessToast,
       hongbao_then_stop: (state) => state.User.HongbaoThenStop,
-      listening_hold_page: (state) => state.User.ListenHoldPage,
+      listening_hold_page: (state) => state.User.ListeningHoldPage,
     }),
   },
   methods: {
@@ -738,7 +738,7 @@ export default {
           this.$nextTick(() => {
             if (
               document.activeElement === this.$refs.post_input_com.$refs.content_input
-              || listening_hold_page === True
+              || this.listening_hold_page === true
             ) {
               document.documentElement.scrollTop =
                 document.body.clientHeight - scroll_top_now;

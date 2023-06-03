@@ -103,7 +103,7 @@ class HongbaoController extends Controller
                     return;
                 } elseif ($hongbao->num_remains == 1) {
                     $coin = $hongbao->olo_remains;
-                    $message = sprintf("恭喜抢到最后一个红包，有%d个奥利奥！", $coin);
+                    $post_content = sprintf("恭喜抢到最后一个红包，有%d个奥利奥！", $coin);
                 } else {
                     if ($hongbao->type == 1) {
                         $central = intval($hongbao->olo_remains / $hongbao->num_remains);
@@ -111,12 +111,32 @@ class HongbaoController extends Controller
                     } elseif ($hongbao->type == 2) {
                         $coin = intval($hongbao->olo_total / $hongbao->num_total);
                     }
-                    $message = sprintf("你抢到了%d个奥利奥！",  $coin);
+                    $post_content = sprintf("你抢到了%d个奥利奥！",  $coin);
                 }
-                $message = "To №" . $post_original->floor . "：" . $message;
+                $post_content = "To №" . $post_original->floor . "：" . $post_content;
+
+
                 if ($hongbao->message) {
-                    $message = $message . '<br>——' . $hongbao->message;
+                    $post_content = $post_content . '<br>——' . $hongbao->message;
                 }
+
+
+                $message = "";
+                if ($hongbao->message) {
+                    //$hongbao->message当是单一message时候不为null
+                    $message = $hongbao->message;
+                    $post_content = $post_content . '<br>——' . $message;
+                }
+
+                if ($hongbao->message_json) {
+                    //$hongbao->message_json当是多选一message时候不为null
+                    $message_array = json_decode($hongbao->message_json);
+                    $rand_key = array_rand($message_array);
+                    $message = $message_array[$rand_key]; //从多个回复中随机抽出一个
+
+                    $post_content = $post_content . '<br>——' . $message;
+                }
+
 
                 $hongbao->increment('olo_remains', -$coin);
                 $hongbao->decrement('num_remains');
@@ -143,7 +163,7 @@ class HongbaoController extends Controller
                     'created_binggan' => $request->binggan,
                     'forum_id' => $request->forum_id,
                     'thread_id' => $request->thread_id,
-                    'content' => $message,
+                    'content' => $post_content,
                     'nickname' => '红包系统',
                     'created_by_admin' => 2,
                     'created_IP' => $request->ip(),
@@ -154,7 +174,7 @@ class HongbaoController extends Controller
                     'normal', //记录类型
                     [
                         'olo' => $coin,
-                        'content' => '抢到红包',
+                        'content' => $message != "" ? '抢到红包——' . $message : '抢到红包',
                         'thread_id' => $thread->id,
                         'thread_title' => $thread->title,
                         'post_id' => $post->id,

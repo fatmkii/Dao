@@ -16,8 +16,6 @@ use App\Models\HongbaoPost;
 use App\Models\HongbaoPostUser;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Support\Facades\Log;
-
 class HongbaoPostController extends Controller
 {
     public function create(Request $request)
@@ -169,7 +167,7 @@ class HongbaoPostController extends Controller
                     DB::beginTransaction();
 
                     $coin = 0; //红包金额
-                    $message = ""; //红包回帖信息
+                    $post_content = ""; //红包回帖信息
 
                     $hongbao = HongbaoPost::lockForUpdate()->find($hongbao_item->id);
                     if (!$hongbao) {
@@ -183,7 +181,7 @@ class HongbaoPostController extends Controller
                     } elseif ($hongbao->num_remains == 1) {
                         $hongbao->delete(); //软删除
                         $coin = $hongbao->olo_remains;
-                        $message = sprintf("恭喜抢到来自№%d楼的最后一个红包，有%d个奥利奥！", $hongbao->floor, $coin);
+                        $post_content = sprintf("恭喜抢到来自№%d楼的最后一个红包，有%d个奥利奥！", $hongbao->floor, $coin);
                     } else {
                         if ($hongbao->type == 1) {
                             //随机红包
@@ -193,11 +191,25 @@ class HongbaoPostController extends Controller
                             //定额红包
                             $coin = intval($hongbao->olo_total / $hongbao->num_total);
                         }
-                        $message = sprintf("你抢到了来自№%d楼的%d个奥利奥！", $hongbao->floor,  $coin);
+                        $post_content = sprintf("你抢到了来自№%d楼的%d个奥利奥！", $hongbao->floor,  $coin);
                     }
-                    $message = "To №" . $post_original->floor . "：" . $message;
+                    $post_content = "To №" . $post_original->floor . "：" . $post_content;
+
+
+                    $message = "";
                     if ($hongbao->message) {
-                        $message = $message . '<br>——' . $hongbao->message;
+                        //$hongbao->message当是单一message时候不为null
+                        $message = $hongbao->message;
+                        $post_content = $post_content . '<br>——' . $message;
+                    }
+
+                    if ($hongbao->message_json) {
+                        //$hongbao->message_json当是多选一message时候不为null
+                        $message_array = json_decode($hongbao->message_json);
+                        $rand_key = array_rand($message_array);
+                        $message = $message_array[$rand_key]; //从多个回复中随机抽出一个
+                        
+                        $post_content = $post_content . '<br>——' . $message;
                     }
 
                     if ($hongbao_item->key_word_type == 3) {
@@ -216,7 +228,7 @@ class HongbaoPostController extends Controller
                         'created_binggan' => $request->binggan,
                         'forum_id' => $request->forum_id,
                         'thread_id' => $request->thread_id,
-                        'content' => $message,
+                        'content' => $post_content,
                         'nickname' => '红包结果',
                         'created_by_admin' => 2,
                         'created_IP' => $request->ip(),
@@ -226,7 +238,7 @@ class HongbaoPostController extends Controller
                         'normal', //记录类型
                         [
                             'olo' => $coin,
-                            'content' => $hongbao->message ? '抢到红包——' . $hongbao->message : '抢到红包',
+                            'content' => $message != "" ? '抢到红包——' . $message : '抢到红包',
                             'thread_id' => $thread->id,
                             'thread_title' => $thread->title,
                             'post_id' => $post_original->id,

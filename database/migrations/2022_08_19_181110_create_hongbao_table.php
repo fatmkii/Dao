@@ -24,6 +24,7 @@ class CreateHongbaoTable extends Migration
             $table->boolean('olo_hide')->default(0);//是否隐藏奥利奥
             $table->string('key_word');
             $table->string('message')->nullable();
+            $table->json('message_json')->nullable(); //回复留言（多选一版本）
             $table->timestamps();
         });
     }

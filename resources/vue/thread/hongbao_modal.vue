@@ -7,93 +7,59 @@
       <div class="hongbao_input">
         <p>
           <span v-if="!is_double11">
-            友情提示：在打赏额以外，会追加扣除7%手续费。</span
-          >
-          <span v-else
-            ><del>友情提示：在打赏额以外，会追加扣除7%手续费。</del>
+            友情提示：在打赏额以外，会追加扣除7%手续费。</span>
+          <span v-else><del>友情提示：在打赏额以外，会追加扣除7%手续费。</del>
             <br />
             双十一当日限时免手续费喔！
           </span>
           <br />
           总共扣除：合计
-          <span style="color: red"
-            >{{ Math.ceil(hongbao_olo * (is_double11 ? 1 : 1.07)) }} </span
-          >块奥利奥
-          <span v-show="hongbao_type == 2"
-            ><br />
+          <span style="color: red">{{ Math.ceil(hongbao_olo * (is_double11 ? 1 : 1.07)) }} </span>块奥利奥
+          <span v-show="hongbao_type == 2"><br />
             <span>
-              定额红包：每个<span style="color: red">{{ hongbao_quota }}</span
-              >奥利奥</span
-            ></span
-          >
+              定额红包：每个<span style="color: red">{{ hongbao_quota }}</span>奥利奥</span></span>
           <br />
           {{ key_word_type_note[key_word_type - 1] }}
         </p>
         <b-input-group prepend="红包类型" class="mt-2">
-          <b-form-select
-            v-model="key_word_type"
-            :options="key_word_type_options"
-            value-field="value"
-            text-field="text"
-          ></b-form-select>
-        </b-input-group>
-        <b-input-group prepend="红包个数" class="mt-2">
-          <b-form-input
-            v-model="hongbao_num"
-            placeholder="红包个数"
-          ></b-form-input>
-        </b-input-group>
-        <b-input-group prepend="olo总数" class="mt-2">
-          <b-form-input
-            v-model="hongbao_olo"
-            placeholder="olo总数"
-          ></b-form-input>
-        </b-input-group>
-        <b-input-group prepend="红包口令" class="mt-2">
-          <b-form-input
-            v-model="hongbao_key_word"
-            placeholder="必填"
-          ></b-form-input>
-        </b-input-group>
-        <b-input-group
-          prepend="口令提示"
-          class="mt-2"
-          v-if="[2, 3].includes(key_word_type)"
-        >
-          <b-form-input
-            v-model="hongbao_question"
-            placeholder="必填"
-          ></b-form-input>
-        </b-input-group>
-        <b-input-group prepend="回复留言" class="mt-2">
-          <b-form-input
-            v-model="hongbao_message"
-            placeholder="可选"
-          ></b-form-input>
+          <b-form-select v-model="key_word_type" :options="key_word_type_options" value-field="value"
+            text-field="text"></b-form-select>
         </b-input-group>
         <b-input-group prepend="olo类型" class="mt-2">
-          <b-form-select
-            v-model="hongbao_type"
-            :options="hongbao_type_options"
-            value-field="value"
-            text-field="text"
-          ></b-form-select>
+          <b-form-select v-model="hongbao_type" :options="hongbao_type_options" value-field="value"
+            text-field="text"></b-form-select>
+        </b-input-group>
+        <b-input-group prepend="红包个数" class="mt-2">
+          <b-form-input v-model="hongbao_num" placeholder="红包个数"></b-form-input>
+        </b-input-group>
+        <b-input-group prepend="olo总数" class="mt-2">
+          <b-form-input v-model="hongbao_olo" placeholder="olo总数"></b-form-input>
+        </b-input-group>
+        <b-input-group prepend="红包口令" class="mt-2">
+          <b-form-input v-model="hongbao_key_word" placeholder="必填"></b-form-input>
+        </b-input-group>
+        <b-input-group prepend="口令提示" class="mt-2" v-if="[2, 3].includes(key_word_type)">
+          <b-form-input v-model="hongbao_question" placeholder="必填"></b-form-input>
+        </b-input-group>
+
+        <b-input-group prepend="回复留言" class="mt-2" v-for="(message, index) in hongbao_message" :key="index">
+          <b-form-input v-model="hongbao_message[index]" placeholder="可选（多个留言时随机回复一个）"></b-form-input>
+        </b-input-group>
+        <b-input-group prepend="留言数量" class="mt-2">
+          <b-form-input v-model="hongbao_message_num" max="5" min="1" type="range"
+            @change="hongbao_message_num_change"></b-form-input>
         </b-input-group>
         <div class="d-flex justify-content-end mt-2">
           <b-form-checkbox v-model="hongbao_olo_hide" switch>
             隐藏红包olo总额
           </b-form-checkbox>
         </div>
+
       </div>
     </template>
     <template v-slot:modal-footer="{ cancel }">
       <b-button-group>
-        <b-button
-          :variant="button_theme"
-          :disabled="hongbao_handling"
-          @click="hongbao_handle"
-          >提交</b-button
-        >
+        <b-button :variant="button_theme" :disabled="hongbao_handling" @click="hongbao_handle">提交</b-button>
         <b-button variant="outline-secondary" @click="cancel()">
           取消
         </b-button>
@@ -114,7 +80,8 @@ export default {
       hongbao_olo: 3000,
       hongbao_num: 10,
       hongbao_key_word: undefined,
-      hongbao_message: "",
+      hongbao_message: [""],
+      hongbao_message_num: 1,
       hongbao_question: "",
       hongbao_handling: false,
       key_word_type: 1,
@@ -161,7 +128,7 @@ export default {
           : 0,
     }),
   },
-  created() {},
+  created() { },
   methods: {
     hongbao_handle() {
       if (this.hongbao_type == 2 && this.hongbao_olo % this.hongbao_num != 0) {
@@ -173,7 +140,7 @@ export default {
         return;
       }
       this.hongbao_handling = true;
-      const config = {
+      var config = {
         method: "post",
         url: "/api/hongbao_post",
         data: {
@@ -186,10 +153,17 @@ export default {
           key_word_type: this.key_word_type,
           hongbao_key_word: this.hongbao_key_word,
           hongbao_question: this.hongbao_question,
-          hongbao_message: this.hongbao_message,
           hongbao_olo_hide: this.hongbao_olo_hide,
         },
       };
+      if (this.hongbao_message.length == 1) {
+        //单个回复时，以json格式提交到hongbao_message
+        config.data.hongbao_message = this.hongbao_message[0]
+      } else {
+        //多个回复时，以json格式提交到hongbao_message_json
+        config.data.hongbao_message_json = JSON.stringify(this.hongbao_message)
+      }
+
       axios(config)
         .then((response) => {
           if (response.data.code == 200) {
@@ -211,6 +185,22 @@ export default {
           // alert(Object.values(error.response.data.errors)[0]);
           // alert(error.response.data.message);
         });
+    },
+    hongbao_message_num_change(value) {
+      const diff = this.hongbao_message.length - value
+      if (diff == 0) {
+        return
+      }
+      if (diff >= 1) {
+        for (var i = 0; i < diff; i++) {
+          this.hongbao_message.pop();
+        }
+      }
+      if (diff <= -1) {
+        for (var i = 0; i < -diff; i++) {
+          this.hongbao_message.push("");
+        }
+      }
     },
     toggle() {
       this.$refs["hongbao_modal"].toggle();

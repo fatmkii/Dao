@@ -24,6 +24,7 @@ class HongbaoPost extends Model
         'user_id',
         'olo_remains',
         'message',
+        'message_json',
         'created_binggan',
         'created_at',
         'updated_at',
@@ -31,7 +32,7 @@ class HongbaoPost extends Model
     ];
 
     public $appends = [
-        'hongbao_user',
+        'hongbao_user'
     ];
 
     public function HongbaoPostUser()
@@ -90,6 +91,7 @@ class HongbaoPost extends Model
             'hongbao_key_word' => 'required|string|max:255',
             'hongbao_question' => 'nullable|string|max:255',
             'hongbao_message' => 'nullable|string|max:255',
+            'hongbao_message_json' => 'nullable|json|max:1000',
             'hongbao_olo_hide' => 'nullable|boolean',
         ]);
 
@@ -127,6 +129,7 @@ class HongbaoPost extends Model
         $hongbao->key_word_type = $request->key_word_type;
         $hongbao->key_word = $request->hongbao_key_word;
         $hongbao->message = $request->hongbao_message;
+        $hongbao->message_json = $request->hongbao_message_json;
         $hongbao->question = $request->hongbao_question;
         $hongbao->olo_hide = $request->hongbao_olo_hide;
         $hongbao->save();

@@ -11,18 +11,9 @@
         <span>发表新话题</span>
       </div>
     </div>
-    <PostInput
-      ref="post_input_com"
-      :input_disable="
-        !this.$store.state.User.LoginStatus || Boolean(locked_TTL) || new_thread_handling
-      "
-      :new_post_handling="new_thread_handling"
-      :random_heads_group="random_heads_group_selected"
-      :forum_id="forum_id"
-      @content_commit="new_thread_handle"
-      has_title
-      has_delay
-    >
+    <PostInput ref="post_input_com" :input_disable="!this.$store.state.User.LoginStatus || Boolean(locked_TTL) || new_thread_handling
+      " :new_post_handling="new_thread_handling" :random_heads_group="random_heads_group_selected" :forum_id="forum_id"
+      @content_commit="new_thread_handle" has_title has_delay>
     </PostInput>
     <div class="row align-items-center mt-2">
       <div class="col-auto ml-auto" style="font-size: 0.875rem">
@@ -45,26 +36,15 @@
         </div>
         <div class="row align-items-center mt-3">
           <div class="col-4">
-            <b-form-select
-              v-model="subtitles_selected"
-              :options="subtitles_options"
-              value-field="value"
-              text-field="value"
-              :disabled="is_private_selected == true"
-            ></b-form-select>
+            <b-form-select v-model="subtitles_selected" :options="subtitles_options" value-field="value"
+              text-field="value" :disabled="is_private_selected == true"></b-form-select>
           </div>
           <div class="col-4">
-            <b-form-select
-              v-model="nissin_time_selected"
-              :options="nissin_time_options"
-              :disabled="!(forum_nissin == 2)"
-            ></b-form-select>
+            <b-form-select v-model="nissin_time_selected" :options="nissin_time_options"
+              :disabled="!(forum_nissin == 2)"></b-form-select>
           </div>
           <div class="col-4">
-            <b-form-select
-              v-model="anti_jingfen_selected"
-              :options="anti_jingfen_options"
-            ></b-form-select>
+            <b-form-select v-model="anti_jingfen_selected" :options="anti_jingfen_options"></b-form-select>
           </div>
         </div>
         <div class="row align-items-center mt-3">
@@ -77,18 +57,11 @@
         </div>
         <div class="row align-items-center mt-3">
           <div class="col-4">
-            <b-form-select
-              v-model="random_heads_group_selected"
-              :options="random_heads_group"
-              value-field="id"
-              text-field="name"
-            ></b-form-select>
+            <b-form-select v-model="random_heads_group_selected" :options="random_heads_group" value-field="id"
+              text-field="name"></b-form-select>
           </div>
           <div class="col-4">
-            <b-form-select
-              v-model="can_battle_selected"
-              :options="can_battle_options"
-            ></b-form-select>
+            <b-form-select v-model="can_battle_selected" :options="can_battle_options"></b-form-select>
           </div>
         </div>
       </b-tab>
@@ -106,24 +79,13 @@
         </div>
         <div class="row align-items-center mt-3">
           <div class="col-4">
-            <b-form-input
-              placeholder="#212529"
-              v-model="title_color_input"
-              class="common_input"
-            ></b-form-input>
+            <b-form-input placeholder="#212529" v-model="title_color_input" class="common_input"></b-form-input>
           </div>
           <div class="col-4">
-            <b-form-input
-              placeholder="大于多少奥利奥才能看帖"
-              v-model="locked_by_coin_input"
-              class="common_input"
-            ></b-form-input>
+            <b-form-input placeholder="大于多少奥利奥才能看帖" v-model="locked_by_coin_input" class="common_input"></b-form-input>
           </div>
           <div class="col-4">
-            <b-form-select
-              v-model="is_private_selected"
-              :options="is_private_options"
-            ></b-form-select>
+            <b-form-select v-model="is_private_selected" :options="is_private_options"></b-form-select>
           </div>
         </div>
         <div class="row align-items-center mt-3">
@@ -133,19 +95,10 @@
         </div>
       </b-tab>
       <b-tab title="红包">
-        <b-form-checkbox
-          class="mr-3"
-          v-model="thread_type"
-          value="hongbao"
-          unchecked-value="normal"
-        >
+        <b-form-checkbox class="mr-3" v-model="thread_type" value="hongbao" unchecked-value="normal">
           开启红包
         </b-form-checkbox>
-        <div
-          v-show="thread_type == 'hongbao'"
-          style="max-width: 400px"
-          class="hongbao_input"
-        >
+        <div v-show="thread_type == 'hongbao'" style="max-width: 400px" class="hongbao_input">
           <b-input-group prepend="红包个数" class="mt-2">
             <b-form-input v-model="hongbao_num" placeholder="红包个数"></b-form-input>
           </b-input-group>
@@ -155,124 +108,68 @@
           <b-input-group prepend="红包口令" class="mt-2">
             <b-form-input v-model="hongbao_key_word" placeholder="必填"></b-form-input>
           </b-input-group>
-          <b-input-group prepend="回复留言" class="mt-2">
-            <b-form-input v-model="hongbao_message" placeholder="可选"></b-form-input>
-          </b-input-group>
           <b-input-group prepend="红包类型" class="mt-2">
-            <b-form-select
-              v-model="hongbao_type"
-              :options="hongbao_type_options"
-              value-field="value"
-              text-field="text"
-            ></b-form-select>
+            <b-form-select v-model="hongbao_type" :options="hongbao_type_options" value-field="value"
+              text-field="text"></b-form-select>
+          </b-input-group>
+          <b-input-group prepend="回复留言" class="mt-2" v-for="(message, index) in hongbao_message" :key="index">
+            <b-form-input v-model="hongbao_message[index]" placeholder="可选（多个留言时随机回复一个）"></b-form-input>
+          </b-input-group>
+          <b-input-group prepend="留言数量" class="mt-2">
+            <b-form-input v-model="hongbao_message_num" max="5" min="1" type="range"
+              @change="hongbao_message_num_change"></b-form-input>
           </b-input-group>
           <b-form-checkbox v-model="hongbao_olo_hide" switch class="my-2">
             隐藏红包olo总额
           </b-form-checkbox>
           <p>
             <span v-if="!is_double11"> 友情提示：在打赏额以外，会追加扣除7%手续费。</span>
-            <span v-else
-              ><del>友情提示：在打赏额以外，会追加扣除7%手续费。</del>
+            <span v-else><del>友情提示：在打赏额以外，会追加扣除7%手续费。</del>
               <br />
               双十一当日限时免手续费喔！
             </span>
             <br />
             总共扣除：
-            <span style="color: red"
-              >{{ Math.ceil(hongbao_olo * (is_double11 ? 1 : 1.07)) }} </span
-            >块奥利奥
-            <span v-show="hongbao_type == 2"
-              ><br />
+            <span style="color: red">{{ Math.ceil(hongbao_olo * (is_double11 ? 1 : 1.07)) }} </span>块奥利奥
+            <span v-show="hongbao_type == 2"><br />
               <span>
-                定额红包：每个<span style="color: red">{{ hongbao_quota }}</span
-                >奥利奥</span
-              ></span
-            >
+                定额红包：每个<span style="color: red">{{ hongbao_quota }}</span>奥利奥</span></span>
           </p>
         </div>
       </b-tab>
       <b-tab title="投票">
-        <b-form-checkbox
-          class="mr-3"
-          v-model="thread_type"
-          value="vote"
-          unchecked-value="normal"
-        >
+        <b-form-checkbox class="mr-3" v-model="thread_type" value="vote" unchecked-value="normal">
           开启投票（1000奥利奥）
         </b-form-checkbox>
         <div class="row align-items-center my-2" v-show="thread_type == 'vote'">
           <div class="col-auto">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="mr-3 svg-icon bi bi-plus-lg"
-              viewBox="0 0 16 16"
-              @click="vote_option_control('push')"
-            >
-              <path
-                d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="mr-3 svg-icon bi bi-plus-lg" viewBox="0 0 16 16" @click="vote_option_control('push')">
+              <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
             </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="mr-3 svg-icon bi bi-dash-lg"
-              viewBox="0 0 16 16"
-              @click="vote_option_control('pop')"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="mr-3 svg-icon bi bi-dash-lg" viewBox="0 0 16 16" @click="vote_option_control('pop')">
               <path d="M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z" />
             </svg>
           </div>
           <div class="col-auto my-2">
             <b-input-group style="max-width: 160px">
-              <b-form-input
-                v-model="end_date_selected"
-                size="sm"
-                type="text"
-                placeholder="结束日期"
-              ></b-form-input>
+              <b-form-input v-model="end_date_selected" size="sm" type="text" placeholder="结束日期"></b-form-input>
               <b-input-group-append>
-                <b-form-datepicker
-                  v-model="end_date_selected"
-                  size="sm"
-                  placeholder="结束日期"
-                  locale="zh"
-                  button-only
-                  today-button
-                  reset-button
-                  close-button
-                  :date-format-options="{
+                <b-form-datepicker v-model="end_date_selected" size="sm" placeholder="结束日期" locale="zh" button-only
+                  today-button reset-button close-button :date-format-options="{
                     year: 'numeric',
                     month: 'numeric',
                     day: 'numeric',
-                  }"
-                  :min="minDate"
-                  :max="maxDate"
-                  label-help="请选择投票结束的日期"
-                ></b-form-datepicker>
+                  }" :min="minDate" :max="maxDate" label-help="请选择投票结束的日期"></b-form-datepicker>
               </b-input-group-append>
             </b-input-group>
           </div>
           <div class="col-auto my-2">
             <b-input-group style="max-width: 160px">
-              <b-form-input
-                v-model="end_time_selected"
-                size="sm"
-                type="text"
-                placeholder="结束时间"
-              ></b-form-input>
+              <b-form-input v-model="end_time_selected" size="sm" type="text" placeholder="结束时间"></b-form-input>
               <b-input-group-append>
-                <b-form-timepicker
-                  v-model="end_time_selected"
-                  size="sm"
-                  locale="zh"
-                  reset-button
-                  button-only
-                >
+                <b-form-timepicker v-model="end_time_selected" size="sm" locale="zh" reset-button button-only>
                 </b-form-timepicker>
               </b-input-group-append>
             </b-input-group>
@@ -284,118 +181,53 @@
               投票多选
             </b-form-checkbox>
             <span class="ml-2" v-if="vote_multiple">最多可选：</span>
-            <b-form-spinbutton
-              size="sm"
-              style="max-width: 120px"
-              min="1"
-              :max="vote_options.length"
-              v-model="vote_max_choices"
-              v-if="vote_multiple"
-            ></b-form-spinbutton>
+            <b-form-spinbutton size="sm" style="max-width: 120px" min="1" :max="vote_options.length"
+              v-model="vote_max_choices" v-if="vote_multiple"></b-form-spinbutton>
             <span class="ml-1 mb-2" v-if="vote_multiple">个</span>
           </div>
           <div class="my-2" style="font-size: 0.875rem">投票标题</div>
-          <b-form-input
-            id="vote_title_input"
-            class="vote_title_input"
-            placeholder="投票标题，必填"
-            v-model="vote_title_input"
-          >
+          <b-form-input id="vote_title_input" class="vote_title_input" placeholder="投票标题，必填" v-model="vote_title_input">
           </b-form-input>
         </div>
-        <div
-          class="my-2"
-          v-show="thread_type == 'vote'"
-          v-for="(vote_option, index) in vote_options"
-          :key="index"
-        >
+        <div class="my-2" v-show="thread_type == 'vote'" v-for="(vote_option, index) in vote_options" :key="index">
           <div style="font-size: 0.875rem">选项{{ index + 1 }}</div>
           <b-form-input v-model="vote_options[index]"></b-form-input>
         </div>
       </b-tab>
       <b-tab title="菠菜">
-        <b-form-checkbox
-          class="mr-3"
-          v-model="thread_type"
-          :disabled="forum_id != 12"
-          value="gamble"
-          unchecked-value="normal"
-        >
+        <b-form-checkbox class="mr-3" v-model="thread_type" :disabled="forum_id != 12" value="gamble"
+          unchecked-value="normal">
           开启菠菜（500奥利奥） 目前只能在海滨乐园岛开菠菜（避免被日清）
         </b-form-checkbox>
         <div class="row align-items-center" v-show="thread_type == 'gamble'">
           <div class="col-auto">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="mr-3 svg-icon bi bi-plus-lg"
-              viewBox="0 0 16 16"
-              @click="vote_option_control('push')"
-            >
-              <path
-                d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="mr-3 svg-icon bi bi-plus-lg" viewBox="0 0 16 16" @click="vote_option_control('push')">
+              <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
             </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="mr-3 svg-icon bi bi-dash-lg"
-              viewBox="0 0 16 16"
-              @click="vote_option_control('pop')"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="mr-3 svg-icon bi bi-dash-lg" viewBox="0 0 16 16" @click="vote_option_control('pop')">
               <path d="M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z" />
             </svg>
           </div>
           <div class="col-auto my-2">
             <b-input-group style="max-width: 160px">
-              <b-form-input
-                v-model="end_date_selected"
-                size="sm"
-                type="text"
-                placeholder="结束日期"
-              ></b-form-input>
+              <b-form-input v-model="end_date_selected" size="sm" type="text" placeholder="结束日期"></b-form-input>
               <b-input-group-append>
-                <b-form-datepicker
-                  v-model="end_date_selected"
-                  size="sm"
-                  placeholder="结束日期"
-                  locale="zh"
-                  button-only
-                  today-button
-                  reset-button
-                  close-button
-                  :date-format-options="{
+                <b-form-datepicker v-model="end_date_selected" size="sm" placeholder="结束日期" locale="zh" button-only
+                  today-button reset-button close-button :date-format-options="{
                     year: 'numeric',
                     month: 'numeric',
                     day: 'numeric',
-                  }"
-                  :min="minDate"
-                  :max="maxDate"
-                  label-help="请选择投票结束的日期"
-                ></b-form-datepicker>
+                  }" :min="minDate" :max="maxDate" label-help="请选择投票结束的日期"></b-form-datepicker>
               </b-input-group-append>
             </b-input-group>
           </div>
           <div class="col-auto my-2">
             <b-input-group style="max-width: 160px">
-              <b-form-input
-                v-model="end_time_selected"
-                size="sm"
-                type="text"
-                placeholder="结束时间"
-              ></b-form-input>
+              <b-form-input v-model="end_time_selected" size="sm" type="text" placeholder="结束时间"></b-form-input>
               <b-input-group-append>
-                <b-form-timepicker
-                  v-model="end_time_selected"
-                  size="sm"
-                  locale="zh"
-                  reset-button
-                  button-only
-                >
+                <b-form-timepicker v-model="end_time_selected" size="sm" locale="zh" reset-button button-only>
                 </b-form-timepicker>
               </b-input-group-append>
             </b-input-group>
@@ -404,87 +236,41 @@
 
         <div v-show="thread_type == 'gamble'">
           <div class="my-2" style="font-size: 0.875rem">菠菜标题</div>
-          <b-form-input
-            id="vote_title_input"
-            class="vote_title_input"
-            placeholder="菠菜标题，必填"
-            v-model="vote_title_input"
-          >
+          <b-form-input id="vote_title_input" class="vote_title_input" placeholder="菠菜标题，必填" v-model="vote_title_input">
           </b-form-input>
         </div>
         <div v-show="thread_type == 'gamble'" class="my-2" style="font-size: 0.875rem">
           菠菜开奖时只能开奖单独一个选项
         </div>
-        <div
-          v-show="thread_type == 'gamble'"
-          class="my-2"
-          v-for="(vote_option, index) in vote_options"
-          :key="index"
-        >
+        <div v-show="thread_type == 'gamble'" class="my-2" v-for="(vote_option, index) in vote_options" :key="index">
           <div style="font-size: 0.875rem">选项{{ index + 1 }}</div>
           <b-form-input v-model="vote_options[index]"></b-form-input>
         </div>
       </b-tab>
-      <b-tab
-        title="众筹"
-        v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
-      >
-        <b-form-checkbox
-          class="mr-3"
-          v-model="thread_type"
-          :disabled="forum_id != 2"
-          value="crowd"
-          unchecked-value="normal"
-        >
+      <b-tab title="众筹" v-if="this.$store.state.User.AdminForums.includes(this.forum_id)">
+        <b-form-checkbox class="mr-3" v-model="thread_type" :disabled="forum_id != 2" value="crowd"
+          unchecked-value="normal">
           开启众筹（仅管理员可见） 目前只能在小火锅调味区开众筹（避免被日清）
         </b-form-checkbox>
         <div class="row align-items-center" v-show="thread_type == 'crowd'">
           <div class="col-auto my-2">
             <b-input-group style="max-width: 160px">
-              <b-form-input
-                v-model="end_date_selected"
-                size="sm"
-                type="text"
-                placeholder="结束日期"
-              ></b-form-input>
+              <b-form-input v-model="end_date_selected" size="sm" type="text" placeholder="结束日期"></b-form-input>
               <b-input-group-append>
-                <b-form-datepicker
-                  v-model="end_date_selected"
-                  size="sm"
-                  placeholder="结束日期"
-                  locale="zh"
-                  button-only
-                  today-button
-                  reset-button
-                  close-button
-                  :date-format-options="{
+                <b-form-datepicker v-model="end_date_selected" size="sm" placeholder="结束日期" locale="zh" button-only
+                  today-button reset-button close-button :date-format-options="{
                     year: 'numeric',
                     month: 'numeric',
                     day: 'numeric',
-                  }"
-                  :min="minDate"
-                  :max="maxDate"
-                  label-help="请选择投票结束的日期"
-                ></b-form-datepicker>
+                  }" :min="minDate" :max="maxDate" label-help="请选择投票结束的日期"></b-form-datepicker>
               </b-input-group-append>
             </b-input-group>
           </div>
           <div class="col-auto my-2">
             <b-input-group style="max-width: 160px">
-              <b-form-input
-                v-model="end_time_selected"
-                size="sm"
-                type="text"
-                placeholder="结束时间"
-              ></b-form-input>
+              <b-form-input v-model="end_time_selected" size="sm" type="text" placeholder="结束时间"></b-form-input>
               <b-input-group-append>
-                <b-form-timepicker
-                  v-model="end_time_selected"
-                  size="sm"
-                  locale="zh"
-                  reset-button
-                  button-only
-                >
+                <b-form-timepicker v-model="end_time_selected" size="sm" locale="zh" reset-button button-only>
                 </b-form-timepicker>
               </b-input-group-append>
             </b-input-group>
@@ -493,27 +279,16 @@
 
         <div v-show="thread_type == 'crowd'">
           <div class="my-2" style="font-size: 0.875rem">众筹项目</div>
-          <b-form-input
-            id="vote_title_input"
-            class="vote_title_input"
-            placeholder="众筹项目标题，必填"
-            v-model="vote_title_input"
-          ></b-form-input>
+          <b-form-input id="vote_title_input" class="vote_title_input" placeholder="众筹项目标题，必填"
+            v-model="vote_title_input"></b-form-input>
         </div>
         <div v-show="thread_type == 'crowd'">
           <div class="my-2" style="font-size: 0.875rem">目标金额</div>
-          <b-form-input
-            id="vote_title_input"
-            class="vote_title_input"
-            placeholder="目标金额，最大1000万"
-            v-model="crowd_olo_input"
-          ></b-form-input>
+          <b-form-input id="vote_title_input" class="vote_title_input" placeholder="目标金额，最大1000万"
+            v-model="crowd_olo_input"></b-form-input>
         </div>
       </b-tab>
-      <b-tab
-        title="管理员"
-        v-if="this.$store.state.User.AdminForums.includes(this.forum_id)"
-      >
+      <b-tab title="管理员" v-if="this.$store.state.User.AdminForums.includes(this.forum_id)">
         <div class="row align-items-center mt-3">
           <div class="col-4"><span class="h6 my-2">管理员选项</span></div>
           <div class="col-4"></div>
@@ -521,11 +296,8 @@
         </div>
         <div class="row align-items-center mt-3">
           <div class="col-4">
-            <b-form-select
-              v-model="admin_subtitles_selected"
-              :options="admin_subtitles_options"
-              :disabled="subtitles_selected != '[公告]'"
-            ></b-form-select>
+            <b-form-select v-model="admin_subtitles_selected" :options="admin_subtitles_options"
+              :disabled="subtitles_selected != '[公告]'"></b-form-select>
           </div>
           <div class="col-4"></div>
           <div class="col-4"></div>
@@ -602,7 +374,8 @@ export default {
       hongbao_olo: "",
       hongbao_num: undefined,
       hongbao_key_word: undefined,
-      hongbao_message: "",
+      hongbao_message: [""],
+      hongbao_message_num: 1,
       hongbao_type: 1,
       hongbao_type_options: [
         { value: 1, text: "随机红包" },
@@ -766,8 +539,15 @@ export default {
         config.data.hongbao_num = this.hongbao_num;
         config.data.type = this.hongbao_type;
         config.data.hongbao_key_word = this.hongbao_key_word;
-        config.data.hongbao_message = this.hongbao_message;
         config.data.hongbao_olo_hide = this.hongbao_olo_hide;
+
+        if (this.hongbao_message.length == 1) {
+          //单个回复时，以json格式提交到hongbao_message
+          config.data.hongbao_message = this.hongbao_message[0]
+        } else {
+          //多个回复时，以json格式提交到hongbao_message_json
+          config.data.hongbao_message_json = JSON.stringify(this.hongbao_message)
+        }
       }
       if (this.thread_type == "vote") {
         //如果是投票贴，追加投票相关的请求参数
@@ -956,6 +736,22 @@ export default {
         }
       }
     },
+    hongbao_message_num_change(value) {
+      const diff = this.hongbao_message.length - value
+      if (diff == 0) {
+        return
+      }
+      if (diff >= 1) {
+        for (var i = 0; i < diff; i++) {
+          this.hongbao_message.pop();
+        }
+      }
+      if (diff <= -1) {
+        for (var i = 0; i < -diff; i++) {
+          this.hongbao_message.push("");
+        }
+      }
+    },
   },
   created() {
     if (localStorage.getItem("emoji_auto_hide") == null) {
@@ -1001,7 +797,7 @@ export default {
     this.hongbao_olo = "";
     this.hongbao_num = undefined;
     this.hongbao_key_word = undefined;
-    this.hongbao_message = "";
+    this.hongbao_message = [""];
     this.hongbao_type = 1;
     this.end_time_selected = "00:00:00";
     this.end_date_selected = undefined;
