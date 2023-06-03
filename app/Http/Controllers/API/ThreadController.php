@@ -5,15 +5,11 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Forum;
 use App\Models\Post;
 use App\Models\Thread;
-use App\Models\User;
-use Illuminate\Database\QueryException;
 use App\Common\ResponseCode;
 use Carbon\Carbon;
 use App\Exceptions\CoinException;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use App\Jobs\ProcessUserActive;
 use App\Models\Crowd;
@@ -619,6 +615,33 @@ class ThreadController extends Controller
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
+        }
+
+        //退回发主题用户的olo
+        $olo = 0;
+        if ($CurrentThread->title_color != null && $CurrentThread->title_color != "#212529") {
+            $olo += 500;
+        }
+        if ($CurrentThread->locked_by_coin > 0) {
+            $olo += 500;
+        }
+        if ($CurrentThread->is_private == true) {
+            $olo += 500;
+        }
+        if ($CurrentThread->vote_question_id != null) {
+            $olo += 1000;
+        }
+        if ($CurrentThread->gamble_question_id != null) {
+            $olo += 500;
+        }
+        if ($olo > 0) {
+            $user->coinChange(
+                'normal', //记录类型
+                [
+                    'olo' => $olo,
+                    'content' => '延时发送主题撤回后退回olo',
+                ]
+            ); //通过统一接口、记录操作  
         }
 
         return response()->json([
