@@ -19,28 +19,28 @@
         <hr :class="is_mobile ? 'my-1' : ''" />
         <MedalsTab></MedalsTab>
       </b-tab>
-      <b-tab title="一般设定">
+      <b-tab title="一般设定" lazy>
         <CommonSettingTab></CommonSettingTab>
       </b-tab>
-      <b-tab title="屏蔽词">
+      <b-tab title="屏蔽词" lazy>
         <PingbiciTab></PingbiciTab>
       </b-tab>
-      <b-tab title="我的表情包">
+      <b-tab title="我的表情包" lazy>
         <MyEmojiTab></MyEmojiTab>
       </b-tab>
-      <!-- <b-tab title="我的角色">
+      <!-- <b-tab title="我的角色" lazy>
         <MyBattleCharaTab></MyBattleCharaTab>
       </b-tab> -->
-      <b-tab title="收支记录">
+      <b-tab title="收支记录" lazy>
         <IncomeTab></IncomeTab>
       </b-tab>
-      <b-tab title="升级饼干">
+      <b-tab title="升级饼干" lazy>
         <UserLVTab></UserLVTab>
       </b-tab>
-      <b-tab title="定制饼干">
+      <b-tab title="定制饼干" lazy>
         <CustomBingganTab></CustomBingganTab>
       </b-tab>
-      <b-tab title="密码设定">
+      <b-tab title="密码设定" lazy>
         <SetPasswordTab></SetPasswordTab>
       </b-tab>
     </b-tabs>
