@@ -194,6 +194,13 @@ export default {
       if (response_data.my_emoji != null) {
         this.$store.commit("MyEmoji_set", JSON.parse(response_data.my_emoji));
       }
+
+      if (response_data.my_battle_chara) {
+        //自定义角色推入到共通角色组
+        response_data.my_battle_chara.forEach((chara, index) => {
+          this.$store.commit("CharaIndex_push_to_0", { value: index + 240, text: chara }, 0);//自定义角色从240开始
+        });
+      }
     },
   },
   created() {

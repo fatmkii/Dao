@@ -2,6 +2,7 @@
 
 namespace App\Common;
 
+use App\Models\MyBattleChara;
 
 class BattleChara
 {
@@ -785,45 +786,91 @@ class BattleChara
         ),
     );
 
-    public static function CharaHeadIndex()
+
+    private $is_custom;
+
+    private $chara_id;
+    private $name;
+    private $heads;
+    private $messages;
+
+    private $name_opponent;
+
+
+
+    function __construct(int $chara_id, int $user_id = null, int $chara_id_opponent = null, int $user_id_opponent = null)
     {
-        //这个方法没在用
-        $index = [];
-        foreach (self::chara_head as $key => $value) {
-            array_push($index, ['value' => $key, 'text' => $value['name']]);
+        if ($user_id == null) {
+            //己方角色相关数据
+            $this->name = self::chara_index[$chara_id]['name'];
+
+            $head_index = self::chara_index[$chara_id]['head'];
+            $this->heads = self::chara_head[$head_index];
+
+            $message_index = self::chara_index[$chara_id]['message'];
+            $this->messages = self::chara_message[$message_index];
+
+            $this->is_custom = false;
+            $this->chara_id = $chara_id;
+        } else {
+            $my_battle_chara = MyBattleChara::where('user_id', $user_id)->where('chara_id', $chara_id)->first();
+            $this->name = $my_battle_chara->name;
+            // $this->heads = json_decode($my_battle_chara->heads);
+            // $this->messages = json_decode($my_battle_chara->messages);
+            $this->heads = $my_battle_chara->heads; //已经通过MyBattleChara的$casts属性转化为array
+            $this->messages = $my_battle_chara->messages; //已经通过MyBattleChara的$casts属性转化为array
+            $this->is_custom = true;
+            $this->chara_id = $chara_id;
         }
-        return $index;
-    }
-    public static function CharaHead(int $chara_id, string $action)
-    {
-        $head_index = self::chara_index[$chara_id]['head'];
-        return self::chara_head[$head_index][$action];
+
+        if ($chara_id_opponent) {
+            //有给出对方角色时候，才初始化对方角色相关数据
+            if ($user_id_opponent == null) {
+                $this->name_opponent = self::chara_index[$chara_id_opponent]['name'];
+            } else {
+                $this->name_opponent  = MyBattleChara::where('user_id', $user_id_opponent)->where('chara_id', $chara_id_opponent)->value('name');
+            }
+        }
     }
 
-    public static function CharaName(int $chara_id)
+    public function CharaHead(string $action)
     {
-        return self::chara_index[$chara_id]['name'];
+        return (string) $this->heads[$action];
     }
 
-    public static function CharaAttackMessage($chara_id, $chara_id_opponent, $rand_num)
+    public function CharaHeadsAll()
     {
-        $message_index = self::chara_index[$chara_id]['message'];
-        $chara_name = self::chara_head[$chara_id]['name'];
-        $chara_name_opponent = self::chara_head[$chara_id_opponent]['name'];
-        $message = self::chara_message[$message_index][intval(($rand_num - 1) / 10)];
-        $message = str_replace('%name', $chara_name, $message);
-        $message = str_replace('%opponent', $chara_name_opponent, $message);
+        return (array) $this->heads;
+    }
+
+    public function CharaName()
+    {
+        return (string) $this->name;
+    }
+
+    public function CharaAttackMessage(int $rand_num)
+    {
+        $message = $this->messages[intval(($rand_num - 1) / 10)];
+
+        $message = str_replace('%name', $this->name, $message);
+        $message = str_replace('%opponent', $this->name_opponent, $message);
         $message = str_replace('%rand_num', strval($rand_num), $message);
-        return $message;
+
+        return (string) $message;
     }
 
-    public static function CharaRandNum($chara_id)
+    public function CharaAttackMessagesAll()
     {
-        switch ($chara_id) {
-            case 10: //元元可以掷出最大101点
-                return random_int(1, 101);
-            default:
-                return random_int(1, 100);
+        return (array) $this->messages;
+    }
+
+    public  function CharaRandNum()
+    {
+        if ($this->chara_id == 10 && $this->is_custom == false) {
+            //只有元元可以掷出最大101点
+            return (int) random_int(1, 101);
+        } else {
+            return (int) random_int(1, 100);
         }
     }
 }

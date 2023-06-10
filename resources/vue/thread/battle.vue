@@ -152,7 +152,8 @@ export default {
         data: {
           binggan: this.$store.state.User.Binggan,
           battle_id: this.battle_data.id,
-          chara_id: this.battle_chara_id,
+          chara_id: this.battle_chara_id >= 240 ? this.battle_chara_id - 240 : this.battle_chara_id,//前端中自定义角色从240开始，减去240让后端从0开始计数
+          is_custom_chara: this.battle_chara_id >= 240 ? true : false,//this.chara_id >= 240 是自定义大乱斗角色
         },
       };
       axios(config)

@@ -28,9 +28,9 @@
       <b-tab title="我的表情包" lazy>
         <MyEmojiTab></MyEmojiTab>
       </b-tab>
-      <!-- <b-tab title="我的角色" lazy>
+      <b-tab title="我的角色" lazy>
         <MyBattleCharaTab></MyBattleCharaTab>
-      </b-tab> -->
+      </b-tab>
       <b-tab title="收支记录" lazy>
         <IncomeTab></IncomeTab>
       </b-tab>
@@ -61,14 +61,14 @@ import IncomeTab from "./income_tab.vue";
 import MyEmojiTab from "./my_emoji_tab.vue";
 import CustomBingganTab from "./custom_binggan_tab.vue";
 import SetPasswordTab from "./set_password_tab.vue";
-// import MyBattleCharaTab from "./my_battle_chara_tab.vue";
+import MyBattleCharaTab from "./my_battle_chara_tab.vue";
 
 export default {
   name: "user_center",
   components: {
     MedalsTab, UserLVTab, CommonSettingTab, PingbiciTab,
-    IncomeTab, MyEmojiTab, CustomBingganTab, SetPasswordTab
-    // MyBattleCharaTab
+    IncomeTab, MyEmojiTab, CustomBingganTab, SetPasswordTab,
+    MyBattleCharaTab
   },
   props: {},
   watch: {
@@ -81,11 +81,9 @@ export default {
     };
   },
   computed: {
-
     button_theme() {
       return this.$store.getters.ButtonTheme;
     },
-
     is_mobile() {
       return document.body.clientWidth < 1200;
     },

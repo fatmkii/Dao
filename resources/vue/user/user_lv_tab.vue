@@ -76,7 +76,7 @@ export default {
           }
         })
         .catch((error) => {
-          this.my_emoji_set_handling = false;
+          this.ajax_handling = false;
           // alert(Object.values(error.response.data.errors)[0]);
           // alert(error.response.data.message);
         });

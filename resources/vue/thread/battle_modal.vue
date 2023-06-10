@@ -7,24 +7,14 @@
       <p>问苍茫大地 谁主沉浮</p>
       <div class="my-1">
         <b-input-group prepend="主题：" class="mt-1">
-          <b-form-select
-            v-model="battle_chara_group_id"
-            :options="battle_chara_group_options"
-          ></b-form-select>
+          <b-form-select v-model="battle_chara_group_id" :options="battle_chara_group_options"></b-form-select>
         </b-input-group>
         <b-input-group prepend="角色：" class="mt-1">
-          <b-form-select
-            v-model="battle_chara_id"
-            :options="battle_chara_options"
-          ></b-form-select>
+          <b-form-select v-model="battle_chara_id" :options="battle_chara_options"></b-form-select>
         </b-input-group>
         <div class="mt-1">
           <b-input-group prepend="下注：">
-            <b-form-input
-              v-model="battle_olo"
-              autofocus
-              @keyup.enter="battle_handle"
-            ></b-form-input>
+            <b-form-input v-model="battle_olo" autofocus @keyup.enter="battle_handle"></b-form-input>
           </b-input-group>
         </div>
       </div>
@@ -32,12 +22,8 @@
     <template v-slot:modal-footer="{ cancel }">
       <span v-if="!thread_can_battle">本主题不能发起大乱斗</span>
       <b-button-group>
-        <b-button
-          :variant="button_theme"
-          :disabled="battle_handing || !thread_can_battle"
-          @click="battle_handle"
-          >Fight！</b-button
-        >
+        <b-button :variant="button_theme" :disabled="battle_handing || !thread_can_battle"
+          @click="battle_handle">Fight！</b-button>
         <b-button variant="outline-secondary" @click="cancel()">
           取消
         </b-button>
@@ -54,10 +40,10 @@ export default {
   watch: {
     battle_chara_group_id() {
       if (
-        this.$store.state.User.CharaIndex[this.battle_chara_group_id] !=
-          undefined &&
+        this.$store.state.User.CharaIndex[this.battle_chara_group_id] != undefined
+        &&
         this.$store.state.User.CharaIndex[this.battle_chara_group_id].length !=
-          0
+        0
       ) {
         this.battle_chara_options =
           this.$store.state.User.CharaIndex[this.battle_chara_group_id];
@@ -83,8 +69,8 @@ export default {
           this.$store.state.Threads.CurrentThreadData.random_heads_group;
         if (
           random_heads_group != 1 &&
-          this.$store.state.User.CharaGroupIndex[random_heads_group - 1] !=
-            undefined &&
+          this.$store.state.User.CharaGroupIndex[random_heads_group - 1] != undefined
+          &&
           this.$store.state.User.CharaGroupIndex[random_heads_group - 1]
             .available == true
         ) {
@@ -123,13 +109,14 @@ export default {
           thread_id: this.thread_id,
           chara_group: this.battle_chara_group_id,
           battle_olo: this.battle_olo,
-          chara_id: this.battle_chara_id,
+          chara_id: this.battle_chara_id >= 240 ? this.battle_chara_id - 240 : this.battle_chara_id,//前端中自定义角色从240开始，减去240让后端从0开始计数
+          is_custom_chara: this.battle_chara_id >= 240 ? true : false,//this.chara_id >= 240 是自定义大乱斗角色
 
           new_post_key: CryptoJS.MD5(
             this.thread_id +
-              this.$store.state.User.Binggan +
-              timestamp +
-              (event.isTrusted ? "true" : "false")
+            this.$store.state.User.Binggan +
+            timestamp +
+            (event.isTrusted ? "true" : "false")
           ).toString(),
           timestamp: timestamp,
         },

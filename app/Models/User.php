@@ -48,6 +48,8 @@ class User extends Authenticatable
         'binggan',
         'admin',
         'password',
+        'created_location',
+        'created_UUID',
         'is_custom',
         'last_login',
         'locked_count',
@@ -400,6 +402,11 @@ class User extends Authenticatable
         return $this->hasOne(UserMedalRecord::class);
     }
 
+    public function MyBattleChara()
+    {
+        return $this->hasMany(MyBattleChara::class);
+    }
+
     public function UserMessages()
     {
         return $this->hasMany(UserMessages::class);
@@ -418,6 +425,11 @@ class User extends Authenticatable
         } else {
             return 0;
         }
+    }
+
+    public function getMyBattleCharaAttribute()
+    {
+        return MyBattleChara::where('user_id', $this->id)->pluck('name');
     }
 
     protected function serializeDate($date)

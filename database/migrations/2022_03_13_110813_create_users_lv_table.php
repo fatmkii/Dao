@@ -20,6 +20,7 @@ class CreateUsersLvTable extends Migration
             $table->integer('content_pingbici')->default(0);
             $table->integer('fjf_pingbici')->default(0);
             $table->integer('my_emoji')->default(0);
+            $table->unsignedTinyInteger('my_battle_chara')->default(0);
             $table->timestamps();
         });
     }

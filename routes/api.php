@@ -118,6 +118,8 @@ Route::prefix('user')->group(function () {
     Route::post('/show_messages_content', [UserController::class, 'show_messages_content'])->middleware('CheckBinggan:show'); //获得站内消息具体内容
     Route::post('/show_medals', [UserController::class, 'show_medals'])->middleware('CheckBinggan:show'); //获得已经获得的成就数据
     Route::post('/show_medal_progress', [UserController::class, 'show_medal_progress'])->middleware('CheckBinggan:show'); //获得某个成就的进度
+    Route::get('/my_battle_chara', [UserController::class, 'my_battle_chara_show'])->middleware('CheckBinggan:show'); //获得已经获得的成就数据
+    Route::post('/my_battle_chara_set', [UserController::class, 'my_battle_chara_set'])->middleware('CheckBinggan:create'); //获得已经获得的成就数据
 });
 
 

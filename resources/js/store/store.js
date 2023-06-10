@@ -33,7 +33,6 @@ const module_user = {
         UserLv: 0,
         UserLvData: {},
         UserCoin: 0,
-
     }),
     mutations: {
         UserDataLoaded_set(state, payload) {
@@ -120,6 +119,9 @@ const module_user = {
         CharaIndex_set(state, payload) {
             state.CharaIndex = payload
         },
+        CharaIndex_push_to_0(state, payload) {
+            state.CharaIndex[0].push(payload)
+        },
         NickName_set(state, payload) {
             state.NickName = payload
         },
@@ -158,7 +160,6 @@ const module_user = {
         UserCoin_set(state, payload) {
             state.UserCoin = payload
         },
-
     },
     actions: {},
     getters: {}
