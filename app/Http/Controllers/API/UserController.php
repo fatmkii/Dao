@@ -161,18 +161,6 @@ class UserController extends Controller
             $my_emoji_data = null;
         }
 
-        //如果没有升级过饼干user_lv为空，则返回默认值
-        $user_lv_data = $user->UserLV;
-        if (!$user_lv_data) {
-            $user_lv_data = array(
-                'title_pingbici' => self::TITLE_PINGBICI_MIN,
-                'content_pingbici' => self::CONTENT_PINGBICI_MIN,
-                'fjf_pingbici' => self::FJF_PINGBICI_MIN,
-                'my_emoji' => self::MYEMOJI_MIN,
-                'my_battle_chara' => self::MYBATTLECHARA_MIN,
-            );
-        }
-
         //自定义大乱斗角色
         $my_battle_chara = MyBattleChara::where('user_id', $user->id)->pluck('name');
 
@@ -188,7 +176,6 @@ class UserController extends Controller
                     'binggan' => $user,
                     'pingbici' => $user->pingbici,
                     'my_emoji' => $my_emoji_data,
-                    'user_lv' => $user_lv_data,
                     'my_battle_chara' => $my_battle_chara,
                 ],
             ],

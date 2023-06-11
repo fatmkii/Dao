@@ -1,7 +1,7 @@
 <template>
   <div>
-    <p class="my-2" v-if="user_lv_data.my_battle_chara == 0">你还没有自定义大乱斗角色槽位哦<br>可以在“升级饼干”功能中升级</p>
-    <div v-if="user_lv_data.my_battle_chara > 0 && get_data_handling == 2">
+    <p class="my-2" v-if="charas.length == 0">你还没有自定义大乱斗角色槽位哦<br>可以在“升级饼干”功能中升级</p>
+    <div v-if="charas.length > 0 && get_data_handling == 2">
       <p class="my-2">自定义大乱斗角色</p>
       <div style="max-width: 400px" class="binggan_custom_input">
         <b-form-select v-model="chara_selected" :options="charas_name_options"></b-form-select>
