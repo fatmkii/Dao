@@ -8,9 +8,9 @@
         <div class="d-flex align-items-center mt-2 ">
           <b-button :variant="button_theme" @click="my_battle_chara_set_handle" :disabled="set_data_handling"
             :size="is_mobile ? 'sm' : 'md'">提交</b-button>
-          <b-button class="ml-2" variant="outline-dark" @click="" :size="is_mobile ? 'sm' : 'md'"
+          <b-button class="ml-2" variant="outline-dark" :size="is_mobile ? 'sm' : 'md'"
             v-b-modal.input_modal>导入</b-button>
-          <b-button class="ml-2" variant="outline-dark" @click="" :size="is_mobile ? 'sm' : 'md'"
+          <b-button class="ml-2" variant="outline-dark" :size="is_mobile ? 'sm' : 'md'"
             v-b-modal.output_modal>导出</b-button>
         </div>
         <hr>

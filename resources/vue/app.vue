@@ -170,7 +170,7 @@ export default {
       this.$store.commit("LockedTTL_set", response_data.binggan.locked_TTL);
       this.$store.commit("UsePingbici_set", response_data.binggan.use_pingbici);
       this.$store.commit("UserLv_set", response_data.binggan.user_lv);
-      this.$store.commit("UserLvData_set", response_data.user_lv);
+      // this.$store.commit("UserLvData_set", response_data.user_lv);
       this.$store.commit("UserCoin_set", response_data.binggan.coin);
       if (response_data.binggan.nickname) {
         this.$store.commit("NickName_set", response_data.binggan.nickname);

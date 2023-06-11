@@ -160,6 +160,7 @@ class UserController extends Controller
         } else {
             $my_emoji_data = null;
         }
+
         //如果没有升级过饼干user_lv为空，则返回默认值
         $user_lv_data = $user->UserLV;
         if (!$user_lv_data) {
@@ -173,11 +174,7 @@ class UserController extends Controller
         }
 
         //自定义大乱斗角色
-        if ($user_lv_data['my_battle_chara'] > 0) {
-            $my_battle_chara = MyBattleChara::where('user_id', $user->id)->pluck('name');
-        } else {
-            $my_battle_chara = [];
-        }
+        $my_battle_chara = MyBattleChara::where('user_id', $user->id)->pluck('name');
 
         //检查成就（小火锅周年活动）
         // $user_medal_record = $user->UserMedalRecord()->firstOrCreate(); //如果记录不存在就追加
@@ -1238,6 +1235,37 @@ class UserController extends Controller
             [
                 'code' => ResponseCode::SUCCESS,
                 'message' => '成功升级饼干！',
+                'data' => $user_lv,
+            ]
+        );
+    }
+
+    //显示饼干等级
+    public function user_lv_show(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+        ]);
+
+        $user = $request->user;
+
+        //如果没有升级过饼干user_lv为空，则返回默认值
+        $user_lv_data = $user->UserLV;
+        if (!$user_lv_data) {
+            $user_lv_data = array(
+                'title_pingbici' => self::TITLE_PINGBICI_MIN,
+                'content_pingbici' => self::CONTENT_PINGBICI_MIN,
+                'fjf_pingbici' => self::FJF_PINGBICI_MIN,
+                'my_emoji' => self::MYEMOJI_MIN,
+                'my_battle_chara' => self::MYBATTLECHARA_MIN,
+            );
+        }
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '查询成功！',
+                'data' => $user_lv_data,
             ]
         );
     }

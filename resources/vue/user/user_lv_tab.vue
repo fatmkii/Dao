@@ -6,8 +6,8 @@
     <div v-for="(line, index) in user_lv_sheet" :key="index" class="my-2 d-flex align-items-center">
       <span style="min-width: 100px">{{ line.chinese }}</span>
       <b-form-input size="sm" style="max-width: 65px" disabled v-model="user_lv_data[line.name]"></b-form-input>
-      <a href="javascript:;" class="ml-2" @click="user_lv_up_handle(line.name, line.chinese, line.price)"
-        :disabled="ajax_handling">升级</a>
+      <b-button class="ml-2" variant="outline-dark" @click="user_lv_up_handle(line.name, line.chinese, line.price)"
+        size="sm" :disabled="ajax_handling">升级</b-button>
     </div>
   </div>
 </template>
@@ -31,6 +31,7 @@ export default {
         { name: "my_battle_chara", chinese: "大乱斗角色", price: 50000 },
       ],
       ajax_handling: false,
+      get_data_handling: 0,
     };
   },
   computed: {
@@ -44,7 +45,9 @@ export default {
       user_lv_data: (state) => state.User.UserLvData,
     }),
   },
-  created() { },
+  created() {
+    this.get_user_lv_data();
+  },
   methods: {
     user_lv_up_handle(name, chinese_name, price) {
       var confirmed = confirm("要升级" + chinese_name + "吗？将会花费" + price + "个olo");
@@ -63,7 +66,8 @@ export default {
       axios(config)
         .then((response) => {
           if (response.data.code == 200) {
-            this.$eventHub.$emit("user_data_refresh"); //通过eventHub空vue对象分发事件
+            // this.$eventHub.$emit("user_data_refresh"); //通过eventHub空vue对象分发事件
+            this.$store.commit("UserLvData_set", response.data.data);
             this.$bvToast.toast(response.data.message, {
               title: "Done.",
               autoHideDelay: 1500,
@@ -81,8 +85,29 @@ export default {
           // alert(error.response.data.message);
         });
     },
-
+    get_user_lv_data() {
+      this.get_data_handling = 1;
+      const config = {
+        method: "get",
+        url: "/api/user/user_lv_show",
+        params: {
+          binggan: this.$store.state.User.Binggan,
+        },
+      };
+      axios(config)
+        .then((response) => {
+          if (response.data.code == 200) {
+            this.$store.commit("UserLvData_set", response.data.data);
+            this.get_data_handling = 2;
+          } else {
+            this.get_data_handling = 0;
+            alert(response.data.message);
+          }
+        })
+        .catch((error) => {
+          this.get_data_handling = 0;
+        });
+    },
   },
-  activated() { },
 };
 </script>
