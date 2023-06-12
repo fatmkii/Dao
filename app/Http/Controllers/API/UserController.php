@@ -1176,8 +1176,6 @@ class UserController extends Controller
 
                     try {
                         DB::beginTransaction();
-                        Log::debug('user_lv', [$user_lv]);
-                        Log::debug('$user_lv->my_battle_chara - 1', [$user_lv->my_battle_chara - 1]);
                         MyBattleChara::create(
                             [
                                 'user_id' => $user->id,
