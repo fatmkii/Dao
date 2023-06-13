@@ -134,6 +134,7 @@ export default {
   },
   mounted() {
     if (this.from_path != "/") {
+      //只要不是从首页进入user_center，就重新获得用户数据，以及时更新user_center的数据
       this.$eventHub.$emit("user_data_refresh"); //通过eventHub空vue对象分发事件
     }
   },

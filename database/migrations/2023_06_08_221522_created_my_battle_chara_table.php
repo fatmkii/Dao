@@ -20,6 +20,7 @@ class CreatedMyBattleCharaTable extends Migration
             $table->string('name', 50);
             $table->json('heads');
             $table->json('messages');
+            $table->boolean('not_use')->default(0);
             $table->timestamps();
         });
     }

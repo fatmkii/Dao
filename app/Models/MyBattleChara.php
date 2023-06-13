@@ -29,7 +29,8 @@ class MyBattleChara extends Model
 
     protected $casts = [
         'messages' => 'array',
-        'heads' => 'array'
+        'heads' => 'array',
+        'not_use' => 'boolean',
     ];
 
 

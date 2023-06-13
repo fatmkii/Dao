@@ -197,8 +197,18 @@ export default {
 
       if (response_data.my_battle_chara) {
         //自定义角色推入到共通角色组
-        response_data.my_battle_chara.forEach((chara, index) => {
-          this.$store.commit("CharaIndex_push_to_0", { value: index + 240, text: chara }, 0);//自定义角色从240开始
+        if (this.$store.state.User.CharaIndex[0].length > chara_index[0].length) {
+          //如果已经存在自定义角色，则重新从头设定chara_index
+          //避免自定义角色在执行user_data_refresh之后被重复录入
+          //CharaIndex[0]是共通组角色
+          this.$store.commit("CharaIndex_set", chara_index);
+        }
+
+        response_data.my_battle_chara.forEach((chara_data, index) => {
+          console.log('CharaIndex_push_to_0')
+          if (chara_data.not_use == false) {
+            this.$store.commit("CharaIndex_push_to_0", { value: index + 240, text: chara_data.name }, 0);
+          }//自定义角色从240开始
         });
       }
     },

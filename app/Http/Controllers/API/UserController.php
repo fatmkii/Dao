@@ -162,7 +162,7 @@ class UserController extends Controller
         }
 
         //自定义大乱斗角色
-        $my_battle_chara = MyBattleChara::where('user_id', $user->id)->pluck('name');
+        $my_battle_chara = MyBattleChara::where('user_id', $user->id)->select('name', 'not_use')->get();
 
         //检查成就（小火锅周年活动）
         // $user_medal_record = $user->UserMedalRecord()->firstOrCreate(); //如果记录不存在就追加
@@ -804,6 +804,7 @@ class UserController extends Controller
             'name' => 'required|string|max:50',
             'heads' => 'required|json|max:1000',
             'messages' => 'required|json|max:1000',
+            'not_use' => 'required|boolean',
         ]);
 
         $user = $request->user;
@@ -826,7 +827,7 @@ class UserController extends Controller
             DB::beginTransaction();
 
             $my_battle_chara = MyBattleChara::where(['user_id' => $user->id, 'chara_id' => $request->chara_id])
-                ->update(['name' => $request->name, 'heads' => $request->heads, 'messages' => $request->messages]);
+                ->update(['name' => $request->name, 'heads' => $request->heads, 'messages' => $request->messages, 'not_use' => $request->not_use]);
             // $my_battle_chara->save();
 
             DB::commit();

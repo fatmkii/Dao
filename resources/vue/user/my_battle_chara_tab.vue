@@ -14,7 +14,10 @@
             v-b-modal.output_modal>导出</b-button>
         </div>
         <hr>
-        <div>角色名</div>
+        <div class="d-flex"> <span>角色名</span> <b-form-checkbox class="ml-2" v-model="charas[chara_selected].not_use"
+            switch>
+            暂停使用
+          </b-form-checkbox></div>
         <b-input-group prepend="角色名" class="mt-2">
           <b-form-input v-model="charas[chara_selected].name" lazy></b-form-input>
         </b-input-group>
@@ -191,6 +194,7 @@ export default {
           name: chara_to_set.name,
           heads: JSON.stringify(chara_to_set.heads),
           messages: JSON.stringify(chara_to_set.messages),
+          not_use: chara_to_set.not_use,
         },
       };
       axios(config)
@@ -201,6 +205,7 @@ export default {
               autoHideDelay: 1500,
               appendToast: true,
             });
+            this.$eventHub.$emit("user_data_refresh")
             this.set_data_handling = false;
           } else {
             this.set_data_handling = false;
