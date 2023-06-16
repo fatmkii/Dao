@@ -53,9 +53,7 @@ public/js/946.js.map
 .vscode/settings.json
 .vscode/settings.json
 public/css/app.css.map
-public/json/emoji.json
-public/json/emoji.js
-public/json/heads.js
+public/json/
 public/vendor/telescope/app-dark.css
 public/vendor/telescope/app.css
 public/vendor/telescope/app.js

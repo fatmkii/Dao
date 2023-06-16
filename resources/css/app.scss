@@ -553,6 +553,44 @@ label.custom-file-label::after {
     }
 }
 
+//表情包萌相关
+.emoji_moe_box {
+    @media all and (min-width: 1200px) {
+        width: 60px;
+        height: 84px;
+    }
+    @media not all and (min-width: 1200px) {
+        width: 48px;
+        height: 68px;
+    }
+}
+
+.emoji_moe_img_box {
+    @media all and (min-width: 1200px) {
+        width: 60px;
+        height: 60px;
+    }
+    @media not all and (min-width: 1200px) {
+        width: 48px;
+        height: 48px;
+    }
+    display: flex;
+    margin: auto;
+}
+
+.emoji_moe_img {
+    margin: auto;
+}
+
+.emoji_vote_text {
+    @media all and (min-width: 1200px) {
+        font-size: 1rem;
+    }
+    @media not all and (min-width: 1200px) {
+        font-size: 0.8rem;
+    }
+}
+
 [v-cloak] {
     display: none;
 }

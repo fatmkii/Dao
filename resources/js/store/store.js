@@ -117,7 +117,11 @@ const module_user = {
             state.CharaGroupIndex = payload
         },
         CharaIndex_set(state, payload) {
-            state.CharaIndex = payload
+            // state.CharaIndex = payload
+            payload.forEach((element, index) => {
+                state.CharaIndex[index] = element.concat()//复制成一个新数组，而不是引用
+                //由于element是数组中的数组，所以不能直接payload.concat()
+            });
         },
         CharaIndex_push_to_0(state, payload) {
             state.CharaIndex[0].push(payload)

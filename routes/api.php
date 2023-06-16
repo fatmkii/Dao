@@ -13,6 +13,7 @@ use App\Http\Controllers\API\BattleController;
 use App\Http\Controllers\API\VoteController;
 use App\Http\Controllers\API\GambleController;
 use App\Http\Controllers\API\CrowdController;
+use App\Http\Controllers\API\EmojiConstestController;
 use App\Http\Controllers\API\HongbaoController;
 use App\Http\Controllers\API\HongbaoPostController;
 
@@ -152,6 +153,13 @@ Route::middleware('CheckTokenCan:super_admin', 'auth:sanctum')->prefix('admin')-
 //IncomeStatement系列
 Route::prefix('income')->group(function () {
     Route::get('/show', [UserController::class, 'income_show'])->middleware('CheckBinggan:show'); //查看olo收益表
+});
+
+//EmojiContest系列
+Route::prefix('emoji_contest')->group(function () {
+    Route::get('/{emoji_group_id}', [EmojiConstestController::class, 'show'])->middleware('CheckBinggan:show'); //查询某表情包投票结果
+    Route::post('/show_user_votes', [EmojiConstestController::class, 'show_user_votes'])->middleware('CheckBinggan:show'); //查询用户的投票结果
+    Route::post('/user_vote', [EmojiConstestController::class, 'user_vote'])->middleware('CheckBinggan:create'); //查询用户的投票结果
 });
 
 //杂项

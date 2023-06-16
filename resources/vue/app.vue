@@ -205,7 +205,6 @@ export default {
         }
 
         response_data.my_battle_chara.forEach((chara_data, index) => {
-          console.log('CharaIndex_push_to_0')
           if (chara_data.not_use == false) {
             this.$store.commit("CharaIndex_push_to_0", { value: index + 240, text: chara_data.name }, 0);
           }//自定义角色从240开始
