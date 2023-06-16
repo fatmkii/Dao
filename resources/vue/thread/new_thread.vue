@@ -126,11 +126,11 @@
             <span v-if="!is_double11"> 友情提示：在打赏额以外，会追加扣除7%手续费。</span>
             <span v-else><del>友情提示：在打赏额以外，会追加扣除7%手续费。</del>
               <br />
-              双十一当日限时免手续费喔！
+              618限时活动手续费2%！
             </span>
             <br />
             总共扣除：
-            <span style="color: red">{{ Math.ceil(hongbao_olo * (is_double11 ? 1 : 1.07)) }} </span>块奥利奥
+            <span style="color: red">{{ Math.ceil(hongbao_olo * (is_double11 ? 1.02 : 1.07)) }} </span>块奥利奥
             <span v-show="hongbao_type == 2"><br />
               <span>
                 定额红包：每个<span style="color: red">{{ hongbao_quota }}</span>奥利奥</span></span>
@@ -492,7 +492,7 @@ export default {
       }
     },
     is_double11() {
-      const double11 = new Date("2022-11-11");
+      const double11 = new Date("2023-06-18");
       const now = new Date(Date.now());
       return now.toLocaleDateString() === double11.toLocaleDateString();
     },

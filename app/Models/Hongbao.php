@@ -89,9 +89,9 @@ class Hongbao extends Model
 
         $user = $request->user;
 
-        if (Carbon::now()->between('2022/11/11 00:00:00', '2022/11/12 00:00:00')) {
-            //双十一期间免税
-            $tax_rate = 1;
+        if (Carbon::now()->between('2023/6/18 00:00:00', '2023/6/19 00:00:00')) {
+            //618税率1.02
+            $tax_rate = 1.02;
         } else {
             $tax_rate = 1.07;
         }

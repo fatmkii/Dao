@@ -11,12 +11,12 @@
         <span v-else
           ><del>友情提示：在打赏额以外，会追加扣除7%手续费。</del>
           <br />
-          双十一当日限时免手续费喔！
+          618限时活动手续费2%！
         </span>
         <br />
         总共扣除：
         <span style="color: red"
-          >{{ Math.ceil(coin_reward_input * (is_double11 ? 1 : 1.07)) }} </span
+          >{{ Math.ceil(coin_reward_input * (is_double11 ? 1.02 : 1.07)) }} </span
         >块奥利奥。
       </p>
       <b-input-group prepend="打赏：">
@@ -67,7 +67,7 @@ export default {
       return this.$store.getters.ButtonTheme;
     },
     is_double11() {
-      const double11 = new Date("2022-11-11");
+      const double11 = new Date("2023-06-18");
       const now = new Date(Date.now());
       return now.toLocaleDateString() === double11.toLocaleDateString();
     },
