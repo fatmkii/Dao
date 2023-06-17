@@ -21,8 +21,8 @@ class EmojiConstestController extends Controller
 
     public function __construct()
     {
-        $this->STARTTIME = Carbon::parse('2023-06-16 20:0:0');//测试时间，要改TODO
-        $this->ENDTIME = Carbon::parse('2023-06-25 20:0:0');//测试时间，要改TODO
+        $this->STARTTIME = Carbon::parse('2023-06-18 20:0:0');//测试时间，要改
+        $this->ENDTIME = Carbon::parse('2023-06-25 20:0:0');//测试时间，要改
 
         $this->chara_name_list = ['AC娘', '鹦鹉鸡', '咪子鱼', '小黑猫', '麻将脸', '小恐龙', 'TD猫', '小豆泥', '小企鹅', '小黄脸', 'FUFU'];
     }
@@ -140,15 +140,15 @@ class EmojiConstestController extends Controller
                 ]);
             }
 
-            //测试中暂不使用TODO
-            // $user->coinChange(
-            //     'normal', //记录类型
-            //     [
-            //         'olo' => -$request->olo,
-            //         'content' => sprintf('表情包萌投票：%s %d票', $this->chara_name_list[$request->emoji_group_id - 1], $votes_num),
-            //     ]
-            // ); //（通过统一接口、记录操作）
-            // $user->save();
+            //测试中暂不使用
+            $user->coinChange(
+                'normal', //记录类型
+                [
+                    'olo' => -$request->olo,
+                    'content' => sprintf('表情包萌投票：%s %d票', $this->chara_name_list[$request->emoji_group_id - 1], $votes_num),
+                ]
+            ); //（通过统一接口、记录操作）
+            $user->save();
 
             DB::commit();
         } catch (Exception $e) {

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="this_show">
+  <div>
     <b-img fluid-grow src="https://i.mjj.rip/2023/06/16/bbce8e574a86398bc038dcec3d8b187f.png"></b-img>
     <div class="my-2">
       <span>{{ banner_text }}</span>
@@ -33,7 +33,7 @@
               {{ user_vote_data.votes_num_total ? user_vote_data.votes_num_total : '' }}</span>
           </div>
         </div>
-        <div class="mt-2 emoji_vote_text" v-if="get_user_vote_handling == 2">自己票数最多的为“⭐我的本命”，<br>如该表情包夺冠将可获得成就哦！</div>
+        <div class="mt-2 emoji_vote_text" v-if="get_user_vote_handling == 2">自己票数最多的为“⭐我的本命”，<br>如该角色夺冠将可获得成就哦！</div>
       </b-tab>
     </b-tabs>
 
@@ -93,12 +93,12 @@ export default {
       return moe_group_index //来自浏览器引入的emoji_moe.js
     },
     before_start() {
-      const start = new Date("2023-06-16 20:00:00");//这里是测试时间，要改
+      const start = new Date("2023-06-18 20:00:00");
       const now = new Date(Date.now());
       return now < start
     },
     after_end() {
-      const end = new Date("2023-06-18 20:00:00");//这里是测试时间，要改
+      const end = new Date("2023-06-25 20:00:00");
       const now = new Date(Date.now());
       return now > end
     },
@@ -118,18 +118,9 @@ export default {
       if (this.can_vote) {
         return `将于6月25日20：00结束`
       } else if (this.before_start) {
-        return '期间：6月18日20：00至6月25日20：00'
+        return '6月18日20：00 投票正式开始！'
       } else if (this.after_end) {
         return ''
-      }
-    },
-    this_show() {
-      if (this.$store.state.User.UserDataLoaded == 2) {
-        if (this.$store.state.User.AdminStatus != 0) {
-          return true;
-        }
-      } else {
-        return false;
       }
     },
     ...mapState({
@@ -195,7 +186,7 @@ export default {
         });
     },
     user_vote_handle() {
-      const confirmed = confirm(`确定要投票给${moe_group_index[this.emoji_group_id_selected - 1].name}角色${this.vote_num}票吗`)//TODO
+      const confirmed = confirm(`确定要投票给${moe_group_index[this.emoji_group_id_selected - 1].name}角色${this.vote_num}票吗`)
       if (!confirmed) {
         return
       }
