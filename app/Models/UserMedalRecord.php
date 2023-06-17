@@ -63,6 +63,10 @@ class UserMedalRecord extends Model
         //已经获得过的徽章（统一查询一次，用于后续判断）
         // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
         $medals_id_retain = UserMedal::where('user_id', $this->user_id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        if (count($medals_id) == count($medals_id_retain)) {
+            //如果数量一样，说明整个系列都已经获得，不需要再判断了
+            return;
+        }
 
         foreach ($medals_id as $medal_id) {
             //循环判断此系列的成就id是否满足阈值threshold条件
@@ -88,6 +92,10 @@ class UserMedalRecord extends Model
         //已经获得过的徽章（统一查询一次，用于后续判断）
         // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
         $medals_id_retain = UserMedal::where('user_id', $this->user_id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        if (count($medals_id) == count($medals_id_retain)) {
+            //如果数量一样，说明整个系列都已经获得，不需要再判断了
+            return;
+        }
 
         foreach ($medals_id as $medal_id) {
             //循环判断此系列的成就id是否满足阈值threshold条件
@@ -125,6 +133,10 @@ class UserMedalRecord extends Model
             //已经获得过的徽章（统一查询一次，用于后续判断）
             // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
             $medals_id_retain = UserMedal::where('user_id', $this->user_id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+            if (count($medals_id) == count($medals_id_retain)) {
+                //如果数量一样，说明整个系列都已经获得，不需要再判断了
+                return;
+            }
 
             foreach ($medals_id as $medal_id) {
                 //循环判断此系列的成就id是否满足阈值threshold条件
@@ -151,6 +163,10 @@ class UserMedalRecord extends Model
         //已经获得过的徽章（统一查询一次，用于后续判断）
         // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
         $medals_id_retain = UserMedal::where('user_id', $this->user_id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        if (count($medals_id) == count($medals_id_retain)) {
+            //如果数量一样，说明整个系列都已经获得，不需要再判断了
+            return;
+        }
 
         foreach ($medals_id as $medal_id) {
             //循环判断此系列的成就id是否满足阈值threshold条件
@@ -176,6 +192,10 @@ class UserMedalRecord extends Model
         //已经获得过的徽章（统一查询一次，用于后续判断）
         // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
         $medals_id_retain = UserMedal::where('user_id', $this->user_id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        if (count($medals_id) == count($medals_id_retain)) {
+            //如果数量一样，说明整个系列都已经获得，不需要再判断了
+            return;
+        }
 
         foreach ($medals_id as $medal_id) {
             //循环判断此系列的成就id是否满足阈值threshold条件
@@ -202,6 +222,10 @@ class UserMedalRecord extends Model
         //已经获得过的徽章（统一查询一次，用于后续判断）
         // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
         $medals_id_retain = UserMedal::where('user_id', $this->user_id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        if (count($medals_id) == count($medals_id_retain)) {
+            //如果数量一样，说明整个系列都已经获得，不需要再判断了
+            return;
+        }
 
         foreach ($medals_id as $medal_id) {
             //循环判断此系列的成就id是否满足阈值threshold条件
@@ -228,6 +252,10 @@ class UserMedalRecord extends Model
         //已经获得过的徽章（统一查询一次，用于后续判断）
         // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
         $medals_id_retain = UserMedal::where('user_id', $this->user_id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        if (count($medals_id) == count($medals_id_retain)) {
+            //如果数量一样，说明整个系列都已经获得，不需要再判断了
+            return;
+        }
 
         foreach ($medals_id as $medal_id) {
             //循环判断此系列的成就id是否满足阈值threshold条件
@@ -253,6 +281,10 @@ class UserMedalRecord extends Model
         //已经获得过的徽章（统一查询一次，用于后续判断）
         // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
         $medals_id_retain = UserMedal::where('user_id', $this->user_id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        if (count($medals_id) == count($medals_id_retain)) {
+            //如果数量一样，说明整个系列都已经获得，不需要再判断了
+            return;
+        }
 
         foreach ($medals_id as $medal_id) {
             //循环判断此系列的成就id是否满足阈值threshold条件
@@ -275,6 +307,10 @@ class UserMedalRecord extends Model
         //已经获得过的徽章（统一查询一次，用于后续判断）
         // $medals_id_retain = $user->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
         $medals_id_retain = UserMedal::where('user_id', $user->id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        if (count($medals_id) == count($medals_id_retain)) {
+            //如果数量一样，说明整个系列都已经获得，不需要再判断了
+            return;
+        }
 
         foreach ($medals_id as $medal_id) {
             //循环判断此系列的成就id是否满足阈值threshold条件
@@ -395,6 +431,50 @@ class UserMedalRecord extends Model
             $user_medal->medal_id = $medal_id;
             $user_medal->created_at = Carbon::now();
             $user_medal->save();
+        }
+    }
+
+    public static function check_emoji_contest_group(int $group_id, int $votes_num_total, User $user)
+    {
+        //表情包萌成就判断（每个角色的成就）
+        $medal_id = $group_id + 200; //emoji_group_id从1开始，相应medal_id是201，差额200
+
+        $medals_code_exists = UserMedal::where('user_id', $user->id)->where('medal_id', $medal_id)->exists();
+        // $votes_num_total = EmojiContestUserTotal::where('user_id', $user->id)->where('emoji_group_id', $group_id)->sum('votes_num_total');
+
+        if (!$medals_code_exists && $votes_num_total >= Medals::DATA[$medal_id]['threshold']) {
+            $user_medal = new UserMedal;
+            $user_medal->user_id = $user->id;
+            $user_medal->medal_id = $medal_id;
+            $user_medal->created_at = Carbon::now();
+            $user_medal->save();
+        }
+    }
+
+    public static function check_emoji_contest_total(User $user)
+    {
+        //表情包萌成就判断（总计的投票数）
+        //本次处理的同一系列的成就id
+        $medals_id = array(212, 213);
+
+        //已经获得过的徽章（统一查询一次，用于后续判断）
+        $medals_id_retain = UserMedal::where('user_id', $user->id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        if (count($medals_id) == count($medals_id_retain)) {
+            //如果数量一样，说明整个系列都已经获得，不需要再判断了
+            return;
+        }
+
+        $user_votes_total = EmojiContestUserTotal::where('user_id', $user->id)->sum('votes_num_total');
+
+        foreach ($medals_id as $medal_id) {
+            //循环判断此系列的成就id是否满足阈值threshold条件
+            if (!in_array($medal_id, $medals_id_retain) && $user_votes_total >= Medals::DATA[$medal_id]['threshold']) {
+                $user_medal = new UserMedal;
+                $user_medal->user_id = $user->id;
+                $user_medal->medal_id = $medal_id;
+                $user_medal->created_at = Carbon::now();
+                $user_medal->save();
+            }
         }
     }
 }

@@ -30,6 +30,7 @@ use App\Models\UserMedal;
 use App\Models\UserMedalRecord;
 use App\Common\Medals;
 use App\Exceptions\UserException;
+use App\Models\EmojiContestUserTotal;
 use App\Models\MyBattleChara;
 use Illuminate\Support\Facades\Log;
 
@@ -1405,20 +1406,39 @@ class UserController extends Controller
             $medal_created_at = null;
         }
 
-        if ($varname == 'olo') {
-            $progress = $user->coin;
-        } elseif ($varname == 'user_lv') {
-            $progress = $user->user_lv;
-        } elseif ($varname != null) {
-            $progress_arr = $user->UserMedalRecord()->pluck($varname)->toArray();
-            Log::debug("progress_arr", [$progress_arr]);
-            if ($progress_arr) {
-                $progress = $progress_arr[0];
-            } else {
-                $progress = 0;
-            }
-        } else {
-            $progress = null;
+        switch ($varname) {
+            case 'olo':
+                $progress = $user->coin;
+                break;
+            case 'user_lv':
+                $progress = $user->user_lv;
+                break;
+            case 'emoji_contest':
+                $emoji_contest_user_total =
+                    EmojiContestUserTotal::where('user_id', $user->id)
+                    ->where('emoji_group_id', $request->medal_id - 200) //emoji_group_id从1开始，相应medal_id是201，差额200
+                    ->first();
+                if ($emoji_contest_user_total) {
+                    $progress = $emoji_contest_user_total->votes_num_total;
+                } else {
+                    $progress = 0;
+                }
+                break;
+            case 'emoji_contest_total':
+                $emoji_contest_user_total_sum = EmojiContestUserTotal::where('user_id', $user->id)->sum('votes_num_total');
+                $progress = $emoji_contest_user_total_sum;
+                break;
+            case null:
+                $progress = null;
+                break;
+            default:
+                $progress_arr = $user->UserMedalRecord()->pluck($varname)->toArray();
+                if ($progress_arr) {
+                    $progress = $progress_arr[0];
+                } else {
+                    $progress = 0;
+                }
+                break;
         }
 
         return response()->json(

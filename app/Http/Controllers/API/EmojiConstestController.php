@@ -7,24 +7,24 @@ use App\Http\Controllers\Controller;
 use App\Models\EmojiContest;
 use App\Models\EmojiContestUser;
 use App\Models\EmojiContestUserTotal;
+use App\Models\UserMedalRecord;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class EmojiConstestController extends Controller
 {
     protected $ENDTIME, $STARTTIME;
 
-    protected $chara_name_list;
+    protected $chara_name_list = ['AC娘', '鹦鹉鸡', '咪子鱼', '小黑猫', '麻将脸', '小恐龙', 'TD猫', '小豆泥', '小企鹅', '小黄脸', 'FUFU'];
 
 
     public function __construct()
     {
-        $this->STARTTIME = Carbon::parse('2023-06-18 20:0:0');//测试时间，要改
-        $this->ENDTIME = Carbon::parse('2023-06-25 20:0:0');//测试时间，要改
-
-        $this->chara_name_list = ['AC娘', '鹦鹉鸡', '咪子鱼', '小黑猫', '麻将脸', '小恐龙', 'TD猫', '小豆泥', '小企鹅', '小黄脸', 'FUFU'];
+        $this->STARTTIME = Carbon::parse('2023-06-18 20:0:0'); //测试时间，要改
+        $this->ENDTIME = Carbon::parse('2023-06-25 20:0:0'); //测试时间，要改
     }
 
     public function show(Request $request, $emoji_group_id)
@@ -133,7 +133,7 @@ class EmojiConstestController extends Controller
                 $user_vote_total->increment('votes_num_total', $votes_num);
                 $user_vote_total->save();
             } else {
-                EmojiContestUserTotal::create([
+                $user_vote_total = EmojiContestUserTotal::create([
                     'user_id' => $user->id,
                     'emoji_group_id' => $request->emoji_group_id,
                     'votes_num_total' => $votes_num,
@@ -150,13 +150,19 @@ class EmojiConstestController extends Controller
             ); //（通过统一接口、记录操作）
             $user->save();
 
+            //确认成就进度
+            UserMedalRecord::check_emoji_contest_group(
+                $request->emoji_group_id,
+                $user_vote_total->votes_num_total,
+                $user
+            );
+            UserMedalRecord::check_emoji_contest_total($user);
+
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
         }
-
-
 
         return response()->json(
             [

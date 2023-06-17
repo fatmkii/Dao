@@ -2440,4 +2440,84 @@ var medals_hide = {
         'img': 'https://s1.ax1x.com/2023/05/27/p9LycrT.png',
     },
 
+    //表情包萌
+    201: {
+        'name': 'ac娘',
+        'describe': '\\\\ ac娘，出道！//',
+        'threshold': 500, //这里指500票，50000个olo
+        'img': 'https://i.mjj.rip/2023/06/17/98fc4801ddb4f4ed231916455a977ab5.png',
+    },
+    202: {
+        'name': '鹦鹉鸡',
+        'describe': '\\\\ 鹦鹉鸡，出道！//',
+        'threshold': 500, //这里指500票，50000个olo
+        'img': 'https://i.mjj.rip/2023/06/17/16645e9f5818fe465762ca3e868eb1d1.png',
+    },
+    203: {
+        'name': '咪子鱼',
+        'describe': '\\\\ 咪子鱼，出道！//',
+        'threshold': 500, //这里指500票，50000个olo
+        'img': 'https://i.mjj.rip/2023/06/17/58f17ba6becc712da320d1ac7c9c9663.png',
+    },
+    204: {
+        'name': '小黑猫',
+        'describe': '\\\\ 小黑猫，出道！//',
+        'threshold': 500, //这里指500票，50000个olo
+        'img': 'https://i.mjj.rip/2023/06/17/0885c864b318f3c740a58030b2efefbc.png',
+    },
+    205: {
+        'name': '麻将脸',
+        'describe': '\\\\ 麻将脸，出道！//',
+        'threshold': 500, //这里指500票，50000个olo
+        'img': 'https://i.mjj.rip/2023/06/17/b85483f73afc45536352f2b2661fdbc9.png',
+    },
+    206: {
+        'name': '小恐龙',
+        'describe': '\\\\ 小恐龙，出道！//',
+        'threshold': 500, //这里指500票，50000个olo
+        'img': 'https://i.mjj.rip/2023/06/17/e5807d6812c7fc10293f542174439973.png',
+    },
+    207: {
+        'name': 'TD猫',
+        'describe': '\\\\ TD猫，出道！//',
+        'threshold': 500, //这里指500票，50000个olo
+        'img': 'https://i.mjj.rip/2023/06/17/9a2846ce41efaca9455230429075c95d.png',
+    },
+    208: {
+        'name': '小豆泥',
+        'describe': '\\\\ 小豆泥，出道！//',
+        'threshold': 500, //这里指500票，50000个olo
+        'img': 'https://i.mjj.rip/2023/06/17/ed406c2f11a4dc7454fb9ad721c6e0ac.png',
+    },
+    209: {
+        'name': '小企鹅',
+        'describe': '\\\\ 小企鹅，出道！//',
+        'threshold': 500, //这里指500票，50000个olo
+        'img': 'https://i.mjj.rip/2023/06/17/403f286099313dc9ef9b4b3fc138160f.png',
+    },
+    210: {
+        'name': '小黄脸',
+        'describe': '\\\\ 小黄脸，出道！//',
+        'threshold': 500, //这里指500票，50000个olo
+        'img': 'https://i.mjj.rip/2023/06/17/aea6ef7747a5c8bfed776d0ebb0c3c23.png',
+    },
+    211: {
+        'name': 'FUFU',
+        'describe': '\\\\ FUFU，出道！//',
+        'threshold': 500, //这里指500票，50000个olo
+        'img': 'https://i.mjj.rip/2023/06/17/56a89d22a8de90baa799bbeb21baf611.png',
+    },
+    212: {
+        'name': '小火锅第一届表情包萌',
+        'describe': '全军出击！',
+        'threshold': 100, //这里指100票，10000个olo
+        'img': 'https://i.mjj.rip/2023/06/17/8d371f54d85768ae8696b86e622317eb.png',
+    },
+    213: {
+        'name': '燃起来了！',
+        'describe': '擦出爱的火花',
+        'threshold': 1000, //这里指1000票，100000个olo
+        'img': 'https://i.mjj.rip/2023/06/17/c5d6b5ca1b5e21f8c517ac84055594f0.png',
+    },
+
 }

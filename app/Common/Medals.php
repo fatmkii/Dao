@@ -302,5 +302,86 @@ class Medals
             'threshold' => null,
             'varname' => null,
         ),
+
+        //表情包萌
+        201 => array(
+            'name' => 'ac娘',
+            'describe' => '\\\\ ac娘，出道！//',
+            'threshold' => 500, //这里指500票，50000个olo
+            'varname' => 'emoji_contest',
+        ),
+        202 => array(
+            'name' => '鹦鹉鸡',
+            'describe' => '\\\\ 鹦鹉鸡，出道！//',
+            'threshold' => 500, //这里指500票，50000个olo
+            'varname' => 'emoji_contest',
+        ),
+        203 => array(
+            'name' => '咪子鱼',
+            'describe' => '\\\\ 咪子鱼，出道！//',
+            'threshold' => 500, //这里指500票，50000个olo
+            'varname' => 'emoji_contest',
+        ),
+        204 => array(
+            'name' => '小黑猫',
+            'describe' => '\\\\ 小黑猫，出道！//',
+            'threshold' => 500, //这里指500票，50000个olo
+            'varname' => 'emoji_contest',
+        ),
+        205 => array(
+            'name' => '麻将脸',
+            'describe' => '\\\\ 麻将脸，出道！//',
+            'threshold' => 500, //这里指500票，50000个olo
+            'varname' => 'emoji_contest',
+        ),
+        206 => array(
+            'name' => '小恐龙',
+            'describe' => '\\\\ 小恐龙，出道！//',
+            'threshold' => 500, //这里指500票，50000个olo
+            'varname' => 'emoji_contest',
+        ),
+        207 => array(
+            'name' => 'TD猫',
+            'describe' => '\\\\ TD猫，出道！//',
+            'threshold' => 500, //这里指500票，50000个olo
+            'varname' => 'emoji_contest',
+        ),
+        208 => array(
+            'name' => '小豆泥',
+            'describe' => '\\\\ 小豆泥，出道！//',
+            'threshold' => 500, //这里指500票，50000个olo
+            'varname' => 'emoji_contest',
+        ),
+        209 => array(
+            'name' => '小企鹅',
+            'describe' => '\\\\ 小企鹅，出道！//',
+            'threshold' => 500, //这里指500票，50000个olo
+            'varname' => 'emoji_contest',
+        ),
+        210 => array(
+            'name' => '小黄脸',
+            'describe' => '\\\\ 小黄脸，出道！//',
+            'threshold' => 500, //这里指500票，50000个olo
+            'varname' => 'emoji_contest',
+        ),
+        211 => array(
+            'name' => 'FUFU',
+            'describe' => '\\\\ FUFU，出道！//',
+            'threshold' => 500, //这里指500票，50000个olo
+            'varname' => 'emoji_contest',
+        ),
+        212 => array(
+            'name' => '小火锅第一届表情包萌',
+            'describe' => '全军出击！',
+            'threshold' => 100, //这里指100票，50000个olo
+            'varname' => 'emoji_contest_total',
+        ),
+        213 => array(
+            'name' => '燃起来了！',
+            'describe' => '擦出爱的火花',
+            'threshold' => 1000, //这里指1000票，100000个olo
+            'varname' => 'emoji_contest_total',
+        ),
+
     );
 }
