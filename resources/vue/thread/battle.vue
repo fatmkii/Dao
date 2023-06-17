@@ -1,92 +1,47 @@
 <template>
   <div class="battle-item">
     <div class="mx-2 my-2">
-      <div
-        class="d-flex align-items-center my-1"
-        :class="{
-          'justify-content-center': battle_message.message_type == 0,
-          'flex-row': battle_message.message_type == 1,
-          'flex-row-reverse': battle_message.message_type == 2,
-        }"
-        v-for="battle_message in battle_messages"
-        :key="battle_message.index"
-      >
+      <div class="d-flex align-items-center my-1" :class="{
+        'justify-content-center': battle_message.message_type == 0,
+        'flex-row': battle_message.message_type == 1,
+        'flex-row-reverse': battle_message.message_type == 2,
+      }" v-for="battle_message in battle_messages" :key="battle_message.index">
         <img class="emoji_img" :src="battle_message.chara_url" />
-        <span
-          class="mx-1"
-          :class="{ battle_message_system: battle_message.message_type == 0 }"
-          >{{ battle_message.message }}</span
-        >
+        <span class="mx-1" :class="{ battle_message_system: battle_message.message_type == 0 }">{{ battle_message.message
+        }}</span>
       </div>
     </div>
     <div class="d-flex align-items-center justify-content-center my-1">
-      <div
-        v-if="battle_data.progress == 0 && battle_data.is_your_battle == false"
-      >
+      <div v-if="battle_data.progress == 0 && battle_data.is_your_battle == false">
         <b-input-group size="sm" prepend="角色：">
-          <b-form-select
-            size="sm"
-            v-model="battle_chara_id"
-            :options="battle_chara_options"
-          ></b-form-select
-          ><b-button
-            :variant="button_theme"
-            size="sm"
-            @click="challenger_roll_handle"
-            >挑战</b-button
-          >
+          <b-form-select size="sm" v-model="battle_chara_id" :options="battle_chara_options"></b-form-select><b-button
+            :variant="button_theme" size="sm" @click="challenger_roll_handle">挑战</b-button>
         </b-input-group>
       </div>
-      <div
-        v-if="battle_data.progress == 0 && battle_data.is_your_battle == true"
-      >
+      <div v-if="battle_data.progress == 0 && battle_data.is_your_battle == true">
         <span class="battle_message_system">正在等待挑战者……</span>
       </div>
-      <div
-        v-if="battle_data.progress == 1 && battle_data.is_your_battle == true"
-      >
-        <span class="battle_message_system">挑战者已出现！</span
-        ><b-button
-          class="ml-1"
-          :variant="button_theme"
-          size="sm"
-          @click="initiator_roll_handle"
-          >迎战</b-button
-        >
+      <div v-if="battle_data.progress == 1 && battle_data.is_your_battle == true">
+        <span class="battle_message_system">挑战者已出现！</span><b-button class="ml-1" :variant="button_theme" size="sm"
+          @click="initiator_roll_handle">迎战</b-button>
       </div>
       <div v-if="battle_data.progress == 2">
-        <span
-          class="battle_message_system"
-          v-if="battle_data.result == 1 && battle_data.is_your_battle == true"
-          >你赢得了{{ Math.floor(battle_data.battle_olo * 1.96) }}个奥利奥！
+        <span class="battle_message_system" v-if="battle_data.result == 1 && battle_data.is_your_battle == true">你赢得了{{
+          Math.floor(battle_data.battle_olo * tax_rate) }}个奥利奥！
         </span>
-        <span
-          class="battle_message_system"
-          v-if="
-            battle_data.result == 1 && battle_data.you_are_challenger == true
-          "
-          >你输掉了{{ battle_data.battle_olo }}个奥利奥……
+        <span class="battle_message_system" v-if="battle_data.result == 1 && battle_data.you_are_challenger == true
+          ">你输掉了{{ battle_data.battle_olo }}个奥利奥……
         </span>
-        <span
-          class="battle_message_system"
-          v-if="battle_data.result == 2 && battle_data.is_your_battle == true"
-          >你输掉了{{ battle_data.battle_olo }}个奥利奥……
+        <span class="battle_message_system" v-if="battle_data.result == 2 && battle_data.is_your_battle == true">你输掉了{{
+          battle_data.battle_olo }}个奥利奥……
         </span>
-        <span
-          class="battle_message_system"
-          v-if="
-            battle_data.result == 2 && battle_data.you_are_challenger == true
-          "
-          >你赢得了{{ Math.floor(battle_data.battle_olo * 1.96) }}个奥利奥！
+        <span class="battle_message_system" v-if="battle_data.result == 2 && battle_data.you_are_challenger == true
+          ">你赢得了{{ Math.floor(battle_data.battle_olo * tax_rate) }}个奥利奥！
         </span>
-        <span
-          class="battle_message_system"
-          v-if="
-            battle_data.result == 3 &&
-            (battle_data.you_are_challenger == true ||
-              battle_data.is_your_battle == true)
-          "
-          >你赢得了{{ Math.floor(battle_data.battle_olo * 1.96) }}个奥利奥！
+        <span class="battle_message_system" v-if="battle_data.result == 3 &&
+          (battle_data.you_are_challenger == true ||
+            battle_data.is_your_battle == true)
+          ">你赢得了{{ Math.floor(battle_data.battle_olo * tax_rate) }}个奥利奥！
         </span>
       </div>
     </div>
@@ -138,6 +93,19 @@ export default {
     button_theme() {
       return this.$store.getters.ButtonTheme;
     },
+    is_double11() {
+      const double11 = new Date("2023-06-18");
+      const now = new Date(Date.now());
+      return now.toLocaleDateString() === double11.toLocaleDateString();
+    },
+    tax_rate() {
+      if (this.is_double11) {
+        return 1.98
+      } else {
+        return tax_rate
+      }
+    },
+
   },
   methods: {
     challenger_roll_handle() {
@@ -197,6 +165,6 @@ export default {
         });
     },
   },
-  created() {},
+  created() { },
 };
 </script>

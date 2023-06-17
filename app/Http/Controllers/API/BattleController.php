@@ -421,7 +421,7 @@ class BattleController extends Controller
 
         switch ($battle_result) {
             case 1:
-                $initiator_income_olo = intval($battle->battle_olo * 0.96);
+                $initiator_income_olo = intval($battle->battle_olo * ($tax_rate - 1));
                 $initiator_income_content = '大乱斗（胜利）';
                 $challenger_income_olo = -$battle->battle_olo;
                 $challenger_income_content = '大乱斗（失败）';
@@ -429,13 +429,13 @@ class BattleController extends Controller
             case 2:
                 $initiator_income_olo = -$battle->battle_olo;
                 $initiator_income_content = '大乱斗（失败）';
-                $challenger_income_olo = intval($battle->battle_olo * 0.96);
+                $challenger_income_olo = intval($battle->battle_olo * ($tax_rate - 1));
                 $challenger_income_content = '大乱斗（胜利）';
                 break;
             case 3:
-                $initiator_income_olo = intval($battle->battle_olo * 0.96);
+                $initiator_income_olo = intval($battle->battle_olo * ($tax_rate - 1));
                 $initiator_income_content = '大乱斗（平局）';
-                $challenger_income_olo = intval($battle->battle_olo * 0.96);
+                $challenger_income_olo = intval($battle->battle_olo * ($tax_rate - 1));
                 $challenger_income_content = '大乱斗（平局）';
                 break;
         }
