@@ -1,41 +1,44 @@
 <template>
   <div>
-    <b-img fluid-grow src="https://i.mjj.rip/2023/06/16/bbce8e574a86398bc038dcec3d8b187f.png"></b-img>
-    <div class="my-2">
-      <span>{{ banner_text }}</span>
-    </div>
-    <b-tabs pills vertical nav-wrapper-class="50px" :small="is_mobile">
-      <b-tab v-for=" (group_data, index) in moe_group_index" :key="index" :title="group_data.name" lazy
-        @click="get_emoji_votes_data(group_data.group_id)" class="d-flex flex-wrap">
-        <div class="w-100 d-flex align-items-center">
-          <span class="emoji_vote_text">{{ group_data.name }}总票数：{{ get_votes_num_total(group_data.group_id) }}</span>
-          <b-button class="ml-auto" :variant="button_theme" :size="is_mobile ? 'sm' : 'md'"
-            @click="get_emoji_votes_data(group_data.group_id, true)">刷新</b-button>
-        </div>
-        <div class="emoji_moe_box d-flex flex-column align-items-center m-1"
-          v-for="group_vote_data in emoji_votes_data[group_data.group_id]" @click="emoji_click(group_vote_data.emoji_id,
-            moe_url(group_vote_data.emoji_id),
-            group_vote_data.votes_num_total,
-            group_data.group_id)">
-          <div class="emoji_moe_img_box"><b-img class="emoji_moe_img" :src="moe_url(group_vote_data.emoji_id)" fluid
-              alt="emoji"></b-img></div>
-          <span class="emoji_vote_text">{{ group_vote_data.votes_num_total ? group_vote_data.votes_num_total : '' }}</span>
-        </div>
-      </b-tab>
-      <b-tab title="我的本命" @click="get_user_votes_data" lazy>
-        <div v-if="get_user_vote_handling == 2 && user_votes_data.length == 0">自己的投票总额会显示在这里</div>
-        <div class="d-flex flex-wrap">
-          <div class="emoji_moe_box d-flex flex-column align-items-center m-1"
-            v-for="(user_vote_data, index) in user_votes_data">
-            <div class="emoji_moe_img_box"><b-img class="emoji_moe_img"
-                :src="moe_group_url(user_vote_data.emoji_group_id)" fluid alt="emoji"></b-img></div>
-            <span class="emoji_vote_text" :style="index == 0 ? 'width:100px;' : ''"> {{ index == 0 ? '⭐' : '' }}
-              {{ user_vote_data.votes_num_total ? user_vote_data.votes_num_total : '' }}</span>
+    <div v-if="login_status">
+      <b-img fluid-grow src="https://i.mjj.rip/2023/06/16/bbce8e574a86398bc038dcec3d8b187f.png"></b-img>
+      <div class="my-2">
+        <span>{{ banner_text }}</span>
+      </div>
+      <b-tabs pills vertical nav-wrapper-class="50px" :small="is_mobile">
+        <b-tab v-for=" (group_data, index) in moe_group_index" :key="index" :title="group_data.name" lazy
+          @click="get_emoji_votes_data(group_data.group_id)" class="d-flex flex-wrap">
+          <div class="w-100 d-flex align-items-center">
+            <span class="emoji_vote_text">{{ group_data.name }}总票数：{{ get_votes_num_total(group_data.group_id) }}</span>
+            <b-button class="ml-auto" :variant="button_theme" :size="is_mobile ? 'sm' : 'md'"
+              @click="get_emoji_votes_data(group_data.group_id, true)">刷新</b-button>
           </div>
-        </div>
-        <div class="mt-2 emoji_vote_text" v-if="get_user_vote_handling == 2">自己票数最多的为“⭐我的本命”，<br>如该角色夺冠将可获得成就哦！</div>
-      </b-tab>
-    </b-tabs>
+          <div class="emoji_moe_box d-flex flex-column align-items-center m-1"
+            v-for="group_vote_data in emoji_votes_data[group_data.group_id]" @click="emoji_click(group_vote_data.emoji_id,
+              moe_url(group_vote_data.emoji_id),
+              group_vote_data.votes_num_total,
+              group_data.group_id)">
+            <div class="emoji_moe_img_box"><b-img class="emoji_moe_img" :src="moe_url(group_vote_data.emoji_id)" fluid
+                alt="emoji"></b-img></div>
+            <span class="emoji_vote_text">{{ group_vote_data.votes_num_total ? group_vote_data.votes_num_total : ''
+            }}</span>
+          </div>
+        </b-tab>
+        <b-tab title="我的本命" @click="get_user_votes_data" lazy>
+          <div v-if="get_user_vote_handling == 2 && user_votes_data.length == 0">自己的投票总额会显示在这里</div>
+          <div class="d-flex flex-wrap">
+            <div class="emoji_moe_box d-flex flex-column align-items-center m-1"
+              v-for="(user_vote_data, index) in user_votes_data">
+              <div class="emoji_moe_img_box"><b-img class="emoji_moe_img"
+                  :src="moe_group_url(user_vote_data.emoji_group_id)" fluid alt="emoji"></b-img></div>
+              <span class="emoji_vote_text" :style="index == 0 ? 'width:100px;' : ''"> {{ index == 0 ? '⭐' : '' }}
+                {{ user_vote_data.votes_num_total ? user_vote_data.votes_num_total : '' }}</span>
+            </div>
+          </div>
+          <div class="mt-2 emoji_vote_text" v-if="get_user_vote_handling == 2">自己票数最多的为“⭐我的本命”，<br>如该角色夺冠将可获得成就哦！</div>
+        </b-tab>
+      </b-tabs>
+    </div>
 
     <b-modal ref="emoji_modal" id="emoji_modal" hide-header>
       <template v-slot:default>
@@ -56,6 +59,8 @@
         </b-button>
       </template>
     </b-modal>
+
+    <img src="https://oss.cpttmm.com/xhg_other/notice_4.png" v-if="!login_status" class="nissined_img" />
   </div>
 </template>
 
@@ -124,6 +129,7 @@ export default {
       }
     },
     ...mapState({
+      login_status: (state) => state.User.LoginStatus
     }),
   },
   created() {

@@ -36,6 +36,7 @@ class EmojiConstestController extends Controller
 
         $emoji_group_results = EmojiContest::where('emoji_group_id', $emoji_group_id)
             ->orderBy('votes_num_total', 'desc')
+            ->orderBy('emoji_id', 'asc')
             ->get();
         // $emoji_group_sum = $emoji_group_results->sum('votes_num_total');
 
