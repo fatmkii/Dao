@@ -102,7 +102,7 @@ export default {
       if (this.is_double11) {
         return 1.98
       } else {
-        return tax_rate
+        return 1.96
       }
     },
 
