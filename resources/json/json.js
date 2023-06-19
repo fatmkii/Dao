@@ -2420,7 +2420,7 @@ var medals_hide = {
         'name': '小火锅二周年',
         'describe': '我们要一直在一起 — 至少十年吧！',
         'threshold': 0,
-        'img': 'https://s1.ax1x.com/2023/04/28/p9lvQhD.png',
+        'img': 'https://i2.mjj.rip/2023/06/19/140dc40b00813e3cc7826d29541202eb.png',
     },
 
     //画师荣誉徽章
@@ -2428,7 +2428,7 @@ var medals_hide = {
         'name': '皇家御用画宗',
         'describe': '大触快教教我画画',
         'threshold': 0,
-        'img': 'https://s1.ax1x.com/2023/05/30/p9jOiVO.png',
+        'img': 'https://i2.mjj.rip/2023/06/19/63cfa3721972d679c41e3a50af691e4e.png',
     },
 
 
