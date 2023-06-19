@@ -197,11 +197,11 @@ export default {
 
       if (response_data.my_battle_chara) {
         //自定义角色推入到共通角色组
-        if (this.$store.state.User.CharaIndex[0].length > chara_index[0].length) {
+        if (this.$store.state.User.CharaIndex[0].length > this.GLOBAL.chara_index[0].length) {
           //如果已经存在自定义角色，则重新从头设定chara_index
           //避免自定义角色在执行user_data_refresh之后被重复录入
           //CharaIndex[0]是共通组角色
-          this.$store.commit("CharaIndex_set", chara_index);
+          this.$store.commit("CharaIndex_set", this.GLOBAL.chara_index);
         }
 
         response_data.my_battle_chara.forEach((chara_data, index) => {
@@ -222,12 +222,12 @@ export default {
     });
 
     //把常用数据写入Vuex，变量来源于json/json.js下的定义
-    this.$store.commit("Emojis_set", emoji_json);
-    this.$store.commit("RandomHeads_set", random_heads_json);
-    this.$store.commit("CharaIndex_set", chara_index);
-    this.$store.commit("CharaGroupIndex_set", chara_group_index);
-    this.$store.commit("Medals_set", medals);
-    this.$store.commit("MedalsHide_set", medals_hide);
+    this.$store.commit("Emojis_set", this.GLOBAL.emoji_json);
+    this.$store.commit("RandomHeads_set", this.GLOBAL.random_heads_json);
+    this.$store.commit("CharaIndex_set", this.GLOBAL.chara_index);
+    this.$store.commit("CharaGroupIndex_set", this.GLOBAL.chara_group_index);
+    this.$store.commit("Medals_set", this.GLOBAL.medals);
+    this.$store.commit("MedalsHide_set", this.GLOBAL.medals_hide);
 
     this.set_LocalStorage(); //把LocalStorage变量存到Vuex
 

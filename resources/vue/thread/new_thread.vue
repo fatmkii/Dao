@@ -478,9 +478,9 @@ export default {
       };
     },
     subtitles_options() {
-      let options = subtitles[0].subtitles; //subtitles来源于json.js全局变量
+      let options = this.GLOBAL.subtitles[0].subtitles; //subtitles来源于json.js全局变量
       if (this.$store.state.User.AdminForums.includes(this.forum_id)) {
-        options = subtitles[1].subtitles.concat(options); //加上管理员选项
+        options = this.GLOBAL.subtitles[1].subtitles.concat(options); //加上管理员选项
       }
       return options;
     },

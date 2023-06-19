@@ -213,9 +213,9 @@ export default {
   },
   computed: {
     subtitles_options() {
-      let options = subtitles[0].subtitles; //subtitles来源于json.js全局变量
-      options = subtitles[1].subtitles.concat(options); //加上管理员选项
-      options = subtitles[2].subtitles.concat(options); //加上[私密]等选项
+      let options = this.GLOBAL.subtitles[0].subtitles; //subtitles来源于json.js全局变量
+      options = this.GLOBAL.subtitles[1].subtitles.concat(options); //加上管理员选项
+      options = this.GLOBAL.subtitles[2].subtitles.concat(options); //加上[私密]等选项
       return options;
     },
     subtitles_excluded() {

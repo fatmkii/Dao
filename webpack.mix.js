@@ -12,14 +12,6 @@ const path = require('path');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .extract(['vue', 'bootstrap-vue', 'vuex', 'vue-router', 'axios', 'js-sha256', "crypto-js"])
-    .sass('resources/css/app.scss', 'public/css')
-    .copy('resources/json/json.js', 'public/json')
-    .copy('resources/json/emoji_moe.js', 'public/json')
-    .vue()
-    .version();
-
 if (process.env.MIX_ENV == 'local')
     mix.alias({
         vue$: path.join(__dirname, 'node_modules/vue/dist/vue.js')
@@ -30,4 +22,19 @@ if (process.env.MIX_ENV == 'production')
         vue$: path.join(__dirname, 'node_modules/vue/dist/vue.min.js')
     });
 
-mix.options({ uglify: {} });
+mix.alias({
+    global_json$: path.join(__dirname, 'resources/json/json.js'),
+    moe_json$: path.join(__dirname, 'resources/json/emoji_moe.js')
+});
+
+
+mix.js('resources/js/app.js', 'public/js').vue()
+mix.sass('resources/css/app.scss', 'public/css')
+// mix.extract(['global_json', 'moe_json'], 'public/js/json.js')//这个没用！
+mix.extract()
+
+if (mix.inProduction()) {
+    mix.version();
+}
+
+mix.disableSuccessNotifications();//禁用成功提醒

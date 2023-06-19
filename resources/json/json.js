@@ -2521,3 +2521,6 @@ var medals_hide = {
     },
 
 }
+
+
+export default { random_heads_json, rgk, emoji_json, chara_index, chara_group_index, subtitles, medals, medals_hide }

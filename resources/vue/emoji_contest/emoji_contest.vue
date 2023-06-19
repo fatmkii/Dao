@@ -67,6 +67,8 @@
 
 <script>
 import { mapState } from "vuex";
+import moe_json from "moe_json";//来自wepack.mix.js的别名alias
+
 export default {
   name: "emoji_contest",
   components: {},
@@ -95,7 +97,7 @@ export default {
       return document.body.clientWidth < 1200;
     },
     moe_group_index() {
-      return moe_group_index //来自浏览器引入的emoji_moe.js
+      return moe_json.moe_group_index //来自浏览器引入的emoji_moe.js
     },
     before_start() {
       const start = new Date("2023-06-18 20:00:00");
@@ -249,11 +251,11 @@ export default {
     },
     moe_url(emoji_id) {
       //因为moe_url是数组，emoji_id从1计算，这里要-1
-      return moe_url[emoji_id - 1] //来自浏览器引入的emoji_moe.js
+      return moe_json.moe_url[emoji_id - 1] //来自浏览器引入的emoji_moe.js
     },
     moe_group_url(emoji_group_id) {
       //因为moe_url是数组，emoji_id从1计算，这里要-1
-      return moe_group_url[emoji_group_id - 1] //来自浏览器引入的emoji_moe.js
+      return moe_json.moe_group_url[emoji_group_id - 1] //来自浏览器引入的emoji_moe.js
     },
   },
 };

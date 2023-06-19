@@ -1,15 +1,18 @@
 import Vue from 'vue'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-import '../css/app.scss'
+
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
+import Echo from "laravel-echo"
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(VueRouter)
 Vue.use(Vuex)
+
 import store from './store/store'
 import router from './routes.js'
-import Echo from "laravel-echo"
+import '../css/app.scss'
+import global_json from 'global_json'//来自webpack.mix.js设置的别名alias
 
 //用js手动载入SocketIO.js，并且加载完再添加实例。好处是当SocketIO服务器端失效时，不影响整体网页。
 var body = document.getElementsByTagName('body')[0];
@@ -76,6 +79,9 @@ Vue.component('navigation', require('../vue/navigation.vue').default);
 Vue.component('app', require('../vue/app.vue').default);
 //全局通用底部
 Vue.component('footer_navi', require('../vue/footer_navi.vue').default);
+
+//一些全局变量（如表情包等）
+Vue.prototype.GLOBAL = global_json
 
 const app = new Vue({
     router,

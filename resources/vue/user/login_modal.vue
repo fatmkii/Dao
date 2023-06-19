@@ -192,7 +192,7 @@ export default {
       const CRC = this.getCanvasFp("BrowserLeaks,com <canvas> 1.0");
       const UA = CryptoJS.MD5(navigator.userAgent).toString().substr(0, 8);
       const encrypted = CryptoJS.AES.encrypt(
-        rgk + CRC + UA,
+        this.GLOBAL.rgk + CRC + UA,
         key,
         options
       ).toString();
