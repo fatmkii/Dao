@@ -91,7 +91,7 @@ class HongbaoPost extends Model
             'hongbao_key_word' => 'required|string|max:255',
             'hongbao_question' => 'nullable|string|max:255',
             'hongbao_message' => 'nullable|string|max:255',
-            'hongbao_message_json' => 'nullable|json|max:1000',
+            'hongbao_message_json' => 'nullable|json|max:3000',
             'hongbao_olo_hide' => 'nullable|boolean',
         ]);
 
