@@ -194,7 +194,7 @@ export default {
         });
     },
     user_vote_handle() {
-      const confirmed = confirm(`确定要投票给${moe_group_index[this.emoji_group_id_selected - 1].name}角色${this.vote_num}票吗`)
+      const confirmed = confirm(`确定要投票给${moe_json.moe_group_index[this.emoji_group_id_selected - 1].name}角色${this.vote_num}票吗`)
       if (!confirmed) {
         return
       }
