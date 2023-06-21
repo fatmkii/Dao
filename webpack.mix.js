@@ -33,8 +33,8 @@ mix.sass('resources/css/app.scss', 'public/css')
 // mix.extract(['global_json', 'moe_json'], 'public/js/json.js')//这个没用！
 mix.extract()
 
-if (mix.inProduction()) {
-    mix.version();
-}
+
+mix.version();
+
 
 mix.disableSuccessNotifications();//禁用成功提醒

@@ -14,7 +14,7 @@ class CreateVoteOptionsTable extends Migration
     public function up()
     {
         Schema::create('vote_options', function (Blueprint $table) {
-            $table->id()->startingValue(10001);
+            $table->id()->from(10001);
             $table->integer('vote_question_id')->index();
             $table->string('option_text');
             $table->unsignedInteger('vote_total')->default(0);

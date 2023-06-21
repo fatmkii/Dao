@@ -32,6 +32,6 @@ class CreatedMyBattleCharaTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('my_battle_chara');
     }
 }

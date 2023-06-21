@@ -14,7 +14,7 @@ class CreateThreadsTable extends Migration
     public function up()
     {
         Schema::create('threads', function (Blueprint $table) {
-            $table->id()->startingValue(10001);
+            $table->id()->from(10001);
             $table->tinyInteger('sub_id')->unsigned()->default(0)->index(); //用来排序的。10=本岛公告、99=全岛公告
             $table->integer('forum_id')->index();
             $table->integer('vote_question_id')->nullable(); //投票贴的id

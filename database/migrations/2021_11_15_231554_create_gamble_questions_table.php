@@ -14,7 +14,7 @@ class CreateGambleQuestionsTable extends Migration
     public function up()
     {
         Schema::create('gamble_questions', function (Blueprint $table) {
-            $table->id()->startingValue(10001);
+            $table->id()->from(10001);
             $table->integer('thread_id')->index();
             $table->text('title');
             $table->timestamp('end_date')->nullable();//在阿里云rds上，不知道为什么not null的话一定会default current_timestamp

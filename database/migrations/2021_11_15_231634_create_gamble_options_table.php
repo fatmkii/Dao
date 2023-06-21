@@ -14,7 +14,7 @@ class CreateGambleOptionsTable extends Migration
     public function up()
     {
         Schema::create('gamble_options', function (Blueprint $table) {
-            $table->id()->startingValue(10001);
+            $table->id()->from(10001);
             $table->integer('gamble_question_id')->index();
             $table->string('option_text');
             $table->unsignedInteger('bet_total')->default(0);

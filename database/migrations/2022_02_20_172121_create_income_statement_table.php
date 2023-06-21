@@ -15,7 +15,7 @@ class CreateIncomeStatementTable extends Migration
     {
         for ($i = 2022; $i < 2024; $i++) {
             Schema::create('income_statement_' . $i, function (Blueprint $table) {
-                $table->id()->startingValue(1000001);
+                $table->id()->from(1000001);
                 $table->timestamp('created_at')->nullable();
                 $table->integer('olo');
                 $table->unsignedInteger('user_id')->index();

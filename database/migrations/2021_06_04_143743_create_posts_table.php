@@ -15,7 +15,7 @@ class CreatePostsTable extends Migration
     {
         for ($i = 1; $i < 3; $i++) {
             Schema::create('posts_' . $i, function (Blueprint $table) {
-                $table->id()->startingValue(1000001);
+                $table->id()->from(1000001);
                 $table->timestamps();
                 // $table->smallInteger('millisecond')->unsigned()->nullable(); //发帖的毫秒值，用于辨别刷帖脚本（已取消）
                 $table->tinyInteger('is_deleted')->default(0); //0=正常；1=被用户删除；2=被管理员删除

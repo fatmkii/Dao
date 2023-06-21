@@ -14,7 +14,7 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id()->startingValue(100001);
+            $table->id()->from(100001);
             $table->string('binggan')->unique()->index();
             $table->string('nickname')->nullable(); //自定义昵称
             $table->string('password')->nullable();

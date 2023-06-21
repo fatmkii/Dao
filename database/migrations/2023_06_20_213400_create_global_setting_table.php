@@ -29,6 +29,6 @@ class CreateGlobalSettingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('GlobalSetting');
+        Schema::dropIfExists('global_setting');
     }
 }

@@ -14,7 +14,7 @@ class CreateHongbaoTable extends Migration
     public function up()
     {
         Schema::create('hongbao', function (Blueprint $table) {
-            $table->id()->startingValue(10001);
+            $table->id()->from(10001);
             $table->foreignId('thread_id')->constrained();
             $table->unsignedSmallInteger('num_total');
             $table->unsignedInteger('olo_total');
