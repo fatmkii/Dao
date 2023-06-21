@@ -139,6 +139,8 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::post('/thread_cancel_top', [AdminController::class, 'thread_cancel_top']); //取消置顶
     Route::post('/create_medal', [AdminController::class, 'create_medal']); //查某个回复的用户的状态
     Route::post('/set_user_olo', [AdminController::class, 'set_user_olo']); //对用户奖罚olo
+    Route::get('/global_setting', [AdminController::class, 'get_global_setting']); //读取全局变量
+    Route::post('/set_global_setting', [AdminController::class, 'set_global_setting']); //设置全局变量
     Route::post('/create_annoucement', [AdminController::class, 'create_annoucement']); //发布站内公告
     Route::get('/annoucement', [AdminController::class, 'show_annoucements']); //查看站内公告
     Route::delete('/annoucement/{annoucement_id}', [AdminController::class, 'del_annoucements']); //查看站内公告
@@ -167,4 +169,5 @@ Route::get('/emoji', [CommonController::class, 'emoji_index']);
 Route::get('/subtitles', [CommonController::class, 'subtitles_index']);
 Route::get('/random_heads', [CommonController::class, 'random_heads_index']);
 Route::get('/captcha', [CommonController::class, 'get_captcha']);
+Route::get('/new_binggan_enable', [CommonController::class, 'new_binggan_enable']);
 Route::post('/img_upload', [CommonController::class, 'img_upload'])->middleware('CheckBinggan:create');//上传图片

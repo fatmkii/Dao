@@ -33,6 +33,9 @@
       超管操作面板
     </p>
     <b-tabs pills v-if="this.$store.state.User.AdminStatus == 99">
+      <b-tab title="全局设置">
+        <GlobalSetting></GlobalSetting>
+      </b-tab>
       <b-tab title="发放成就">
         <div class="mx-2 my-2 binggan_custom_input" style="max-width: 400px;">
           <b-input-group prepend="发放饼干" class="mt-2">
@@ -89,8 +92,10 @@
 
 <script>
 import { mapState } from "vuex";
+import GlobalSetting from "./global_setting_tab.vue";
+
 export default {
-  components: {},
+  components: { GlobalSetting },
   props: {},
   watch: {
     forums_load_status() {

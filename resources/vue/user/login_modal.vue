@@ -8,40 +8,27 @@
       <template v-slot:default>
         <div class="login_input mt-2">
           <b-input-group prepend="导入饼干" class="mt-2">
-            <b-form-input
-              v-model="binggan_input"
-              placeholder="请输入饼干"
-            ></b-form-input>
+            <b-form-input v-model="binggan_input" placeholder="请输入饼干"></b-form-input>
           </b-input-group>
           <b-input-group prepend="密码" class="mt-2">
-            <b-form-input
-              type="password"
-              v-model="binggan_password"
-              placeholder="（选填）如果没设定密码可留空"
-            ></b-form-input>
+            <b-form-input type="password" v-model="binggan_password" placeholder="（选填）如果没设定密码可留空"></b-form-input>
           </b-input-group>
           <div class="d-flex flex-row-reverse align-items-center mt-2">
-            <b-button variant="outline-success" @click="login_handle"
-              >导入</b-button
-            >
+            <b-button variant="outline-success" @click="login_handle">导入</b-button>
           </div>
         </div>
-
-        <p v-if="reg_record_TTL > 0">
+        <p class="my-1" v-if="reg_record_TTL > 0">
           你需要等待{{
             Math.floor(reg_record_TTL / 86400) + 1
           }}天后才能再次申请新饼干
         </p>
+        <p class="my-1" v-if="new_binggan_enable == false">嗷……新饼干申请目前暂停中</p>
       </template>
       <template v-slot:modal-footer="{ cancel }">
-        <b-button
-          :variant="button_theme"
-          class="mr-auto"
-          :disabled="reg_record_TTL > 1"
-          @click="register_handle"
-          >没有饼干？来一个！
+        <b-button :variant="button_theme" :disabled="reg_record_TTL > 1 || new_binggan_enable == false"
+          @click="register_handle">我想申请新饼干！
         </b-button>
-        <b-button variant="outline-secondary" @click="cancel()">
+        <b-button class="ml-auto" variant="outline-secondary" @click="cancel()">
           取消
         </b-button>
       </template>
@@ -60,6 +47,7 @@ export default {
       binggan_input: "",
       binggan_password: "",
       reg_record_TTL: 1, //如果记录不存在，TTL返回-2
+      new_binggan_enable: true,
     };
   },
   computed: {
@@ -77,7 +65,7 @@ export default {
       .then((response) => {
         this.reg_record_TTL = response.data.data.reg_record_TTL;
       })
-      // .catch((error) => alert(error)); // Todo:写异常返回代码
+    // .catch((error) => alert(error)); // Todo:写异常返回代码
   },
   methods: {
     login_handle() {
@@ -108,8 +96,24 @@ export default {
             alert(response.data.message);
           }
         })
-        // .catch((error) => alert(error)); // Todo:写异常返回代码
+      // .catch((error) => alert(error)); // Todo:写异常返回代码
       this.$router.push({ name: "homepage" });
+    },
+    check_new_binggan_enable() {
+      const config = {
+        method: "get",
+        url: "api/new_binggan_enable",
+      };
+      axios(config)
+        .then((response) => {
+          if (response.data.code == 200) {
+            this.new_binggan_enable = response.data.data
+          } else {
+            alert(response.data.message);
+          }
+        })
+        .catch((error) => {
+        });
     },
     register_handle() {
       const config = {
@@ -139,7 +143,7 @@ export default {
             alert(response.data.message);
           }
         })
-        // .catch((error) => alert(error)); // Todo:写异常返回代码
+      // .catch((error) => alert(error)); // Todo:写异常返回代码
     },
     bin2hex(s) {
       var i,
@@ -198,6 +202,9 @@ export default {
       ).toString();
       return encrypted;
     },
+  },
+  created() {
+    this.check_new_binggan_enable()
   },
 };
 </script>

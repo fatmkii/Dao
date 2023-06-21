@@ -6,6 +6,7 @@ use App\Common\Medals;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Common\ResponseCode;
+use App\Facades\GlobalSetting;
 use App\Jobs\ProcessUserActive;
 use App\Models\AnnoucementMessages;
 use App\Models\Forum;
@@ -757,6 +758,65 @@ class AdminController extends Controller
         return response()->json([
             'code' => ResponseCode::SUCCESS,
             'message' => sprintf("已%s该饼干%d个olo", $request->olo_num > 0 ? '奖励' : '扣除', $request->olo_num),
+        ]);
+    }
+
+    public function get_global_setting(Request $request)
+    {
+        $request->validate([
+            'key' => 'nullable|string',
+        ]);
+
+        $user = $request->user();
+
+        //确认是否超管
+        if (!$user->tokenCan('super_admin')) {
+            return response()->json(
+                [
+                    'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+                    'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+                ],
+            );
+        }
+
+        if ($request->key) {
+            $value = GlobalSetting::get($request->key);
+        } else {
+            $value = GlobalSetting::get_all();
+        }
+
+        return response()->json([
+            'code' => ResponseCode::SUCCESS,
+            'message' => '成功获取全局变量',
+            'data' => $value
+        ]);
+    }
+
+    public function set_global_setting(Request $request)
+    {
+        // 手动给用户发送成就（超管功能）
+        $request->validate([
+            'key' => 'required|string',
+            'value' => 'required|json',
+        ]);
+
+        $user = $request->user();
+
+        //确认是否超管
+        if (!$user->tokenCan('super_admin')) {
+            return response()->json(
+                [
+                    'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+                    'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+                ],
+            );
+        }
+
+        GlobalSetting::set($request->key, $request->value);
+
+        return response()->json([
+            'code' => ResponseCode::SUCCESS,
+            'message' => '已成功设定全局变量',
         ]);
     }
 

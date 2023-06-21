@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use App\Common\ResponseCode;
 use App\Common\Captcha;
+use App\Facades\GlobalSetting;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Redis;
 use App\Models\Post;
 use App\Models\Thread;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
 
@@ -206,6 +206,17 @@ class CommonController extends Controller
                 'message' => '上传成功！',
                 'file_url' => $upload_status['file_url'],
             ]
+        );
+    }
+
+    public function new_binggan_enable(Request $request)
+    {
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '已查询申请饼干开放状态',
+                'data' =>  GlobalSetting::get('new_binggan'),
+            ],
         );
     }
 

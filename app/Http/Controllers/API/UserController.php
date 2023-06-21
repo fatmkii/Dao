@@ -30,6 +30,7 @@ use App\Models\UserMedal;
 use App\Models\UserMedalRecord;
 use App\Common\Medals;
 use App\Exceptions\UserException;
+use App\Facades\GlobalSetting;
 use App\Models\EmojiContestUserTotal;
 use App\Models\MyBattleChara;
 use Illuminate\Support\Facades\Log;
@@ -212,7 +213,7 @@ class UserController extends Controller
             'register_key' => 'required|string',
         ]);
 
-        if (!config('app.new_binggan')) {
+        if (!GlobalSetting::get('new_binggan')) {
             return response()->json([
                 'code' => ResponseCode::USER_NEW_CLOSED,
                 'message' => ResponseCode::$codeMap[ResponseCode::USER_NEW_CLOSED],
