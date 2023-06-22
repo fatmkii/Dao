@@ -16,29 +16,25 @@ use Illuminate\Support\Facades\Log;
 
 class EmojiConstestController extends Controller
 {
-    protected $ENDTIME, $STARTTIME;
-
+    private $start_time = '2023-06-18 20:00:00';
+    private $end_time = '2023-06-25 20:00:00';
     protected $chara_name_list = ['AC娘', '鹦鹉鸡', '咪子鱼', '小黑猫', '麻将脸', '小恐龙', 'TD猫', '小豆泥', '小企鹅', '小黄脸', 'FUFU'];
-
-
-    public function __construct()
-    {
-        $this->STARTTIME = Carbon::parse('2023-06-18 20:0:0'); //测试时间，要改
-        $this->ENDTIME = Carbon::parse('2023-06-25 20:0:0'); //测试时间，要改
-    }
 
     public function show(Request $request, $emoji_group_id)
     {
-        // $request->validate([
-        //     'binggan' => 'required|string',
-        //     'emoji_group_id' => 'required|integer',
-        // ]);
-
         $emoji_group_results = EmojiContest::where('emoji_group_id', $emoji_group_id)
             ->orderBy('votes_num_total', 'desc')
             ->orderBy('emoji_id', 'asc')
             ->get();
-        // $emoji_group_sum = $emoji_group_results->sum('votes_num_total');
+
+        // if (Carbon::now()->between(
+        //     Carbon::parse($this->end_time),
+        //     Carbon::parse($this->end_time)->addSeconds(-3600)
+        // )) {
+        //     $emoji_group_results = $emoji_group_results->get('emoji_id'); //最后一小时隐藏投票结果
+        // } else {
+        //     $emoji_group_results = $emoji_group_results->get();
+        // }
 
         return response()->json(
             [
@@ -79,7 +75,7 @@ class EmojiConstestController extends Controller
             'olo' => 'required|integer|min:100|max:1000000',
         ]);
 
-        if (Carbon::now() < $this->STARTTIME) {
+        if (Carbon::now() < Carbon::parse($this->start_time)) {
             return response()->json([
                 'code' => ResponseCode::DEFAULT,
                 'message' => '本次表情包萌尚未开始哦',
@@ -87,7 +83,7 @@ class EmojiConstestController extends Controller
         }
 
 
-        if (Carbon::now() > $this->ENDTIME) {
+        if (Carbon::now() > Carbon::parse($this->end_time)) {
             return response()->json([
                 'code' => ResponseCode::DEFAULT,
                 'message' => '嗷……本次表情包萌已经结束了',
@@ -141,7 +137,6 @@ class EmojiConstestController extends Controller
                 ]);
             }
 
-            //测试中暂不使用
             $user->coinChange(
                 'normal', //记录类型
                 [
