@@ -15,6 +15,8 @@ class UserMedal extends Model
 
     protected $fillable = [
         'user_id',
+        'medal_id',
+        'created_at'
     ];
     protected $hidden = [
         'id',

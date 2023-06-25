@@ -2519,7 +2519,12 @@ var medals_hide = {
         'threshold': 1000, //这里指1000票，100000个olo
         'img': 'https://i.mjj.rip/2023/06/17/c5d6b5ca1b5e21f8c517ac84055594f0.png',
     },
-
+    214: {
+        'name': '为冠军的小豆泥献上喝彩',
+        'describe': '尊贵的小豆泥陛下火遍全球天下第一帝锅',
+        'threshold': 0, //本命是小豆泥的全部饼干
+        'img': 'https://i2.mjj.rip/2023/06/25/145a99a9aafeaa4e24056ef45c89b42d.png',
+    },
 }
 
 

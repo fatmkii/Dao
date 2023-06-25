@@ -382,6 +382,11 @@ class Medals
             'threshold' => 1000, //这里指1000票，100000个olo
             'varname' => 'emoji_contest_total',
         ),
-
+        214 => array(
+            'name' => '为冠军的小豆泥献上喝彩',
+            'describe' => '尊贵的小豆泥陛下火遍全球天下第一帝锅',
+            'threshold' => 0, //本命是小豆泥的全部饼干
+            'varname' =>null,
+        ),
     );
 }
