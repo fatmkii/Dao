@@ -51,19 +51,19 @@ return [
         'database_log' => [
             'driver' => 'single',
             'path' => storage_path('logs/database_log.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
+            'level' => 'info',
         ],
         //自用的信息，譬如redis expire失效等
         'my_log' => [
             'driver' => 'single',
             'path' => storage_path('logs/my_log.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
+            'level' => 'info',
         ],
         //自用的信息，临时使用
         'temp_log' => [
             'driver' => 'single',
             'path' => storage_path('logs/temp.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
+            'level' => 'debug',
         ],
 
         'daily' => [
