@@ -1994,6 +1994,10 @@ var chara_index = [
         {
             "value": 10,
             "text": "元元"
+        },
+        {
+            "value": 11,
+            "text": "fufu"
         }
     ],
     [

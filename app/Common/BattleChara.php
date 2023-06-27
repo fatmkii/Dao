@@ -77,6 +77,12 @@ class BattleChara
             'head' => 10,
             'message' => 0,
         ),
+        11 => array(
+            'name' => 'fufu',
+            'group' => 0,
+            'head' => 11,
+            'message' => 0,
+        ),
         100 => array(
             'name' => '虎杖悠仁',
             'group' => 1,
@@ -306,6 +312,14 @@ class BattleChara
             'attack' => 'https://www.z4a.net/images/2021/11/27/Rp87kt.png',
             'win' => 'https://www.z4a.net/images/2021/11/27/2mtBTg.jpg',
             'lose' => 'https://www.z4a.net/images/2021/11/27/RpGEX4.jpg',
+        ),
+        11 => array(
+            'name' => 'fufu',
+            'wait' => 'https://img.mjj.today/2023/04/29/b7c25d0ef3f414c1c065270152f9c340.gif',
+            'against' => 'https://img.mjj.today/2023/04/29/2f16d22117fed560a02283fc65b4c054.gif',
+            'attack' => 'https://img.mjj.today/2023/04/29/3e9c250e85438c4fcae41a20a33c61b6.gif',
+            'win' => 'https://img.mjj.today/2023/04/29/791888598e420153582774f0c4f6f307.png',
+            'lose' => 'https://img.mjj.today/2023/04/29/b546503be87a4154d2d921e503df33fb.webp',
         ),
         100 => array(
             'name' => '虎杖悠仁',
