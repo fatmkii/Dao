@@ -154,15 +154,15 @@ class BattleController extends Controller
         // broadcast(new NewPostBroadcast($request->thread_id, $post->id, $post->floor))->toOthers();
         $post->broadcast();
 
-        ProcessUserActive::dispatch(
-            [
-                'binggan' => $user->binggan,
-                'user_id' => $user->id,
-                'active' => '用户发起 了大乱斗',
-                'thread_id' => $request->thread_id,
-                'post_id' => $post->id,
-            ]
-        );
+        // ProcessUserActive::dispatch(
+        //     [
+        //         'binggan' => $user->binggan,
+        //         'user_id' => $user->id,
+        //         'active' => '用户发起 了大乱斗',
+        //         'thread_id' => $request->thread_id,
+        //         'post_id' => $post->id,
+        //     ]
+        // );
 
 
         return response()->json([
@@ -443,23 +443,23 @@ class BattleController extends Controller
         $thread = Thread::find($battle->thread_id);
         $post = Post::suffix(intval($thread->id / 10000))->find($battle->post_id);
 
-        ProcessUserActive::dispatch(
-            [
-                'binggan' => $challenger_user->binggan,
-                'user_id' => $challenger_user->id,
-                'active' => '用户参加了大乱斗（挑战者）',
-                'content' => '投出的点数：' . $challenger_rand_num . "。结果：" . $challenger_income_content . "。赌注：" . $challenger_income_olo,
-            ]
-        );
+        // ProcessUserActive::dispatch(
+        //     [
+        //         'binggan' => $challenger_user->binggan,
+        //         'user_id' => $challenger_user->id,
+        //         'active' => '用户参加了大乱斗（挑战者）',
+        //         'content' => '投出的点数：' . $challenger_rand_num . "。结果：" . $challenger_income_content . "。赌注：" . $challenger_income_olo,
+        //     ]
+        // );
 
-        ProcessUserActive::dispatch(
-            [
-                'binggan' => $initiator_user->binggan,
-                'user_id' => $initiator_user->id,
-                'active' => '用户参加了大乱斗（发起者）',
-                'content' => '投出的点数：' . $initiator_rand_num . "。结果：" . $initiator_income_content . "。赌注：" . $initiator_income_olo,
-            ]
-        );
+        // ProcessUserActive::dispatch(
+        //     [
+        //         'binggan' => $initiator_user->binggan,
+        //         'user_id' => $initiator_user->id,
+        //         'active' => '用户参加了大乱斗（发起者）',
+        //         'content' => '投出的点数：' . $initiator_rand_num . "。结果：" . $initiator_income_content . "。赌注：" . $initiator_income_olo,
+        //     ]
+        // );
 
         //记录olo变动（发起者）
         ProcessIncomeStatement::dispatch(
