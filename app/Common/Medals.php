@@ -287,6 +287,59 @@ class Medals
             'varname' => null,
         ),
 
+        //通过打赏获得的olo数量 
+        161 => array(
+            'name' => '得来全不费功夫',
+            'describe' => '通过打赏获得10w个olo',
+            'threshold' => 100000,
+            'varname' => 'reward_olo_in',
+        ),
+        162 => array(
+            'name' => '得道多助',
+            'describe' => '通过打赏获得50w个olo',
+            'threshold' => 500000,
+            'varname' => 'reward_olo_in',
+        ),
+        163 => array(
+            'name' => '全凭本事',
+            'describe' => '通过打赏获得100w个olo',
+            'threshold' => 1000000,
+            'varname' => 'reward_olo_in',
+        ),
+        164 => array(
+            'name' => '嘀——全款已到账',
+            'describe' => '通过打赏获得200w个olo',
+            'threshold' => 2000000,
+            'varname' => 'reward_olo_in',
+        ),
+
+        //通过打赏失去的olo数量 
+        171 => array(
+            'name' => '种瓜得瓜',
+            'describe' => '打赏出去10w个olo',
+            'threshold' => 100000,
+            'varname' => 'reward_olo_out',
+        ),
+        172 => array(
+            'name' => '手有余香',
+            'describe' => '打赏出去50w个olo',
+            'threshold' => 500000,
+            'varname' => 'reward_olo_out',
+        ),
+        173 => array(
+            'name' => '春蚕蜡炬',
+            'describe' => '打赏出去100w个olo',
+            'threshold' => 1000000,
+            'varname' => 'reward_olo_out',
+        ),
+        174 => array(
+            'name' => '羽化飞升',
+            'describe' => '打赏出去200w个olo',
+            'threshold' => 2000000,
+            'varname' => 'reward_olo_out',
+        ),
+
+
         //管理员荣誉徽章
         181 => array(
             'name' => '皇家御用画宗',
@@ -302,6 +355,15 @@ class Medals
             'threshold' => null,
             'varname' => null,
         ),
+
+        //小火锅终末旅行
+        183 => array(
+            'name' => '小火锅终末旅行',
+            'describe' => '既有开始，必有终结',
+            'threshold' => null,
+            'varname' => null,
+        ),
+
 
         //表情包萌
         201 => array(
@@ -386,7 +448,60 @@ class Medals
             'name' => '为冠军的小豆泥献上喝彩',
             'describe' => '尊贵的小豆泥陛下火遍全球天下第一帝锅',
             'threshold' => 0, //本命是小豆泥的全部饼干
-            'varname' =>null,
+            'varname' => null,
         ),
+
+        //连续赢得大乱斗
+        221 => array(
+            'name' => '喜鹊落枝头',
+            'describe' => '连续赢得2次大乱斗',
+            'threshold' => 3,
+            'varname' => 'battle_win_con',
+        ),
+        222 => array(
+            'name' => '春风得意马蹄疾',
+            'describe' => '连续赢得5次大乱斗',
+            'threshold' => 5,
+            'varname' => 'battle_win_con',
+        ),
+        223 => array(
+            'name' => '福无双至今日至',
+            'describe' => '连续赢得8次大乱斗',
+            'threshold' => 8,
+            'varname' => 'battle_win_con',
+        ),
+        224 => array(
+            'name' => '紫气东来保你发财',
+            'describe' => '连续赢得10次大乱斗',
+            'threshold' => 10,
+            'varname' => 'battle_win_con',
+        ),
+
+        //连续输掉大乱斗
+        231 => array(
+            'name' => '脚踩瓜皮',
+            'describe' => '连续输掉2次大乱斗',
+            'threshold' => 3,
+            'varname' => 'battle_lose_con',
+        ),
+        232 => array(
+            'name' => '凉水塞牙',
+            'describe' => '连续输掉5次大乱斗',
+            'threshold' => 5,
+            'varname' => 'battle_lose_con',
+        ),
+        233 => array(
+            'name' => '点背不能怨社会',
+            'describe' => '连续输掉8次大乱斗',
+            'threshold' => 8,
+            'varname' => 'battle_lose_con',
+        ),
+        234 => array(
+            'name' => '人生不如意十有八九',
+            'describe' => '连续输掉10次大乱斗',
+            'threshold' => 10,
+            'varname' => 'battle_lose_con',
+        ),
+
     );
 }

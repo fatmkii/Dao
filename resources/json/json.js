@@ -2370,6 +2370,110 @@ var medals = {
         'threshold': 40,
         'img': 'https://s1.ax1x.com/2022/12/03/zrKGz4.png',
     },
+
+    //通过打赏获得的olo数量
+    161: {
+        'name': '得来全不费功夫',
+        'describe': '通过打赏获得10w个olo',
+        'threshold': 100000,
+        'img': 'https://i2.mjj.rip/2023/06/26/8d09690c770faca7d4bb441c88e03253.png',
+    },
+    162: {
+        'name': '得道多助',
+        'describe': '通过打赏获得50w个olo',
+        'threshold': 500000,
+        'img': 'https://i2.mjj.rip/2023/06/26/d6eea12ce8837859a30d29b276f23b69.png',
+    },
+    163: {
+        'name': '全凭本事',
+        'describe': '通过打赏获得100w个olo',
+        'threshold': 1000000,
+        'img': 'https://i2.mjj.rip/2023/06/26/7a1d4f24aab9135b7d49f17c7c079008.png',
+    },
+    164: {
+        'name': '嘀——全款已到账',
+        'describe': '通过打赏获得200w个olo',
+        'threshold': 2000000,
+        'img': 'https://i2.mjj.rip/2023/06/26/54e6177b9d1cc729c1005d536671ab7f.png',
+    },
+
+    //通过打赏失去的olo数量
+    171: {
+        'name': '种瓜得瓜',
+        'describe': '打赏出去10w个olo',
+        'threshold': 100000,
+        'img': 'https://i2.mjj.rip/2023/06/26/53b372aa314ae53447b93643c62a1f44.png',
+    },
+    172: {
+        'name': '手有余香',
+        'describe': '打赏出去50w个olo',
+        'threshold': 500000,
+        'img': 'https://i2.mjj.rip/2023/06/26/ef4ff781f4f803d59af36a6570cfa225.png',
+    },
+    173: {
+        'name': '春蚕蜡炬',
+        'describe': '打赏出去100w个olo',
+        'threshold': 1000000,
+        'img': 'https://i2.mjj.rip/2023/06/26/554bb9e7205406ca31ef0a5d7983e098.png',
+    },
+    174: {
+        'name': '羽化飞升',
+        'describe': '打赏出去200w个olo',
+        'threshold': 2000000,
+        'img': 'https://i2.mjj.rip/2023/06/26/5ee983cd8b10eaadd59f2d12b8e809e8.png',
+    },
+
+    //连续赢得大乱斗
+    221: {
+        'name': '喜鹊落枝头',
+        'describe': '连续赢得3次大乱斗',
+        'threshold': 3,
+        'img': 'https://i2.mjj.rip/2023/06/26/dc25942ed776c2aeb576634d7e05c40f.png',
+    },
+    222: {
+        'name': '春风得意马蹄疾',
+        'describe': '连续赢得5次大乱斗',
+        'threshold': 5,
+        'img': 'https://i2.mjj.rip/2023/06/26/4044bd801fed0f12017b5ec394db15de.png',
+    },
+    223: {
+        'name': '福无双至今日至',
+        'describe': '连续赢得8次大乱斗',
+        'threshold': 8,
+        'img': 'https://i2.mjj.rip/2023/06/26/7e15d627f4ed2097134f550965126894.png',
+    },
+    224: {
+        'name': '紫气东来保你发财',
+        'describe': '连续赢得10次大乱斗',
+        'threshold': 10,
+        'img': 'https://i2.mjj.rip/2023/06/26/a3cc4b08d67eec564ed1e4a84119f941.png',
+    },
+
+    //连续输掉大乱斗
+    231: {
+        'name': '脚踩瓜皮',
+        'describe': '连续输掉3次大乱斗',
+        'threshold': 3,
+        'img': 'https://i2.mjj.rip/2023/06/29/a693d6fcf6ee14baad47606c6890827f.png',
+    },
+    232: {
+        'name': '凉水塞牙',
+        'describe': '连续输掉5次大乱斗',
+        'threshold': 5,
+        'img': 'https://i2.mjj.rip/2023/06/29/9831059fe5a6da515d68be781ae2eac1.png',
+    },
+    233: {
+        'name': '点背不能怨社会',
+        'describe': '连续输掉8次大乱斗',
+        'threshold': 8,
+        'img': 'https://i2.mjj.rip/2023/06/29/3f4491fb188ed3c5cfe468f1116101c0.png',
+    },
+    234: {
+        'name': '人生不如意十有八九',
+        'describe': '连续输掉10次大乱斗',
+        'threshold': 10,
+        'img': 'https://i2.mjj.rip/2023/06/29/6eb25db86513d762cd2a9d04a5189aa5.png',
+    },
 }
 
 //隐藏成就数据
@@ -2463,6 +2567,14 @@ var medals_hide = {
         'describe': '我来组成小火锅锅底！',
         'threshold': 0,
         'img': 'https://s1.ax1x.com/2023/05/27/p9LycrT.png',
+    },
+
+    //小火锅终末旅行
+    183: {
+        'name': '小火锅终末旅行',
+        'describe': '既有开始，必有终结',
+        'threshold': 0,
+        'img': 'https://i2.mjj.rip/2023/06/26/b6d0946796b384885f166c2255f2e3a1.png',
     },
 
     //表情包萌

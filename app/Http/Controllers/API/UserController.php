@@ -577,6 +577,11 @@ class UserController extends Controller
             throw $e;
         }
 
+        $user_medal_record = $user->UserMedalRecord()->firstOrCreate(); //如果记录不存在就追加
+        $user_target_medal_record = $user_target->UserMedalRecord()->firstOrCreate(); //如果记录不存在就追加
+        $user_medal_record->push_reward_out($coin_pay); //检查成就
+        $user_target_medal_record->push_reward_in($request->coin); //检查成就
+
         //广播发帖动作
         // broadcast(new NewPostBroadcast($request->thread_id, $post->id, $post->floor))->toOthers();
         $post->broadcast();

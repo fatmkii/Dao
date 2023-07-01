@@ -20,8 +20,12 @@ class CreateUserMedalRecordTable extends Migration
             $table->unsignedInteger('battle_olo_out')->default(0);
             $table->unsignedInteger('hongbao_olo_in')->default(0);
             $table->unsignedInteger('hongbao_olo_out')->default(0);
+            $table->unsignedInteger('reward_olo_in')->default(0);
+            $table->unsignedInteger('reward_olo_out')->default(0);
             $table->unsignedInteger('battle_ignored')->default(0);
             $table->unsignedInteger('battle_draw')->default(0);
+            $table->unsignedTinyInteger('battle_win_con')->default(0); //连续赢大乱斗
+            $table->unsignedTinyInteger('battle_lose_con')->default(0); //连续输大乱斗
             $table->unsignedInteger('delete_posts_num')->default(0);
             $table->unsignedInteger('posts_num')->default(0);
             $table->timestamps();

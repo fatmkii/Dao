@@ -515,15 +515,28 @@ class BattleController extends Controller
             $challenger_medal_record->push_battle_out($challenger_income_olo);
             $challenger_medal_record->check_olo_0($challenger_user); //有可能olo清零，检查成就
         }
-        //检查成就（平局时）
-        if ($difference == 0) {
-            $challenger_medal_record->check_battle_draw();
-            $initiator_medal_record->check_battle_draw();
-        }
+
         //检查成就（点数）
         $challenger_medal_record->check_battle_num($challenger_rand_num);
         $initiator_medal_record->check_battle_num($initiator_rand_num);
 
+        switch ($battle_result) {
+            case 1:
+                //检查成就（发起者胜利）
+                $initiator_medal_record->push_battle_win();
+                $challenger_medal_record->push_battle_lose();
+                break;
+            case 2:
+                //检查成就（挑战者胜利）
+                $initiator_medal_record->push_battle_lose();
+                $challenger_medal_record->push_battle_win();
+                break;
+            case 3:
+                //检查成就（平局时）
+                $challenger_medal_record->check_battle_draw();
+                $initiator_medal_record->check_battle_draw();
+                break;
+        }
         return response()->json([
             'code' => ResponseCode::SUCCESS,
             'message' => '大乱斗已结束！',
