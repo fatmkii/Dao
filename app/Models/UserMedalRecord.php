@@ -58,7 +58,7 @@ class UserMedalRecord extends Model
         $this->save();
 
         //本次处理的同一系列的成就id
-        $medals_id = array(11, 12, 13, 14);
+        $medals_id = array(11, 12, 13, 14, 15);
 
         //已经获得过的徽章（统一查询一次，用于后续判断）
         // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
@@ -87,7 +87,7 @@ class UserMedalRecord extends Model
         $this->save();
 
         //本次处理的同一系列的成就id
-        $medals_id = array(21, 22, 23, 24);
+        $medals_id = array(21, 22, 23, 24, 25);
 
         //已经获得过的徽章（统一查询一次，用于后续判断）
         // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
@@ -128,7 +128,7 @@ class UserMedalRecord extends Model
             $this->save();
 
             //本次处理的同一系列的成就id
-            $medals_id = array(31, 32, 33, 34);
+            $medals_id = array(31, 32, 33, 34, 35);
 
             //已经获得过的徽章（统一查询一次，用于后续判断）
             // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
@@ -158,7 +158,7 @@ class UserMedalRecord extends Model
         $this->save();
 
         //本次处理的同一系列的成就id
-        $medals_id = array(41, 42, 43, 44);
+        $medals_id = array(41, 42, 43, 44, 45);
 
         //已经获得过的徽章（统一查询一次，用于后续判断）
         // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();

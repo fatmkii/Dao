@@ -57,6 +57,12 @@ class Medals
             'threshold' => 1000000,
             'varname' => 'battle_olo_in',
         ),
+        15 => array(
+            'name' => '赌场收割者',
+            'describe' => '通过大乱斗获得1000w个olo',
+            'threshold' => 10000000,
+            'varname' => 'battle_olo_in',
+        ),
 
         //通过大乱斗失去的olo数量
         21 => array(
@@ -83,7 +89,13 @@ class Medals
             'threshold' => 1000000,
             'varname' => 'battle_olo_out',
         ),
-
+        25 => array(
+            'name' => '空中飞人',
+            'describe' => '由于大乱斗失去1000w个olo',
+            'threshold' => 10000000,
+            'varname' => 'battle_olo_out',
+        ),
+        
         //通过红包获得的olo数量 
         31 => array(
             'name' => '天降横财',
@@ -107,6 +119,12 @@ class Medals
             'name' => '天选之子',
             'describe' => '通过红包获得100w个olo',
             'threshold' => 1000000,
+            'varname' => 'hongbao_olo_in',
+        ),
+        35 => array(
+            'name' => '金玉满堂',
+            'describe' => '通过红包获得500w个olo',
+            'threshold' => 5000000,
             'varname' => 'hongbao_olo_in',
         ),
 
@@ -133,6 +151,12 @@ class Medals
             'name' => '有钱就是任性',
             'describe' => '派发红包合计100w个olo',
             'threshold' => 1000000,
+            'varname' => 'hongbao_olo_out',
+        ),
+        45 => array(
+            'name' => '普度众生',
+            'describe' => '派发红包合计500w个olo',
+            'threshold' => 5000000,
             'varname' => 'hongbao_olo_out',
         ),
 
