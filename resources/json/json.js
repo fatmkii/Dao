@@ -2208,6 +2208,12 @@ var medals = {
         'threshold': 1000000,
         'img': 'https://img.mjj.today/2022/11/28/2ddaec3e77725235ee3a9ab38c23f893.png',
     },
+    15: {
+        'name': '赌场收割者',
+        'describe': '通过大乱斗获得1000w个olo',
+        'threshold': 10000000,
+        'img': 'https://i2.mjj.rip/2023/07/04/61f0f3637773242ef4899955e75032df.png',
+    },
 
     //通过大乱斗失去的olo数量
     21: {
@@ -2233,6 +2239,12 @@ var medals = {
         'describe': '由于大乱斗失去100w个olo',
         'threshold': 1000000,
         'img': 'https://s1.ax1x.com/2022/11/25/ztEibq.png',
+    },
+    25: {
+        'name': '空中飞人',
+        'describe': '由于大乱斗失去1000w个olo',
+        'threshold': 10000000,
+        'img': 'https://i2.mjj.rip/2023/07/04/3e8e282f68f54133d001d02b61538b3e.png',
     },
 
     //通过红包获得的olo数量 
@@ -2260,6 +2272,12 @@ var medals = {
         'threshold': 1000000,
         'img': 'https://s1.ax1x.com/2022/11/25/ztVKfS.png',
     },
+    35: {
+        'name': '金玉满堂',
+        'describe': '通过红包获得500w个olo',
+        'threshold': 5000000,
+        'img': 'https://i2.mjj.rip/2023/07/04/dec6fc46c76c5da888f47955aabd04f0.png',
+    },
 
     //通过红包失去的olo数量
     41: {
@@ -2285,6 +2303,12 @@ var medals = {
         'describe': '派发红包合计100w个olo',
         'threshold': 1000000,
         'img': 'https://s1.ax1x.com/2022/11/25/ztVsmR.png',
+    },
+    45: {
+        'name': '普度众生',
+        'describe': '派发红包合计500w个olo',
+        'threshold': 5000000,
+        'img': 'https://i2.mjj.rip/2023/07/04/464472bc41d94de850796356c602264a.png',
     },
 
     //发起大乱斗没人接的次数 
