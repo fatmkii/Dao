@@ -54,11 +54,13 @@ class AdminController extends Controller
 
         $thread->is_deleted = 2;
         $thread->save();
+
+        $admin_name = $user->tokenCan('admin') ? '管理员' : '专岛管理员';
         ProcessUserActive::dispatch(
             [
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
-                'active' => '管理员删除了主题',
+                'active' => $admin_name . '删除了主题',
                 'thread_id' => $thread->id,
                 'content' => $request->content,
             ]
@@ -105,11 +107,12 @@ class AdminController extends Controller
         $thread->sub_id = 10;
         $thread->save();
 
+        $admin_name = $user->tokenCan('admin') ? '管理员' : '专岛管理员';
         ProcessUserActive::dispatch(
             [
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
-                'active' => '管理员置顶了主题',
+                'active' => $admin_name . '置顶了主题',
                 'thread_id' => $thread->id,
             ]
         );
@@ -153,11 +156,13 @@ class AdminController extends Controller
 
         $thread->sub_id = 0;
         $thread->save();
+
+        $admin_name = $user->tokenCan('admin') ? '管理员' : '专岛管理员';
         ProcessUserActive::dispatch(
             [
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
-                'active' => '管理员取消了置顶主题',
+                'active' => $admin_name . '取消了置顶主题',
                 'thread_id' => $thread->id,
             ]
         );
@@ -238,11 +243,12 @@ class AdminController extends Controller
             }
         }
 
+        $admin_name = $user->tokenCan('admin') ? '管理员' : '专岛管理员';
         ProcessUserActive::dispatch(
             [
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
-                'active' => '管理员删除了帖子',
+                'active' => $admin_name . '删除了帖子',
                 'thread_id' => $request->thread_id,
                 'post_id' => $post->id,
                 'content' => $request->content,
@@ -290,11 +296,12 @@ class AdminController extends Controller
         $post->is_deleted = 0;
         $post->save();
 
+        $admin_name = $user->tokenCan('admin') ? '管理员' : '专岛管理员';
         ProcessUserActive::dispatch(
             [
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
-                'active' => '管理员恢复了已删除的帖子',
+                'active' => $admin_name . '恢复了已删除的帖子',
                 'thread_id' => $request->thread_id,
                 'post_id' => $post->id,
                 'content' => $request->content,
@@ -391,11 +398,12 @@ class AdminController extends Controller
             }
         }
 
+        $admin_name = $user->tokenCan('admin') ? '管理员' : '专岛管理员';
         ProcessUserActive::dispatch(
             [
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
-                'active' => '管理员删除该用户全部的回帖',
+                'active' => $admin_name . '删除该用户全部的回帖',
                 'thread_id' => $request->thread_id,
                 'binggan_target' => $post->created_binggan,
                 'content' => $request->content,
@@ -448,11 +456,13 @@ class AdminController extends Controller
 
         $user_to_ban->is_banned = true;
         $user_to_ban->save();
+
+        $admin_name = $user->tokenCan('admin') ? '管理员' : '专岛管理员';
         ProcessUserActive::dispatch(
             [
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
-                'active' => '管理员碎了饼干',
+                'active' => $admin_name . '碎了饼干',
                 'thread_id' => $request->thread_id,
                 'post_id' => $request->post_id,
                 'binggan_target' => $user_to_ban->binggan,
@@ -522,11 +532,13 @@ class AdminController extends Controller
             $msg = sprintf('该饼干已封禁%d天。', $user_to_lock->locked_count * 3);
         }
         $user_to_lock->save();
+
+        $admin_name = $user->tokenCan('admin') ? '管理员' : '专岛管理员';
         ProcessUserActive::dispatch(
             [
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
-                'active' => '管理员封禁了饼干',
+                'active' => $admin_name . '封禁了饼干',
                 'thread_id' => $request->thread_id,
                 'post_id' => $request->post_id,
                 'binggan_target' => $user_to_lock->binggan,
@@ -581,11 +593,12 @@ class AdminController extends Controller
         //要清除板块的缓存
         Cache::forget('forums_cache');
 
+        $admin_name = $user->tokenCan('admin') ? '管理员' : '专岛管理员';
         ProcessUserActive::dispatch(
             [
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
-                'active' => '管理员更新了版头。板块：' . $request->forum_id,
+                'active' => $admin_name . '更新了版头。板块：' . $request->forum_id,
                 'content' => '版头字符串长度：' . mb_strlen($request->banners),
             ]
         );
@@ -964,12 +977,12 @@ class AdminController extends Controller
             throw $e;
         }
 
-
+        $admin_name = $user->tokenCan('admin') ? '管理员' : '专岛管理员';
         ProcessUserActive::dispatch(
             [
                 'binggan' => $user->binggan,
                 'user_id' => $user->id,
-                'active' => '管理员发布了公告',
+                'active' => $admin_name . '发布了公告',
                 'content' => '标题：' . $request->title,
             ]
         );
