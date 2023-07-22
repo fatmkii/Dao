@@ -137,7 +137,7 @@ class BattleController extends Controller
             $battle_message->battle_id = $battle->id;
             $battle_message->chara_url = $battle_chara->CharaHead('wait');
             $battle_message->message_type = 1;
-            $battle_message->message = $battle_chara->CharaName() . "正在等待挑战者……押注：" . $request->battle_olo . "个奥利奥";
+            $battle_message->message = $battle_chara->CharaName() . "正在等待挑战者……押注：" . number_format($request->battle_olo) . "个奥利奥";
             $battle_message->save();
 
             $user->coinConsume($request->battle_olo);
@@ -318,7 +318,7 @@ class BattleController extends Controller
                         $battle_message->message_type = 1;
                         $battle_message->message = $initiator_chara->CharaName() .
                             '获得奖金' .
-                            intval($battle->battle_olo * $tax_rate) . '个奥利奥';
+                            number_format(intval($battle->battle_olo * $tax_rate)) . '个奥利奥';
                         $battle_message->save();
 
                         //平局挑战者公告
@@ -328,7 +328,7 @@ class BattleController extends Controller
                         $battle_message->message_type = 2;
                         $battle_message->message = $challenger_chara->CharaName() .
                             '获得奖金' .
-                            intval($battle->battle_olo * $tax_rate) . '个奥利奥';
+                            number_format(intval($battle->battle_olo * $tax_rate)) . '个奥利奥';
                         $battle_message->save();
                         break;
                     }
@@ -345,7 +345,7 @@ class BattleController extends Controller
                         $battle_message->message_type = 1;
                         $battle_message->message = $initiator_chara->CharaName() .
                             '胜利！获得奖金' .
-                            intval($battle->battle_olo * $tax_rate) . '个奥利奥';
+                            number_format(intval($battle->battle_olo * $tax_rate)) . '个奥利奥';
                         $battle_message->save();
 
                         //失败者公告
@@ -378,7 +378,7 @@ class BattleController extends Controller
                         $battle_message->message_type = 2;
                         $battle_message->message = $challenger_chara->CharaName() .
                             '胜利！获得奖金' .
-                            intval($battle->battle_olo * $tax_rate) . '个奥利奥';
+                            number_format(intval($battle->battle_olo * $tax_rate)) . '个奥利奥';
                         $battle_message->save();
 
                         //失败者公告
