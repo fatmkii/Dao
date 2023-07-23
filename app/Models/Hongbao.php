@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Facades\GlobalSetting;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -89,12 +90,7 @@ class Hongbao extends Model
 
         $user = $request->user;
 
-        if (Carbon::now()->between('2023/6/18 00:00:00', '2023/6/19 00:00:00')) {
-            //618税率1.02
-            $tax_rate = 1.02;
-        } else {
-            $tax_rate = 1.07;
-        }
+        $tax_rate = GlobalSetting::get_tax('normal');
         $coin_pay = ceil($request->hongbao_olo * $tax_rate);
         $user->coinChange(
             'normal', //记录类型

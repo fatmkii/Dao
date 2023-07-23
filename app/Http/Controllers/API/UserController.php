@@ -529,16 +529,7 @@ class UserController extends Controller
 
             $thread = $post->thread;
 
-            //这个和前端*1.07对不上
-            // $tax = ceil($request->coin * 0.07); //税率0.07
-            // $coin_pay = $request->coin + $tax;
-
-            if (Carbon::now()->between('2023/6/18 00:00:00', '2023/6/19 00:00:00')) {
-                //618税率1.02
-                $tax_rate = 1.02;
-            } else {
-                $tax_rate = 1.07;
-            }
+            $tax_rate = GlobalSetting::get_tax('normal');
             $coin_pay = ceil($request->coin * $tax_rate);
             // $user->coinConsume($coin_pay);
             $user->coinChange(

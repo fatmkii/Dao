@@ -19,6 +19,7 @@ use App\Jobs\ProcessIncomeStatement;
 use App\Models\Thread;
 use Illuminate\Support\Carbon;
 use App\Events\NewPostBroadcast;
+use App\Facades\GlobalSetting;
 use App\Models\UserMedalRecord;
 use Exception;
 
@@ -283,14 +284,7 @@ class BattleController extends Controller
             $battle_message->message = $initiator_chara->CharaAttackMessage($initiator_rand_num);
             $battle_message->save();
 
-            if (Carbon::now()->between('2023/6/18 00:00:00', '2023/6/19 00:00:00')) {
-                //618税率2%
-                $tax_rate = 1.98;
-            } else {
-                //税率4%，也就是奖金是1.96倍
-                $tax_rate = 1.96;
-            }
-
+            $tax_rate = GlobalSetting::get_tax('battle');
 
             switch ($difference) {
                 case 0: { //平局！
