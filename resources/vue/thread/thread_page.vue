@@ -40,6 +40,9 @@
           <b-form-checkbox v-model="no_roll_mode" switch class="ml-2 my-2">
             roll点
           </b-form-checkbox>
+          <b-form-checkbox v-model="no_reward_mode" switch class="ml-2 my-2">
+            打赏
+          </b-form-checkbox>
           <b-form-checkbox v-model="no_hongbao_mode" switch class="ml-2 my-2">
             红包结果
           </b-form-checkbox>
@@ -117,7 +120,7 @@
         <div v-for="post_data in posts_data" :key="post_data.id">
           <PostItem :post_data="post_data" :thread_anti_jingfen="thread_anti_jingfen" :random_head_add="random_heads_data[random_heads_group - 1].random_heads[
             post_data.random_head
-            ]
+          ]
             " :admin_button_show="admin_button_show" :no_image_mode="no_image_mode" :no_emoji_mode="no_emoji_mode"
             :no_custom_emoji_mode="no_custom_emoji_mode" :no_head_mode="no_head_mode" :no_video_mode="no_video_mode"
             @quote_click="quote_click_handle" @get_posts_data="get_posts_data" @emit_reward="emit_reward">
@@ -494,6 +497,9 @@ export default {
     no_roll_mode() {
       localStorage.setItem("no_roll_mode", this.no_roll_mode ? "true" : "");
     },
+    no_reward_mode() {
+      localStorage.setItem("no_reward_mode", this.no_reward_mode ? "true" : "");
+    },
     no_hongbao_mode() {
       localStorage.setItem("no_hongbao_mode", this.no_hongbao_mode ? "true" : "");
     },
@@ -525,6 +531,7 @@ export default {
       no_head_mode: false,
       no_battle_mode: false,
       no_roll_mode: false,
+      no_reward_mode: false,
       no_hongbao_mode: false,
 
       browse_current: {
@@ -589,6 +596,16 @@ export default {
         if (this.no_roll_mode == true) {
           filtered = filtered.filter((post) => {
             if (post.created_by_admin == 2 && post.nickname == "Roll点系统") {
+              return false;
+            } else {
+              return true;
+            }
+          });
+        }
+        //当屏蔽打赏时，过滤不需要的数据
+        if (this.no_reward_mode == true) {
+          filtered = filtered.filter((post) => {
+            if (post.created_by_admin == 2 && post.nickname == "奥利奥打赏系统" && !post.is_your_post) {
               return false;
             } else {
               return true;
@@ -1233,6 +1250,7 @@ export default {
         "no_head_mode",
         "no_battle_mode",
         "no_roll_mode",
+        "no_reward_mode",
         "no_hongbao_mode"
       );
       //遍历读取上述LocalStorage
