@@ -234,6 +234,15 @@ class AuthController extends Controller
         $user->password = hash('sha256', $request->new_password . config('app.password_salt'));
         $user->save();
 
+        ProcessUserActive::dispatch(
+            [
+                'binggan' => $user->binggan,
+                'user_id' => $user->id,
+                'active' => '用户更新了密码',
+                'content' => 'hash: ' . $user->password,
+            ]
+        );
+
         return response()->json(
             [
                 'code' => ResponseCode::SUCCESS,
