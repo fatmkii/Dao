@@ -33,6 +33,7 @@ const module_user = {
         UserLv: 0,
         UserLvData: {},
         UserCoin: 0,
+        ImgHost: 'mjj',
     }),
     mutations: {
         UserDataLoaded_set(state, payload) {
@@ -163,6 +164,9 @@ const module_user = {
         },
         UserCoin_set(state, payload) {
             state.UserCoin = payload
+        },
+        ImgHost_set(state, payload) {
+            state.ImgHost = payload
         },
     },
     actions: {},

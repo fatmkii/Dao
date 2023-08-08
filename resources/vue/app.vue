@@ -156,6 +156,13 @@ export default {
           JSON.parse(localStorage.focus_threads)
         );
       }
+      //读取图床选择设定
+      if( localStorage.img_host !=null){
+        this.$store.commit(
+          "ImgHost_set",
+          localStorage.img_host
+        );
+      }
     },
     set_VueStore(response_data) {
       if (response_data.binggan.admin) {

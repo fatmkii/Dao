@@ -13,6 +13,9 @@
     <b-form-checkbox class="mx-2 my-2" switch v-model="ListeningHoldPage">
       自动涮锅时页面保持不动
     </b-form-checkbox>
+    <b-input-group prepend="图床选择：" class="mt-1" style="max-width: 300px" >
+      <b-form-select v-model="ImgHostSelected" :options="img_host_options"></b-form-select>
+    </b-input-group>
     <hr :class="is_mobile ? 'my-1' : ''" />
     <div class="mt-2 d-flex align-items-center">
       <span class="mb-2">帖子内容行距：</span>
@@ -91,6 +94,10 @@ export default {
   data: function () {
     return {
       z_bar_left: false,
+      img_host_options: [
+        { value: 'mjj', text: "mjj" },
+        { value: 'imgbb', text: "imgbb" },
+      ],
     };
   },
   computed: {
@@ -125,6 +132,15 @@ export default {
       set(value) {
         localStorage.setItem("listening_hold_page", value ? "true" : "");
         this.$store.commit("ListeningHoldPage_set", value);
+      },
+    },
+    ImgHostSelected: {
+      get() {
+        return this.$store.state.User.ImgHost;
+      },
+      set(value) {
+        localStorage.setItem("img_host", value);
+        this.$store.commit("ImgHost_set", value);
       },
     },
 
@@ -200,6 +216,7 @@ export default {
         this.$store.commit("ThreadsMarginPaddingY_set", value);
       },
     },
+
   },
   created() {
     if (localStorage.getItem("z_bar_left") == null) {
