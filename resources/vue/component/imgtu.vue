@@ -41,6 +41,13 @@ export default {
         pup.setAttribute("data-auto-insert", "html-embed-medium");
         button.setAttribute("data-imgbb-trigger", "")
       }
+      if (station == 'freeimage') {
+        pup.setAttribute("async", true);
+        pup.setAttribute("src", "https://freeimage.host/sdk/pup.js");
+        pup.setAttribute("data-url", "https://freeimage.host/upload");
+        pup.setAttribute("data-auto-insert", "html-embed-medium");
+        button.setAttribute("data-chevereto-pup-trigger", "")
+      }
       body.appendChild(pup);
     },
   },

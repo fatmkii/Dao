@@ -97,6 +97,7 @@ export default {
       img_host_options: [
         { value: 'mjj', text: "mjj" },
         { value: 'imgbb', text: "imgbb" },
+        { value: 'freeimage', text: "freeimage" },
       ],
     };
   },
