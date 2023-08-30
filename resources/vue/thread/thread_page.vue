@@ -621,7 +621,7 @@ export default {
               post.nickname == "红包结果" &&
               !post.is_your_post;
             //抢红包的口令屏蔽条件
-            const condition2 = /--红包口令: /.test(post.content) && !post.is_your_post;
+            const condition2 = /^--红包口令: /.test(post.content) && !post.is_your_post;
             if (condition1 || condition2) {
               return false;
             } else {
