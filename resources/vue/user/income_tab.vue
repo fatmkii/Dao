@@ -2,14 +2,14 @@
   <div>
     <div class="d-flex mt-1">
       <b-input-group style="max-width: 160px">
-        <b-form-input v-model="income_date_selected" size="sm" type="text" placeholder="结束日期"></b-form-input>
+        <b-form-input v-model="income_date_selected" size="sm" type="text" placeholder="查询日期"></b-form-input>
         <b-input-group-append>
-          <b-form-datepicker v-model="income_date_selected" size="sm" placeholder="结束日期" locale="zh" button-only
+          <b-form-datepicker v-model="income_date_selected" size="sm" placeholder="查询日期" locale="zh" button-only
             today-button reset-button close-button :date-format-options="{
               year: 'numeric',
               month: 'numeric',
               day: 'numeric',
-            }" label-help="请选择投票结束的日期"></b-form-datepicker>
+            }" label-help="请选择查询日期"></b-form-datepicker>
         </b-input-group-append>
       </b-input-group>
       <b-button class="ml-2" :variant="button_theme" :size="is_mobile ? 'sm' : 'md'" :disabled="income_loading == 1"
