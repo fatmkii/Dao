@@ -256,6 +256,24 @@ img[class^="head_"] {
     @include background_color("icon_color2");
 }
 
+//个人中心信息用
+.user_info {
+    .list-group-item {
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
+    }
+    @media not all and (min-width: 1200px) {
+        font-size: 0.8rem;
+        .b-avatar {
+            height: 2rem;
+            width: 2rem;
+        }
+    }
+    .icon {
+        max-height: 40px;
+    }
+}
+
 //forum_page相关
 .forum_name {
     cursor: pointer;
@@ -331,6 +349,14 @@ img[class^="head_"] {
     }
     tr:hover {
         @include background_color("background_color_hover");
+    }
+}
+
+//银行记录列表
+.user_center_table {
+    max-width: 600px;
+    @media not all and (min-width: 1200px) {
+        font-size: 0.8rem;
     }
 }
 

@@ -132,17 +132,17 @@ export default {
   created() { },
   methods: {
     set_income_date_default() {
-      var dateTime = new Date(); //默认日期是今天
-      var year = dateTime.getFullYear();
-      var month = dateTime.getMonth() + 1;
-      if (month >= 1 && month <= 9) {
-        month = "0" + month;
+      function padTo2Digits(num) {
+        return num.toString().padStart(2, '0');
       }
-      var strDate = dateTime.getDate();
-      if (strDate >= 0 && strDate <= 9) {
-        strDate = "0" + strDate;
-      }
-      this.income_date_selected = year + "-" + month + "-" + strDate;
+      var dateTime = new Date();
+
+      this.income_date_selected = [
+        dateTime.getFullYear(),
+        padTo2Digits(dateTime.getMonth() + 1),
+        padTo2Digits(dateTime.getDate()),
+      ].join('-')
+
     },
     get_income_data(page) {
       this.income_no_data = false;

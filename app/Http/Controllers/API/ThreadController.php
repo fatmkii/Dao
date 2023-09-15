@@ -388,7 +388,7 @@ class ThreadController extends Controller
                     'message' => '本小岛需要饼干才能查看喔',
                 ]);
             }
-            if ($user->coin < $CurrentForum->accessible_coin && !(in_array($user->admin, [99, 20, 10]))) {
+            if ($user->getCoin() < $CurrentForum->accessible_coin && !(in_array($user->admin, [99, 20, 10]))) {
                 return response()->json([
                     'code' => ResponseCode::THREAD_UNAUTHORIZED,
                     'message' => sprintf("本小岛需要拥有大于%u奥利奥才能查看喔", $CurrentForum->accessible_coin),
@@ -404,7 +404,7 @@ class ThreadController extends Controller
                     'message' => '本贴需要饼干才能查看喔',
                 ]);
             }
-            if ($user->coin < $CurrentThread->locked_by_coin && !(in_array($user->admin, [99, 20, 10]))) {
+            if ($user->getCoin() < $CurrentThread->locked_by_coin && !(in_array($user->admin, [99, 20, 10]))) {
                 return response()->json([
                     'code' => ResponseCode::THREAD_UNAUTHORIZED,
                     'message' => sprintf("本贴需要拥有大于%u奥利奥才能查看喔", $CurrentThread->locked_by_coin),

@@ -1,17 +1,28 @@
 <template>
   <div>
-    <p class="mt-2">你好！别来无恙。</p>
-    <p @click="binggan_show = true" :class="is_mobile ? 'mb-1' : ''">
-      你的饼干是：{{ binggan_show ? binggan : "*点击显示*" }}
-    </p>
-    <p :class="is_mobile ? 'mb-1' : ''">
-      饼干等级是：Lv.
-      {{ $store.state.User.UserDataLoaded == 2 ? user_lv : "读取中" }}
-    </p>
-    <p :class="is_mobile ? 'mb-1' : ''">
-      你的奥利奥：{{ $store.state.User.UserDataLoaded == 2 ? user_coin : "读取中" }}
-      个
-    </p>
+    <div style="max-width: 250px;" :class="is_mobile ? 'my-1' : 'my-2'" class="user_info">
+      <div class="d-flex align-items-center" @click="binggan_show = true">
+        <!-- <b-avatar square variant="light" src="https://oss.cpttmm.com/xhg_other/icon_binggan.png"  class="mr-3"></b-avatar> -->
+        <b-img class="icon mr-2" src="https://oss.cpttmm.com/xhg_other/icon_binggan.png" fluid alt="Fluid image"></b-img>
+        <span class="mr-auto">我的饼干 </span>
+        <span> {{ binggan_show ? binggan : "*点击显示*" }}</span>
+      </div>
+      <div class="d-flex align-items-center">
+        <b-img class="icon mr-2" src="https://oss.cpttmm.com/xhg_other/icon_binggan_lv.png" fluid alt="Fluid image"></b-img>
+        <span class="mr-auto">饼干等级 </span>
+        <span>{{ $store.state.User.UserDataLoaded == 2 ? user_lv : "读取中" }}</span>
+      </div>
+      <div class="d-flex align-items-center">
+        <b-img class="icon mr-2" src="https://oss.cpttmm.com/xhg_other/icon_olo.png" fluid alt="Fluid image"></b-img>
+        <span class="mr-auto">奥利奥</span>
+        <span>{{ $store.state.User.UserDataLoaded == 2 ? user_coin : "读取中" }}</span>
+      </div>
+      <div class="d-flex align-items-center">
+        <b-img class="icon mr-2" src="https://oss.cpttmm.com/xhg_other/icon_bank_olo.png" fluid alt="Fluid image"></b-img>
+        <span class="mr-auto">粮仓奥利奥</span>
+        <span>{{ $store.state.User.UserDataLoaded == 2 ? user_bank_coin : "读取中" }}</span>
+      </div>
+    </div>
     <b-button :size="is_mobile ? 'sm' : 'md'" class="my-1 my-sm-0" variant="dark" @click="logout_handle">退出饼干</b-button>
     <hr :class="is_mobile ? 'my-1' : ''" />
     <b-tabs pills :small="is_mobile">
@@ -30,6 +41,9 @@
       </b-tab>
       <b-tab title="我的角色" lazy>
         <MyBattleCharaTab></MyBattleCharaTab>
+      </b-tab>
+      <b-tab title="我的粮仓" lazy>
+        <BankTab></BankTab>
       </b-tab>
       <b-tab title="收支记录" lazy>
         <IncomeTab></IncomeTab>
@@ -58,6 +72,7 @@ import UserLVTab from "./user_lv_tab.vue";
 import CommonSettingTab from "./common_setting_tab.vue";
 import PingbiciTab from "./pingbici_tab.vue";
 import IncomeTab from "./income_tab.vue";
+import BankTab from "./bank_tab.vue";
 import MyEmojiTab from "./my_emoji_tab.vue";
 import CustomBingganTab from "./custom_binggan_tab.vue";
 import SetPasswordTab from "./set_password_tab.vue";
@@ -67,7 +82,7 @@ export default {
   name: "user_center",
   components: {
     MedalsTab, UserLVTab, CommonSettingTab, PingbiciTab,
-    IncomeTab, MyEmojiTab, CustomBingganTab, SetPasswordTab,
+    IncomeTab, BankTab, MyEmojiTab, CustomBingganTab, SetPasswordTab,
     MyBattleCharaTab
   },
   props: {},
@@ -91,6 +106,7 @@ export default {
       login_status: (state) => state.User.LoginStatus,
       binggan: (state) => state.User.Binggan,
       user_coin: (state) => state.User.UserCoin,
+      user_bank_coin: (state) => state.User.UserBankCoin,
       user_lv: (state) => state.User.UserLv,
     }),
   },

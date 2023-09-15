@@ -361,6 +361,12 @@ class User extends Authenticatable
         }
     }
 
+    //获取总olo(现金+银行)
+    public function getCoin()
+    {
+        return $this->coin + $this->coin_in_bank;
+    }
+
     public function Pingbici()
     {
         return $this->hasOne(Pingbici::class);
@@ -410,6 +416,11 @@ class User extends Authenticatable
     public function EmojiContestUser()
     {
         return $this->hasMany(EmojiContestUser::class);
+    }
+
+    public function UserBank()
+    {
+        return $this->hasMany(UserBank::class);
     }
 
     public function UserMessages()

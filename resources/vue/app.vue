@@ -179,6 +179,7 @@ export default {
       this.$store.commit("UserLv_set", response_data.binggan.user_lv);
       // this.$store.commit("UserLvData_set", response_data.user_lv);
       this.$store.commit("UserCoin_set", response_data.binggan.coin);
+      this.$store.commit("UserBankCoin_set", response_data.binggan.coin_in_bank);
       if (response_data.binggan.nickname) {
         this.$store.commit("NickName_set", response_data.binggan.nickname);
       } else {

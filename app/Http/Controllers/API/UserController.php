@@ -33,6 +33,7 @@ use App\Exceptions\UserException;
 use App\Facades\GlobalSetting;
 use App\Models\EmojiContestUserTotal;
 use App\Models\MyBattleChara;
+use App\Models\UserBank;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
@@ -1448,6 +1449,165 @@ class UserController extends Controller
                     'progress' => $progress,
                     'medal_created_at' => $medal_created_at,
                 ],
+            ]
+        );
+    }
+
+    //存入银行
+    public function bank_deposit(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'olo' => 'required|integer|max:1000000|min:10',
+            'expire_date' => 'required|date_format:Y-m-d H:i:s', //到期时间
+        ]);
+
+        $user = $request->user;
+
+        $expire_date = Carbon::parse($request->expire_date);
+        $end = Carbon::now()->addYear()->addDay(); //多加一天，避免因为实际时间和提交时间不同造成影响；
+        $start = Carbon::now()->addDay()->addHours(-1); //多减一小时，避免因为实际时间和提交时间不同造成影响；
+
+        if (!$expire_date->between($start,  $end)) {
+            return response()->json([
+                'code' => ResponseCode::USER_CANNOT,
+                'message' => '存粮时间最短1天、最长1年哦',
+            ]);
+        }
+
+        try {
+            DB::beginTransaction();
+
+
+            $user_bank = UserBank::create([
+                'user_id' => $user->id,
+                'olo' => $request->olo,
+                'expire_date' => $request->expire_date,
+            ]);
+
+            $user->coinChange(
+                'normal', //记录类型
+                [
+                    'olo' => -$request->olo,
+                    'content' => sprintf('存入粮仓:%d个olo  到期时间:%s', $request->olo, $request->expire_date),
+                ]
+            ); //扣除用户相应olo（通过统一接口、记录操作）
+
+            $user_olo_in_bank = UserBank::where('user_id', $user->id)->where('is_deleted', 0)->sum('olo');
+            $user->coin_in_bank = $user_olo_in_bank;
+            $user->save();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => sprintf('成功存入粮仓:%d个olo  到期时间:%s', $request->olo, $request->expire_date),
+                'data' => $user_bank,
+            ]
+        );
+    }
+
+    //从银行取出
+    public function bank_withdraw(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'deposit_id' => 'required|integer',
+            'confirm_penalty' => 'required|boolean', //前端确认是否接受提前支取的惩罚
+        ]);
+
+        $user = $request->user;
+
+        $user_bank = UserBank::where('id', $request->deposit_id)
+            ->where('is_deleted', false)->first();
+
+        if ($user_bank == null) {
+            return response()->json([
+                'code' => ResponseCode::DEFAULT,
+                'message' => '该存粮不存在！',
+            ]);
+        }
+
+        if ($user_bank->user_id != $user->id) {
+            return response()->json([
+                'code' => ResponseCode::USER_CANNOT,
+                'message' => ResponseCode::$codeMap[ResponseCode::USER_CANNOT],
+            ]);
+        }
+
+        if (Carbon::parse($user_bank->expire_date) > Carbon::now()) {
+            if ($request->confirm_penalty == true) {
+                $tax_rate = 0.88;
+            } else {
+                return response()->json([
+                    'code' => ResponseCode::USER_CANNOT,
+                    'message' => ResponseCode::$codeMap[ResponseCode::USER_CANNOT],
+                ]);
+            }
+        } else {
+            $tax_rate = 1;
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $olo_withdraw = floor($user_bank->olo * $tax_rate);
+
+            if ($tax_rate == 1) {
+                $message = sprintf('从粮仓取出:%d个olo', $olo_withdraw);
+            } else {
+                $message = sprintf('从粮仓取出:%d个olo（因提前支取扣除% d个olo）', $olo_withdraw, $user_bank->olo - $olo_withdraw);
+            }
+
+            $user->coinChange(
+                'normal', //记录类型
+                [
+                    'olo' =>  $olo_withdraw,
+                    'content' =>  $message,
+                ]
+            ); //扣除用户相应olo（通过统一接口、记录操作）
+
+            $user_bank->is_deleted = true;
+            $user_bank->withdraw_date = Carbon::now();
+            $user_bank->save();
+
+            $user_olo_in_bank = UserBank::where('user_id', $user->id)->where('is_deleted', false)->sum('olo');
+            $user->coin_in_bank = $user_olo_in_bank;
+            $user->save();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => $message,
+                'data' => $user_bank,
+            ]
+        );
+    }
+
+    //显示所有银行存款
+    public function show_bank_deposit(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+        ]);
+
+        $user = $request->user;
+        $user_bank = UserBank::where('user_id', $user->id)->where('is_deleted', false)->get();
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '已获取存款数据',
+                'data' => $user_bank,
             ]
         );
     }
