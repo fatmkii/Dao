@@ -28,6 +28,7 @@ class CreateUserMedalRecordTable extends Migration
             $table->unsignedTinyInteger('battle_lose_con')->default(0); //连续输大乱斗
             $table->unsignedInteger('delete_posts_num')->default(0);
             $table->unsignedInteger('posts_num')->default(0);
+            $table->unsignedInteger('withdraw_penalty')->default(0);
             $table->timestamps();
         });
     }

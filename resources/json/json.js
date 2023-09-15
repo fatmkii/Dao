@@ -2498,6 +2498,38 @@ var medals = {
         'threshold': 10,
         'img': 'https://i2.mjj.rip/2023/06/29/6eb25db86513d762cd2a9d04a5189aa5.png',
     },
+
+    //粮仓存粮成就
+    241: {
+        'name': '日进斗金',
+        'describe': '粮仓存粮5w',
+        'threshold': 50000,
+        'img': 'https://ice.frostsky.com/2023/09/15/e2a2bec899f6aa047429811e8f7c03f6.png',
+    },
+    242: {
+        'name': '堆金积玉',
+        'describe': '粮仓存粮10w',
+        'threshold': 100000,
+        'img': 'https://ice.frostsky.com/2023/09/15/f3ae1f1dc014633e107c60b4258daa39.png',
+    },
+    243: {
+        'name': '富甲一方',
+        'describe': '粮仓存粮30w',
+        'threshold': 300000,
+        'img': 'https://ice.frostsky.com/2023/09/15/f48aec2d728f74ea404da7c3f2a70568.png',
+    },
+    244: {
+        'name': '腰缠万贯',
+        'describe': '粮仓存粮50w',
+        'threshold': 500000,
+        'img': 'https://ice.frostsky.com/2023/09/15/794a7bd404fc9df579ac8aed354c461f.png',
+    },
+    245: {
+        'name': '富有四海',
+        'describe': '粮仓存粮100w',
+        'threshold': 1000000,
+        'img': 'https://ice.frostsky.com/2023/09/15/6fde3b66d4eae8dbd6ee8d3cb68940c8.png',
+    },
 }
 
 //隐藏成就数据
@@ -2685,6 +2717,14 @@ var medals_hide = {
         'describe': '尊贵的小豆泥陛下火遍全球天下第一帝锅',
         'threshold': 0, //本命是小豆泥的全部饼干
         'img': 'https://i2.mjj.rip/2023/06/25/145a99a9aafeaa4e24056ef45c89b42d.png',
+    },
+
+    //银行提前支取累计
+    251: {
+        'name': '今朝有米今朝吃',
+        'describe': '明日无米啃枯枝（提前开仓累计30w）',
+        'threshold': 300000,
+        'img': 'https://ice.frostsky.com/2023/09/15/227b2417ff7b10e841811e1a3f41d12e.png',
     },
 }
 

@@ -1502,6 +1502,9 @@ class UserController extends Controller
             throw $e;
         }
 
+        //检查成就
+        UserMedalRecord::check_bank_coin($user);
+
         return response()->json(
             [
                 'code' => ResponseCode::SUCCESS,
@@ -1582,6 +1585,12 @@ class UserController extends Controller
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
+        }
+
+        if ($tax_rate != 1) {
+            //提前支取，计入成就记录
+            $user_medal_record = $user->UserMedalRecord()->firstOrCreate();
+            $user_medal_record->push_withdraw_penalty($user_bank->olo);
         }
 
         return response()->json(

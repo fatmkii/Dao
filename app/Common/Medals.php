@@ -95,7 +95,7 @@ class Medals
             'threshold' => 10000000,
             'varname' => 'battle_olo_out',
         ),
-        
+
         //通过红包获得的olo数量 
         31 => array(
             'name' => '天降横财',
@@ -526,6 +526,48 @@ class Medals
             'threshold' => 10,
             'varname' => 'battle_lose_con',
         ),
+
+        //银行存款合计
+        241 => array(
+            'name' => '日进斗金',
+            'describe' => '粮仓存粮5w',
+            'threshold' => 50000,
+            'varname' => null,
+        ),
+        242 => array(
+            'name' => '堆金积玉',
+            'describe' => '粮仓存粮10w',
+            'threshold' => 100000,
+            'varname' => null,
+        ),
+        243 => array(
+            'name' => '富甲一方',
+            'describe' => '粮仓存粮30w',
+            'threshold' => 300000,
+            'varname' => null,
+        ),
+        244 => array(
+            'name' => '腰缠万贯',
+            'describe' => '粮仓存粮50w',
+            'threshold' => 500000,
+            'varname' => null,
+        ),
+        245 => array(
+            'name' => '富有四海',
+            'describe' => '粮仓存粮100w',
+            'threshold' => 1000000,
+            'varname' => null,
+        ),
+
+        
+        //银行提前支取累计
+        251 => array(
+            'name' => '今朝有米今朝吃',
+            'describe' => '明日无米啃枯枝（提前开仓累计30w）',
+            'threshold' => 300000,
+            'varname' => 'withdraw_penalty',
+        ),
+
 
     );
 }
