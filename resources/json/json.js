@@ -534,6 +534,7 @@ var emoji_json = [
             "https://www.z4a.net/images/2022/01/30/HpJpWQ.jpg",
             "https://s4.ax1x.com/2022/02/16/Hhy6qx.jpg",
             "https://img.mjj.today/2022/10/01/f3e6f090eefe4df78eeda77134502d46.gif",
+            "https://i.mji.rip/2023/09/23/49cfc2e3cc94499c7822526ae36c559f.gif",
             "https://img.mjj.today/2022/07/20/5c684034d6f4f85cc08e518cbc8c89ff.jpg"
         ],
         "deleted_at": null
