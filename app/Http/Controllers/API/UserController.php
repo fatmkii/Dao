@@ -1459,6 +1459,7 @@ class UserController extends Controller
         $request->validate([
             'binggan' => 'required|string',
             'olo' => 'required|integer|max:1000000|min:10',
+            'description' => 'nullable|string|max:50',
             'expire_date' => 'required|date_format:Y-m-d H:i:s', //到期时间
         ]);
 
@@ -1482,6 +1483,7 @@ class UserController extends Controller
             $user_bank = UserBank::create([
                 'user_id' => $user->id,
                 'olo' => $request->olo,
+                'description' => $request->description,
                 'expire_date' => $request->expire_date,
             ]);
 

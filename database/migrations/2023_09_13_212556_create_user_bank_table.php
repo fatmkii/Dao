@@ -17,6 +17,7 @@ class CreateUserBankTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->unsignedInteger('olo');
+            $table->string('description')->nullable();
             $table->boolean('is_deleted')->default(0)->index();
             $table->timestamp('expire_date');
             $table->timestamp('withdraw_date')->nullable();

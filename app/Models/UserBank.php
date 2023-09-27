@@ -22,6 +22,7 @@ class UserBank extends Model
     protected $fillable = [
         'user_id',
         'olo',
+        'description',
         'expire_date',
     ];
 

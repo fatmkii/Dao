@@ -13,10 +13,13 @@
         bank_data_offset,
         bank_data_offset + 10
       )" :key="index">
+        <div class="my-1 py-1" v-if="deposit.description">
+          <span>存粮标签：{{ deposit.description }} </span>
+        </div>
         <div class="my-1 py-1">
           <span>存入时间：{{ deposit.created_at }} </span>
           <span class="float-right">存粮：{{ deposit.olo }} {{
-              is_expired(deposit.expire_date) ? '' : '🔒' }}</span>
+            is_expired(deposit.expire_date) ? '' : '🔒' }}</span>
         </div>
         <div class="my-1 py-1">
           <span>到期时间：{{ deposit.expire_date }}</span>
@@ -41,6 +44,10 @@
             <br>
             （那有什么用啊！）
           </p>
+          <b-input-group prepend="存粮标签　" class="mt-2">
+            <b-form-input v-model="deposit_description" type="text" placeholder="可留空"></b-form-input>
+          </b-input-group>
+
           <b-input-group prepend="存入奥利奥" class="mt-2">
             <b-form-input v-model="deposit_olo" type="number" placeholder="最少10个奥利奥">></b-form-input>
           </b-input-group>
@@ -104,6 +111,7 @@ export default {
       bank_data_page: 1,
 
       deposit_olo: 0,
+      deposit_description: "",
       end_time_selected: "00:00:00",
       end_date_selected: undefined,
 
@@ -182,6 +190,7 @@ export default {
         data: {
           binggan: this.$store.state.User.Binggan,
           olo: this.deposit_olo,
+          description: this.deposit_description,
           expire_date: this.end_date_selected + " " + this.end_time_selected,
         },
       };
