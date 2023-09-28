@@ -49,7 +49,9 @@ class EraseNissinedDatabase extends Command
         }
 
         $this->info('正在开始清理数据');
-        $nissined_threads_id = Thread::where('has_nissined', 1)->pluck('id');
+        $nissined_threads_id = Thread::where('has_nissined', 1)
+            ->where('forum_id', '<>', 419) //咒岛不清
+            ->pluck('id');
         Log::channel('database_log')->info('nissined_thread_id', [$nissined_threads_id]);
 
         $num_nissined_threads = count($nissined_threads_id);
@@ -69,7 +71,7 @@ class EraseNissinedDatabase extends Command
             Post::suffix(intval($thread_id / 10000))
                 ->where('thread_id', $thread_id)
                 ->delete();
-                $bar->setMessage(sprintf('已清理主题id-%d  共有%d个回复', $thread_id, $num_posts));
+            $bar->setMessage(sprintf('已清理主题id-%d  共有%d个回复', $thread_id, $num_posts));
             Log::channel('database_log')->info(sprintf('已清理主题id-%d  共有%d个回复', $thread_id, $num_posts));
             $bar->advance();
         }
