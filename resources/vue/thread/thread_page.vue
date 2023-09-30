@@ -1161,7 +1161,7 @@ export default {
       this.$refs.reward_modal.reward_click(payload);
     },
     keyup_callee(event) {
-      if (event.ctrlKey && event.key === "q") {
+      if (event.ctrlKey && event.key === "x") {
         this.get_posts_data(true, false);
       }
     },
