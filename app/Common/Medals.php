@@ -310,6 +310,14 @@ class Medals
             'threshold' => null,
             'varname' => null,
         ),
+        //23年国庆
+        152 => array(
+            'name' => '国庆节快乐',
+            'describe' => '伟大的祖国节日快乐',
+            'threshold' => null,
+            'varname' => null,
+        ),
+
 
         //通过打赏获得的olo数量 
         161 => array(
@@ -559,7 +567,7 @@ class Medals
             'varname' => null,
         ),
 
-        
+
         //银行提前支取累计
         251 => array(
             'name' => '今朝有米今朝吃',

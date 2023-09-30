@@ -117,6 +117,8 @@
         </CrowdComponent>
         <HongbaoComponent v-if="hongbao_id && posts_load_status" :hongbao_id="hongbao_id"
           @quote_click="quote_click_handle" :admin_button_show="admin_button_show"></HongbaoComponent>
+        <HongbaoPoolComponent v-if="thread_id == 88348" :thread_id="thread_id" :forum_id="forum_id">
+        </HongbaoPoolComponent>
         <div v-for="post_data in posts_data" :key="post_data.id">
           <PostItem :post_data="post_data" :thread_anti_jingfen="thread_anti_jingfen" :random_head_add="random_heads_data[random_heads_group - 1].random_heads[
             post_data.random_head
@@ -397,6 +399,7 @@ import GambleComponent from "./gamble_component.vue";
 import CrowdComponent from "./crowd_component.vue";
 import HongbaoComponent from "./hongbao_component.vue";
 import HongbaoPostComponent from "./hongbao_post_component.vue";
+import HongbaoPoolComponent from "./hongbao_pool_component.vue";
 import HongbaoModal from "./hongbao_modal.vue";
 import Battle from "./battle.vue";
 import BattleModal from "./battle_modal.vue";
@@ -417,6 +420,7 @@ export default {
     CrowdComponent,
     HongbaoComponent,
     HongbaoPostComponent,
+    HongbaoPoolComponent,
     HongbaoModal,
     Battle,
     BattleModal,

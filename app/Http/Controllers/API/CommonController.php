@@ -227,50 +227,50 @@ class CommonController extends Controller
         $coin = 0; //红包金额
         $message = ""; //红包回帖信息
 
-        if (Carbon::now() < Carbon::create("2023-4-28 0:0:0")) {
+        if (Carbon::now() < Carbon::create("2023-10-1 0:0:0")) {
             $coin = 0;
             $message = "本次活动尚未开始，请稍等喔";
-        } elseif (Carbon::now() > Carbon::create("2023-5-2 0:0:0")) {
+        } elseif (Carbon::now() > Carbon::create("2023-10-4 0:0:0")) {
             $coin = 0;
             $message = "本次活动已经结束，你来晚啦";
         } elseif (DB::table("hongbao_record")->where('user_id', $user->id)->lockForUpdate()->exists()) {
             $coin = 0;
             $message = "你已经领取过了，不要贪心喔！";
-        } elseif (Carbon::parse($user->created_at) > Carbon::create("2023-4-28 0:0:0")) {
+        } elseif (Carbon::parse($user->created_at) > Carbon::create("2023-9-28 0:0:0")) {
             $coin = 0;
-            $message = "你的饼干不符合领取条件（23年4月28日0点前领取的饼干）";
+            $message = "你的饼干不符合领取条件（23年9月28日0点前领取的饼干）";
         } else {
             $rand_num = random_int(1, 1000);
             switch ($rand_num) {
                 case $rand_num == 1000: {
                         if (DB::table("hongbao_record")->where('rand_num', 1000)->exists()) {
                             $coin = 10000;
-                            $message = "哇喔！恭喜抽到1w个olo！感谢您继续支持小火锅~！ <img src='https://img.mjj.today/2022/06/26/ef232ad2a61c42966a5bb04732457ec3.gif' class='emoji_img'>";
+                            $message = "哇喔！恭喜抽到1w个olo！祝国庆快乐~";
                             break;
                         } else {
                             $coin = 100000;
-                            $message = "哇喔！！！这是唯一大奖10w个olo！恭喜！！<img src='https://img.mjj.today/2022/10/18/df14947d315f468dad272680313e29c9.gif' class='emoji_img'>";
+                            $message = "这是岛主埋单唯一大礼！10w个olo！祝国庆快乐~";
                             break;
                         }
                     }
                 case $rand_num >= 990: {
                         $coin = 10000;
-                        $message = "哇喔！恭喜抽到1w个olo！感谢您继续支持小火锅~！  <img src='https://img.mjj.today/2022/06/26/ef232ad2a61c42966a5bb04732457ec3.gif' class='emoji_img'>";
+                        $message = "哇喔！恭喜抽到1w个olo！祝国庆快乐~";
                         break;
                     }
                 case $rand_num >= 900: {
                         $coin = 3000;
-                        $message = "哇喔！恭喜抽到3000个olo！感谢您继续支持小火锅~！  <img src='https://img.mjj.today/2022/07/20/acdae76f36d1931931a59c4a9d453944.gif' class='emoji_img'>";
+                        $message = "恭喜抽到3000个olo！祝国庆快乐~";
                         break;
                     }
                 case $rand_num >= 600: {
                         $coin = 1000;
-                        $message = "恭喜抽到1000个olo！感谢您继续支持小火锅~！ <img src='https://img.mjj.today/2022/10/18/8a486bd71d4df7263544618561915199.gif' class='emoji_img'>";
+                        $message = "恭喜抽到1000个olo！祝国庆快乐~";
                         break;
                     }
                 default: {
                         $coin = 500;
-                        $message = "恭喜抽到500个olo！感谢您继续支持小火锅~！ <img src='https://img.mjj.today/2022/10/18/79c5e0400efa7308fcb2899faf40b89e.gif' class='emoji_img'>";
+                        $message = "恭喜抽到500个olo！祝国庆快乐~";
                         break;
                     }
             }
@@ -287,7 +287,7 @@ class CommonController extends Controller
                 'forum_id' => $request->forum_id,
                 'thread_id' => $request->thread_id,
                 'content' => $message,
-                'nickname' => '新春红包系统',
+                'nickname' => '国庆红包系统',
                 'created_by_admin' => 2,
                 'created_IP' => $request->ip(),
             ]);
@@ -299,13 +299,13 @@ class CommonController extends Controller
                     'normal', //记录类型
                     [
                         'olo' => $coin,
-                        'content' => '新春红包奖励',
+                        'content' => '国庆红包奖励',
                         'thread_id' => $thread->id,
                         'thread_title' => $thread->title,
                         'post_id' => $post->id,
                         'floor' => $post->floor,
                     ]
-                ); //回复+10奥利奥（通过统一接口、记录操作）
+                );
                 $user->save();
 
                 DB::table("hongbao_record")->insert([
@@ -325,7 +325,132 @@ class CommonController extends Controller
         }
     }
 
+    public function store_hongbao_pool(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'olo' => 'required|integer',
+            'message' => 'nullable|string|max:100',
+            'thread_id' => 'required|integer',
+            'forum_id' => 'required|integer',
+        ]);
+
+        $user = $request->user;
+        $olo = 1000;
+        $message = "我投入了1000个olo！<br>" . $request->message; //祝福池留言
+
+        if (Carbon::now() < Carbon::create("2023-10-1 0:0:0")) {
+            return response()->json([
+                'code' => ResponseCode::USER_CANNOT,
+                'message' => "本次活动尚未开始，请稍等喔",
+            ]);
+        }
+        if (Carbon::now() > Carbon::create("2023-10-4 0:0:0")) {
+            return response()->json([
+                'code' => ResponseCode::USER_CANNOT,
+                'message' => "本次活动已经结束，你来晚啦",
+            ]);
+        }
+        if (Carbon::parse($user->created_at) > Carbon::create("2023-9-28 0:0:0")) {
+            return response()->json([
+                'code' => ResponseCode::USER_CANNOT,
+                'message' => "你的饼干不符合参与条件（23年9月28日0点前领取的饼干）",
+            ]);
+        }
+
+        if (DB::table("hongbao_pool")->where('user_id', $user->id)->exists()) {
+            return response()->json([
+                'code' => ResponseCode::USER_CANNOT,
+                'message' => "已经投入过祝福池了，请勿重复投入喔！",
+            ]);
+        }
+
+        // $matches = array();
+        // if (preg_match("/暴毙|爆炸/", $request->message, $matches)) {
+        //     return response()->json([
+        //         'code' => ResponseCode::USER_CANNOT,
+        //         'message' => sprintf('请勿投入黑锦鲤喔！关键词：%s', $matches[0]),
+        //     ]);
+        // }
+
+        //执行追加新回复流程
+        try {
+            DB::beginTransaction();
+
+            $post = Post::create([
+                'created_binggan' => $request->binggan,
+                'forum_id' => $request->forum_id,
+                'thread_id' => $request->thread_id,
+                'content' => $message,
+                'nickname' => '祝福池系统',
+                'created_by_admin' => 2,
+                'created_IP' => $request->ip(),
+            ]);
+
+
+            $user->coinChange(
+                'normal', //记录类型
+                [
+                    'olo' => $olo,
+                    'content' => '国庆祝福池',
+                    'thread_id' => $request->thread_id,
+                    'thread_title' => "国庆祝福池活动",
+                    'post_id' => $post->id,
+                    'floor' => $post->floor,
+                ]
+            );
+            $user->save();
+
+            DB::table("hongbao_pool")->insert([
+                "post_id" => $post->id,
+                "user_id" => $user->id,
+                "message" => $message,
+                'floor' => $post->floor,
+                "olo" => $olo,
+                "created_at" => Carbon::now(),
+            ]);
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '已投入祝福池！请等待开奖~',
+            ],
+        );
+    }
+
+    public function get_hongbao_pool(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+
+        ]);
+
+        $user = $request->user;
+
+        $user_pool = DB::table('hongbao_pool')->where('user_id', $user->id)->first();
+        $olo_total = DB::table('hongbao_pool')->sum('olo');
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '已获取祝福池信息',
+                'data' => [
+                    'user_pool' => $user_pool,
+                    'olo_total' => $olo_total
+                ],
+            ],
+        );
+    }
+
+
     public static  function get_IP_location(string $IP)
+
     {
         $url = "http://ip-api.com/json/" . $IP . '?fields=17425937';
         // $post_data = array();

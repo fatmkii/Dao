@@ -2609,6 +2609,14 @@ var medals_hide = {
         'img': 'https://i2.mjj.rip/2023/06/19/140dc40b00813e3cc7826d29541202eb.png',
     },
 
+    //23年国庆
+    152: {
+        'name': '国庆节快乐',
+        'describe': '伟大的祖国节日快乐',
+        'threshold': 0,
+        'img': 'https://i.mji.rip/2023/09/29/285e7c6c0c10cc192afa787320aefbcf.png',
+    },
+
     //画师荣誉徽章
     181: {
         'name': '皇家御用画宗',

@@ -559,6 +559,33 @@ class UserMedalRecord extends Model
         }
     }
 
+    public function check_national_day()
+    {
+        if (Carbon::now() < Carbon::create("2023-10-1 0:0:0")) {
+            //如果时间未到，就什么都不做
+            return;
+        }
+
+        if (Carbon::now() > Carbon::create("2023-10-8 0:0:0")) {
+            //如果时间已经过期，就什么都不做
+            return;
+        }
+
+        $medal_id = 152;
+
+        //纯粹行为型的徽章，直接查询
+        // $medals_code_exists = $this->UserMedal()->where('medal_id', 131)->exists();
+        $medals_code_exists = UserMedal::where('user_id', $this->user_id)->where('medal_id', $medal_id)->exists();
+        if (!$medals_code_exists) {
+            $user_medal = new UserMedal;
+            $user_medal->user_id = $this->user_id;
+            $user_medal->medal_id = $medal_id;
+            $user_medal->created_at = Carbon::now();
+            $user_medal->save();
+        }
+    }
+
+
     public static function check_emoji_contest_group(int $group_id, int $votes_num_total, User $user)
     {
         //表情包萌成就判断（每个角色的成就）
