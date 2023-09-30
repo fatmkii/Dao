@@ -84,7 +84,7 @@
     <div class="post_footer" ref="post_author_info" :style="post_footer_css">
       <span class="post_footer_text" @click="quote_click">№{{ post_data.floor }} ☆☆☆</span>
       <span class="post_nick_name align-items-center" :class="author_class">
-        {{ post_data.nickname }} [CN]
+        {{ post_data.nickname }} 🇨🇳
       </span>
       <span class="post_footer_text">于</span>
       <span class="post_created_at">{{ post_data.created_at }}</span>
