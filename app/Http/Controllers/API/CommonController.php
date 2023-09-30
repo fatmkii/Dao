@@ -391,7 +391,7 @@ class CommonController extends Controller
             $user->coinChange(
                 'normal', //记录类型
                 [
-                    'olo' => $olo,
+                    'olo' => -$olo,
                     'content' => '国庆祝福池',
                     'thread_id' => $request->thread_id,
                     'thread_title' => "国庆祝福池活动",
