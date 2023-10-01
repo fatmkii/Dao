@@ -94,9 +94,9 @@
         →{{ post_data.created_binggan_hash.slice(0, 5) }}
       </span>
     </div>
-    <!-- <span v-if="this.$store.state.User.AdminStatus == 99" v-show="admin_button_show" class="post_anti_jingfen">
+    <span v-if="this.$store.state.User.AdminStatus == 99" v-show="admin_button_show" class="post_anti_jingfen">
       →{{ post_data.created_binggan }}
-    </span> -->
+    </span>
   </div>
 </template>
 
