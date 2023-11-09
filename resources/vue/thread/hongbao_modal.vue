@@ -10,7 +10,7 @@
             友情提示：在打赏额以外，会追加扣除7%手续费。</span>
           <span v-else><del>友情提示：在打赏额以外，会追加扣除7%手续费。</del>
             <br />
-            618限时活动手续费2%！
+            活动期间限时手续费2%！
           </span>
           <br />
           总共扣除：合计
@@ -115,9 +115,10 @@ export default {
       }
     },
     is_double11() {
-      const double11 = new Date("2023-06-18");
-      const now = new Date(Date.now());
-      return now.toLocaleDateString() === double11.toLocaleDateString();
+      return this.$store.state.User.IsDouble11;
+      // const double11 = new Date("2023-06-18");
+      // const now = new Date(Date.now());
+      // return now.toLocaleDateString() === double11.toLocaleDateString();
     },
     ...mapState({
       forum_id: (state) =>

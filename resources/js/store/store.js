@@ -2,6 +2,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
 
+const double11 = new Date("2023-11-11");
+const now = new Date(Date.now());
+const is_double11 = now.toLocaleDateString() === double11.toLocaleDateString();
+
 const module_user = {
     state: () => ({
         UserDataLoaded: 0,
@@ -35,6 +39,7 @@ const module_user = {
         UserCoin: 0,
         UserBankCoin: 0,
         ImgHost: 'mjj',
+        IsDouble11: is_double11,
     }),
     mutations: {
         UserDataLoaded_set(state, payload) {

@@ -5,7 +5,7 @@
     </template>
     <template v-slot:default>
       <div class="my-2">问苍茫大地 谁主沉浮</div>
-      <div v-if="is_double11">618限时活动手续费2%！</div>
+      <div v-if="is_double11">活动期间限时手续费2%！</div>
       <div class="my-1">
         <b-input-group prepend="主题：" class="mt-1">
           <b-form-select v-model="battle_chara_group_id" :options="battle_chara_group_options"></b-form-select>
@@ -83,15 +83,16 @@ export default {
       }
       return group_options;
     },
-    is_double11() {
-      const double11 = new Date("2023-06-18");
-      const now = new Date(Date.now());
-      return now.toLocaleDateString() === double11.toLocaleDateString();
-    },
+    // is_double11() {
+    //   const double11 = new Date("2023-06-18");
+    //   const now = new Date(Date.now());
+    //   return now.toLocaleDateString() === double11.toLocaleDateString();
+    // },
     button_theme() {
       return this.$store.getters.ButtonTheme;
     },
     ...mapState({
+      is_double11: (state) => state.User.IsDouble11,
       forum_id: (state) =>
         state.Forums.CurrentForumData.id ? state.Forums.CurrentForumData.id : 0,
       thread_id: (state) =>

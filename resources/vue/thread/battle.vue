@@ -94,9 +94,10 @@ export default {
       return this.$store.getters.ButtonTheme;
     },
     is_double11() {
-      const double11 = new Date("2023-06-18");
-      const now = new Date(Date.now());
-      return now.toLocaleDateString() === double11.toLocaleDateString();
+      return this.$store.state.User.IsDouble11;
+      // const double11 = new Date("2023-06-18");
+      // const now = new Date(Date.now());
+      // return now.toLocaleDateString() === double11.toLocaleDateString();
     },
     tax_rate() {
       if (this.is_double11) {
