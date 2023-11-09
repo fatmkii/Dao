@@ -121,9 +121,9 @@ export default {
     },
     banner_text() {
       if (this.can_vote) {
-        return `将于6月25日20：00结束`
+        return `将于11月14日20：00结束`
       } else if (this.before_start) {
-        return '6月18日20：00 投票正式开始！'
+        return '11月11日20：00 投票正式开始！'
       } else if (this.after_end) {
         return ''
       }
