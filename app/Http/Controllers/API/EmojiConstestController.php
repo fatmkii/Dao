@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\Log;
 
 class EmojiConstestController extends Controller
 {
-    private $start_time = '2023-06-18 20:00:00';
-    private $end_time = '2023-06-25 20:00:00';
-    protected $chara_name_list = ['AC娘', '鹦鹉鸡', '咪子鱼', '小黑猫', '麻将脸', '小恐龙', 'TD猫', '小豆泥', '小企鹅', '小黄脸', 'FUFU'];
+    private $start_time = '2023-11-11 20:00:00';
+    private $end_time = '2023-11-14 20:00:00';
+    protected $chara_name_list = ['领结猫', '小甲鱼', '小蓝龙', '咖波', '谷歌布丁', '药水哥', 'Loopy', '粉红兔', '猫猫', '迷宫饭', 'Boocha', 'chiikawa', '线条小狗'];
 
     public function show(Request $request, $emoji_group_id)
     {

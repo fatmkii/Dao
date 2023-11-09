@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="login_status">
-      <b-img fluid-grow src="https://i.mjj.rip/2023/06/16/bbce8e574a86398bc038dcec3d8b187f.png"></b-img>
+      <b-img fluid-grow src="https://i.mji.rip/2023/11/08/6ef6ac935961751d3cf158a43d5b4b80.jpeg"></b-img>
       <div class="my-2">
         <span>{{ banner_text }}</span>
       </div>
@@ -18,8 +18,7 @@
               moe_url(group_vote_data.emoji_id),
               group_vote_data.votes_num_total,
               group_data.group_id)">
-            <div class="emoji_moe_img_box"><b-img class="emoji_moe_img" :src="moe_url(group_vote_data.emoji_id)" fluid
-                alt="emoji"></b-img></div>
+            <b-img class="emoji_moe_img" :src="moe_url(group_vote_data.emoji_id)" fluid alt="emoji"></b-img>
             <span class="emoji_vote_text">{{ group_vote_data.votes_num_total ? group_vote_data.votes_num_total : ''
             }}</span>
           </div>
@@ -29,8 +28,7 @@
           <div class="d-flex flex-wrap">
             <div class="emoji_moe_box d-flex flex-column align-items-center m-1"
               v-for="(user_vote_data, index) in user_votes_data">
-              <div class="emoji_moe_img_box"><b-img class="emoji_moe_img"
-                  :src="moe_group_url(user_vote_data.emoji_group_id)" fluid alt="emoji"></b-img></div>
+              <b-img class="emoji_moe_img" :src="moe_group_url(user_vote_data.emoji_group_id)" fluid alt="emoji"></b-img>
               <span class="emoji_vote_text" :style="index == 0 ? 'width:100px;' : ''"> {{ index == 0 ? '⭐' : '' }}
                 {{ user_vote_data.votes_num_total ? user_vote_data.votes_num_total : '' }}</span>
             </div>
@@ -100,12 +98,12 @@ export default {
       return moe_json.moe_group_index //来自浏览器引入的emoji_moe.js
     },
     before_start() {
-      const start = new Date("2023-06-18 20:00:00");
+      const start = new Date("2023-11-11 20:00:00");
       const now = new Date(Date.now());
       return now < start
     },
     after_end() {
-      const end = new Date("2023-06-25 20:00:00");
+      const end = new Date("2023-11-14 20:00:00");
       const now = new Date(Date.now());
       return now > end
     },

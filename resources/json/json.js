@@ -2735,6 +2735,20 @@ var medals_hide = {
         'threshold': 300000,
         'img': 'https://ice.frostsky.com/2023/09/15/227b2417ff7b10e841811e1a3f41d12e.png',
     },
+
+    261: {
+        'name': '小火锅第一届出道萌',
+        'describe': '出道萌投票100票',
+        'threshold': 100, //这里指100票，10000个olo
+        'img': 'https://i.mji.rip/2023/11/08/8ecc814a41d54a7c87ca85411f9c2ca2.png',
+    },
+    262: {
+        'name': '成为大家的爱豆',
+        'describe': '出道萌投票1000票',
+        'threshold': 1000, //这里指1000票，100000个olo
+        'img': 'https://i.mji.rip/2023/11/08/e7e61cae6b3ed7341b431229be404a90.png',
+    },
+
 }
 
 

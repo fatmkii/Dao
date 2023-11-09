@@ -576,6 +576,20 @@ class Medals
             'varname' => 'withdraw_penalty',
         ),
 
+        //表情包出道萌
+        261 => array(
+            'name' => '小火锅第一届出道萌',
+            'describe' => '出道萌投票100票',
+            'threshold' => 100, //这里指100票，10000个olo
+            'varname' => 'emoji_contest_total',
+        ),
+        262 => array(
+            'name' => '成为大家的爱豆',
+            'describe' => '出道萌投票1000票',
+            'threshold' => 1000, //这里指1000票，100000个olo
+            'varname' => 'emoji_contest_total',
+        ),
+
 
     );
 }

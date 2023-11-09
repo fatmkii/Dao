@@ -607,7 +607,9 @@ class UserMedalRecord extends Model
     {
         //表情包萌成就判断（总计的投票数）
         //本次处理的同一系列的成就id
-        $medals_id = array(212, 213);
+        // $medals_id = array(212, 213);//212和213是表情包萌
+        $medals_id = array(261, 262);//261和262是表情包萌
+        
 
         //已经获得过的徽章（统一查询一次，用于后续判断）
         $medals_id_retain = UserMedal::where('user_id', $user->id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();

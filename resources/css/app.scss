@@ -583,25 +583,13 @@ label.custom-file-label::after {
 .emoji_moe_box {
     @media all and (min-width: 1200px) {
         width: 60px;
-        height: 84px;
+        // height: 84px;
     }
     @media not all and (min-width: 1200px) {
         width: 48px;
-        height: 68px;
+        // height: 68px;
     }
-}
-
-.emoji_moe_img_box {
-    @media all and (min-width: 1200px) {
-        width: 60px;
-        height: 60px;
-    }
-    @media not all and (min-width: 1200px) {
-        width: 48px;
-        height: 48px;
-    }
-    display: flex;
-    margin: auto;
+    height: auto;
 }
 
 .emoji_moe_img {
