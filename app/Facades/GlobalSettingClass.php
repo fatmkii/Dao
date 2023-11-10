@@ -50,7 +50,7 @@ class GlobalSettingClass
 
         if ($use_festival_check) {
             if ($time == null) {
-                $time == Carbon::now();
+                $time = Carbon::now();
             }
             if ($time->between($start, $end)) {
                 $is_festival = true;
