@@ -589,6 +589,12 @@ class Medals
             'threshold' => 1000, //这里指1000票，100000个olo
             'varname' => 'emoji_contest_total',
         ),
+        263 => array(
+            'name' => '药药切克闹',
+            'describe' => '民推之光药水哥',
+            'threshold' => 0, //本命是药水哥的全部饼干
+            'varname' => null,
+        ),
 
 
     );

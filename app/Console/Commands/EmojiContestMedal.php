@@ -52,12 +52,12 @@ class EmojiContestMedal extends Command
                 ->orderBy('votes_num_total', 'desc')
                 ->orderBy('updated_at', 'desc')
                 ->first();
-            if ($user_vote_total->emoji_group_id == 8) {
+            if ($user_vote_total->emoji_group_id == 6) {
                 $count += 1;
                 array_push($user_array, $user_id);
                 UserMedal::create([
                     'user_id' => $user_id,
-                    'medal_id' => 214,
+                    'medal_id' => 263,
                     'created_at' => Carbon::now(),
                 ]);
             }

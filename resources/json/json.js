@@ -1968,6 +1968,45 @@ var emoji_json = [
         ],
         "deleted_at": null
     },
+    {
+        "id": "16",
+        "heads_id": "0",
+        "name": "药水哥",
+        "emojis": [
+            "https://www.z4a.net/images/2023/11/14/1.gif",
+            "https://www.z4a.net/images/2023/11/14/2.gif",
+            "https://www.z4a.net/images/2023/11/14/3.gif",
+            "https://www.z4a.net/images/2023/11/14/4.gif",
+            "https://www.z4a.net/images/2023/11/14/5.gif",
+            "https://www.z4a.net/images/2023/11/14/30.gif",
+            "https://www.z4a.net/images/2023/11/14/32.gif",
+            "https://www.z4a.net/images/2023/11/14/6.gif",
+            "https://www.z4a.net/images/2023/11/14/7.gif",
+            "https://www.z4a.net/images/2023/11/14/8.gif",
+            "https://www.z4a.net/images/2023/11/14/9.gif",
+            "https://www.z4a.net/images/2023/11/14/10.gif",
+            "https://www.z4a.net/images/2023/11/14/12.gif",
+            "https://www.z4a.net/images/2023/11/14/14.gif",
+            "https://www.z4a.net/images/2023/11/14/15.gif",
+            "https://www.z4a.net/images/2023/11/14/11.gif",
+            "https://www.z4a.net/images/2023/11/14/13.gif",
+            "https://www.z4a.net/images/2023/11/14/16.gif",
+            "https://www.z4a.net/images/2023/11/14/17.gif",
+            "https://www.z4a.net/images/2023/11/14/18.gif",
+            "https://www.z4a.net/images/2023/11/14/19.gif",
+            "https://www.z4a.net/images/2023/11/14/20.gif",
+            "https://www.z4a.net/images/2023/11/14/21.gif",
+            "https://www.z4a.net/images/2023/11/14/22.gif",
+            "https://www.z4a.net/images/2023/11/14/23.gif",
+            "https://www.z4a.net/images/2023/11/14/24.gif",
+            "https://www.z4a.net/images/2023/11/14/25.gif",
+            "https://www.z4a.net/images/2023/11/14/26.gif",
+            "https://www.z4a.net/images/2023/11/14/27.gif",
+            "https://www.z4a.net/images/2023/11/14/28.webp",
+            "https://www.z4a.net/images/2023/11/14/29.gif"
+        ],
+        "deleted_at": null
+    },
 ]
 
 //大乱斗角色
@@ -2747,6 +2786,12 @@ var medals_hide = {
         'describe': '出道萌投票1000票',
         'threshold': 1000, //这里指1000票，100000个olo
         'img': 'https://i.mji.rip/2023/11/08/e7e61cae6b3ed7341b431229be404a90.png',
+    },
+    263: {
+        'name': '药药切克闹',
+        'describe': '民推之光药水哥',
+        'threshold': null,
+        'img': 'https://z1.ax1x.com/2023/11/14/piYVhE6.png',
     },
 
 }
