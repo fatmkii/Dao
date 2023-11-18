@@ -16,6 +16,8 @@ use App\Models\HongbaoPost;
 use App\Models\HongbaoPostUser;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\Redis;
+
 class HongbaoPostController extends Controller
 {
     public function create(Request $request)
@@ -162,6 +164,24 @@ class HongbaoPostController extends Controller
                     return;
                 }
 
+
+                //用Redis记录，限制30秒内同一个IP不能领取同一个红包
+                $key = sprintf('hongbao_post_%s_%s', $hongbao_item->id, $request->ip()); //格式：hongbao_post_红包ID_IP地址
+                if (Redis::exists($key)) {
+                    // $post_content = "30s内不能茄饼领同一个红包哦";
+                    // $post_content = "To №" . $post_original->floor . "：" . $post_content;
+                    // Post::create([
+                    //     'created_binggan' => $request->binggan,
+                    //     'forum_id' => $request->forum_id,
+                    //     'thread_id' => $request->thread_id,
+                    //     'content' => $post_content,
+                    //     'nickname' => '红包结果',
+                    //     'created_by_admin' => 2,
+                    //     'created_IP' => $request->ip(),
+                    // ]);
+                    return;
+                }
+
                 //执行追加新回复流程
                 try {
                     DB::beginTransaction();
@@ -208,7 +228,7 @@ class HongbaoPostController extends Controller
                         $message_array = json_decode($hongbao->message_json);
                         $rand_key = array_rand($message_array);
                         $message = $message_array[$rand_key]; //从多个回复中随机抽出一个
-                        
+
                         $post_content = $post_content . '<br>——' . $message;
                     }
 
@@ -254,6 +274,11 @@ class HongbaoPostController extends Controller
                     $hongbao_user->floor = $post_original->floor;
                     $hongbao_user->created_at = Carbon::now();
                     $hongbao_user->save();
+
+                    //追加该IP的抢红包记录，限制同一IP抢同一个红包
+                    $key = sprintf('hongbao_post_%s_%s', $hongbao_item->id, $request->ip()); //格式：hongbao_post_红包ID_IP地址
+                    $ttl = 30; //限制30秒
+                    Redis::setex($key, $ttl, 1);
 
                     DB::commit();
                 } catch (Exception $e) {
