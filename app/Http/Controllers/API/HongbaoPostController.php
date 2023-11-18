@@ -165,10 +165,10 @@ class HongbaoPostController extends Controller
                 }
 
 
-                //用Redis记录，限制30秒内同一个IP不能领取同一个红包
+                //用Redis记录，限制10秒内同一个IP不能领取同一个红包
                 $key = sprintf('hongbao_post_%s_%s', $hongbao_item->id, $request->ip()); //格式：hongbao_post_红包ID_IP地址
                 if (Redis::exists($key)) {
-                    // $post_content = "30s内不能茄饼领同一个红包哦";
+                    // $post_content = "10s内不能茄饼领同一个红包哦";
                     // $post_content = "To №" . $post_original->floor . "：" . $post_content;
                     // Post::create([
                     //     'created_binggan' => $request->binggan,
@@ -277,7 +277,7 @@ class HongbaoPostController extends Controller
 
                     //追加该IP的抢红包记录，限制同一IP抢同一个红包
                     $key = sprintf('hongbao_post_%s_%s', $hongbao_item->id, $request->ip()); //格式：hongbao_post_红包ID_IP地址
-                    $ttl = 30; //限制30秒
+                    $ttl = 10; //限制30秒
                     Redis::setex($key, $ttl, 1);
 
                     DB::commit();
