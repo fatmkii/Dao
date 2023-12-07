@@ -124,6 +124,7 @@ Route::prefix('user')->group(function () {
     Route::post('/my_battle_chara_set', [UserController::class, 'my_battle_chara_set'])->middleware('CheckBinggan:create'); //获得已经获得的成就数据
     Route::post('/bank_deposit', [UserController::class, 'bank_deposit'])->middleware('CheckBinggan:create'); //往银行存款
     Route::post('/bank_withdraw', [UserController::class, 'bank_withdraw'])->middleware('CheckBinggan:create'); //从银行提款
+    Route::post('/show_bank', [UserController::class, 'show_bank_deposit'])->middleware('CheckBinggan:show'); //查询银行存款
 });
 
 
