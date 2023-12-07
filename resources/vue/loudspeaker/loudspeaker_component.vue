@@ -90,6 +90,11 @@ export default {
                             this.loudspeaker_no_data = true;
                         } else {
                             this.loudspeaker_data = response.data.data;
+                            //避免重复追加多个style
+                            var style_existed = document.getElementById("loudspeaker_keyframe")
+                            if (style_existed) {
+                                style_existed.remove()
+                            }
                             let vm = this;
                             setTimeout(function () {
                                 //setTimeout后才能获得准确的元素高度
@@ -154,7 +159,15 @@ export default {
 
         },
     },
-    created() { this.get_loudspeaker_data(); },
+    created() {
+        this.get_loudspeaker_data();
+
+        let vm = this; //为了回调函数可以使用vue的方法
+        this.$eventHub.$on("loudspeaker_refresh", () => {
+            vm.get_loudspeaker_data(); //监听全局的需要刷新大喇叭数据的需求
+        });
+
+    },
     mounted() { },
     beforeDestroy() {
         //避免重复追加多个style
