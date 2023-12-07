@@ -58,7 +58,6 @@
         <b-button size="sm" class="ml-1" style="min-width: 46px" variant="outline-dark" @click="search_clear">清空
         </b-button>
       </div>
-      <Loudspeaker></Loudspeaker>
       <ThreadPaginator :thread_id="thread_id" :last_page="posts_last_page" :current_page="page" align="right">
       </ThreadPaginator>
       <div class="post_container">
@@ -144,12 +143,6 @@
           </b-button>
 
           <div>
-            <!-- <b-spinner
-              class="spinner img-uploading ml-2"
-              v-show="is_listening"
-              label="涮锅中"
-            >
-            </b-spinner> -->
             <img v-show="is_listening" id="listening_img" class="ml-2" />
             <router-link :to="'/thread/' + thread_id + '/' + (page + 1)" v-if="show_listen_next_page"
               class="thread_page ml-1" style="font-size: 0.875rem">回帖已经翻页、点击前往
@@ -157,7 +150,9 @@
             <span class="ml-1" style="font-size: 0.875rem" v-if="this.page != this.posts_last_page">在最后一页才能自动涮锅</span>
           </div>
         </div>
+
       </div>
+      <Loudspeaker></Loudspeaker>
       <PostInput ref="post_input_com" :input_disable="!this.$store.state.User.LoginStatus || Boolean(locked_TTL) || new_post_handling
         " :new_post_handling="new_post_handling" :random_heads_group="random_heads_group" :forum_id="forum_id"
         :thread_id="thread_id" @content_commit="new_post_handle"><template v-slot:svg_icon>

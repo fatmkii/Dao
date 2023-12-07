@@ -1,25 +1,49 @@
 <template>
-    <div class="loudspeaker_container">
-        <div class="loudspeaker_content" v-if="data_loading != 2">正在读取大喇叭</div>
-        <div class="loudspeaker_content" v-if="loudspeaker_no_data"><router-link to="/loudspeaker" class="thread_title">
-                目前没有大喇叭，要发一个吗？</router-link></div>
-        <div class="loudspeaker_content" v-if="data_loading == 2 && !loudspeaker_no_data">
-            <div style="word-wrap:break-word" v-for="(loudspeaker, index) in loudspeaker_data" :key="index"
-                :style="{ color: loudspeaker.color }">
-                <component :is="loudspeaker.thread_id ? 'router-link' : 'span'" :style="{ color: loudspeaker.color }"
-                    :to="thread_link(loudspeaker.thread_id)">
-                    {{ index }}. {{ loudspeaker.content }}
-                </component>
-            </div>
-            <!-- 复制多一份，实现无缝循环播放 -->
-            <div style="word-wrap:break-word" v-for="(loudspeaker, index) in loudspeaker_data"
-                :key="index + loudspeaker_data.length" :style="{ color: loudspeaker.color }">
-                <component :is="loudspeaker.thread_id ? 'router-link' : 'span'" :style="{ color: loudspeaker.color }"
-                    :to="thread_link(loudspeaker.thread_id)">
-                    {{ index }}. {{ loudspeaker.content }}
-                </component>
+    <div class="d-flex">
+        <b-img style="height: 40px;" src="https://oss.cpttmm.com/xhg_other/miku_loudspeaker.png" fluid
+            @click="$bvModal.show('loudspeaker_list_modal')"></b-img>
+        <div class="loudspeaker_container ml-1">
+
+            <div class="loudspeaker_content" v-if="data_loading != 2">正在读取大喇叭</div>
+            <div class="loudspeaker_content" v-if="loudspeaker_no_data"><router-link to="/loudspeaker" class="thread_title">
+                    目前没有大喇叭，要发一个吗？</router-link></div>
+            <div class="loudspeaker_content" v-if="data_loading == 2 && !loudspeaker_no_data">
+                <div style="word-wrap:break-word" v-for="(loudspeaker, index) in loudspeaker_data" :key="index"
+                    :style="{ color: loudspeaker.color }">
+                    <component :is="loudspeaker.thread_id ? 'router-link' : 'span'" :style="{ color: loudspeaker.color }"
+                        :to="thread_link(loudspeaker.thread_id)">
+                        {{ index }}. {{ loudspeaker.content }}
+                    </component>
+                </div>
+                <!-- 复制多一份，实现无缝循环播放 -->
+                <div style="word-wrap:break-word" v-for="(loudspeaker, index) in loudspeaker_data"
+                    :key="index + loudspeaker_data.length" :style="{ color: loudspeaker.color }">
+                    <component :is="loudspeaker.thread_id ? 'router-link' : 'span'" :style="{ color: loudspeaker.color }"
+                        :to="thread_link(loudspeaker.thread_id)">
+                        {{ index }}. {{ loudspeaker.content }}
+                    </component>
+                </div>
             </div>
         </div>
+
+        <b-modal ref="loudspeaker_list_modal" id="loudspeaker_list_modal" hide-header>
+            <template v-slot:default>
+                <div style="max-height: 75vh;overflow: scroll;">
+                    <div style="word-wrap:break-word;margin-top: 0.8rem;" v-for="(loudspeaker, index) in loudspeaker_data"
+                        :key="index" :style="{ color: loudspeaker.color }">
+                        <component :is="loudspeaker.thread_id ? 'router-link' : 'span'"
+                            :style="{ color: loudspeaker.color }" :to="thread_link(loudspeaker.thread_id)">
+                            {{ index }}. {{ loudspeaker.content }}
+                        </component>
+                    </div>
+                </div>
+            </template>
+            <template v-slot:modal-footer="{ cancel }">
+                <b-button variant="outline-secondary" @click="cancel()">
+                    关闭
+                </b-button>
+            </template>
+        </b-modal>
     </div>
 </template>
   
