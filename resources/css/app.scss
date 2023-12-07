@@ -605,6 +605,34 @@ label.custom-file-label::after {
     }
 }
 
+//大喇叭容器
+.loudspeaker_container {
+    height: 2rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+    overflow-y: hidden;
+    position: relative;
+    width: 100%;
+
+    .loudspeaker_content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        :hover .loudspeaker_content {
+            animation-play-state: paused;
+            -webkit-animation-play-state: paused;
+        }
+    }
+}
+
+.loudspeaker_container:hover .loudspeaker_content {
+    animation-play-state: paused;
+    -webkit-animation-play-state: paused;
+}
+
+
+
+
 [v-cloak] {
     display: none;
 }

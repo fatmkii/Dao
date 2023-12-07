@@ -86,6 +86,7 @@ class Hongbao extends Model
             'hongbao_message' => 'nullable|string|max:255',
             'hongbao_message_json' => 'nullable|json|max:3000',
             'hongbao_olo_hide' => 'nullable|boolean',
+            'hongbao_loudspeaker' => 'nullable|boolean',
         ]);
 
         $user = $request->user;
@@ -114,6 +115,21 @@ class Hongbao extends Model
         $hongbao->message_json = $request->hongbao_message_json;
         $hongbao->olo_hide = $request->hongbao_olo_hide;
         $hongbao->save();
+
+        if ($request->hongbao_loudspeaker) {
+            //如果有设定自动发大喇叭，就发大喇叭
+            $effective_date = Carbon::now();
+            $expire_date = $effective_date->copy()->addDays(1); //记得copy否则会影响原变量
+            $loudspeaker = Loudspeaker::create([
+                'sub_id' => 1,
+                'user_id' => $user->id,
+                'created_binggan' => $user->binggan,
+                'content' => $request->title,
+                'thread_id' => $thread_id,
+                'effective_date' => $effective_date,
+                'expire_date' => $expire_date,
+            ]);
+        }
 
         $user_medal_record = $user->UserMedalRecord()->firstOrCreate();
         $user_medal_record->push_hongbao_out($request->hongbao_olo);

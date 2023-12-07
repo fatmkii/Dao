@@ -58,6 +58,7 @@
         <b-button size="sm" class="ml-1" style="min-width: 46px" variant="outline-dark" @click="search_clear">清空
         </b-button>
       </div>
+      <Loudspeaker></Loudspeaker>
       <ThreadPaginator :thread_id="thread_id" :last_page="posts_last_page" :current_page="page" align="right">
       </ThreadPaginator>
       <div class="post_container">
@@ -402,6 +403,7 @@ import Battle from "./battle.vue";
 import BattleModal from "./battle_modal.vue";
 import ZBar from "../component/z_bar.vue";
 import ColorPicker from "../component/color_picker.vue";
+import Loudspeaker from "../loudspeaker/loudspeaker_component.vue";
 
 export default {
   name: "thread_page",
@@ -422,6 +424,7 @@ export default {
     BattleModal,
     ZBar,
     ColorPicker,
+    Loudspeaker,
   },
   props: {
     thread_id: Number, //来自router，

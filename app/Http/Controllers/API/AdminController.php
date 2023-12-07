@@ -11,6 +11,7 @@ use App\Jobs\ProcessUserActive;
 use App\Models\AnnoucementMessages;
 use App\Models\Forum;
 use App\Models\HongbaoPost;
+use App\Models\Loudspeaker;
 use App\Models\Post;
 use App\Models\Thread;
 use App\Models\User;
@@ -1046,5 +1047,51 @@ class AdminController extends Controller
             'code' => ResponseCode::SUCCESS,
             'message' => '已删除公告',
         ]);
+    }
+
+    //管理员删除大喇叭
+    public function del_loudspeaker(Request $request)
+    {
+        $request->validate([
+            'binggan' => 'required|string',
+            'loudspeaker_id' => 'required|integer',
+        ]);
+
+
+        $user = $request->user();
+        $loudspeaker = Loudspeaker::find($request->loudspeaker_id);
+
+        if (!$loudspeaker) {
+            return response()->json([
+                'code' => ResponseCode::USER_NOT_FOUND,
+                'message' => '大喇叭不存在或已失效',
+            ]);
+        }
+
+        if (!$user->tokenCan('admin')) {
+            return response()->json([
+                'code' => ResponseCode::ADMIN_UNAUTHORIZED,
+                'message' => ResponseCode::$codeMap[ResponseCode::ADMIN_UNAUTHORIZED],
+            ]);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $loudspeaker->delete();
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '已删除该大喇叭',
+                'data' => $loudspeaker,
+            ]
+        );
     }
 }

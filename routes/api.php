@@ -124,7 +124,6 @@ Route::prefix('user')->group(function () {
     Route::post('/my_battle_chara_set', [UserController::class, 'my_battle_chara_set'])->middleware('CheckBinggan:create'); //获得已经获得的成就数据
     Route::post('/bank_deposit', [UserController::class, 'bank_deposit'])->middleware('CheckBinggan:create'); //往银行存款
     Route::post('/bank_withdraw', [UserController::class, 'bank_withdraw'])->middleware('CheckBinggan:create'); //从银行提款
-    Route::post('/show_bank', [UserController::class, 'show_bank_deposit'])->middleware('CheckBinggan:show'); //查询银行存款
 });
 
 
@@ -148,6 +147,7 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::get('/annoucement', [AdminController::class, 'show_annoucements']); //查看站内公告
     Route::delete('/annoucement/{annoucement_id}', [AdminController::class, 'del_annoucements']); //查看站内公告
     // Route::post('/check_jingfen', [AdminController::class, 'check_jingfen']); //查精分
+    Route::post('/del_loudspeaker', [AdminController::class, 'del_loudspeaker']); //删除大喇叭
 });
 
 //SuperAdmin系列
@@ -167,6 +167,13 @@ Route::prefix('emoji_contest')->group(function () {
     Route::post('/user_vote', [EmojiConstestController::class, 'user_vote'])->middleware('CheckBinggan:create'); //查询用户的投票结果
 });
 
+//Loudspeaker系列
+Route::prefix('loudspeaker')->group(function () {
+    Route::get('/show', [UserController::class, 'show_loudspeaker'])->middleware('CheckBinggan:show'); //获取大喇叭信息
+    Route::post('/create', [UserController::class, 'create_loudspeaker'])->middleware('CheckBinggan:create'); //发起大喇叭
+    Route::post('/repeal', [UserController::class, 'repeal_loudspeaker'])->middleware('CheckBinggan:create'); //撤回大喇叭
+
+});
 //杂项
 Route::get('/emoji', [CommonController::class, 'emoji_index']);
 Route::get('/subtitles', [CommonController::class, 'subtitles_index']);

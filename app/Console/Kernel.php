@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Models\Loudspeaker;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -43,6 +44,11 @@ class Kernel extends ConsoleKernel
                 Log::channel('my_log')->error('search_record_global expired failed');
                 Redis::del('search_record_global');
             }
+        })->everyMinute();
+
+        //每分钟检查过期大喇叭
+        $schedule->call(function () {
+            Loudspeaker::where('expire_date', "<", Carbon::now())->delete();
         })->everyMinute();
     }
 

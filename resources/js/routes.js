@@ -11,6 +11,7 @@ import admin_login_page from '../vue/admin/admin_login_page.vue'
 import admin_center from '../vue/admin/admin_center'
 import check_user_post from '../vue/admin/check_user_post'
 import emoji_contest from "../vue/emoji_contest/emoji_contest.vue"
+import louderspeaker_page from "../vue/loudspeaker/loudspeaker_page.vue"
 
 Vue.use(VueRouter);
 
@@ -82,6 +83,11 @@ const routes = [
         path: '/emoji_moe',
         name: 'emoji_contest',
         component: emoji_contest,
+    },
+    {
+        path: '/loudspeaker',
+        name: 'loudspeaker',
+        component: louderspeaker_page,
     },
 ]
 

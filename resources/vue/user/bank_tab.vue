@@ -175,7 +175,6 @@ export default {
     },
     set_bank_deposit() {
       if (!this.end_date_selected || !this.end_time_selected) {
-        this.new_thread_handling = false;
         alert("请选择存粮到期日期和时间");
         return;
       }

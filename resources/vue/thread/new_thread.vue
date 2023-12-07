@@ -122,6 +122,9 @@
           <b-form-checkbox v-model="hongbao_olo_hide" switch class="my-2">
             隐藏红包olo总额
           </b-form-checkbox>
+          <b-form-checkbox v-model="hongbao_loudspeaker" switch class="my-2" v-b-popover.hover.bottom="'自动发出1天大喇叭（免费）'">
+            自动发出大喇叭
+          </b-form-checkbox>
           <p>
             <span v-if="!is_double11"> 友情提示：在打赏额以外，会追加扣除7%手续费。</span>
             <span v-else><del>友情提示：在打赏额以外，会追加扣除7%手续费。</del>
@@ -382,6 +385,7 @@ export default {
         { value: 2, text: "定额红包" },
       ],
       hongbao_olo_hide: false,
+      hongbao_loudspeaker: true,
       end_time_selected: "00:00:00",
       end_date_selected: undefined,
       minDate: minDate,
@@ -541,6 +545,7 @@ export default {
         config.data.type = this.hongbao_type;
         config.data.hongbao_key_word = this.hongbao_key_word;
         config.data.hongbao_olo_hide = this.hongbao_olo_hide;
+        config.data.hongbao_loudspeaker = this.hongbao_loudspeaker;
 
         if (this.hongbao_message.length == 1) {
           //单个回复时，以json格式提交到hongbao_message

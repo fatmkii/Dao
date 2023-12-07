@@ -75,6 +75,8 @@ class ResponseCode
 
     const DATABASE_FAILED = 5001;
 
+    const PARAM_FAILED = 6001;
+
     const DEFAULT = 99999;
 
     public static $codeMap = [
@@ -132,6 +134,7 @@ class ResponseCode
         self::CAPTCHA_NOT_FOUND => '验证码不存在或已过期',
         self::CAPTCHA_WRONG => '验证码错误',
         self::ANNOUCEMENT_NOT_FOUND => '公告不存在',
+        self::PARAM_FAILED => '请求参数错误',
     ];
 }
 
