@@ -21,8 +21,8 @@ class CreateLoudspeakerTable extends Migration
             $table->string('content');
             $table->string('color')->nullable();
             $table->unsignedInteger('thread_id')->nullable(); //链接到相应的主题
-            $table->timestamp('effective_date');
-            $table->timestamp('expire_date');
+            $table->timestamp('effective_date')->nullable();
+            $table->timestamp('expire_date')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
