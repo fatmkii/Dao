@@ -152,7 +152,6 @@
         </div>
 
       </div>
-      <Loudspeaker></Loudspeaker>
       <PostInput ref="post_input_com" :input_disable="!this.$store.state.User.LoginStatus || Boolean(locked_TTL) || new_post_handling
         " :new_post_handling="new_post_handling" :random_heads_group="random_heads_group" :forum_id="forum_id"
         :thread_id="thread_id" @content_commit="new_post_handle"><template v-slot:svg_icon>
@@ -225,6 +224,7 @@
           </b-button>
         </div>
       </div>
+      <Loudspeaker></Loudspeaker>
     </div>
 
     <img src="https://oss.cpttmm.com/xhg_other/notice_2.png"
