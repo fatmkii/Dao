@@ -4,7 +4,7 @@
             <div class="d-flex align-items-end">
                 <b-img style="height: 80px;" src="https://oss.cpttmm.com/xhg_other/miku_loudspeaker.png" fluid></b-img>
                 <div class="ml-2" v-show="data_loading == 1">读取中……</div>
-                <div class="ml-2" v-show="loudspeaker_no_data">目前无大喇叭</div>
+                <div class="ml-2" v-show="loudspeaker_no_data">目前没有大喇叭</div>
                 <div class="ml-2" v-show="data_loading == 2 && !loudspeaker_no_data">爱乃是盲目！</div>
                 <b-button size="sm" class="ml-auto" :variant="button_theme" :disabled="data_loading == 1"
                     v-b-modal.loudspeaker_modal>发布大喇叭</b-button>
