@@ -163,10 +163,10 @@ export default {
     created() {
         this.get_loudspeaker_data();
 
-        let vm = this; //为了回调函数可以使用vue的方法
-        this.$eventHub.$on("loudspeaker_refresh", () => {
-            vm.get_loudspeaker_data(); //监听全局的需要刷新大喇叭数据的需求
-        });
+        // let vm = this; //为了回调函数可以使用vue的方法
+        // this.$eventHub.$on("loudspeaker_refresh", () => {
+        //     vm.get_loudspeaker_data(); //监听全局的需要刷新大喇叭数据的需求
+        // });
 
     },
     mounted() { },

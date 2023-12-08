@@ -69,7 +69,7 @@ export default {
       }
     },
     reload_handle() {
-      this.$eventHub.$emit("loudspeaker_refresh")//刷新大喇叭的全局事件
+      // this.$eventHub.$emit("loudspeaker_refresh")//刷新大喇叭的全局事件
       this.$emit('reload')//往父组件传递reload时间（主题列表刷新或者回复刷新）
     }
   },
