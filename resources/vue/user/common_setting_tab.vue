@@ -13,9 +13,17 @@
     <b-form-checkbox class="mx-2 my-2" switch v-model="ListeningHoldPage">
       自动涮锅时页面保持不动
     </b-form-checkbox>
-    <b-input-group prepend="图床选择：" class="mt-1" style="max-width: 300px" >
-      <b-form-select v-model="ImgHostSelected" :options="img_host_options"></b-form-select>
-    </b-input-group>
+    <b-form-checkbox class="mx-2 my-2" switch v-model="LoudspeakerMono">
+      大喇叭保持单色
+    </b-form-checkbox>
+    <div class="hongbao_input">
+      <b-input-group prepend="图床选择" class="mt-1" style="max-width: 300px">
+        <b-form-select v-model="ImgHostSelected" :options="img_host_options"></b-form-select>
+      </b-input-group>
+      <b-input-group prepend="大喇叭" class="mt-1" style="max-width: 300px">
+        <b-form-select v-model="LoudspeakerLocationSelected" :options="loudspeaker_options"></b-form-select>
+      </b-input-group>
+    </div>
     <hr :class="is_mobile ? 'my-1' : ''" />
     <div class="mt-2 d-flex align-items-center">
       <span class="mb-2">帖子内容行距：</span>
@@ -99,6 +107,11 @@ export default {
         { value: 'imgbb', text: "imgbb" },
         { value: 'freeimage', text: "freeimage" },
       ],
+      loudspeaker_options: [
+        { value: 'top', text: "放在上面" },
+        { value: 'center', text: "放在中间" },
+        { value: 'bottom', text: "放在底部" },
+      ],
     };
   },
   computed: {
@@ -135,6 +148,15 @@ export default {
         this.$store.commit("ListeningHoldPage_set", value);
       },
     },
+    LoudspeakerMono: {
+      get() {
+        return this.$store.state.User.LoudspeakerMono;
+      },
+      set(value) {
+        localStorage.setItem("loudspeaker_monochrome", value ? "true" : "");
+        this.$store.commit("LoudspeakerMono_set", value);
+      },
+    },
     ImgHostSelected: {
       get() {
         return this.$store.state.User.ImgHost;
@@ -142,6 +164,15 @@ export default {
       set(value) {
         localStorage.setItem("img_host", value);
         this.$store.commit("ImgHost_set", value);
+      },
+    },
+    LoudspeakerLocationSelected: {
+      get() {
+        return this.$store.state.User.LoudspeakerLocation;
+      },
+      set(value) {
+        localStorage.setItem("loudspeaker_location", value);
+        this.$store.commit("LoudspeakerLocationS_set", value);
       },
     },
 

@@ -126,6 +126,14 @@ export default {
         );
       }
 
+      //读取是否大喇叭单色
+      if (localStorage.getItem("loudspeaker_monochrome") != null) {
+        this.$store.commit(
+          "LoudspeakerMono_set",
+          localStorage.getItem("loudspeaker_monochrome") === "true"
+        );
+      }
+
       //读取MyCss（自定义字体大小和行距等）
       if (localStorage.my_css != null) {
         this.$store.commit("MyCSS_set_all", JSON.parse(localStorage.my_css));
@@ -157,12 +165,20 @@ export default {
         );
       }
       //读取图床选择设定
-      if( localStorage.img_host !=null){
+      if (localStorage.img_host != null) {
         this.$store.commit(
           "ImgHost_set",
           localStorage.img_host
         );
       }
+      //读取大喇叭放置位置
+      if (localStorage.loudspeaker_location != null) {
+        this.$store.commit(
+          "LoudspeakerLocation_set",
+          localStorage.loudspeaker_location
+        );
+      }
+
     },
     set_VueStore(response_data) {
       if (response_data.binggan.admin) {

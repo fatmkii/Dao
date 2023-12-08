@@ -40,6 +40,8 @@ const module_user = {
         UserBankCoin: 0,
         ImgHost: 'mjj',
         IsDouble11: is_double11,
+        LoudspeakerMono: false,
+        LoudspeakerLocation: 'bottom'
     }),
     mutations: {
         UserDataLoaded_set(state, payload) {
@@ -177,6 +179,12 @@ const module_user = {
         ImgHost_set(state, payload) {
             state.ImgHost = payload
         },
+        LoudspeakerMono_set(state, payload) {
+            state.LoudspeakerMono = payload
+        },
+        LoudspeakerLocation_set(state, payload) {
+            state.LoudspeakerLocation = payload
+        }
     },
     actions: {},
     getters: {}

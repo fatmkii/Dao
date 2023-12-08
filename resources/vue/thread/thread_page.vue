@@ -58,6 +58,7 @@
         <b-button size="sm" class="ml-1" style="min-width: 46px" variant="outline-dark" @click="search_clear">清空
         </b-button>
       </div>
+      <Loudspeaker v-if="loudspeaker_location == 'top'"></Loudspeaker>
       <ThreadPaginator :thread_id="thread_id" :last_page="posts_last_page" :current_page="page" align="right">
       </ThreadPaginator>
       <div class="post_container">
@@ -150,8 +151,8 @@
             <span class="ml-1" style="font-size: 0.875rem" v-if="this.page != this.posts_last_page">在最后一页才能自动涮锅</span>
           </div>
         </div>
-
       </div>
+      <Loudspeaker v-if="loudspeaker_location == 'center'"></Loudspeaker>
       <PostInput ref="post_input_com" :input_disable="!this.$store.state.User.LoginStatus || Boolean(locked_TTL) || new_post_handling
         " :new_post_handling="new_post_handling" :random_heads_group="random_heads_group" :forum_id="forum_id"
         :thread_id="thread_id" @content_commit="new_post_handle"><template v-slot:svg_icon>
@@ -224,7 +225,7 @@
           </b-button>
         </div>
       </div>
-      <Loudspeaker></Loudspeaker>
+      <Loudspeaker v-if="loudspeaker_location == 'bottom'"></Loudspeaker>
     </div>
 
     <img src="https://oss.cpttmm.com/xhg_other/notice_2.png"
@@ -662,6 +663,7 @@ export default {
       less_toast: (state) => state.User.LessToast,
       hongbao_then_stop: (state) => state.User.HongbaoThenStop,
       listening_hold_page: (state) => state.User.ListeningHoldPage,
+      loudspeaker_location: (state) => state.User.LoudspeakerLocation,
     }),
   },
   methods: {

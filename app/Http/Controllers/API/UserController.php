@@ -1636,10 +1636,10 @@ class UserController extends Controller
 
         if ($request->mode == 'effective') {
             //正常显示的已发布的大喇叭
-            $loudspeakers = Loudspeaker::where('effective_date', "<", Carbon::now())->orderBy('sub_id', 'desc')->get();
+            $loudspeakers = Loudspeaker::where('effective_date', "<", Carbon::now())->orderBy('sub_id', 'desc')->orderBy('id', 'asc')->get();
         } elseif ($request->mode == 'all') {
             //全部大喇叭（不含软删除），用于确认包括未发布的清单
-            $loudspeakers = Loudspeaker::orderBy('sub_id', 'desc')->get();
+            $loudspeakers = Loudspeaker::orderBy('sub_id', 'desc')->orderBy('id', 'asc')->get();
         } else {
             return response()->json([
                 'code' => ResponseCode::PARAM_FAILED,
