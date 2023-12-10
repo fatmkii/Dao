@@ -357,7 +357,7 @@ class ThreadController extends Controller
         $CurrentForum = $CurrentThread->forum;
         $user = $request->user;
 
-        if (!$CurrentThread->is_deleted != 0 && $user->admin != 99) {
+        if ($CurrentThread->is_deleted != 0 && $user->admin != 99) {
             //已删除的帖子不显示
             return response()->json([
                 'code' => ResponseCode::THREAD_NOT_FOUND,
