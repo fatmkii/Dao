@@ -357,6 +357,14 @@ class ThreadController extends Controller
         $CurrentForum = $CurrentThread->forum;
         $user = $request->user;
 
+        if (!$CurrentThread->is_deleted != 0 && $user->admin != 99) {
+            //已删除的帖子不显示
+            return response()->json([
+                'code' => ResponseCode::THREAD_NOT_FOUND,
+                'message' => ResponseCode::$codeMap[ResponseCode::THREAD_NOT_FOUND],
+            ]);
+        }
+
         //用redis记录，全局每10秒搜索20次限制
         if ($request->has('search_content')) {
             if (Redis::exists('search_record_global')) {
