@@ -220,6 +220,18 @@ class CommonController extends Controller
         );
     }
 
+    public function new_loudspeaker_enable(Request $request)
+    {
+        return response()->json(
+            [
+                'code' => ResponseCode::SUCCESS,
+                'message' => '已查询大喇叭开放状态',
+                'data' =>  GlobalSetting::get('new_loudspeaker'),
+            ],
+        );
+    }
+
+
     public static  function post_hongbao(Request $request, Thread $thread, Post $post)
     {
         $user = $request->user;

@@ -1675,6 +1675,13 @@ class UserController extends Controller
             'days' => 'required|integer|min:1|max:3',
         ]);
 
+        if (!GlobalSetting::get('new_loudspeaker')) {
+            return response()->json([
+                'code' => ResponseCode::USER_CANNOT,
+                'message' => '暂时停止发布新的大喇叭',
+            ]);
+        }
+
 
         $user = $request->user;
 

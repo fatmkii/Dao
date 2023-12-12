@@ -3,12 +3,21 @@
     <b-input-group prepend="领取饼干" class="mt-2">
       <b-form-select v-model="new_binggan_selected" :options="new_binggan_option"
         :disabled="get_data_handling != 2"></b-form-select>
+      <b-input-group-append>
+        <b-button :variant="button_theme" :disabled="ajax_handling"
+          @click="set_global_setting('new_binggan', new_binggan_selected)">提交
+        </b-button>
+      </b-input-group-append>
     </b-input-group>
-    <div class="mt-2">
-      <b-button :variant="button_theme" :disabled="ajax_handling"
-        @click="set_global_setting('new_binggan', new_binggan_selected)">提交
-      </b-button>
-    </div>
+    <b-input-group prepend="大喇叭开关" class="mt-2">
+      <b-form-select v-model="loudspeaker_selected" :options="loudspeaker_option"
+        :disabled="get_data_handling != 2"></b-form-select>
+      <b-input-group-append>
+        <b-button :variant="button_theme" :disabled="ajax_handling"
+          @click="set_global_setting('new_loudspeaker', loudspeaker_selected)">提交
+        </b-button>
+      </b-input-group-append>
+    </b-input-group>
   </div>
 </template>
 
@@ -27,6 +36,11 @@ export default {
       get_data_handling: 0,
       new_binggan_selected: false,
       new_binggan_option: [
+        { text: '打开', value: true },
+        { text: '关闭', value: false }
+      ],
+      loudspeaker_selected: false,
+      loudspeaker_option: [
         { text: '打开', value: true },
         { text: '关闭', value: false }
       ]
@@ -63,6 +77,7 @@ export default {
         .then((response) => {
           if (response.data.code == 200) {
             this.new_binggan_selected = response.data.data.new_binggan
+            this.loudspeaker_selected = response.data.data.new_loudspeaker
             this.get_data_handling = 2;
           } else {
             this.get_data_handling = 0;

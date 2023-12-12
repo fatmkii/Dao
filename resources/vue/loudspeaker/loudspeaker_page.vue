@@ -109,12 +109,13 @@
                 </div>
             </template>
             <template v-slot:modal-footer="{ cancel }">
+                <span v-if="!new_loudspeaker_enable">嗷……目前暂停新的大喇叭发布</span>
                 <b-form-checkbox class="mt-2" v-model="loudspeaker_sub_id" value="10" unchecked-value="1"
                     v-if="$store.state.User.AdminStatus == 99">
                     设为置顶大喇叭
                 </b-form-checkbox>
                 <b-button-group>
-                    <b-button :disable="loudspeaker_handling" :variant="button_theme"
+                    <b-button :disabled="loudspeaker_handling || !new_loudspeaker_enable" :variant="button_theme"
                         @click="create_loudspeaker_hanle">发布</b-button>
                     <b-button variant="outline-secondary" @click="cancel()">
                         取消
@@ -156,6 +157,8 @@ export default {
             end_time_selected: "00:00:00",
             end_date_selected: undefined,
             loudspeaker_handling: false,
+
+            new_loudspeaker_enable: true,
 
 
             minDate: minDate,
@@ -343,6 +346,22 @@ export default {
                     this.loudspeaker_handling = false;
                 });
         },
+        check_new_loudspeaker_enable() {
+            const config = {
+                method: "get",
+                url: "api/new_loudspeaker_enable",
+            };
+            axios(config)
+                .then((response) => {
+                    if (response.data.code == 200) {
+                        this.new_loudspeaker_enable = response.data.data
+                    } else {
+                        alert(response.data.message);
+                    }
+                })
+                .catch((error) => {
+                });
+        },
 
 
         thread_link(thread_id) {
@@ -357,6 +376,7 @@ export default {
     mounted() {
         this.get_loudspeaker_data(1);
         this.set_date_default();
+        this.check_new_loudspeaker_enable();
     },
 };
 </script>

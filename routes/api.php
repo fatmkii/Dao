@@ -181,6 +181,7 @@ Route::get('/subtitles', [CommonController::class, 'subtitles_index']);
 Route::get('/random_heads', [CommonController::class, 'random_heads_index']);
 Route::get('/captcha', [CommonController::class, 'get_captcha']);
 Route::get('/new_binggan_enable', [CommonController::class, 'new_binggan_enable']);
+Route::get('/new_loudspeaker_enable', [CommonController::class, 'new_loudspeaker_enable']);
 Route::post('/img_upload', [CommonController::class, 'img_upload'])->middleware('CheckBinggan:create'); //上传图片
 Route::post('/store_pool', [CommonController::class, 'store_hongbao_pool'])->middleware('CheckBinggan:create'); //投入祝福池
 Route::get('/get_pool', [CommonController::class, 'get_hongbao_pool'])->middleware('CheckBinggan:show'); //获取祝福池信息
