@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex mt-2">
         <b-img style="height: 40px;" src="https://oss.cpttmm.com/xhg_other/miku_loudspeaker.png" fluid
-            @click="$bvModal.show('loudspeaker_list_modal')"></b-img>
+            @click="$refs['loudspeaker_list_modal'].show()"></b-img>
         <div class="loudspeaker_container ml-1">
 
             <div class="loudspeaker_content" v-if="data_loading != 2">正在读取大喇叭</div>
