@@ -1734,6 +1734,11 @@ class UserController extends Controller
             throw $e;
         }
 
+        //检查成就（发布大喇叭）
+        $user_medal_record = $user->UserMedalRecord()->firstOrCreate(); //如果记录不存在就追加
+        $user_medal_record->push_loudspeakers_con();
+
+
 
         return response()->json(
             [
@@ -1780,6 +1785,10 @@ class UserController extends Controller
             DB::rollback();
             throw $e;
         }
+
+        //检查成就（撤回大喇叭）
+        $user_medal_record = $user->UserMedalRecord()->firstOrCreate(); //如果记录不存在就追加
+        $user_medal_record->check_loudspeakers_withdraw();
 
 
         return response()->json(

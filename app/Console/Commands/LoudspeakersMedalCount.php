@@ -46,14 +46,14 @@ class LoudspeakersMedalCount extends Command
         $this->info('记录：' . json_encode($arr));
         Log::channel('temp_log')->info('loudspeakers_count', [$arr]);
 
-        // foreach ($arr as $key => $user_data) {
-        //     //检查成就（发布大喇叭）
-        //     $user_medal_record = UserMedalRecord::firstOrNew(['user_id' => $user_data->user_id]); //如果记录不存在就追加
-        //     $user_medal_record->loudspeakers_con = $user_data->user_count;
-        //     $user_medal_record->save();
-        // }
+        foreach ($arr as $key => $user_data) {
+            //检查成就（发布大喇叭）
+            $user_medal_record = UserMedalRecord::firstOrNew(['user_id' => $user_data->user_id]); //如果记录不存在就追加
+            $user_medal_record->loudspeakers_con = $user_data->user_count;
+            $user_medal_record->save();
+        }
 
-        // $this->info('已结束处理');
-        // return 0;
+        $this->info('已结束处理');
+        return 0;
     }
 }

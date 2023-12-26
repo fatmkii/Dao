@@ -2586,6 +2586,31 @@ var medals = {
         'threshold': 1000000,
         'img': 'https://ice.frostsky.com/2023/09/15/6fde3b66d4eae8dbd6ee8d3cb68940c8.png',
     },
+
+    271: {
+        'name': '锣鼓喧天',
+        'describe': '发布1个大喇叭',
+        'threshold': 1,
+        'img': 'https://i.miji.bid/2023/12/14/64f1aeeb3170c47ece3a4e6f3540ced7.png',
+    },
+    272: {
+        'name': '鞭炮齐鸣',
+        'describe': '发布10个大喇叭',
+        'threshold': 10,
+        'img': 'https://i.miji.bid/2023/12/14/326ff093eedc097864fc1144eee912d2.png',
+    },
+    273: {
+        'name': '红旗招展',
+        'describe': '发布50个大喇叭',
+        'threshold': 50,
+        'img': 'https://i.miji.bid/2023/12/14/51a10a94112084451c506fd8f76e03be.png',
+    },
+    274: {
+        'name': '人山人海',
+        'describe': '发布100个大喇叭',
+        'threshold': 100,
+        'img': 'https://i.miji.bid/2023/12/14/40ea25c10ac3b05d62da0f5cb410ad1c.png',
+    },
 }
 
 //隐藏成就数据
@@ -2808,6 +2833,13 @@ var medals_hide = {
         'describe': '民推之光药水哥',
         'threshold': null,
         'img': 'https://z1.ax1x.com/2023/11/14/piYVhE6.png',
+    },
+
+    270: {
+        'name': '吼那么大声干嘛啦',
+        'describe': '撤回一个大喇叭',
+        'threshold': null,
+        'img': 'https://s11.ax1x.com/2023/12/26/pib6BQK.png',
     },
 
 }

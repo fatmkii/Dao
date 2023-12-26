@@ -596,6 +596,40 @@ class Medals
             'varname' => null,
         ),
 
+        //大喇叭相关
+        270 => array(
+            'name' => '吼那么大声干嘛啦',
+            'describe' => '撤回一次大喇叭',
+            'threshold' => null,
+            'varname' => null,
+        ),
+        271 => array(
+            'name' => '锣鼓喧天',
+            'describe' => '发布1个大喇叭',
+            'threshold' =>1 , 
+            'varname' => 'loudspeakers_con',
+        ),
+        272 => array(
+            'name' => '鞭炮齐鸣',
+            'describe' => '发布10个大喇叭',
+            'threshold' =>11 , 
+            'varname' => 'loudspeakers_con',
+        ),
+        273 => array(
+            'name' => '红旗招展',
+            'describe' => '发布50个大喇叭',
+            'threshold' =>50 , 
+            'varname' => 'loudspeakers_con',
+        ),
+        274 => array(
+            'name' => '人山人海',
+            'describe' => '发布100个大喇叭',
+            'threshold' =>100 , 
+            'varname' => 'loudspeakers_con',
+        ),
+
+
+
 
     );
 }

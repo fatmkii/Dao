@@ -29,6 +29,7 @@ class CreateUserMedalRecordTable extends Migration
             $table->unsignedInteger('delete_posts_num')->default(0);
             $table->unsignedInteger('posts_num')->default(0);
             $table->unsignedInteger('withdraw_penalty')->default(0);
+            $table->unsignedInteger('loudspeakers_con')->default(0); //发大喇叭数量
             $table->timestamps();
         });
     }

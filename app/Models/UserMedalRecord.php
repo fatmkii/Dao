@@ -608,8 +608,7 @@ class UserMedalRecord extends Model
         //表情包萌成就判断（总计的投票数）
         //本次处理的同一系列的成就id
         // $medals_id = array(212, 213);//212和213是表情包萌
-        $medals_id = array(261, 262);//261和262是表情包萌
-        
+        $medals_id = array(261, 262); //261和262是表情包萌
 
         //已经获得过的徽章（统一查询一次，用于后续判断）
         $medals_id_retain = UserMedal::where('user_id', $user->id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
@@ -696,6 +695,52 @@ class UserMedalRecord extends Model
                 $user_medal->created_at = Carbon::now();
                 $user_medal->save();
             }
+        }
+    }
+
+    public function push_loudspeakers_con()
+    {
+        $this->increment('loudspeakers_con', 1);
+        $this->save();
+
+        //本次处理的同一系列的成就id
+        $medals_id = array(271, 272, 273, 274);
+
+        //已经获得过的徽章（统一查询一次，用于后续判断）
+        // $medals_id_retain = $this->UserMedal()->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        $medals_id_retain = UserMedal::where('user_id', $this->user_id)->whereIn('medal_id', $medals_id)->pluck('medal_id')->toArray();
+        if (count($medals_id) == count($medals_id_retain)) {
+            //如果数量一样，说明整个系列都已经获得，不需要再判断了
+            return;
+        }
+
+        foreach ($medals_id as $medal_id) {
+            //循环判断此系列的成就id是否满足阈值threshold条件
+            $varname = Medals::DATA[$medal_id]['varname'];
+            if (!in_array($medal_id, $medals_id_retain) && $this->$varname >= Medals::DATA[$medal_id]['threshold']) {
+                $user_medal = new UserMedal;
+                $user_medal->user_id = $this->user_id;
+                $user_medal->medal_id = $medal_id;
+                $user_medal->created_at = Carbon::now();
+                $user_medal->save();
+            }
+        }
+    }
+
+    public function check_loudspeakers_withdraw()
+    {
+
+        $medal_id = 270;
+
+        //纯粹行为型的徽章，直接查询
+        // $medals_code_exists = $this->UserMedal()->where('medal_id', 131)->exists();
+        $medals_code_exists = UserMedal::where('user_id', $this->user_id)->where('medal_id', $medal_id)->exists();
+        if (!$medals_code_exists) {
+            $user_medal = new UserMedal;
+            $user_medal->user_id = $this->user_id;
+            $user_medal->medal_id = $medal_id;
+            $user_medal->created_at = Carbon::now();
+            $user_medal->save();
         }
     }
 }
