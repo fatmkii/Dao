@@ -612,7 +612,7 @@ class Medals
         272 => array(
             'name' => '鞭炮齐鸣',
             'describe' => '发布10个大喇叭',
-            'threshold' =>11 , 
+            'threshold' =>10 , 
             'varname' => 'loudspeakers_con',
         ),
         273 => array(
