@@ -9,13 +9,11 @@
                 <b-button size="sm" class="ml-auto" :variant="button_theme" :disabled="data_loading == 1"
                     v-b-modal.loudspeaker_modal>发布大喇叭</b-button>
             </div>
+
             <div class="threads_table_header my-2 py-1 text-center">
                 <span>大喇叭列表</span>
             </div>
-            <div class="threads_container" v-for="(loudspeaker, index) in loudspeaker_data.slice(
-                data_offset,
-                data_offset + 10
-            )" :key="index">
+            <div class="threads_container" v-for="(loudspeaker, index) in loudspeaker_data_filtered" :key="index">
                 <div class="text-left my-1 py-1" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
                     <component :is="loudspeaker.thread_id ? 'router-link' : 'span'" :style="{ color: loudspeaker.color }"
                         :to="thread_link(loudspeaker.thread_id)">
@@ -38,8 +36,14 @@
                 </div>
 
             </div>
+            <div class="d-flex">
+                <b-pagination class="mt-1" v-model="data_page" :total-rows="data_rows" per-page="10"
+                    size="sm"></b-pagination>
+                <b-form-checkbox class="mt-1 ml-auto" v-model="my_loudspeaker_show" switch>
+                    只显示自己的
+                </b-form-checkbox>
+            </div>
         </div>
-        <b-pagination class="mt-1" v-model="data_page" :total-rows="data_rows" per-page="10" size="sm"></b-pagination>
 
         <b-modal ref="loudspeaker_modal" id="loudspeaker_modal">
             <template v-slot:modal-header>
@@ -160,6 +164,7 @@ export default {
 
             new_loudspeaker_enable: true,
 
+            my_loudspeaker_show: false,
 
             minDate: minDate,
             maxDate: maxDate,
@@ -174,6 +179,18 @@ export default {
         },
         data_offset() {
             return (this.data_page - 1) * 10;
+        },
+        loudspeaker_data_filtered() {
+            var filtered = []
+            if (this.my_loudspeaker_show) {
+                filtered = this.loudspeaker_data.filter((data) => (data.is_your_loudspeaker))
+            } else {
+                filtered = this.loudspeaker_data
+            }
+            return filtered.slice(
+                this.data_offset,
+                this.data_offset + 10
+            )
         },
 
         ...mapState({
