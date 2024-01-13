@@ -37,8 +37,21 @@
 
             </div>
             <div class="d-flex">
-                <b-pagination class="mt-1" v-model="data_page" :total-rows="data_rows" per-page="10"
+                <b-pagination class="mt-1 mr-auto" v-model="data_page" :total-rows="data_rows" per-page="10"
                     size="sm"></b-pagination>
+                <b-input-group style="max-width: 160px">
+                    <b-form-input v-model="search_date_selected" size="sm" type="text" placeholder="筛选生效日期"></b-form-input>
+                    <b-input-group-append>
+                        <b-form-datepicker v-model="search_date_selected" size="sm" placeholder="筛选生效日期" locale="zh"
+                            button-only today-button reset-button close-button :date-format-options="{
+                                year: 'numeric',
+                                month: 'numeric',
+                                day: 'numeric',
+                            }" label-help="请选择查询日期"></b-form-datepicker>
+                    </b-input-group-append>
+                </b-input-group>
+            </div>
+            <div class="d-flex">
                 <b-form-checkbox class="mt-1 ml-auto" v-model="my_loudspeaker_show" switch>
                     只显示自己的
                 </b-form-checkbox>
@@ -91,10 +104,6 @@
                     <div class="mt-2">内容</div>
                     <textarea style="width: 100%;" v-model="loudspeaker_content" type="text" placeholder="最多100字"
                         rows="3"></textarea>
-
-
-
-
                     <b-input-group prepend="链接主题" class="mt-2">
                         <b-form-input v-model="loudspeaker_thread_id" type="number"
                             placeholder="主题网址的ID（可留空）"></b-form-input>
@@ -162,6 +171,8 @@ export default {
             end_date_selected: undefined,
             loudspeaker_handling: false,
 
+            search_date_selected: undefined,
+
             new_loudspeaker_enable: true,
 
             my_loudspeaker_show: false,
@@ -181,11 +192,20 @@ export default {
             return (this.data_page - 1) * 10;
         },
         loudspeaker_data_filtered() {
-            var filtered = []
+            var filtered = this.loudspeaker_data
             if (this.my_loudspeaker_show) {
-                filtered = this.loudspeaker_data.filter((data) => (data.is_your_loudspeaker))
-            } else {
-                filtered = this.loudspeaker_data
+                filtered = filtered.filter((data) => (data.is_your_loudspeaker))
+            }
+            if (this.search_date_selected) {
+                var selected = new Date(this.search_date_selected + ' 00:00:00')
+                var selected_1 = new Date(this.search_date_selected + ' 00:00:00')
+                selected_1 = new Date(selected_1.setDate(selected.getDate() + 1))
+                console.log(selected)
+                console.log(selected_1)
+                filtered = filtered.filter((data) => {
+                    let effective_date = new Date(data.effective_date)
+                    return effective_date > selected && effective_date < selected_1
+                })
             }
             return filtered.slice(
                 this.data_offset,
