@@ -200,8 +200,6 @@ export default {
                 var selected = new Date(this.search_date_selected + ' 00:00:00')
                 var selected_1 = new Date(this.search_date_selected + ' 00:00:00')
                 selected_1 = new Date(selected_1.setDate(selected.getDate() + 1))
-                console.log(selected)
-                console.log(selected_1)
                 filtered = filtered.filter((data) => {
                     let effective_date = new Date(data.effective_date)
                     return effective_date > selected && effective_date < selected_1
