@@ -202,7 +202,7 @@ export default {
                 selected_1 = new Date(selected_1.setDate(selected.getDate() + 1))
                 filtered = filtered.filter((data) => {
                     let effective_date = new Date(data.effective_date)
-                    return effective_date > selected && effective_date < selected_1
+                    return effective_date >= selected && effective_date < selected_1
                 })
             }
             return filtered.slice(
