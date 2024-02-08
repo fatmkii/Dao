@@ -2696,6 +2696,14 @@ var medals_hide = {
         'threshold': 0,
         'img': 'https://i.mji.rip/2023/09/29/285e7c6c0c10cc192afa787320aefbcf.png',
     },
+    //23年国庆
+    153: {
+        'name': '龙年快乐',
+        'describe': '2024年小火锅龙年祝福',
+        'threshold': 0,
+        'img': 'https://i.miji.bid/2024/02/08/a6427d8bacfe0e01a6612962998195db.png',
+    },
+
 
     //画师荣誉徽章
     181: {

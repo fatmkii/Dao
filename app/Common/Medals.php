@@ -317,6 +317,14 @@ class Medals
             'threshold' => null,
             'varname' => null,
         ),
+        //24年春节
+        153 => array(
+            'name' => '龙年快乐',
+            'describe' => '2024年小火锅龙年祝福',
+            'threshold' => null,
+            'varname' => null,
+        ),
+
 
 
         //通过打赏获得的olo数量 
@@ -606,25 +614,25 @@ class Medals
         271 => array(
             'name' => '锣鼓喧天',
             'describe' => '发布1个大喇叭',
-            'threshold' =>1 , 
+            'threshold' => 1,
             'varname' => 'loudspeakers_con',
         ),
         272 => array(
             'name' => '鞭炮齐鸣',
             'describe' => '发布10个大喇叭',
-            'threshold' =>10 , 
+            'threshold' => 10,
             'varname' => 'loudspeakers_con',
         ),
         273 => array(
             'name' => '红旗招展',
             'describe' => '发布50个大喇叭',
-            'threshold' =>50 , 
+            'threshold' => 50,
             'varname' => 'loudspeakers_con',
         ),
         274 => array(
             'name' => '人山人海',
             'describe' => '发布100个大喇叭',
-            'threshold' =>100 , 
+            'threshold' => 100,
             'varname' => 'loudspeakers_con',
         ),
 

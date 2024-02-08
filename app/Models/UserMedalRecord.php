@@ -561,17 +561,17 @@ class UserMedalRecord extends Model
 
     public function check_national_day()
     {
-        if (Carbon::now() < Carbon::create("2023-10-1 0:0:0")) {
+        if (Carbon::now() < Carbon::create("2024-2-10 0:0:0")) {
             //如果时间未到，就什么都不做
             return;
         }
 
-        if (Carbon::now() > Carbon::create("2023-10-8 0:0:0")) {
+        if (Carbon::now() > Carbon::create("2024-2-13 0:0:0")) {
             //如果时间已经过期，就什么都不做
             return;
         }
 
-        $medal_id = 152;
+        $medal_id = 153;
 
         //纯粹行为型的徽章，直接查询
         // $medals_code_exists = $this->UserMedal()->where('medal_id', 131)->exists();

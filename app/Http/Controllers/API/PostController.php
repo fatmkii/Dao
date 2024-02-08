@@ -150,7 +150,7 @@ class PostController extends Controller
         // if (
         //     //国庆活动
         //     $request->thread_id == 88347
-        //     && strpos($request->content, '祖国') !== false
+        //     && strpos($request->content, '新春快乐') !== false
         // ) {
         //     CommonController::post_hongbao($request, $thread, $post); //执行送红包流程
         // }

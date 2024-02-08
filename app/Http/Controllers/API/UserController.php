@@ -168,9 +168,9 @@ class UserController extends Controller
         //自定义大乱斗角色
         $my_battle_chara = MyBattleChara::where('user_id', $user->id)->select('name', 'not_use')->get();
 
-        //检查成就（小火锅周年活动）
-        // $user_medal_record = $user->UserMedalRecord()->firstOrCreate(); //如果记录不存在就追加
-        // $user_medal_record->check_national_day();
+        // 检查成就（小火锅周年活动）
+        $user_medal_record = $user->UserMedalRecord()->firstOrCreate(); //如果记录不存在就追加
+        $user_medal_record->check_national_day();
 
         return response()->json(
             [

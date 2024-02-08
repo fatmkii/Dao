@@ -239,50 +239,50 @@ class CommonController extends Controller
         $coin = 0; //红包金额
         $message = ""; //红包回帖信息
 
-        if (Carbon::now() < Carbon::create("2023-10-1 0:0:0")) {
+        if (Carbon::now() < Carbon::create("2024-2-10 0:0:0")) {
             $coin = 0;
             $message = "本次活动尚未开始，请稍等喔";
-        } elseif (Carbon::now() > Carbon::create("2023-10-4 0:0:0")) {
+        } elseif (Carbon::now() > Carbon::create("2024-2-13 0:0:0")) {
             $coin = 0;
             $message = "本次活动已经结束，你来晚啦";
         } elseif (DB::table("hongbao_record")->where('user_id', $user->id)->lockForUpdate()->exists()) {
             $coin = 0;
             $message = "你已经领取过了，不要贪心喔！";
-        } elseif (Carbon::parse($user->created_at) > Carbon::create("2023-9-28 0:0:0")) {
+        } elseif (Carbon::parse($user->created_at) > Carbon::create("2024-2-8 0:0:0")) {
             $coin = 0;
-            $message = "你的饼干不符合领取条件（23年9月28日0点前领取的饼干）";
+            $message = "你的饼干不符合领取条件（需要是24年2月8日0点前领取的饼干）";
         } else {
             $rand_num = random_int(1, 1000);
             switch ($rand_num) {
                 case $rand_num == 1000: {
                         if (DB::table("hongbao_record")->where('rand_num', 1000)->exists()) {
                             $coin = 10000;
-                            $message = "哇喔！恭喜抽到1w个olo！祝国庆快乐~";
+                            $message = "哇喔！恭喜抽到1w个olo！祝您新春快乐~";
                             break;
                         } else {
                             $coin = 100000;
-                            $message = "这是岛主埋单唯一大礼！10w个olo！祝国庆快乐~";
+                            $message = "这是岛主埋单唯一大礼！10w个olo！祝您新春快乐~";
                             break;
                         }
                     }
                 case $rand_num >= 990: {
                         $coin = 10000;
-                        $message = "哇喔！恭喜抽到1w个olo！祝国庆快乐~";
+                        $message = "哇喔！恭喜抽到1w个olo！祝您新春快乐~";
                         break;
                     }
                 case $rand_num >= 900: {
                         $coin = 3000;
-                        $message = "恭喜抽到3000个olo！祝国庆快乐~";
+                        $message = "恭喜抽到3000个olo！祝您新春快乐~";
                         break;
                     }
                 case $rand_num >= 600: {
                         $coin = 1000;
-                        $message = "恭喜抽到1000个olo！祝国庆快乐~";
+                        $message = "恭喜抽到1000个olo！祝您新春快乐~";
                         break;
                     }
                 default: {
                         $coin = 500;
-                        $message = "恭喜抽到500个olo！祝国庆快乐~";
+                        $message = "恭喜抽到500个olo！祝您新春快乐~";
                         break;
                     }
             }
@@ -299,7 +299,7 @@ class CommonController extends Controller
                 'forum_id' => $request->forum_id,
                 'thread_id' => $request->thread_id,
                 'content' => $message,
-                'nickname' => '国庆红包系统',
+                'nickname' => '新春红包系统',
                 'created_by_admin' => 2,
                 'created_IP' => $request->ip(),
             ]);
@@ -311,7 +311,7 @@ class CommonController extends Controller
                     'normal', //记录类型
                     [
                         'olo' => $coin,
-                        'content' => '国庆红包奖励',
+                        'content' => '新春红包奖励',
                         'thread_id' => $thread->id,
                         'thread_title' => $thread->title,
                         'post_id' => $post->id,
@@ -351,22 +351,22 @@ class CommonController extends Controller
         $olo = 1000;
         $message = "我投入了1000个olo！<br>" . $request->message; //祝福池留言
 
-        if (Carbon::now() < Carbon::create("2023-10-1 0:0:0")) {
+        if (Carbon::now() < Carbon::create("2024-2-10 0:0:0")) {
             return response()->json([
                 'code' => ResponseCode::USER_CANNOT,
                 'message' => "本次活动尚未开始，请稍等喔",
             ]);
         }
-        if (Carbon::now() > Carbon::create("2023-10-4 0:0:0")) {
+        if (Carbon::now() > Carbon::create("2024-2-13 0:0:0")) {
             return response()->json([
                 'code' => ResponseCode::USER_CANNOT,
                 'message' => "本次活动已经结束，你来晚啦",
             ]);
         }
-        if (Carbon::parse($user->created_at) > Carbon::create("2023-9-28 0:0:0")) {
+        if (Carbon::parse($user->created_at) > Carbon::create("2024-2-8 0:0:0")) {
             return response()->json([
                 'code' => ResponseCode::USER_CANNOT,
-                'message' => "你的饼干不符合参与条件（23年9月28日0点前领取的饼干）",
+                'message' => "你的饼干不符合参与条件（24年2月8日0点前领取的饼干）",
             ]);
         }
 
@@ -404,9 +404,9 @@ class CommonController extends Controller
                 'normal', //记录类型
                 [
                     'olo' => -$olo,
-                    'content' => '国庆祝福池',
+                    'content' => '新春祝福池',
                     'thread_id' => $request->thread_id,
-                    'thread_title' => "国庆祝福池活动",
+                    'thread_title' => "新春祝福池活动",
                     'post_id' => $post->id,
                     'floor' => $post->floor,
                 ]

@@ -5,16 +5,19 @@
       <b-input-group class="my-2" size="sm">
         <b-form-input placeholder="留下祝福语" style="max-width: 200px" v-model="message"></b-form-input>
         <b-button class="ml-2" :variant="button_theme" size="sm" @click="store_pool_handle"
-          :disabled="pool_end_flag || user_stored_flag">
+          :disabled="pool_end_flag || user_stored_flag || pool_before_flag">
           投入祝福</b-button>
 
       </b-input-group>
 
     </div>
     <div class="my-2" v-if="!pool_end_flag">
-      <span class="ml-2" style="font-size: 0.875rem" v-if="user_stored_flag">已经投过祝福了，<router-link
-          :to="floor_href">在{{ user_pool_data.floor }}楼</router-link>
+      <span class="ml-2" style="font-size: 0.875rem" v-if="user_stored_flag">已经投过祝福了，<router-link :to="floor_href">在{{
+        user_pool_data.floor }}楼</router-link>
       </span>
+    </div>
+    <div class="my-2" v-if="pool_before_flag">
+      <span class="ml-2" style="font-size: 0.875rem" v-if="pool_before_flag">活动将于2月10日 大年初一 0点开始</span>
     </div>
     <div class="my-2" v-if="pool_end_flag">
       <span class="ml-2" style="font-size: 0.875rem" v-if="pool_end_flag">活动已经结束</span>
@@ -49,9 +52,14 @@ export default {
   },
   computed: {
     pool_end_flag() {
-      const end = new Date("2023-10-04 00:00:00");
+      const end = new Date("2024-02-13 00:00:00");
       const now = new Date(Date.now());
       return now > end
+    },
+    pool_before_flag() {
+      const start = new Date("2024-02-10 00:00:00");
+      const now = new Date(Date.now());
+      return start > now
     },
     user_stored_flag() {
       if (this.user_pool_data) {
