@@ -2696,12 +2696,12 @@ var medals_hide = {
         'threshold': 0,
         'img': 'https://i.mji.rip/2023/09/29/285e7c6c0c10cc192afa787320aefbcf.png',
     },
-    //23年国庆
+    //24年春节
     153: {
         'name': '龙年快乐',
         'describe': '2024年小火锅龙年祝福',
         'threshold': 0,
-        'img': 'https://i.miji.bid/2024/02/08/a6427d8bacfe0e01a6612962998195db.png',
+        'img': 'https://i.miji.bid/2024/02/11/d29f3244c7a0d0a651427e8ea8dbf6b1.png',
     },
 
 

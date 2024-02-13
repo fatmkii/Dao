@@ -101,7 +101,7 @@ class HongPoolResult extends Command
                 $post = Post::create([
                     'created_binggan' => $user->binggan,
                     'forum_id' => 2,
-                    'thread_id' => 88348,
+                    'thread_id' => 100658,
                     'content' => $message,
                     'nickname' => '祝福池系统',
                     'created_by_admin' => 2,
@@ -113,9 +113,9 @@ class HongPoolResult extends Command
                     'normal', //记录类型
                     [
                         'olo' => $olo,
-                        'content' => '国庆祝福池',
-                        'thread_id' => 88348,
-                        'thread_title' => "国庆祝福池活动",
+                        'content' => '新春祝福池',
+                        'thread_id' => 100658,
+                        'thread_title' => "新春祝福池活动",
                         'post_id' => $post->id,
                         'floor' => $post->floor,
                     ]
@@ -148,7 +148,7 @@ class HongPoolResult extends Command
                 $post = Post::create([
                     'created_binggan' => $user->binggan,
                     'forum_id' => 2,
-                    'thread_id' => 88348,
+                    'thread_id' => 100658,
                     'content' => $message,
                     'nickname' => '祝福池系统',
                     'created_by_admin' => 2,
@@ -160,9 +160,9 @@ class HongPoolResult extends Command
                     'normal', //记录类型
                     [
                         'olo' => $olo,
-                        'content' => '国庆祝福池',
-                        'thread_id' => 88348,
-                        'thread_title' => "国庆祝福池活动",
+                        'content' => '新春祝福池',
+                        'thread_id' => 100658,
+                        'thread_title' => "新春祝福池活动",
                         'post_id' => $post->id,
                         'floor' => $post->floor,
                     ]
@@ -197,7 +197,7 @@ class HongPoolResult extends Command
                 $post = Post::create([
                     'created_binggan' => $user->binggan,
                     'forum_id' => 2,
-                    'thread_id' => 88348,
+                    'thread_id' => 100658,
                     'content' => $message,
                     'nickname' => '祝福池系统',
                     'created_by_admin' => 2,
@@ -209,9 +209,9 @@ class HongPoolResult extends Command
                     'normal', //记录类型
                     [
                         'olo' => $olo,
-                        'content' => '国庆祝福池',
-                        'thread_id' => 88348,
-                        'thread_title' => "国庆祝福池活动",
+                        'content' => '新春祝福池',
+                        'thread_id' => 100658,
+                        'thread_title' => "新春祝福池活动",
                         'post_id' => $post->id,
                         'floor' => $post->floor,
                     ]
