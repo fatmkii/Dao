@@ -50,6 +50,7 @@ class HongPoolResult extends Command
 
         $hongbao_pools = DB::table("hongbao_pool")->get(['id', 'user_id']);
         $olo_total = DB::table('hongbao_pool')->sum('olo');
+        $thread_id = 100658; //这里记得每次改！！
 
         $this->info('投入用户共有：' . count($hongbao_pools));
         $this->info('olo总数' . $olo_total);
@@ -88,7 +89,7 @@ class HongPoolResult extends Command
             //处理二等奖
             $user = User::find($pool_id->user_id);
             $hongbao_pool = DB::table('hongbao_pool')->find($pool_id->id);
-            $post = Post::suffix(8)->find($hongbao_pool->post_id);
+            $post = Post::suffix(intval($thread_id / 10000))->find($hongbao_pool->post_id);
             $olo = ceil($olo_total * 0.01);
             $message = sprintf($message_format, $post->content, $hongbao_pool->floor, Carbon::parse($post->created_at)->toDateTimeString(), '感谢你的祝福~！恭喜获得二等奖，祝福池的1%', $olo);
 
@@ -101,7 +102,7 @@ class HongPoolResult extends Command
                 $post = Post::create([
                     'created_binggan' => $user->binggan,
                     'forum_id' => 2,
-                    'thread_id' => 100658,
+                    'thread_id' => $thread_id,
                     'content' => $message,
                     'nickname' => '祝福池系统',
                     'created_by_admin' => 2,
@@ -114,7 +115,7 @@ class HongPoolResult extends Command
                     [
                         'olo' => $olo,
                         'content' => '新春祝福池',
-                        'thread_id' => 100658,
+                        'thread_id' => $thread_id,
                         'thread_title' => "新春祝福池活动",
                         'post_id' => $post->id,
                         'floor' => $post->floor,
@@ -135,7 +136,7 @@ class HongPoolResult extends Command
             //处理一等奖
             $user = User::find($pool_id->user_id);
             $hongbao_pool = DB::table('hongbao_pool')->find($pool_id->id);
-            $post = Post::suffix(8)->find($hongbao_pool->post_id);
+            $post = Post::suffix(intval($thread_id / 10000))->find($hongbao_pool->post_id);
             $olo = ceil($olo_total * 0.1);
             $message = sprintf($message_format, $post->content, $hongbao_pool->floor, Carbon::parse($post->created_at)->toDateTimeString(), '感谢你的祝福~！恭喜获得一等奖，祝福池的10%', $olo);
 
@@ -148,7 +149,7 @@ class HongPoolResult extends Command
                 $post = Post::create([
                     'created_binggan' => $user->binggan,
                     'forum_id' => 2,
-                    'thread_id' => 100658,
+                    'thread_id' => $thread_id,
                     'content' => $message,
                     'nickname' => '祝福池系统',
                     'created_by_admin' => 2,
@@ -161,7 +162,7 @@ class HongPoolResult extends Command
                     [
                         'olo' => $olo,
                         'content' => '新春祝福池',
-                        'thread_id' => 100658,
+                        'thread_id' => $thread_id,
                         'thread_title' => "新春祝福池活动",
                         'post_id' => $post->id,
                         'floor' => $post->floor,
@@ -184,7 +185,7 @@ class HongPoolResult extends Command
             //处理特等奖
             $user = User::find($pool_id->user_id);
             $hongbao_pool = DB::table('hongbao_pool')->find($pool_id->id);
-            $post = Post::suffix(8)->find($hongbao_pool->post_id);
+            $post = Post::suffix(intval($thread_id / 10000))->find($hongbao_pool->post_id);
             $olo = ceil($olo_total * 0.5);
             $message = sprintf($message_format, $post->content, $hongbao_pool->floor, Carbon::parse($post->created_at)->toDateTimeString(), '哇喔！恭喜获得唯一至尊超级无敌特等奖！祝福池的50%', $olo);
 
@@ -197,7 +198,7 @@ class HongPoolResult extends Command
                 $post = Post::create([
                     'created_binggan' => $user->binggan,
                     'forum_id' => 2,
-                    'thread_id' => 100658,
+                    'thread_id' => $thread_id,
                     'content' => $message,
                     'nickname' => '祝福池系统',
                     'created_by_admin' => 2,
@@ -210,7 +211,7 @@ class HongPoolResult extends Command
                     [
                         'olo' => $olo,
                         'content' => '新春祝福池',
-                        'thread_id' => 100658,
+                        'thread_id' => $thread_id,
                         'thread_title' => "新春祝福池活动",
                         'post_id' => $post->id,
                         'floor' => $post->floor,
