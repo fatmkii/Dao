@@ -536,6 +536,18 @@ export default {
             }
           }
         }
+        //处理固马屏蔽词（复用fjf屏蔽词）
+        if (this.$store.state.User.FjfPingbici !== null) {
+          const fjf_pingbici = this.$store.state.User.FjfPingbici;
+          for (var i = 0; i < fjf_pingbici.length; i++) {
+            var reg = new RegExp(fjf_pingbici[i], "g");
+            if (reg.test(this.post_data.nickname)) {
+              this.post_content_show = false; //回帖是否显示的开关
+              this.post_content_should_hiden = true;
+              this.hide_reason = "（固马黑名单）";
+            }
+          }
+        }
       }
       //处理无视频音频模式
       if (this.no_video_mode) {

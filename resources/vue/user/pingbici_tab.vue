@@ -6,7 +6,7 @@
     <b-form-textarea id="content_pingbici_input" v-model="content_pingbici_input" rows="3"
       max-rows="20"></b-form-textarea>
     <p class="my-2">
-      FJF小尾巴黑名单：（注意：同一个饼干在不同FJF主题中，小尾巴会不同）
+      FJF小尾巴和固马黑名单：（注意：同一个饼干在不同FJF主题中，小尾巴会不同）
     </p>
     <b-form-textarea id="fjf_pingbici_input" v-model="fjf_pingbici_input" rows="3" max-rows="20"></b-form-textarea>
     <div class="d-flex align-items-center mt-2">
