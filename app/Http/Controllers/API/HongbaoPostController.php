@@ -226,10 +226,11 @@ class HongbaoPostController extends Controller
                     if ($hongbao->message_json) {
                         //$hongbao->message_json当是多选一message时候不为null
                         $message_array = json_decode($hongbao->message_json);
-                        $rand_key = array_rand($message_array);
-                        $message = $message_array[$rand_key]; //从多个回复中随机抽出一个
-
-                        $post_content = $post_content . '<br>——' . $message;
+                        if (count($message_array) >= 1) {
+                            $rand_key = array_rand($message_array);
+                            $message = $message_array[$rand_key]; //从多个回复中随机抽出一个
+                            $post_content = $post_content . '<br>——' . $message;
+                        }
                     }
 
                     if ($hongbao_item->key_word_type == 3) {
