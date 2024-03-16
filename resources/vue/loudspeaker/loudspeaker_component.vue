@@ -5,21 +5,22 @@
         <div class="loudspeaker_container ml-1">
 
             <div class="loudspeaker_content" v-if="data_loading != 2">正在读取大喇叭</div>
-            <div class="loudspeaker_content" v-if="loudspeaker_no_data"><router-link to="/loudspeaker" class="thread_title">
+            <div class="loudspeaker_content" v-if="loudspeaker_no_data"><router-link to="/loudspeaker"
+                    class="thread_title">
                     目前没有大喇叭，要发一个吗？</router-link></div>
             <div class="loudspeaker_content" v-if="data_loading == 2 && !loudspeaker_no_data">
-                <div style="word-wrap:break-word" v-for="(loudspeaker, index) in loudspeaker_data" :key="index"
-                    :style="{ color: loudspeaker_monochrome ? null : loudspeaker.color }">
+                <div style="word-wrap:break-word" v-for="(loudspeaker, index) in loudspeaker_data" :key="index">
                     <component :is="loudspeaker.thread_id ? 'router-link' : 'span'"
+                        :style="{ color: loudspeaker_monochrome ? null : loudspeaker.color }"
                         :to="thread_link(loudspeaker.thread_id)">
                         {{ index }}. {{ loudspeaker.content }}
                     </component>
                 </div>
                 <!-- 复制多一份，实现无缝循环播放 -->
                 <div style="word-wrap:break-word" v-for="(loudspeaker, index) in loudspeaker_data"
-                    :key="index + loudspeaker_data.length"
-                    :style="{ color: loudspeaker_monochrome ? null : loudspeaker.color }">
+                    :key="index + loudspeaker_data.length">
                     <component :is="loudspeaker.thread_id ? 'router-link' : 'span'"
+                        :style="{ color: loudspeaker_monochrome ? null : loudspeaker.color }"
                         :to="thread_link(loudspeaker.thread_id)">
                         {{ index }}. {{ loudspeaker.content }}
                     </component>
@@ -30,8 +31,8 @@
         <b-modal ref="loudspeaker_list_modal" id="loudspeaker_list_modal" hide-header>
             <template v-slot:default>
                 <div style="max-height: 75vh;overflow: scroll;">
-                    <div style="word-wrap:break-word;margin-top: 0.8rem;" v-for="(loudspeaker, index) in loudspeaker_data"
-                        :key="index" :style="{ color: loudspeaker.color }">
+                    <div style="word-wrap:break-word;margin-top: 0.8rem;"
+                        v-for="(loudspeaker, index) in loudspeaker_data" :key="index">
                         <component :is="loudspeaker.thread_id ? 'router-link' : 'span'"
                             :style="{ color: loudspeaker.color }" :to="thread_link(loudspeaker.thread_id)">
                             {{ index }}. {{ loudspeaker.content }}
@@ -47,8 +48,8 @@
         </b-modal>
     </div>
 </template>
-  
-  
+
+
 <script>
 import { mapState } from "vuex";
 export default {
