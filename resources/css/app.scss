@@ -423,11 +423,13 @@ img[class^="head_"] {
     border-bottom: 1px solid;
     @include border_color("border_color1");
 }
-.emoji_img {
+.emoji_img,
+.emoji-img {
     max-height: 67px;
     max-width: 67px;
 }
-.custom_emoji_img {
+.custom_emoji_img,
+.custom-emoji-img {
     max-height: 67px;
     max-width: 67px;
 }
